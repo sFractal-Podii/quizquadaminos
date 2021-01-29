@@ -19,6 +19,7 @@ defmodule QuadquizaminosWeb.Router do
 
     live "/game", GameLive
     live "/", PageLive, :index
+    live "/tetris", TetrisLive
   end
 
   # Other scopes may use custom stacks.

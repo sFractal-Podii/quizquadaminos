@@ -1,6 +1,8 @@
 defmodule Quadquizaminos.Tetromino do
   defstruct name: :i, location: {40, 0}, rotation: 0, reflection: false
 
+  alias Quadquizaminos.Point
+
   def new(attributes \\ []), do: __struct__(attributes)
 
   def new_random do
@@ -103,12 +105,48 @@ defmodule Quadquizaminos.Tetromino do
     ]
   end
 
+  def color(%{name: :i}), do: :blue
+  def color(%{name: :l}), do: :green
+  def color(%{name: :z}), do: :orange
+  def color(%{name: :o}), do: :red
+  def color(%{name: :t}), do: :yellow
+
+  def prepare(brick) do
+    brick
+    |> points()
+    |> Point.rotate(brick.rotation)
+    |> Point.mirror(brick.reflection)
+  end
+
+  def render(brick) do
+    brick
+    |> prepare()
+    |> Point.move_to_location(brick.location)
+    |> Point.with_color(color(brick))
+  end
+
   def to_string(brick) do
-    map = brick |> points() |> Enum.map(fn key -> {key, "X"} end) |> Map.new()
+    map = brick |> prepare() |> Enum.map(fn key -> {key, "\xe2\x97\xbc "} end) |> Map.new()
 
     for y <- 1..4, x <- 1..4 do
-      Map.get(map, {x, y}, "O")
+      Map.get(map, {x, y}, "\xe2\x8e\x95 ")
     end
     |> Enum.chunk_every(4)
+    |> Enum.map(&Enum.join/1)
+    |> Enum.join("\n")
+  end
+
+  defimpl Inspect, for: Quadquizaminos.Tetromino do
+    import Inspect.Algebra
+
+    def inspect(brick, _opt) do
+      concat([
+        Quadquizaminos.Tetromino.to_string(brick),
+        "\n",
+        inspect(brick.reflection),
+        " ",
+        inspect(brick.rotation)
+      ])
+    end
   end
 end
