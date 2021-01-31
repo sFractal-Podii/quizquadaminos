@@ -15,13 +15,46 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def render(assigns) do
     ~L"""
       
-       <div>
+       <div phx-window-keydown="keydown">
        <%= raw svg_head() %>
        	<%= raw boxes(@tetromino) %>
        	<%= raw svg_foot() %>
        </div>
 
+
     """
+  end
+
+  def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
+    {:noreply, move(:left, socket)}
+  end
+
+  def handle_event("keydown", %{"key" => "ArrowRight"}, socket) do
+    {:noreply, move(:right, socket)}
+  end
+
+  def handle_event("keydown", %{"key" => "ArrowUp"}, socket) do
+    {:noreply, move(:turn, socket)}
+  end
+
+  def handle_event("keydown", _, socket), do: {:noreply, socket}
+
+  def move(direction, socket) do
+    socket
+    |> do_move(direction)
+    |> show()
+  end
+
+  def do_move(socket, :left) do
+    assign(socket, brick: socket.assigns.brick |> Tetromino.left())
+  end
+
+  def do_move(socket, :right) do
+    assign(socket, brick: socket.assigns.brick |> Tetromino.right())
+  end
+
+  def do_move(socket, :turn) do
+    assign(socket, brick: socket.assigns.brick |> Tetromino.spin_90())
   end
 
   defp new_game(socket) do
@@ -41,6 +74,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       tetromino:
         brick
         |> Tetromino.prepare()
+        |> Point.move_to_location(brick.location)
         |> Point.with_color(colors(brick))
     )
   end
@@ -49,6 +83,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     """
       <svg 
     version="1.0" 
+    style="background-color: #EEEEEE"
     id="Layer_1"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -83,7 +118,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     <rect 
      x="#{x + 1}" y="#{y + 1}"
      style="fill:##{shade};"
-     width="#{@box_width - 2}" height="#{@box_height - 2}"/>
+     width="#{@box_width - 2}" height="#{@box_height - 1}"/>
     """
   end
 
