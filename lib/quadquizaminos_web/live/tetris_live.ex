@@ -3,24 +3,46 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import Phoenix.HTML, only: [raw: 1]
   alias Quadquizaminos.Tetromino
+  alias Quadquizaminos.Point
 
   @box_width 20
   @box_height 20
 
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(tetromino: Tetromino.new_random() |> Tetromino.to_string())}
+    {:ok, new_game(socket)}
   end
 
   def render(assigns) do
     ~L"""
-       <pre><%= @tetromino %></pre>
+      
        <div>
        <%= raw svg_head() %>
-       	<%= raw box({1, 2}, :red) %>
+       	<%= raw boxes(@tetromino) %>
        	<%= raw svg_foot() %>
        </div>
 
     """
+  end
+
+  defp new_game(socket) do
+    socket |> assign(state: :playing, score: 0) |> new_block() |> show()
+  end
+
+  def new_block(socket) do
+    brick = Tetromino.new_random() |> Map.put(:location, {3, 1})
+
+    assign(socket, brick: brick)
+  end
+
+  def show(socket) do
+    brick = socket.assigns.brick
+
+    assign(socket,
+      tetromino:
+        brick
+        |> Tetromino.prepare()
+        |> Point.with_color(colors(brick))
+    )
   end
 
   def svg_head do
@@ -38,6 +60,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def svg_foot, do: "</svg>"
+
+  def boxes(points_with_color) do
+    points_with_color
+    |> Enum.map(fn {x, y, color} ->
+      box({x, y}, color)
+    end)
+    |> Enum.join("\n")
+  end
 
   def box(point, color) do
     """
@@ -76,4 +106,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp shades(:green), do: %{light: "006600", dark: "003300"}
   defp shades(:orange), do: %{light: "FF6600", dark: "FF3300"}
   defp shades(:grey), do: %{light: "686868", dark: "303030"}
+
+  defp colors(%{name: :t}), do: :red
+  defp colors(%{name: :i}), do: :blue
+  defp colors(%{name: :l}), do: :green
+  defp colors(%{name: :z}), do: :orange
+  defp colors(%{name: :o}), do: :grey
 end
