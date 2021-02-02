@@ -18,7 +18,8 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through :browser
 
     live "/game", GameLive
-    live "/", PageLive, :index
+    live "/tt", PageLive, :index
+    get "/", PageController, :index
   end
 
   scope "/auth", QuadquizaminosWeb do

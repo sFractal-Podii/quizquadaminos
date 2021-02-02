@@ -27,11 +27,11 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
-  providers: [github: {Ueberauth.Strategy.Github, [default_scope: "user,public_repo"]}]
+  providers: [github: {Ueberauth.Strategy.Github, [default_scope: "user:email"]}]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: "4a4208b91287caaa3c9f",
-  client_secret: "f9a66591504ae801955cb2282204fc5f4c0d9621"
+  client_id: "",
+  client_secret: ""
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

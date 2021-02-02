@@ -10,11 +10,6 @@ defmodule QuadquizaminosWeb.AuthController do
   alias Ueberauth.Strategy.Helpers
   alias Quadquizaminos.UserFromAuth
 
-  def request(conn, _params) do
-    IO.puts("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-    render(conn, "request.html", callback_url: Helpers.callback_url(conn))
-  end
-
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "You have been logged out!")
@@ -34,7 +29,6 @@ defmodule QuadquizaminosWeb.AuthController do
         conn
         |> put_flash(:info, "Successfully authenticated.")
         |> put_session(:current_user, user)
-        |> IO.inspect(label: "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
         |> configure_session(renew: true)
         |> redirect(to: "/")
 
