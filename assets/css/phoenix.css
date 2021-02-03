@@ -98,4 +98,10 @@ header nav a {
     flex-basis: 527px;
     margin: 2rem 1rem;
   }
+
+  .container{
+    display:flex;
+    justify-content:center;
+
+  }
 }

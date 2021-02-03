@@ -13,8 +13,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def render(%{state: :playing} = assigns) do
     ~L"""
-      <h1><%= @score %><h1>
-      <div phx-window-keydown="keydown">
+
+      <div class="container"><h1><%= @score %><h1></div>
+      <div class="container" phx-window-keydown="keydown">
         <%= raw svg_head() %>
         <%= for row <- [@tetromino, Map.values(@bottom)] do %> 
           <%= for {x, y, color} <- row do %>
@@ -33,17 +34,28 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def render(%{state: :starting} = assigns) do
     ~L"""
+    <div class ="container">
       <h1>Welcome to Tetris!</h1>
-      <button phx-click="start">Start</button>
+     </div>
+     <div class="container">
+       <button phx-click="start">Start</button>
+       </div>
     """
   end
 
   def render(%{state: :game_over} = assigns) do
     ~L"""
+    <div class="container">
       <h1>Game Over</h1>
+      </div>
+       <div class="container">
       <h2>Your score: <%= @score %></h2>
+       </div>
+        <div class="container">
       <button phx-click="start">Play again?</button>
+      </div>
       <%= debug(assigns) %>
+     
     """
   end
 
