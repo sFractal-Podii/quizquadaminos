@@ -27,7 +27,9 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
-  providers: [github: {Ueberauth.Strategy.Github, [default_scope: "user:email"]}]
+  providers: [
+    github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
+  ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
   client_id: "4a4208b91287caaa3c9f",
