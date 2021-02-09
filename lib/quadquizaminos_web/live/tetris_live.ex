@@ -14,32 +14,60 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def render(%{state: :playing} = assigns) do
     ~L"""
 
-      <div class="container"><h1><%= @score %><h1></div>
-      <div class="container" phx-window-keydown="keydown">
-        <%= raw svg_head() %>
-        <%= for row <- [@tetromino, Map.values(@bottom)] do %> 
-          <%= for {x, y, color} <- row do %>
-            <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %> 
-            <rect 
-              x="<%= x+1 %>" y="<%= y+1 %>" 
-              style="fill:#<%= shades(color).light %>;" 
-              width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
-            <%= end %>
-        <%= end %>
-        <%= raw svg_foot() %>
-      </div>
-      <%= debug(assigns) %>
+      <div class="container">
+        <div class="row">
+          <div class="column column-75">
+              <div class="row">
+                <div class="column column-25 column-offset-25">
+                    <h1><%= @score %></h1>
+                </div>
+                <div class="column column-50"> 
+                  <div phx-window-keydown="keydown">
+                    <%= raw svg_head() %>
+                    <%= for row <- [@tetromino, Map.values(@bottom)] do %> 
+                      <%= for {x, y, color} <- row do %>
+                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %> 
+                        <rect 
+                          x="<%= x+1 %>" y="<%= y+1 %>" 
+                          style="fill:#<%= shades(color).light %>;" 
+                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                        <%= end %>
+                    <%= end %>
+                    <%= raw svg_foot() %>
+                  </div>  
+                </div>
+              </div>
+            </div> 
+           <div class="column"> 
+              <h2>How to play</h2>
+                <ol>
+                  <li>Up arrow key rotates the blocks</li>
+                  <li>Left arrow key moves the blocks to the left</li>
+                  <li>Right arrow key moves the blocks to the right</li>
+                </ol>
+           </div>
+          <%= debug(assigns) %>
+        </div>
+    </div>
     """
   end
 
   def render(%{state: :starting} = assigns) do
     ~L"""
     <div class ="container">
-      <h1>Welcome to Tetris!</h1>
-     </div>
-     <div class="container">
-       <button phx-click="start">Start</button>
-       </div>
+      <div class="row">
+          <div class="column column-50 column-offset-25"> 
+            <h1>Welcome to Tetris!</h1>
+              <button phx-click="start">Start</button>
+                <h2>How to play</h2>
+                  <ol>
+                    <li>Up arrow key rotates the blocks</li>
+                    <li>Left arrow key moves the blocks to the left</li>
+                    <li>Right arrow key moves the blocks to the right</li>
+                </ol>
+           </div>
+      </div>
+    </div>
     """
   end
 
