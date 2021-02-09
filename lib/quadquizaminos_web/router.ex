@@ -18,7 +18,16 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through :browser
 
     live "/game", GameLive
-    live "/", PageLive, :index
+    get "/", PageController, :index
+  end
+
+  scope "/auth", QuadquizaminosWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    post "/:provider/callback", AuthController, :callback
+    delete "/logout", AuthController, :delete
   end
 
   # Other scopes may use custom stacks.

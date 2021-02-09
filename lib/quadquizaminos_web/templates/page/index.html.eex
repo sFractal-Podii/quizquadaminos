@@ -1,0 +1,20 @@
+<section class="phx-hero">
+  <h1>QuadQuizAminos</h1>
+  <%= if @current_user do %>
+    <h2>Welcome, <%= @current_user.name %>!</h2>
+    <div>
+      <img src="<%= @current_user.avatar %>" />
+    </div>
+    <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button" %>
+    <br>
+  <% else %>
+    <ul style="list-style: none">
+      <li>
+        <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
+          <i class="fa fa-github"></i>
+          Sign in with GitHub
+        </a>
+      </li>
+    </ul>
+  <% end %>
+</section>
