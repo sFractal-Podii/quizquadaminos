@@ -5,7 +5,7 @@ This is an extension to quadblocks by Grox.io
 which is based on the Phoenix framework with liveview.
 
 # to run game
-blah blah blah
+blah blah 
 
 # game rules
 blah blan
