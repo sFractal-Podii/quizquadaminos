@@ -21,7 +21,7 @@ pre{padding: 1em;}
   margin: 0 auto;
   max-width: 80.0rem;
   padding: 0 2.0rem;
-  position: relative;
+  /* position: relative; */
   width: 100%
 }
 select {
@@ -98,4 +98,6 @@ header nav a {
     flex-basis: 527px;
     margin: 2rem 1rem;
   }
+
+  
 }
