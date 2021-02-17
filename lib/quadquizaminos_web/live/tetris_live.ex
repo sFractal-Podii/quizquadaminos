@@ -43,7 +43,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     """
   end
 
-  def render(%{state: _state} = assigns) do
+  def render(%{state: state} = assigns) do
     ~L"""
 
       <div class="container">
@@ -66,7 +66,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                         <% end %>
                     <% end %>
                     <%= raw svg_foot() %>
-                  </div>  
+                  </div> 
                 </div>
               </div>
             </div> 
@@ -222,6 +222,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def drop(_not_playing, socket, _fast), do: socket
+
+  def move(_direction, %{assigns: %{state: :pausing}} = socket), do: socket
 
   def move(direction, socket) do
     socket
