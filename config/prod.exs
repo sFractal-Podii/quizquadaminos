@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
@@ -10,11 +10,14 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :quadquizaminos, QuadquizaminosWeb.Endpoint,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "localhost", port: 4000],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  check_origin: false
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :quadquizaminos, QuadquizaminosWeb.Endpoint, server: true
 
 # ## SSL Support
 #
@@ -52,4 +55,4 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"

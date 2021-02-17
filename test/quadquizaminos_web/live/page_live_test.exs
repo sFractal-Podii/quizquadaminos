@@ -2,10 +2,10 @@ defmodule QuadquizaminosWeb.PageLiveTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
+  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
-  test "disconnected and connected render", %{conn: conn} do
-    {:ok, page_live, disconnected_html} = live(conn, "/")
-    assert disconnected_html =~ "Welcome to Phoenix!"
-    assert render(page_live) =~ "Welcome to Phoenix!"
+  test "users are required to sign up first to access the game", %{conn: conn} do
+    {:error, {:redirect, %{to: "/"}}} =
+      live(conn, Routes.live_path(conn, QuadquizaminosWeb.TetrisLive))
   end
 end

@@ -5,6 +5,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   alias Quadquizaminos.Tetris
 
   @debug false
+  @box_width 20
+  @box_height 20
 
   def mount(_param, _session, socket) do
     :timer.send_interval(250, self(), :tick)
@@ -31,20 +33,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
                           x="<%= x+1 %>" y="<%= y+1 %>" 
                           style="fill:#<%= shades(color).light %>;" 
                           width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
-                        <%= end %>
-                    <%= end %>
+                        <% end %>
+                    <% end %>
                     <%= raw svg_foot() %>
                   </div>  
                 </div>
               </div>
             </div> 
            <div class="column"> 
-              <h2>How to play</h2>
-                <ol>
-                  <li>Up arrow key rotates the blocks</li>
-                  <li>Left arrow key moves the blocks to the left</li>
-                  <li>Right arrow key moves the blocks to the right</li>
-                </ol>
+              <%= raw game_instruction() %>
            </div>
           <%= debug(assigns) %>
         </div>
@@ -59,12 +56,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
           <div class="column column-50 column-offset-25"> 
             <h1>Welcome to Tetris!</h1>
               <button phx-click="start">Start</button>
-                <h2>How to play</h2>
-                  <ol>
-                    <li>Up arrow key rotates the blocks</li>
-                    <li>Left arrow key moves the blocks to the left</li>
-                    <li>Right arrow key moves the blocks to the right</li>
-                </ol>
+                <%= raw game_instruction() %>
            </div>
       </div>
     </div>
@@ -74,16 +66,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def render(%{state: :game_over} = assigns) do
     ~L"""
     <div class="container">
-      <h1>Game Over</h1>
+      <div class="row">
+        <div class="column column-50 column-offset-25"> 
+          <h1>Game Over</h1>
+            <h2>Your score: <%= @score %></h2>
+              <button phx-click="start">Play again?</button>
+        </div>
       </div>
-       <div class="container">
-      <h2>Your score: <%= @score %></h2>
-       </div>
-        <div class="container">
-      <button phx-click="start">Play again?</button>
-      </div>
-      <%= debug(assigns) %>
+    </div>
+     <%= debug(assigns) %>
      
+    """
+  end
+
+  defp game_instruction do
+    """
+    <h2>How to play</h2>
+        <ol>
+          <li>Up arrow key rotates the blocks</li>
+          <li>Left arrow key moves the blocks to the left</li>
+          <li>Right arrow key moves the blocks to the right</li>
+        </ol>
     """
   end
 

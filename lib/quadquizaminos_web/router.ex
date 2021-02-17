@@ -5,6 +5,7 @@ defmodule QuadquizaminosWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
+    plug QuadquizaminosWeb.Auth
     plug :put_root_layout, {QuadquizaminosWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
@@ -14,13 +15,17 @@ defmodule QuadquizaminosWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :authorize do
+    plug QuadquizaminosWeb.Authorize
+  end
+
   scope "/", QuadquizaminosWeb do
     pipe_through :browser
 
-    live "/game", GameLive
-    live "/", PageLive, :index
+    live "/", PageLive
+
+    pipe_through :authorize
     live "/tetris", TetrisLive
-    get "/", PageController, :index
   end
 
   scope "/auth", QuadquizaminosWeb do

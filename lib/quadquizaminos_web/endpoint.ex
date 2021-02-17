@@ -24,7 +24,7 @@ defmodule QuadquizaminosWeb.Endpoint do
     at: "/",
     from: :quadquizaminos,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js favicon.ico robots.txt bom.json bom.xml)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
