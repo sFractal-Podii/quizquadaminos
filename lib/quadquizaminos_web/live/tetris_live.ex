@@ -13,7 +13,37 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:ok, start_game(socket)}
   end
 
-  def render(%{state: :playing} = assigns) do
+  def render(%{state: :starting} = assigns) do
+    ~L"""
+    <div class ="container">
+      <div class="row">
+          <div class="column column-50 column-offset-25"> 
+            <h1>Welcome to Tetris!</h1>
+              <button phx-click="start">Start</button>
+                <%= raw game_instruction() %>
+           </div>
+      </div>
+    </div>
+    """
+  end
+
+  def render(%{state: :game_over} = assigns) do
+    ~L"""
+    <div class="container">
+      <div class="row">
+        <div class="column column-50 column-offset-25"> 
+          <h1>Game Over</h1>
+            <h2>Your score: <%= @score %></h2>
+              <button phx-click="start">Play again?</button>
+        </div>
+      </div>
+    </div>
+     <%= debug(assigns) %>
+     
+    """
+  end
+
+  def render(%{state: _state} = assigns) do
     ~L"""
 
       <div class="container">
@@ -49,36 +79,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     """
   end
 
-  def render(%{state: :starting} = assigns) do
-    ~L"""
-    <div class ="container">
-      <div class="row">
-          <div class="column column-50 column-offset-25"> 
-            <h1>Welcome to Tetris!</h1>
-              <button phx-click="start">Start</button>
-                <%= raw game_instruction() %>
-           </div>
-      </div>
-    </div>
-    """
-  end
-
-  def render(%{state: :game_over} = assigns) do
-    ~L"""
-    <div class="container">
-      <div class="row">
-        <div class="column column-50 column-offset-25"> 
-          <h1>Game Over</h1>
-            <h2>Your score: <%= @score %></h2>
-              <button phx-click="start">Play again?</button>
-        </div>
-      </div>
-    </div>
-     <%= debug(assigns) %>
-     
-    """
-  end
-
   defp game_instruction do
     """
     <h2>How to play</h2>
@@ -88,6 +88,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
           <li>Right arrow key moves the blocks to the right</li>
         </ol>
     """
+  end
+
+  defp pause_game(socket) do
+    assign(socket, state: :pausing)
   end
 
   defp start_game(socket) do
@@ -251,6 +255,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
     {:noreply, drop(socket.assigns.state, socket, true)}
+  end
+
+  def handle_event("keydown", %{"key" => " "}, socket) do
+    {:noreply, pause_game(socket)}
   end
 
   def handle_event("keydown", _, socket), do: {:noreply, socket}
