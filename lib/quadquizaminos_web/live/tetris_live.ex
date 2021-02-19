@@ -16,14 +16,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:ok, start_game(socket)}
   end
 
-  def handle_params(_, _, %{assigns: %{modal: true}} = socket) do
-    {:noreply, socket |> assign(modal: false)}
-  end
-
-  def handle_params(_params, _, socket) do
-    {:noreply, socket}
-  end
-
   def render(%{state: :starting} = assigns) do
     ~L"""
     <div class ="container">
@@ -66,7 +58,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50"> 
                 <%= if @modal do%>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, return_to: Routes.live_path(@socket, __MODULE__)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, return_to: Routes.live_path(@socket, __MODULE__)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
@@ -256,6 +248,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def do_move(%{assigns: %{brick: brick, bottom: bottom}} = socket, :turn) do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
+  end
+
+  def handle_event("play", _, socket) do
+    {:noreply, socket |> assign(state: :playing, modal: false)}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do

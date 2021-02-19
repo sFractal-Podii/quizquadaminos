@@ -3,7 +3,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
 
   def render(assigns) do
     ~L"""
-    <h> live component</h1>
+    <button phx-click="play">Continue</button>
     """
   end
 end
