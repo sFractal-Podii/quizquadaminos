@@ -2,6 +2,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
 
+  import QuadquizaminosWeb.LiveHelpers
+  alias QuadquizaminosWeb.Router.Helpers, as: Routes
+
   alias Quadquizaminos.Tetris
 
   @debug false
@@ -11,6 +14,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def mount(_param, _session, socket) do
     :timer.send_interval(250, self(), :tick)
     {:ok, start_game(socket)}
+  end
+
+  def handle_params(_, _, %{assigns: %{modal: true}} = socket) do
+    {:noreply, socket |> assign(modal: false)}
+  end
+
+  def handle_params(_params, _, socket) do
+    {:noreply, socket}
   end
 
   def render(%{state: :starting} = assigns) do
@@ -54,6 +65,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                 </div>
                 <div class="column column-50"> 
+                <%= if @modal do%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, return_to: Routes.live_path(@socket, __MODULE__)%>
+                <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %> 
@@ -91,13 +105,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp pause_game(socket) do
-    assign(socket, state: :paused)
+    assign(socket, state: :paused, modal: true)
   end
 
   defp start_game(socket) do
     assign(socket,
       state: :starting,
       box_width: 20,
+      modal: false,
       box_height: 20
     )
   end
