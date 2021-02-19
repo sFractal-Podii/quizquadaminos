@@ -43,7 +43,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     """
   end
 
-  def render(%{state: state} = assigns) do
+  def render(assigns) do
     ~L"""
 
       <div class="container">
@@ -91,7 +91,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp pause_game(socket) do
-    assign(socket, state: :pausing)
+    assign(socket, state: :paused)
   end
 
   defp start_game(socket) do
@@ -223,7 +223,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def drop(_not_playing, socket, _fast), do: socket
 
-  def move(_direction, %{assigns: %{state: :pausing}} = socket), do: socket
+  def move(_direction, %{assigns: %{state: :paused}} = socket), do: socket
 
   def move(direction, socket) do
     socket
