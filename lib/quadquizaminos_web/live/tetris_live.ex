@@ -13,42 +13,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:ok, start_game(socket)}
   end
 
-  def render(%{state: :playing} = assigns) do
-    ~L"""
-
-      <div class="container">
-        <div class="row">
-          <div class="column column-75">
-              <div class="row">
-                <div class="column column-25 column-offset-25">
-                    <h1><%= @score %></h1>
-                </div>
-                <div class="column column-50"> 
-                  <div phx-window-keydown="keydown">
-                    <%= raw svg_head() %>
-                    <%= for row <- [@tetromino, Map.values(@bottom)] do %> 
-                      <%= for {x, y, color} <- row do %>
-                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %> 
-                        <rect 
-                          x="<%= x+1 %>" y="<%= y+1 %>" 
-                          style="fill:#<%= shades(color).light %>;" 
-                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
-                        <% end %>
-                    <% end %>
-                    <%= raw svg_foot() %>
-                  </div>  
-                </div>
-              </div>
-            </div> 
-           <div class="column"> 
-              <%= raw game_instruction() %>
-           </div>
-          <%= debug(assigns) %>
-        </div>
-    </div>
-    """
-  end
-
   def render(%{state: :starting} = assigns) do
     ~L"""
     <div class ="container">
@@ -79,6 +43,42 @@ defmodule QuadquizaminosWeb.TetrisLive do
     """
   end
 
+  def render(assigns) do
+    ~L"""
+
+      <div class="container">
+        <div class="row">
+          <div class="column column-75">
+              <div class="row">
+                <div class="column column-25 column-offset-25">
+                    <h1><%= @score %></h1>
+                </div>
+                <div class="column column-50"> 
+                  <div phx-window-keydown="keydown">
+                    <%= raw svg_head() %>
+                    <%= for row <- [@tetromino, Map.values(@bottom)] do %> 
+                      <%= for {x, y, color} <- row do %>
+                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %> 
+                        <rect 
+                          x="<%= x+1 %>" y="<%= y+1 %>" 
+                          style="fill:#<%= shades(color).light %>;" 
+                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                        <% end %>
+                    <% end %>
+                    <%= raw svg_foot() %>
+                  </div> 
+                </div>
+              </div>
+            </div> 
+           <div class="column"> 
+              <%= raw game_instruction() %>
+           </div>
+          <%= debug(assigns) %>
+        </div>
+    </div>
+    """
+  end
+
   defp game_instruction do
     """
     <h2>How to play</h2>
@@ -88,6 +88,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
           <li>Right arrow key moves the blocks to the right</li>
         </ol>
     """
+  end
+
+  defp pause_game(socket) do
+    assign(socket, state: :paused)
   end
 
   defp start_game(socket) do
@@ -219,6 +223,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def drop(_not_playing, socket, _fast), do: socket
 
+  def move(_direction, %{assigns: %{state: :paused}} = socket), do: socket
+
   def move(direction, socket) do
     socket
     |> do_move(direction)
@@ -251,6 +257,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
     {:noreply, drop(socket.assigns.state, socket, true)}
+  end
+
+  def handle_event("keydown", %{"key" => " "}, socket) do
+    {:noreply, pause_game(socket)}
   end
 
   def handle_event("keydown", _, socket), do: {:noreply, socket}
