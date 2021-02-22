@@ -10,6 +10,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @debug false
   @box_width 20
   @box_height 20
+  @answers %{answers: ["1", "2", "3", "4"], correct: "4"}
 
   def mount(_param, _session, socket) do
     :timer.send_interval(250, self(), :tick)
@@ -95,6 +96,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
         </ol>
     """
   end
+
+  defp correct_answer?(%{correct: guess}, guess), do: true
+  defp correct_answer?(_answers, _guess), do: false
 
   defp pause_game(socket) do
     assign(socket, state: :paused, modal: true)
@@ -250,7 +254,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
-  def handle_event("play", _, socket) do
+  def handle_event("unpause", _, socket) do
+    {:noreply, socket |> assign(state: :playing, modal: false)}
+  end
+
+  def handle_event("powerups", _, socket) do
     {:noreply, socket |> assign(state: :playing, modal: false)}
   end
 
