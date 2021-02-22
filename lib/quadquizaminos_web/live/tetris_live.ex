@@ -4,17 +4,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
+  alias Quadquizaminos.QnA
 
   alias Quadquizaminos.Tetris
 
   @debug false
   @box_width 20
   @box_height 20
-  @qna %{question: "What is 2 + 2?", answers: ["1", "2", "3", "4"], correct: "4"}
 
   def mount(_param, _session, socket) do
     :timer.send_interval(250, self(), :tick)
-    {:ok, socket |> assign(qna: @qna) |> start_game()}
+    {:ok, socket |> assign(qna: QnA.question()) |> start_game()}
   end
 
   def render(%{state: :starting} = assigns) do
@@ -285,9 +285,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, new_game(socket)}
   end
 
-  def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
+  def handle_event("check_answer", %{"quiz" => %{"guess" => guess}} = params, socket) do
     socket =
-      if correct_answer?(@qna, guess) do
+      if correct_answer?(socket.assigns.qna, guess) do
         continue_game(socket)
       else
         pause_game(socket)

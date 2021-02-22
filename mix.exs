@@ -49,7 +49,8 @@ defmodule Quadquizaminos.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_github, "~> 0.7"},
-      {:sbom, git: "https://github.com/voltone/sbom", runtime: false}
+      {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
+      {:earmark, "~> 1.4"}
     ]
   end
 
