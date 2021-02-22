@@ -4,8 +4,8 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp build do
-    {:ok, content} = File.read("qna/sbom/001.md")
-    [question, answers] = content |> String.split(~r/# answers/i)
+    {:ok, content} = choose_file |> File.read()
+    [question, answers] = content |> String.split(~r/## answers/i)
     %{question: question(question), answers: answers(answers), correct: correct_answer(answers)}
   end
 
@@ -19,6 +19,11 @@ defmodule Quadquizaminos.QnA do
   defp question(question) do
     {:ok, question, _} = Earmark.as_html(question)
     question |> String.replace("#", "")
+  end
+
+  defp choose_file do
+    {:ok, files} = File.ls("qna/sbom/")
+    Path.join("qna/sbom", Enum.random(files))
   end
 
   defp correct_answer(answers) do

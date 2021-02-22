@@ -296,6 +296,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket}
   end
 
+  def handle_event("check_answer", _params, socket), do: {:noreply, socket}
+
   def handle_info(:tick, socket) do
     {:noreply, drop(socket.assigns.state, socket, false)}
   end
