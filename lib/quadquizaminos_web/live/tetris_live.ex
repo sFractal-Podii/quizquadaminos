@@ -239,7 +239,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: brick |> Tetris.try_right(bottom))
   end
 
-  def do_move(%{assigns: %{brick: brick, bottom: bottom}} = socket, :turn) do
+  def do_move(%{assigns: %{brick: _brick, bottom: bottom}} = socket, :turn) do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
@@ -284,5 +284,5 @@ defmodule QuadquizaminosWeb.TetrisLive do
     """
   end
 
-  def debug(assigns, _, _), do: ""
+  def debug(_assigns, _, _), do: ""
 end
