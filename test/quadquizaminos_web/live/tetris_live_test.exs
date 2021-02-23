@@ -26,7 +26,7 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
     } do
       right_answer = question().correct
 
-      wrong_answer = Enum.find(["1", "2", "3", "4"], fn guess -> guess != right_answer end)
+      wrong_answer = Enum.find(["0", "1", "2", "3", "4"], fn guess -> guess != right_answer end)
 
       {:ok, view, _html} = live(conn, "/tetris")
 
