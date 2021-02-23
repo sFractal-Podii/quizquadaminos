@@ -48,7 +48,7 @@ select {
   display: block;
 }
 .phx-logo img {
-  width: auto;
+  width: 300px;
   display: block;
 }
 
@@ -99,5 +99,5 @@ header nav a {
     margin: 2rem 1rem;
   }
 
-  
+
 }

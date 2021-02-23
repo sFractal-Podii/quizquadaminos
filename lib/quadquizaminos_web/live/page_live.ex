@@ -12,9 +12,9 @@ defmodule QuadquizaminosWeb.PageLive do
 
   def render(assigns) do
     ~L"""
-    <div class="container"> 
+    <div class="container">
     <section class="phx-hero">
-    <h1>QuadQuizAminos</h1>
+    <h1>QuizQuadBlocks</h1>
     <%= if @current_user do %>
      <h2>Welcome, <%= @current_user.name %>!</h2>
      <div>
