@@ -2,6 +2,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
 
+  import QuadquizaminosWeb.LiveHelpers
+  alias QuadquizaminosWeb.Router.Helpers, as: Routes
+  alias Quadquizaminos.QnA
+
   alias Quadquizaminos.Tetris
 
   @debug false
@@ -10,14 +14,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, _session, socket) do
     :timer.send_interval(250, self(), :tick)
-    {:ok, start_game(socket)}
+    {:ok, socket |> assign(qna: QnA.question()) |> start_game()}
   end
 
   def render(%{state: :starting} = assigns) do
     ~L"""
     <div class ="container">
       <div class="row">
-          <div class="column column-50 column-offset-25"> 
+          <div class="column column-50 column-offset-25">
             <h1>Welcome to Tetris!</h1>
               <button phx-click="start">Start</button>
                 <%= raw game_instruction() %>
@@ -31,7 +35,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     ~L"""
     <div class="container">
       <div class="row">
-        <div class="column column-50 column-offset-25"> 
+        <div class="column column-50 column-offset-25">
           <h1>Game Over</h1>
             <h2>Your score: <%= @score %></h2>
               <button phx-click="start">Play again?</button>
@@ -39,7 +43,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       </div>
     </div>
      <%= debug(assigns) %>
-     
+
     """
   end
 
@@ -53,24 +57,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
                 </div>
-                <div class="column column-50"> 
+                <div class="column column-50">
+                <%= if @modal do%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, return_to: Routes.live_path(@socket, __MODULE__)%>
+                <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
-                    <%= for row <- [@tetromino, Map.values(@bottom)] do %> 
+                    <%= for row <- [@tetromino, Map.values(@bottom)] do %>
                       <%= for {x, y, color} <- row do %>
-                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %> 
-                        <rect 
-                          x="<%= x+1 %>" y="<%= y+1 %>" 
-                          style="fill:#<%= shades(color).light %>;" 
+                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %>
+                        <rect
+                          x="<%= x+1 %>" y="<%= y+1 %>"
+                          style="fill:#<%= shades(color).light %>;"
                           width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
                         <% end %>
                     <% end %>
                     <%= raw svg_foot() %>
-                  </div> 
+                  </div>
                 </div>
               </div>
-            </div> 
-           <div class="column"> 
+            </div>
+           <div class="column">
               <%= raw game_instruction() %>
            </div>
           <%= debug(assigns) %>
@@ -91,13 +98,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp pause_game(socket) do
-    assign(socket, state: :paused)
+    assign(socket, state: :paused, modal: true)
   end
 
   defp start_game(socket) do
     assign(socket,
       state: :starting,
       box_width: 20,
+      modal: false,
       box_height: 20
     )
   end
@@ -134,14 +142,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def svg_head() do
     """
-    <svg 
-    version="1.0" 
+    <svg
+    version="1.0"
     style="background-color: #F8F8F8"
-    id="Layer_1" 
-    xmlns="http://www.w3.org/2000/svg" 
-    xmlns:xlink="http://www.w3.org/1999/xlink" 
-    width="200" height="400" 
-    viewBox="0 0 200 400" 
+    id="Layer_1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    width="200" height="400"
+    viewBox="0 0 200 400"
     xml:space="preserve">
     """
   end
@@ -167,9 +175,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {x, y} = to_pixels(point, 20, 20)
 
     """
-    <rect 
-      x="#{x + 1}" y="#{y + 1}" 
-      style="fill:##{shade};" 
+    <rect
+      x="#{x + 1}" y="#{y + 1}"
+      style="fill:##{shade};"
       width="#{@box_width - 2}" height="#{@box_height - 1}"/>
     """
   end
@@ -179,8 +187,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {w, h} = {@box_width, @box_height}
 
     """
-    <polyline 
-        style="fill:##{shade}" 
+    <polyline
+        style="fill:##{shade}"
         points="#{x + 1},#{y + 1} #{x + w},#{y + 1} #{x + w},#{y + h}" />
     """
   end
@@ -243,6 +251,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
+  def handle_event("unpause", _, socket) do
+    {:noreply, socket |> assign(state: :playing, modal: false)}
+  end
+
+  def handle_event("powerups", _, socket) do
+    {:noreply, socket |> assign(state: :playing, modal: false)}
+  end
+
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
     {:noreply, move(:left, socket)}
   end
@@ -269,8 +285,28 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, new_game(socket)}
   end
 
+  def handle_event("check_answer", %{"quiz" => %{"guess" => guess}} = params, socket) do
+    socket =
+      if correct_answer?(socket.assigns.qna, guess) do
+        continue_game(socket)
+      else
+        pause_game(socket)
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("check_answer", _params, socket), do: {:noreply, socket}
+
   def handle_info(:tick, socket) do
     {:noreply, drop(socket.assigns.state, socket, false)}
+  end
+
+  defp correct_answer?(%{correct: guess}, guess), do: true
+  defp correct_answer?(_qna, _guess), do: false
+
+  defp continue_game(socket) do
+    socket |> assign(state: :playing, modal: false)
   end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
