@@ -1,10 +1,9 @@
 defmodule QuadquizaminosWeb.PageControllerTest do
   use QuadquizaminosWeb.ConnCase
 
-  import Phoenix.LiveViewTest
-
   test "user is restricted to access tetris game if not logged in", %{conn: conn} do
-    {:error, {:redirect, %{to: "/"}}} = live(conn, "/tetris")
+    conn = get(conn, "/tetris")
+    assert get_flash(conn, :error) == "Please login first"
   end
 
   test "non configured players are restricted from accessing tetris game", %{conn: conn} do
