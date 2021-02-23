@@ -8,10 +8,9 @@ defmodule QuadquizaminosWeb.Authorize do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    current_user =
-      conn.assigns
-      |> Map.get(:current_user)
-      |> authorize_user(conn)
+    conn.assigns
+    |> Map.get(:current_user)
+    |> authorize_user(conn)
   end
 
   defp authorize_user(nil, conn) do
@@ -21,5 +20,5 @@ defmodule QuadquizaminosWeb.Authorize do
     |> halt()
   end
 
-  defp authorize_user(user, conn), do: conn
+  defp authorize_user(_user, conn), do: conn
 end

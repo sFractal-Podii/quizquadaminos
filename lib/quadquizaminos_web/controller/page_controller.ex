@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.PageController do
   alias Quadquizaminos.UserFromAuth
 
   def index(conn, _params) do
-    user_id = get_session(conn, :current_user)
+    user_id = get_session(conn, :user_id)
     render(conn, "index.html", current_user: current_user(user_id))
   end
 

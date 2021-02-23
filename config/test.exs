@@ -20,3 +20,16 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :ueberauth, Ueberauth,
+  providers: [
+    github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: "4b4208b91287cbbb3c9f",
+  client_secret: "f9b66591504ae801955cb2200004fc5f4c0d9621"
+
+config :quadquizaminos,
+  # add github_id of authorized users
+  github_ids: [4_000_000]
