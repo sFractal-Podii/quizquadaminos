@@ -22,8 +22,6 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
 
 # Compile assets
 COPY assets ./assets
-RUN npm install --prefix ./assets && \
-    npm run deploy --prefix ./assets
 
 # Now, let's go with the actual elixir code. The order matters: if we only
 # change elixir code, all the above layers will be cached ~ less image build time.
@@ -35,6 +33,9 @@ COPY Makefile ./Makefile
 RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.10.3/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli
 RUN make sbom
 RUN cp bom* ./assets/static
+RUN npm install --prefix ./assets && \
+    npm run deploy --prefix ./assets
+
 
 # Final build step: digest static assets and generate the release
 RUN mix phx.digest && mix release
