@@ -4,7 +4,7 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp build do
-    {:ok, content} = choose_file |> File.read()
+    {:ok, content} = choose_file() |> File.read()
     [question, answers] = content |> String.split(~r/## answers/i)
     %{question: question(question), answers: answers(answers), correct: correct_answer(answers)}
   end

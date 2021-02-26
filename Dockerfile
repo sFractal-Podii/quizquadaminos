@@ -30,6 +30,7 @@ RUN npm install --prefix ./assets && \
 COPY config ./config
 COPY lib ./lib
 COPY priv ./priv
+COPY qna ./qna
 COPY Makefile ./Makefile
 
 RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.10.3/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli

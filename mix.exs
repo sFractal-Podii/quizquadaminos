@@ -10,7 +10,12 @@ defmodule Quadquizaminos.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        quadquizaminos: [
+          overlays: ["qna"]
+        ]
+      ]
     ]
   end
 
@@ -20,7 +25,7 @@ defmodule Quadquizaminos.MixProject do
   def application do
     [
       mod: {Quadquizaminos.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth, :mix]
     ]
   end
 
