@@ -7,7 +7,6 @@ each with a set of questions:
 - OpenC2
 - OpenChain
 - Phoenix
-- EEF
 - Sponsors
 
 blah blah on why each is important to either supply chain or this game
