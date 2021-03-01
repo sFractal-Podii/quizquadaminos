@@ -22,7 +22,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     <div class ="container">
       <div class="row">
           <div class="column column-50 column-offset-25">
-            <h1>Welcome to Tetris!</h1>
+            <h1>Welcome to QuizQuadBlocks!</h1>
               <button phx-click="start">Start</button>
                 <%= raw game_instruction() %>
            </div>
