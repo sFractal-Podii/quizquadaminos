@@ -8,8 +8,10 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
      <h2> Answer </h2>
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
     <%= for {answer, index}<- @qna.answers do %>
-    <%= radio_button f,  :guess, answer, value: index %>
-    <label> <%= answer %></label>
+    <%= label do %>
+      <%= radio_button f, :guess, answer, value: index %>
+      <%= answer %>
+     <% end %> <!-- end label -->
     <% end %>
 
     <%= submit  "Continue" %>
