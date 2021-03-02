@@ -1,5 +1,5 @@
 defmodule Quadquizaminos.QnA do
-  @qna_directory Application.app_dir(:quadquizaminos, "priv/static/qna")
+  @qna_directory Application.get_env(:quadquizaminos, :qna_directory)
 
   def question do
     build()
@@ -24,9 +24,7 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp choose_file do
-    IO.inspect(@qna_directory)
     {:ok, files} = File.ls("#{@qna_directory}/sbom")
-    IO.inspect(files)
     Path.join("#{@qna_directory}/sbom", Enum.random(files))
   end
 
