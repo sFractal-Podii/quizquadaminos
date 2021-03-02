@@ -1,8 +1,9 @@
 <section class="phx-hero">
-  <h1>QuizQuadBlocks</h1>
+  <h1>QuadBlocksQuiz</h1>
   <%= if @current_user do %>
     <h2>Welcome, <%= @current_user.name %>!</h2>
     <h3>Version <%= Quadquizaminos.Meta.version() %></h3>
+    <h4><a href="bom.json" target="_blank">SBOM available here</a></h4>
     <div>
       <img src="<%= @current_user.avatar %>" />
     </div>
