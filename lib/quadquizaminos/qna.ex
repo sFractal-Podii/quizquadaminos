@@ -1,10 +1,12 @@
 defmodule Quadquizaminos.QnA do
+  @qna_directory Application.get_env(:quadquizaminos, :qna_directory)
+
   def question do
     build()
   end
 
   defp build do
-    {:ok, content} = choose_file |> File.read()
+    {:ok, content} = choose_file() |> File.read()
     [question, answers] = content |> String.split(~r/## answers/i)
     %{question: question(question), answers: answers(answers), correct: correct_answer(answers)}
   end
@@ -22,8 +24,8 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp choose_file do
-    {:ok, files} = File.ls("qna/sbom/")
-    Path.join("qna/sbom", Enum.random(files))
+    {:ok, files} = File.ls("#{@qna_directory}/sbom")
+    Path.join("#{@qna_directory}/sbom", Enum.random(files))
   end
 
   defp correct_answer(answers) do

@@ -9,6 +9,7 @@ defmodule Quadquizaminos.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      build_embedded: true,
       aliases: aliases(),
       deps: deps()
     ]
@@ -20,7 +21,7 @@ defmodule Quadquizaminos.MixProject do
   def application do
     [
       mod: {Quadquizaminos.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth, :mix]
     ]
   end
 

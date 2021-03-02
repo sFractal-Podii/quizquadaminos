@@ -19,6 +19,9 @@ config :logger, level: :info
 
 config :quadquizaminos, QuadquizaminosWeb.Endpoint, server: true
 
+config :quadquizaminos,
+  qna_directory: "/home/app/prod/lib/quadquizaminos/priv/static/qna"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

@@ -30,6 +30,9 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
     ]
   ]
 
+config :quadquizaminos,
+  qna_directory: Path.join(Path.dirname(__DIR__), "priv/static/qna")
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
