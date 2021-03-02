@@ -1,11 +1,15 @@
 <section class="phx-hero">
-  <h1>QuizQuadBlocks</h1>
+  <h1>QuadBlocksQuiz</h1>
+  <h3>Supply Chain Village Edition</h3>
+  <h4>Version <%= Quadquizaminos.Meta.version() %></h4>
+  <h4><a href="bom.json" target="_blank">SBOM available here</a></h4>
+
   <%= if @current_user do %>
     <h2>Welcome, <%= @current_user.name %>!</h2>
     <div>
       <img src="<%= @current_user.avatar %>" />
     </div>
-    <%= link "Tetris Game", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TetrisLive), class: "button" %>
+    <%= link "Play Game", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TetrisLive), class: "button" %>
     <br>
   <% else %>
     <ul style="list-style: none">
