@@ -1,5 +1,6 @@
 <section class="phx-hero">
   <h1>QuadBlocksQuiz</h1>
+  <h3>Supply Chain Village Edition</h3>
   <%= if @current_user do %>
     <h2>Welcome, <%= @current_user.name %>!</h2>
     <h3>Version <%= Quadquizaminos.Meta.version() %></h3>
