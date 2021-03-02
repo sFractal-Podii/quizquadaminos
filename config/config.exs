@@ -37,7 +37,19 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 
 config :quadquizaminos,
   # add github_id of authorized users
-  github_ids: [1, 2]
+  github_ids: []
+
+config :quadquizaminos,
+  # topics of QnA
+  topics: [:supply_chain, :sbom, :open_c2, :open_chain, :phoenix, :sponsors],
+  # name and questions in :supply_chain topic
+  supply_chain: %{name: "Supply Chain", question_number: 1, total_questions: 3, questions:["001","002","003"] },
+  sbom: %{name: "SBOM", question_number: 1, total_questions: 4, questions:["001","002","003", "004"] },
+  open_c2: %{name: "OpenC2", question_number: 1, total_questions: 1, questions:["001"] },
+  open_chain: %{name: "Open Chain", question_number: 1, total_questions: 1, questions:["001"] },
+  phoenix: %{name: "Phoenix", question_number: 1, total_questions: 1, questions:["001"] },
+  sponsors: %{name: "Sponsors", question_number: 1, total_questions: 1, questions:["001"] }
+
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
