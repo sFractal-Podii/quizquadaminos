@@ -5,7 +5,7 @@
     <div>
       <img src="<%= @current_user.avatar %>" />
     </div>
-    <%= link "Tetris Game", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TetrisLive), class: "button" %>
+    <%= link "Play Game", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TetrisLive), class: "button" %>
     <br>
   <% else %>
     <ul style="list-style: none">
