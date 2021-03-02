@@ -9,13 +9,9 @@ defmodule Quadquizaminos.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      build_embedded: true,
       aliases: aliases(),
-      deps: deps(),
-      releases: [
-        quadquizaminos: [
-          overlays: ["qna"]
-        ]
-      ]
+      deps: deps()
     ]
   end
 
