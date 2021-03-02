@@ -32,12 +32,12 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: "4a4208b91287caaa3c9f",
-  client_secret: "f9a66591504ae801955cb2282204fc5f4c0d9621"
+  client_id: "",
+  client_secret: ""
 
 config :quadquizaminos,
   # add github_id of authorized users
-  github_ids: [1, 2]
+  github_ids: []
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
