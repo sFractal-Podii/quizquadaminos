@@ -23,7 +23,7 @@ defmodule QuadquizaminosWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :quadquizaminos,
-    gzip: false,
+    gzip: true,
     only: ~w(css fonts images js favicon.ico robots.txt bom.json bom.xml)
 
   # Code reloading can be explicitly enabled under the
