@@ -2,6 +2,7 @@
   <h1>QuizQuadBlocks</h1>
   <%= if @current_user do %>
     <h2>Welcome, <%= @current_user.name %>!</h2>
+    <h3>Version <%= Quadquizaminos.Meta.version() %></h3>
     <div>
       <img src="<%= @current_user.avatar %>" />
     </div>
