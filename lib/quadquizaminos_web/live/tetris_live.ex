@@ -310,7 +310,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp correct_answer?(_qna, _guess), do: false
 
   defp continue_game(socket) do
-    socket |> assign(state: :playing, modal: false)
+    socket |> assign(state: :playing, modal: false, category: nil)
   end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())

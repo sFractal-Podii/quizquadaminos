@@ -22,7 +22,7 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp build do
-    categories |> Enum.random() |> build()
+    categories() |> Enum.random() |> build()
   end
 
   defp build(category) do
@@ -50,6 +50,7 @@ defmodule Quadquizaminos.QnA do
 
   defp choose_file(category) do
     path = "#{@qna_directory}/#{category}"
+
     {:ok, files} = File.ls(path)
     Path.join(path, Enum.random(files))
   end

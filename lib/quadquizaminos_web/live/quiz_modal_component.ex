@@ -8,7 +8,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
 
     <button phx-click="unpause">Continue</button>
     <%= for category <- QnA.categories() do %>
-     <button phx-click="choose_category" phx-value-category="<%= category%>"><%= category %></button>
+     <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
     </div>
     """
