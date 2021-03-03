@@ -9,7 +9,6 @@ defmodule Quadquizaminos.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      build_embedded: true,
       aliases: aliases(),
       deps: deps()
     ]
@@ -27,7 +26,7 @@ defmodule Quadquizaminos.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_), do: ["lib", "qna"]
 
   # Specifies your project dependencies.
   #

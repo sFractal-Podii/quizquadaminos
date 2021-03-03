@@ -37,7 +37,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 
 config :quadquizaminos,
   # add github_id of authorized users
-  github_ids: []
+  github_ids: [1, 2, 584_211]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
