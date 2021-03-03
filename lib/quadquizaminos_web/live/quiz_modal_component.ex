@@ -28,7 +28,6 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
         <% end %>
        <%= submit  "Continue" %>
        </form>
-        <button phx-click="unpause">Power Up</button>
         <div>
     """
   end

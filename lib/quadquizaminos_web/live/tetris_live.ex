@@ -251,16 +251,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
-  def handle_event("unpause", _, socket) do
-    {:noreply, socket |> assign(state: :playing, modal: false)}
-  end
-
   def handle_event("choose_category", %{"category" => category}, socket) do
     {:noreply, socket |> assign(category: category, qna: QnA.question(category))}
   end
 
   def handle_event("powerups", _, socket) do
-    {:noreply, socket |> assign(state: :playing, modal: false)}
+    {:noreply, socket |> assign(state: :playing, modal: false, category: nil)}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -289,7 +285,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, new_game(socket)}
   end
 
-  def handle_event("check_answer", %{"quiz" => %{"guess" => guess}} = params, socket) do
+  def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
     socket =
       if correct_answer?(socket.assigns.qna, guess) do
         continue_game(socket)
