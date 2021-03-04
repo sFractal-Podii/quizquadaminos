@@ -25,7 +25,8 @@ defmodule QuadquizaminosWeb.Router do
     get "/", PageController, :index
 
     pipe_through :authorize
-    live "/tetris", TetrisLive
+    live "/tetris", TetrisLive, :tetris
+    live "/instructions", TetrisLive, :instructions
   end
 
   scope "/auth", QuadquizaminosWeb do
