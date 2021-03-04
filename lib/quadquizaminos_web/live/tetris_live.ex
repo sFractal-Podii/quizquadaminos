@@ -1,7 +1,7 @@
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
-
+  
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.QnA
@@ -17,17 +17,22 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:ok, socket |> assign(qna: QnA.question()) |> start_game()}
   end
 
-  def render(%{state: :starting} = assigns) do
+  def render(%{state: :starting, live_action: live_action} = assigns) do
     ~L"""
-    <div class ="container">
-      <div class="row">
-          <div class="column column-50 column-offset-25">
-            <h1>Welcome to QuizQuadBlocks!</h1>
-              <button phx-click="start">Start</button>
-                <%= raw game_instruction() %>
-           </div>
+    <%= if live_action == :instructions do %>
+      <div class="column">
+        <%= raw game_instruction() %>
       </div>
-    </div>
+      <% else %>
+        <div class ="container">
+          <div class="row">
+              <div class="column column-50 column-offset-25">
+                <h1>Welcome to QuizQuadBlocks!</h1>
+                  <button phx-click="start">Start</button>
+              </div>
+          </div>
+        </div>
+    <% end %>
     """
   end
 
@@ -49,7 +54,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def render(assigns) do
     ~L"""
-
       <div class="container">
         <div class="row">
           <div class="column column-75">
@@ -58,7 +62,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                 </div>
                 <div class="column column-50">
-                <%= if @modal do%>
+                <%= if @modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, return_to: Routes.live_path(@socket, __MODULE__)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
@@ -77,9 +81,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
               </div>
             </div>
-           <div class="column">
-              <%= raw game_instruction() %>
-           </div>
+            <div class="column">
+            <a class="button", href = <%= Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions) %> > How to play </a>
+            </div>
           <%= debug(assigns) %>
         </div>
     </div>
