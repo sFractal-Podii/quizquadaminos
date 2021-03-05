@@ -10,6 +10,7 @@ defmodule Quadquizaminos.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
+      build_embedded: true,
       deps: deps()
     ]
   end

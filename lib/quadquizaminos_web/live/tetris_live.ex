@@ -255,8 +255,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(category: category, qna: QnA.question(category))}
   end
 
-  def handle_event("powerups", _, socket) do
-    {:noreply, socket |> assign(state: :playing, modal: false, category: nil)}
+  def handle_event("unpause", _, socket) do
+    {:noreply, socket |> assign(state: :playing, modal: false)}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do

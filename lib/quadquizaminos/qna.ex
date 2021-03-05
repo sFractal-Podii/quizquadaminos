@@ -14,10 +14,11 @@ defmodule Quadquizaminos.QnA do
   end
 
   def categories do
-    "qna"
+    @qna_directory
     |> File.ls!()
     |> Enum.filter(fn folder ->
-      File.dir?("./qna/#{folder}") and not (File.ls!("./qna/#{folder}") |> Enum.empty?())
+      File.dir?("#{@qna_directory}/#{folder}") and
+        not (File.ls!("#{@qna_directory}/#{folder}") |> Enum.empty?())
     end)
   end
 
