@@ -89,12 +89,12 @@ or answer questions for points and powerups
 
 ### 5.6 Vendors
 - this game, this sandbox, would not be possible without sponsors. Please read about them and answer easy questions to gain points and powerups (row delete)
-- sFractal Consulting - Platinum Sponsor - designed this game, wrote software, funded additional developers, ... sFractal Consulting is a botique software/cybersecurity consulting firm.
+- sFractal Consulting - Platinum Sponsor - designed this game, wrote software, funded additional developers, ... sFractal Consulting is a boutique software/cybersecurity consulting firm.
     + sFractal Consulting strongly believes in Supply Chain Risk Management, and assists its clients with quantitative risk management, SBOM creation as part of the SDLC, and Open Chain.
     + sFractal Consulting strongly believes in creating SBOMs for all software, but confesses to not always being able to walk that talk. SBOMs are available for this game, but not for all the software sFracal has created. sFractal Consulting commits to continuous improvement in this area and to slowly grow the SBOM corpus will all new software it creates or updates
     + sFractal Consulting strongly believes in cybersecurity automation and is very active in OpenC2. For example the security of this website is under OpenC2 Control
     + sFractal Consulting commits to improving it's OpenChain behavior, fully admitting it has not been a focus but intends to change that
-- Podii - In-kind Sponsor - developed much of the quiz software for this game, building on the work of Grox.io. Podii developes "software done right".
+- Podii - In-kind Sponsor - developed much of the quiz software for this game, building on the work of Grox.io. Podii develops "software done right".
     + blah blah on supply chain, SBOM, OpenC2, OpenChain
 - Grox.io - In-kind Sponsor - developed much of the quadblocks software that is the basis for this game. Grox.io teaches programming. The Tetris game that is the basis of this game is developed as part of a Grox.io course.
     + blah blah on supply chain, SBOM, OpenC2, OpenChain
