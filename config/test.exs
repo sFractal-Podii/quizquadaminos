@@ -21,6 +21,9 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+config :quadquizaminos,
+  qna_directory: Path.join(Path.dirname(__DIR__), "priv/static/qna")
+
 config :ueberauth, Ueberauth,
   providers: [
     github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
