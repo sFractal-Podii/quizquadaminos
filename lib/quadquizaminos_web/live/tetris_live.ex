@@ -63,7 +63,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, return_to: Routes.live_path(@socket, __MODULE__)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, return_to: Routes.tetris_path(@socket, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>

@@ -26,7 +26,7 @@ defmodule QuadquizaminosWeb.Router do
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
-    live "/instructions", TetrisLive, :instructions
+    live "/tetris/instructions", TetrisLive, :instructions
   end
 
   scope "/auth", QuadquizaminosWeb do
