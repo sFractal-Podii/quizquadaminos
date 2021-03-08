@@ -60,12 +60,16 @@ defmodule Quadquizaminos.QnA do
     count = Enum.count(files)
     index = count - 1
 
-    if position > index do
-      Path.join(path, Enum.at(files, position - count))
-    else
-      Path.join(path, Enum.at(files, position))
-    end
+    position = file_position(position, index, count)
+
+    Path.join(path, Enum.at(files, position))
   end
+
+  defp file_position(position, index, count) when position > index do
+    position - count
+  end
+
+  defp file_position(position, _index, _count), do: position
 
   defp correct_answer(answers) do
     regex = ~r/(-|\*)/
