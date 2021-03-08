@@ -18,10 +18,11 @@ defmodule Quadquizaminos.QnA do
   end
 
   def categories do
-    "qna"
+    @qna_directory
     |> File.ls!()
     |> Enum.filter(fn folder ->
-      File.dir?("./qna/#{folder}") and not (File.ls!("./qna/#{folder}") |> Enum.empty?())
+      File.dir?("#{@qna_directory}/#{folder}") and
+        not (File.ls!("#{@qna_directory}/#{folder}") |> Enum.empty?())
     end)
   end
 
@@ -56,7 +57,14 @@ defmodule Quadquizaminos.QnA do
     path = "#{@qna_directory}/#{category}"
     {:ok, files} = File.ls(path)
     files = Enum.sort(files)
-    Path.join(path, Enum.at(files, position))
+    count = Enum.count(files)
+    index = count - 1
+
+    if position > index do
+      Path.join(path, Enum.at(files, position - count))
+    else
+      Path.join(path, Enum.at(files, position))
+    end
   end
 
   defp correct_answer(answers) do
