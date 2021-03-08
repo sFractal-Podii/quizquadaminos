@@ -14,7 +14,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, _session, socket) do
     :timer.send_interval(250, self(), :tick)
-    {:ok, socket |> assign(qna: QnA.question()) |> start_game()}
+    {:ok, socket |> assign(qna: %{}, category: nil) |> start_game()}
   end
 
   def render(%{state: :starting} = assigns) do
@@ -59,7 +59,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do%>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, return_to: Routes.live_path(@socket, __MODULE__)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, category: @category, return_to: Routes.live_path(@socket, __MODULE__)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
@@ -251,11 +251,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
-  def handle_event("unpause", _, socket) do
-    {:noreply, socket |> assign(state: :playing, modal: false)}
+  def handle_event("choose_category", %{"category" => category}, socket) do
+    {:noreply, socket |> assign(category: category, qna: QnA.question(category))}
   end
 
-  def handle_event("powerups", _, socket) do
+  def handle_event("unpause", _, socket) do
     {:noreply, socket |> assign(state: :playing, modal: false)}
   end
 
@@ -285,7 +285,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, new_game(socket)}
   end
 
-  def handle_event("check_answer", %{"quiz" => %{"guess" => guess}} = params, socket) do
+  def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
     socket =
       if correct_answer?(socket.assigns.qna, guess) do
         continue_game(socket)
@@ -306,7 +306,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp correct_answer?(_qna, _guess), do: false
 
   defp continue_game(socket) do
-    socket |> assign(state: :playing, modal: false)
+    socket |> assign(state: :playing, modal: false, category: nil)
   end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
