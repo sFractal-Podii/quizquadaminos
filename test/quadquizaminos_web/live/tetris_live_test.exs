@@ -17,35 +17,68 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
       render_click(view, "start")
 
       html = render_keydown(view, "keydown", %{"key" => " "})
-      assert html =~ "<button type=\"submit\">Continue</button></form>"
+      assert html =~ "button phx-click=\"unpause\">Continue</button>"
       assert html =~ "<div class=\"phx-modal-content\">"
+    end
+
+    test "player can see categories of topics to select", %{conn: conn} do
+      categories = Quadquizaminos.QnA.categories()
+      {_view, html} = pause_game(conn)
+
+      Enum.each(categories, fn category ->
+        category = category |> Macro.camelize()
+        assert html =~ "#{category}</button>"
+      end)
+    end
+
+    test "game continues when continue button is clicked", %{conn: conn} do
+      {view, _html} = pause_game(conn)
+
+      html = render_click(view, "unpause")
+      refute html =~ "<div class=\"phx-modal-content\">"
+    end
+  end
+
+  describe "select topic" do
+    test "player can select topic of the question to answer", %{conn: conn} do
+      categories = Quadquizaminos.QnA.categories()
+      {view, _html} = pause_game(conn)
+
+      Enum.map(categories, fn category ->
+        html = render_click(view, "choose_category", %{"category" => "#{category}"})
+        assert html =~ "Question:"
+      end)
     end
 
     test "game continues when right answer is picked otherwise remains in paused state", %{
       conn: conn
     } do
-      right_answer = question().correct
+      [category | _] = Quadquizaminos.QnA.categories()
+      {view, _html} = pause_game(conn)
 
-      wrong_answer = Enum.find(["0", "1", "2", "3", "4"], fn guess -> guess != right_answer end)
+      render_click(view, "choose_category", %{"category" => category})
+      right_answer = Quadquizaminos.QnA.question(category).correct
 
-      {:ok, view, _html} = live(conn, "/tetris")
+      wrong_answer =
+        Enum.find(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], fn guess ->
+          guess != right_answer
+        end)
 
-      render_click(view, "start")
-
-      render_keydown(view, "keydown", %{"key" => " "})
-
-      pause_html =
-        render_submit(view, "check_answer", %{"quiz" => %{"guess" => "#{wrong_answer}"}})
+      pause_html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
 
       continue_html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
       assert pause_html =~ "Question:"
-      assert pause_html =~ "<button type=\"submit\">Continue</button></form>"
-      refute continue_html =~ "<button type=\"submit\">Continue</button></form>"
+      assert pause_html =~ "Continue</button></form>"
+      refute continue_html =~ "Continue</button></form>"
     end
   end
 
-  defp question do
-    Quadquizaminos.QnA.question()
+  defp pause_game(conn) do
+    {:ok, view, _html} = live(conn, "/tetris")
+
+    render_click(view, "start")
+    html = render_keydown(view, "keydown", %{"key" => " "})
+    {view, html}
   end
 end

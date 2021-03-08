@@ -5,10 +5,36 @@ defmodule Quadquizaminos.QnA do
     build()
   end
 
+  def question(nil) do
+    %{}
+  end
+
+  def question(category) do
+    build(category)
+  end
+
+  def categories do
+    @qna_directory
+    |> File.ls!()
+    |> Enum.filter(fn folder ->
+      File.dir?("#{@qna_directory}/#{folder}") and
+        not (File.ls!("#{@qna_directory}/#{folder}") |> Enum.empty?())
+    end)
+  end
+
   defp build do
-    {:ok, content} = choose_file() |> File.read()
+    categories() |> Enum.random() |> build()
+  end
+
+  defp build(category) do
+    {:ok, content} = category |> choose_file() |> File.read()
     [question, answers] = content |> String.split(~r/## answers/i)
-    %{question: question(question), answers: answers(answers), correct: correct_answer(answers)}
+
+    %{
+      question: question_as_html(question),
+      answers: answers(answers),
+      correct: correct_answer(answers)
+    }
   end
 
   defp answers(answers) do
@@ -18,14 +44,16 @@ defmodule Quadquizaminos.QnA do
     |> Enum.with_index()
   end
 
-  defp question(question) do
+  defp question_as_html(question) do
     {:ok, question, _} = Earmark.as_html(question)
     question |> String.replace("#", "")
   end
 
-  defp choose_file do
-    {:ok, files} = File.ls("#{@qna_directory}/sbom")
-    Path.join("#{@qna_directory}/sbom", Enum.random(files))
+  defp choose_file(category) do
+    path = "#{@qna_directory}/#{category}"
+
+    {:ok, files} = File.ls(path)
+    Path.join(path, Enum.random(files))
   end
 
   defp correct_answer(answers) do

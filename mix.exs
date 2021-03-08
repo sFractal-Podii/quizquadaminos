@@ -4,13 +4,13 @@ defmodule Quadquizaminos.MixProject do
   def project do
     [
       app: :quadquizaminos,
-      version: "0.1.0",
+      version: "0.3.6",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      build_embedded: true,
       aliases: aliases(),
+      build_embedded: true,
       deps: deps()
     ]
   end
@@ -27,7 +27,7 @@ defmodule Quadquizaminos.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_), do: ["lib", "qna"]
 
   # Specifies your project dependencies.
   #

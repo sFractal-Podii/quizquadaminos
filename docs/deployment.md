@@ -17,13 +17,24 @@ If you want to create a docker image for use in your laptop then you can use the
 ```shell
 make docker-image
 ```
+Note that the image tag will be build off the latest github tag if not specified. 
+You can specify the image tag by passing `APP_VERSION`
+
+```shell
+make docker-image APP_VERSION=v1.0.2
+```
 
 #### Creating an image and pushing to GCP
 You can optionally create an image on your laptop and push it up to GCP container registry using the following command
 ```shell
 make push-image-gcp
 ```
-This will create the image and tag it with the current application version then push the created image to GCP
+This will create the image and tag it with the latest github tag then push the created image to GCP.
+You can specify github tag you want to tag the image with by passing `APP_VERSION`
+
+```shell
+make push-image-gcp APP_VERSION=v1.0.2
+```
 
 #### creating an image and lauching an instance on GCP
 You can also run a server on GCP using the docker image by running the following command
