@@ -59,7 +59,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do%>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, category: @category, return_to: Routes.live_path(@socket, __MODULE__)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.live_path(@socket, __MODULE__)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
@@ -290,7 +290,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
       if correct_answer?(socket.assigns.qna, guess) do
         continue_game(socket)
       else
-        return_to_game(socket)
+        score = socket.assigns.score - 5
+        score = if score < 0, do: 0, else: score
+        socket = assign(socket, score: score)
+        pause_game(socket)
       end
 
     {:noreply, socket}
@@ -308,14 +311,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp continue_game(socket) do
     score = socket.assigns.score + 25
     socket |> assign(state: :playing, modal: false, category: nil, score: score)
-  end
-
-  defp return_to_game(socket) do
-    score = socket.assigns.score - 5
-
-    score = if score < 0, do: 0, else: score
-
-    socket |> assign(state: :paused, modal: false, score: score)
   end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())

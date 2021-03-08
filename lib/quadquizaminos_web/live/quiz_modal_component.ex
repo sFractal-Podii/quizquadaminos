@@ -17,6 +17,8 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
   def render(assigns) do
     ~L"""
     <div>
+         <div class ="float-right"><h2><b>Total Score:</b><%= @score %></h2></div>
+         <br/>
          <h2><%= raw @qna.question %></h2>
          <h2> Answer </h2>
         <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
