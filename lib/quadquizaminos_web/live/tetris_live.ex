@@ -14,7 +14,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, _session, socket) do
     :timer.send_interval(250, self(), :tick)
-    {:ok, socket |> assign(qna: %{}, category: nil) |> start_game()}
+
+    {:ok,
+     socket |> assign(qna: %{}, category: nil, categories: init_categories()) |> start_game()}
   end
 
   def render(%{state: :starting} = assigns) do
@@ -252,7 +254,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("choose_category", %{"category" => category}, socket) do
-    {:noreply, socket |> assign(category: category, qna: QnA.question(category))}
+    categories = socket.assigns.categories
+    question_position = categories[category]
+    categories = increment_position(categories, category, question_position)
+
+    {:noreply,
+     socket
+     |> assign(
+       category: category,
+       categories: categories,
+       qna: QnA.question(category, question_position)
+     )}
   end
 
   def handle_event("unpause", _, socket) do
@@ -321,4 +333,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def debug(_assigns, _, _), do: ""
+
+  defp init_categories do
+    QnA.categories()
+    |> Enum.into(%{}, fn elem -> {elem, 0} end)
+  end
+
+  defp increment_position(categories, category, current_position) do
+    %{categories | category => current_position + 1}
+  end
 end

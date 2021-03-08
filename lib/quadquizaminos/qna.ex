@@ -13,21 +13,24 @@ defmodule Quadquizaminos.QnA do
     build(category)
   end
 
+  def question(category, position) do
+    build(category, position)
+  end
+
   def categories do
-    @qna_directory
+    "qna"
     |> File.ls!()
     |> Enum.filter(fn folder ->
-      File.dir?("#{@qna_directory}/#{folder}") and
-        not (File.ls!("#{@qna_directory}/#{folder}") |> Enum.empty?())
+      File.dir?("./qna/#{folder}") and not (File.ls!("./qna/#{folder}") |> Enum.empty?())
     end)
   end
 
   defp build do
-    categories() |> Enum.random() |> build()
+    categories |> Enum.random() |> build()
   end
 
-  defp build(category) do
-    {:ok, content} = category |> choose_file() |> File.read()
+  defp build(category, position \\ 0) do
+    {:ok, content} = category |> choose_file(position) |> File.read()
     [question, answers] = content |> String.split(~r/## answers/i)
 
     %{
@@ -49,11 +52,11 @@ defmodule Quadquizaminos.QnA do
     question |> String.replace("#", "")
   end
 
-  defp choose_file(category) do
+  defp choose_file(category, position \\ 0) do
     path = "#{@qna_directory}/#{category}"
-
     {:ok, files} = File.ls(path)
-    Path.join(path, Enum.random(files))
+    files = Enum.sort(files)
+    Path.join(path, Enum.at(files, position))
   end
 
   defp correct_answer(answers) do
