@@ -1,7 +1,7 @@
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
-  
+
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.QnA
@@ -64,8 +64,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                 </div>
                 <div class="column column-50">
-                <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, modal: @modal, qna: @qna, return_to: Routes.tetris_path(@socket, :tetris)%>
+                <%= if @modal do%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
@@ -306,6 +306,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
       if correct_answer?(socket.assigns.qna, guess) do
         continue_game(socket)
       else
+        score = socket.assigns.score - 5
+        score = if score < 0, do: 0, else: score
+        socket = assign(socket, score: score)
         pause_game(socket)
       end
 
@@ -322,7 +325,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp correct_answer?(_qna, _guess), do: false
 
   defp continue_game(socket) do
-    socket |> assign(state: :playing, modal: false, category: nil)
+    score = socket.assigns.score + 25
+    socket |> assign(state: :playing, modal: false, category: nil, score: score)
   end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
