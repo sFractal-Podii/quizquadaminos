@@ -32,14 +32,15 @@ defmodule Quadquizaminos.QnA do
 
   defp build(category, position \\ 0) do
     {:ok, content} = category |> choose_file(position) |> File.read()
-    [question, answers_scores] = content |> String.split(~r/## answers/i) 
-    [answers, score] = answers_scores |> String.split(~r/## score/i) |> IO.inspect(label: "==========")
+    [question, answers_scores] = content |> String.split(~r/## answers/i)
+
+    [answers, score] = answers_scores |> String.split(~r/## score/i)
 
     %{
       question: question_as_html(question),
       answers: answers(answers),
-      correct: correct_answer(answers)
-      # score: 
+      correct: correct_answer(answers),
+      score: score(score)
     }
   end
 
@@ -47,6 +48,10 @@ defmodule Quadquizaminos.QnA do
     score
     |> String.replace("\n", "")
     |> String.split("-", trim: true)
+    |> Enum.map(fn score ->
+      score |> String.trim_leading() |> String.split(":") |> List.to_tuple()
+    end)
+    |> Map.new()
   end
 
   defp answers(answers) do
