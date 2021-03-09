@@ -32,9 +32,13 @@ defmodule Quadquizaminos.QnA do
 
   defp build(category, position \\ 0) do
     {:ok, content} = category |> choose_file(position) |> File.read()
+
     [question, answers_scores] = content |> String.split(~r/## answers/i)
 
-    [answers, score] = answers_scores |> String.split(~r/## score/i)
+    [answers, score] =
+      answers_scores
+      |> String.split(~r/## score/i)
+      |> answer_and_score()
 
     %{
       question: question_as_html(question),
@@ -43,6 +47,11 @@ defmodule Quadquizaminos.QnA do
       score: score(score)
     }
   end
+
+  defp answer_and_score([answers | []]), do: [answers, nil]
+  defp answer_and_score([answers, scores]), do: [answers, scores]
+
+  defp score(nil), do: %{}
 
   defp score(score) do
     score

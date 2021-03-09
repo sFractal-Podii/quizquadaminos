@@ -302,17 +302,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
-    socket =
-      if correct_answer?(socket.assigns.qna, guess) do
-        continue_game(socket)
-      else
-        score = socket.assigns.score - 5
-        score = if score < 0, do: 0, else: score
-        socket = assign(socket, score: score)
-        pause_game(socket)
-      end
-
-    {:noreply, socket}
+    {:noreply, socket.assigns.qna |> correct_answer?(guess) |> continue_or_pause_game(socket)}
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
@@ -321,12 +311,45 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, drop(socket.assigns.state, socket, false)}
   end
 
+  defp continue_or_pause_game(true, socket) do
+    continue_game(socket)
+  end
+
+  defp continue_or_pause_game(_, socket) do
+    points = wrong_points(socket)
+    score = socket.assigns.score - points
+    score = if score < 0, do: 0, else: score
+    socket = assign(socket, score: score)
+    pause_game(socket)
+  end
+
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
 
   defp continue_game(socket) do
-    score = socket.assigns.score + 25
+    points = right_points(socket)
+    score = socket.assigns.score + points
     socket |> assign(state: :playing, modal: false, category: nil, score: score)
+  end
+
+  defp wrong_points(socket) do
+    if Enum.empty?(socket.assigns.qna.score) do
+      0
+    else
+      %{"Wrong" => points} = socket.assigns.qna.score
+      {points, _} = Integer.parse(points)
+      points
+    end
+  end
+
+  defp right_points(socket) do
+    if Enum.empty?(socket.assigns.qna.score) do
+      0
+    else
+      %{"Right" => points} = socket.assigns.qna.score
+      {points, _} = Integer.parse(points)
+      points
+    end
   end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
