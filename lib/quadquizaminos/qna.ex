@@ -13,6 +13,10 @@ defmodule Quadquizaminos.QnA do
     build(category)
   end
 
+  def question(category, position) do
+    build(category, position)
+  end
+
   def categories do
     @qna_directory
     |> File.ls!()
@@ -23,11 +27,11 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp build do
-    categories() |> Enum.random() |> build()
+    categories |> Enum.random() |> build()
   end
 
-  defp build(category) do
-    {:ok, content} = category |> choose_file() |> File.read()
+  defp build(category, position \\ 0) do
+    {:ok, content} = category |> choose_file(position) |> File.read()
     [question, answers] = content |> String.split(~r/## answers/i)
 
     %{
@@ -49,12 +53,23 @@ defmodule Quadquizaminos.QnA do
     question |> String.replace("#", "")
   end
 
-  defp choose_file(category) do
+  defp choose_file(category, position \\ 0) do
     path = "#{@qna_directory}/#{category}"
-
     {:ok, files} = File.ls(path)
-    Path.join(path, Enum.random(files))
+    files = Enum.sort(files)
+    count = Enum.count(files)
+    index = count - 1
+
+    position = file_position(position, index, count)
+
+    Path.join(path, Enum.at(files, position))
   end
+
+  defp file_position(position, index, count) when position > index do
+    position - count
+  end
+
+  defp file_position(position, _index, _count), do: position
 
   defp correct_answer(answers) do
     regex = ~r/(-|\*)/
