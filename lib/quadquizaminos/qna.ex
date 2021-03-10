@@ -51,7 +51,7 @@ defmodule Quadquizaminos.QnA do
   defp answer_and_score([answers | []]), do: [answers, nil]
   defp answer_and_score([answers, scores]), do: [answers, scores]
 
-  defp score(nil), do: %{}
+  defp score(nil), do: %{"Right" => "25", "Wrong" => "5"}
 
   defp score(score) do
     score

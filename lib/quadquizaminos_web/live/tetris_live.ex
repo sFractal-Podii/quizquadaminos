@@ -333,23 +333,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp wrong_points(socket) do
-    if Enum.empty?(socket.assigns.qna.score) do
-      0
-    else
-      %{"Wrong" => points} = socket.assigns.qna.score
-      {points, _} = Integer.parse(points)
-      points
-    end
+    %{"Wrong" => points} = socket.assigns.qna.score
+    {points, _} = Integer.parse(points)
+    points
   end
 
   defp right_points(socket) do
-    if Enum.empty?(socket.assigns.qna.score) do
-      0
-    else
-      %{"Right" => points} = socket.assigns.qna.score
-      {points, _} = Integer.parse(points)
-      points
-    end
+    %{"Right" => points} = socket.assigns.qna.score
+    {points, _} = Integer.parse(points)
+    points
   end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
