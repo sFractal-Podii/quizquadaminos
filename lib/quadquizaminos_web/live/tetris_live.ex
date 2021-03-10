@@ -304,7 +304,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
     socket =
       if correct_answer?(socket.assigns.qna, guess) do
-        continue_game(socket)
+        socket |> assign(category: nil, score: socket.assigns.score + 25)
       else
         score = socket.assigns.score - 5
         score = if score < 0, do: 0, else: score
@@ -323,11 +323,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
-
-  defp continue_game(socket) do
-    score = socket.assigns.score + 25
-    socket |> assign(state: :playing, modal: false, category: nil, score: score)
-  end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
 
