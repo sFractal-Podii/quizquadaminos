@@ -16,13 +16,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
     :timer.send_interval(250, self(), :tick)
 
     {:ok,
-     socket |> assign(qna: %{}, category: nil, categories: init_categories()) |> start_game()}
+     socket |> assign(qna: %{}, category: nil, categories: init_categories(), instructions_modal: false) |> start_game()}  
   end
 
-  def render(%{state: :starting, live_action: live_action} = assigns) do
+  def render(%{state: :starting, live_action: live_action} = assigns) do   
     ~L"""
     <%= if live_action == :instructions do %>
-      <div class="column">
+    <div class = "phx-modal-content">
         <%= raw game_instruction() %>
       </div>
       <% else %>
@@ -64,8 +64,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                 </div>
                 <div class="column column-50">
-                <%= if @modal do%>
+                <%= if @modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <% end %>
+                <%= if @instructions_modal do %>
+                 <%= live_modal @socket, QuadquizaminosWeb.InstructionsComponent, id: 2, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris) %>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
@@ -84,7 +87,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
               </div>
             </div>
             <div class="column">
-            <a class="button", href = <%= Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions) %> > How to play </a>
+            <a class="button" phx-click="instructions">  How to play </a>
             </div>
           <%= debug(assigns) %>
         </div>
@@ -316,6 +319,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
+
+  def handle_event("instructions", _params, socket) do
+    {:noreply, socket |> assign(instructions_modal: true, state: :paused)}
+  end
+
+  def handle_event("close_instructions", _param, socket)do
+    {:noreply, socket |> assign(instructions_modal: false, state: :playing)}
+  end
 
   def handle_info(:tick, socket) do
     {:noreply, drop(socket.assigns.state, socket, false)}
