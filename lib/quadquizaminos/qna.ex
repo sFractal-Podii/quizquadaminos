@@ -37,8 +37,21 @@ defmodule Quadquizaminos.QnA do
     %{
       question: question_as_html(question),
       answers: answers(answers),
-      correct: correct_answer(answers)
+      correct: correct_answer(answers),
+      powerup: powerup(content)
     }
+  end
+
+  defp powerup(content) do
+    regex = ~r/# powerup(?<powerup>.*)/i
+
+    case Regex.named_captures(regex, content |> String.replace("\n", " ")) do
+      %{"powerup" => powerup} ->
+        powerup |> String.trim() |> String.downcase() |> String.to_atom()
+
+      nil ->
+        nil
+    end
   end
 
   defp answers(answers) do
