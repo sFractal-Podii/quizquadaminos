@@ -50,7 +50,7 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
       end)
     end
 
-    test "game continues when right answer is picked otherwise remains in paused state", %{
+    test "game  remains in paused state when wrong answer is picked", %{
       conn: conn
     } do
       [category | _] = Quadquizaminos.QnA.categories()
@@ -64,13 +64,21 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
           guess != right_answer
         end)
 
-      pause_html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
 
-      continue_html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+      assert html =~ "Question:"
+      assert html =~ "Continue</button></form>"
+    end
 
-      assert pause_html =~ "Question:"
-      assert pause_html =~ "Continue</button></form>"
-      refute continue_html =~ "Continue</button></form>"
+    test "choosing correct answer asks player to choose another category", %{conn: conn} do
+      [category | _] = Quadquizaminos.QnA.categories()
+      {view, _html} = pause_game(conn)
+
+      render_click(view, "choose_category", %{"category" => category})
+      right_answer = Quadquizaminos.QnA.question(category).correct
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+      assert html =~ "Continue"
+      assert html =~ category |> Macro.camelize()
     end
   end
 

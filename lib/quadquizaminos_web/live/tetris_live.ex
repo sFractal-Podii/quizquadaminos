@@ -302,7 +302,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
-    {:noreply, socket.assigns.qna |> correct_answer?(guess) |> continue_or_pause_game(socket)}
+    {:noreply,
+     socket.assigns.qna |> correct_answer?(guess) |> return_to_categories_or_pause_game(socket)}
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
@@ -311,11 +312,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, drop(socket.assigns.state, socket, false)}
   end
 
-  defp continue_or_pause_game(true, socket) do
-    continue_game(socket)
+  defp return_to_categories_or_pause_game(true, socket) do
+    points = right_points(socket)
+    socket |> assign(category: nil, score: socket.assigns.score + points)
   end
 
-  defp continue_or_pause_game(_, socket) do
+  defp return_to_categories_or_pause_game(_, socket) do
     points = wrong_points(socket)
     score = socket.assigns.score - points
     score = if score < 0, do: 0, else: score
@@ -325,12 +327,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
-
-  defp continue_game(socket) do
-    points = right_points(socket)
-    score = socket.assigns.score + points
-    socket |> assign(state: :playing, modal: false, category: nil, score: score)
-  end
 
   defp wrong_points(socket) do
     %{"Wrong" => points} = socket.assigns.qna.score
