@@ -340,12 +340,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def debug(_assigns, _, _), do: ""
 
   defp init_categories do
-1 conflicting file
-tetris_live.ex
-...uadquizaminos_web/live/tetris_live.ex
-lib/quadquizaminos_web/live/tetris_live.ex
-1 conflict
-
     QnA.categories()
     |> Enum.into(%{}, fn elem -> {elem, 0} end)
   end
