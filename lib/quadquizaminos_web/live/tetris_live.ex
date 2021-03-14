@@ -326,11 +326,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
 
-  defp continue_game(socket) do
-    score = socket.assigns.score + 25
-    socket |> assign(state: :playing, modal: false, category: nil, score: score)
-  end
-
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
 
   def debug(assigns, true, :dev) do
@@ -345,6 +340,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def debug(_assigns, _, _), do: ""
 
   defp init_categories do
+1 conflicting file
+tetris_live.ex
+...uadquizaminos_web/live/tetris_live.ex
+lib/quadquizaminos_web/live/tetris_live.ex
+1 conflict
+
     QnA.categories()
     |> Enum.into(%{}, fn elem -> {elem, 0} end)
   end
