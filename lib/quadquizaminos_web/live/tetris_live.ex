@@ -1,3 +1,5 @@
+
+
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
@@ -12,11 +14,25 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @box_width 20
   @box_height 20
 
+  @drop_speeds [ %{name: "full throttle", ratio: 1}, # 20/s, 50 ms
+                 %{name: "high speed", ratio: 2},    # 10/s, 100 ms
+                 %{name: "fast", ratio: 5},          # 4/s, 250 ms. - default game starts with
+                 %{name: "moderate", ratio: 7},      # ~3/s, 350 ms
+                 %{name: "leisurely", ratio: 10},    # 2/s, 500 ms
+                 %{name: "sedate", ratio: 15},       # 3/2s, 750 ms
+                 %{name: "lethargic", ratio: 20}     # 1/s, 1000 ms
+                  ]
+
+
   def mount(_param, _session, socket) do
-    :timer.send_interval(250, self(), :tick)
+    :timer.send_interval(50, self(), :tick)
 
     {:ok,
-     socket |> assign(qna: %{}, category: nil, categories: init_categories()) |> start_game()}
+     socket
+     |> assign(qna: %{}, category: nil, categories: init_categories())
+     |> assign(speed: 2, tick_count: 5)
+     |> start_game()
+    }
   end
 
   def render(%{state: :starting, live_action: live_action} = assigns) do
@@ -99,6 +115,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
           <li>Up arrow key rotates the blocks</li>
           <li>Left arrow key moves the blocks to the left</li>
           <li>Right arrow key moves the blocks to the right</li>
+          <li>Down arrow key moves the blocks down</li>
+          <li>Debug until powerups: "r" raises dropping speed</li>
+          <li>Debug until powerups: "l" lowers dropping speed</li>
+          <li>Debug until powerups: "c" clears bottom blocks</li>
         </ol>
     """
   end
@@ -110,9 +130,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp start_game(socket) do
     assign(socket,
       state: :starting,
-      box_width: 20,
+      box_width: @box_width,
       modal: false,
-      box_height: 20
+      box_height: @box_height
     )
   end
 
@@ -124,6 +144,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
     )
     |> new_block
     |> show
+  end
+
+  defp raise_speed(socket) do
+    speed = socket.assigns.speed - 1
+    speed = if speed < 0, do: 0, else: speed
+    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    tick_count = speed_info.ratio
+    assign(socket, speed: speed, tick_count: tick_count)
+  end
+
+  defp lower_speed(socket) do
+    speed = socket.assigns.speed + 1
+    lowest_speed = length(@drop_speeds) - 1
+    speed = if speed > lowest_speed, do: lowest_speed, else: speed
+    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    tick_count = speed_info.ratio
+    assign(socket, speed: speed, tick_count: tick_count)
+  end
+
+  defp clear_blocks(socket) do
+    assign(socket, bottom: %{})
   end
 
   def new_block(socket) do
@@ -295,6 +336,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, pause_game(socket)}
   end
 
+  ## until powerups and for debugging - take out eventually
+  def handle_event("keydown", %{"key" => "l"}, socket) do
+    {:noreply, lower_speed(socket)}
+  end
+
+  ## until powerups and for debugging - take out eventually
+  def handle_event("keydown", %{"key" => "r"}, socket) do
+    {:noreply, raise_speed(socket)}
+  end
+
+  ## until powerups and for debugging - take out eventually
+  def handle_event("keydown", %{"key" => "c"}, socket) do
+    {:noreply, clear_blocks(socket)}
+  end
+
   def handle_event("keydown", _, socket), do: {:noreply, socket}
 
   def handle_event("start", _, socket) do
@@ -311,14 +367,25 @@ defmodule QuadquizaminosWeb.TetrisLive do
         socket = assign(socket, score: score)
         pause_game(socket)
       end
-
     {:noreply, socket}
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
 
   def handle_info(:tick, socket) do
-    {:noreply, drop(socket.assigns.state, socket, false)}
+    tick_count = socket.assigns.tick_count - 1
+    if tick_count > 0 do
+      ## don't drop yet
+      socket = assign(socket, tick_count: tick_count)
+      {:noreply, socket}
+    else
+      ## reset counter and drop
+      {:ok, speed_info} = Enum.fetch(@drop_speeds, socket.assigns.speed)
+      tick_count = speed_info.ratio
+
+      socket = assign(socket, tick_count: tick_count)
+      {:noreply, drop(socket.assigns.state, socket, false)}
+    end
   end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
