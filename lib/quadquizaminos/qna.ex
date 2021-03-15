@@ -42,8 +42,9 @@ defmodule Quadquizaminos.QnA do
 
     %{
       question: question_as_html(question),
-      answers: answers(answers),
+      answers: answers(content, answers),
       correct: correct_answer(answers),
+      powerup: powerup(content),
       score: score(score)
     }
   end
@@ -61,6 +62,34 @@ defmodule Quadquizaminos.QnA do
       score |> String.trim_leading() |> String.split(":") |> List.to_tuple()
     end)
     |> Map.new()
+  end
+
+  defp powerup(content) do
+    regex = ~r/# powerup(?<powerup>.*)/i
+
+    case Regex.named_captures(regex, content |> String.replace("\n", " ")) do
+      %{"powerup" => powerup} ->
+        powerup |> String.trim() |> String.downcase() |> String.to_atom()
+
+      nil ->
+        nil
+    end
+  end
+
+  defp answers(content, answers) do
+    regex = ~r/# answers(?<answers>.*)#/iU
+
+    case Regex.named_captures(regex, content |> String.replace("\n", " ")) do
+      %{"answers" => answers} ->
+        answers
+        |> String.trim()
+        |> String.split(["-", "*"], trim: true)
+        |> Enum.with_index()
+
+      nil ->
+        nil
+        answers(answers)
+    end
   end
 
   defp answers(answers) do

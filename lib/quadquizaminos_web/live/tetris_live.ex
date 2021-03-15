@@ -16,7 +16,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
     :timer.send_interval(250, self(), :tick)
 
     {:ok,
-     socket |> assign(qna: %{}, category: nil, categories: init_categories()) |> start_game()}
+     socket
+     |> assign(qna: %{}, category: nil, categories: init_categories(), powers: [])
+     |> start_game()}
   end
 
   def render(%{state: :starting, live_action: live_action} = assigns) do
@@ -65,7 +67,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do%>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
@@ -302,8 +304,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
-    {:noreply,
-     socket.assigns.qna |> correct_answer?(guess) |> return_to_categories_or_pause_game(socket)}
+    socket =
+      if correct_answer?(socket.assigns.qna, guess) do
+        socket |> assign(category: nil) |> add_power() |> assign_score()
+      else
+        points = wrong_points(socket)
+        score = socket.assigns.score - points
+        score = if score < 0, do: 0, else: score
+        socket = assign(socket, score: score)
+        pause_game(socket)
+      end
+
+    {:noreply, socket}
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
@@ -312,18 +324,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, drop(socket.assigns.state, socket, false)}
   end
 
-  defp return_to_categories_or_pause_game(true, socket) do
-    points = right_points(socket)
-    socket |> assign(category: nil, score: socket.assigns.score + points)
-  end
+  # defp return_to_categories_or_pause_game(true, socket) do
+  #   points = right_points(socket)
+  #   socket |> assign(category: nil, score: socket.assigns.score + points)
+  # end
 
-  defp return_to_categories_or_pause_game(_, socket) do
-    points = wrong_points(socket)
-    score = socket.assigns.score - points
-    score = if score < 0, do: 0, else: score
-    socket = assign(socket, score: score)
-    pause_game(socket)
-  end
+  # defp return_to_categories_or_pause_game(_, socket) do
+  #   points = wrong_points(socket)
+  #   score = socket.assigns.score - points
+  #   score = if score < 0, do: 0, else: score
+  #   socket = assign(socket, score: score)
+  #   pause_game(socket)
+  # end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
@@ -360,5 +372,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp increment_position(categories, category, current_position) do
     %{categories | category => current_position + 1}
+  end
+
+  defp assign_score(socket) do
+    points = right_points(socket)
+    socket |> assign(score: socket.assigns.score + points)
+  end
+
+  defp add_power(socket) do
+    case socket.assigns.qna[:powerup] do
+      nil ->
+        socket
+
+      power ->
+        current_powers = socket.assigns.powers
+        assign(socket, powers: [power | current_powers])
+    end
   end
 end
