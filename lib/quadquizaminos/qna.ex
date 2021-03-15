@@ -33,41 +33,39 @@ defmodule Quadquizaminos.QnA do
   defp build(category, position \\ 0) do
     {:ok, content} = category |> choose_file(position) |> File.read()
 
-    [question, answers_scores] = content |> String.split(~r/## answers/i)
-
-    [answers, score] =
-      answers_scores
-      |> String.split(~r/## score/i)
-      |> answer_and_score()
+    [question, answers] = content |> String.split(~r/## answers/i)
 
     %{
       question: question_as_html(question),
       answers: answers(content, answers),
       correct: correct_answer(answers),
       powerup: powerup(content),
-      score: score(score)
+      score: score(content)
     }
   end
 
-  defp answer_and_score([answers | []]), do: [answers, nil]
-  defp answer_and_score([answers, scores]), do: [answers, scores]
+  defp score(content) do
+    regex = ~r/# score(?<score>.*)/i
 
-  defp score(nil), do: %{"Right" => "25", "Wrong" => "5"}
+    case named_captures(regex, content) do
+      %{"score" => score} ->
+        [score | _] = String.split(score, ~r/## powerup/i)
 
-  defp score(score) do
-    score
-    |> String.replace("\n", "")
-    |> String.split("-", trim: true)
-    |> Enum.map(fn score ->
-      score |> String.trim_leading() |> String.split(":") |> List.to_tuple()
-    end)
-    |> Map.new()
+        score
+        |> String.trim()
+        |> String.split("-", trim: true)
+        |> Enum.map(fn score -> score |> String.trim() |> String.split(":") |> List.to_tuple() end)
+        |> Map.new()
+
+      nil ->
+        %{"Right" => "25", "Wrong" => "5"}
+    end
   end
 
   defp powerup(content) do
     regex = ~r/# powerup(?<powerup>.*)/i
 
-    case Regex.named_captures(regex, content |> String.replace("\n", " ")) do
+    case named_captures(regex, content) do
       %{"powerup" => powerup} ->
         powerup |> String.trim() |> String.downcase() |> String.to_atom()
 
@@ -79,7 +77,7 @@ defmodule Quadquizaminos.QnA do
   defp answers(content, answers) do
     regex = ~r/# answers(?<answers>.*)#/iU
 
-    case Regex.named_captures(regex, content |> String.replace("\n", " ")) do
+    case named_captures(regex, content) do
       %{"answers" => answers} ->
         answers
         |> String.trim()
@@ -97,6 +95,10 @@ defmodule Quadquizaminos.QnA do
     |> String.replace("\n", "")
     |> String.split(["-", "*"], trim: true)
     |> Enum.with_index()
+  end
+
+  defp named_captures(regex, content) do
+    Regex.named_captures(regex, content |> String.replace("\n", " "))
   end
 
   defp question_as_html(question) do
