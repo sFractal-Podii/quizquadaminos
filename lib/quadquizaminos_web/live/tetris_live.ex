@@ -29,10 +29,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     {:ok,
      socket
-     |> assign(qna: %{}, category: nil, categories: init_categories())
+     |> assign(qna: %{}, category: nil, categories: init_categories(), powers: [])
      |> assign(speed: 2, tick_count: 5)
-     |> start_game()
-    }
+     |> start_game()}
   end
 
   def render(%{state: :starting, live_action: live_action} = assigns) do
@@ -81,7 +80,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do%>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown">
                     <%= raw svg_head() %>
@@ -360,7 +359,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
     socket =
       if correct_answer?(socket.assigns.qna, guess) do
-        socket |> assign(category: nil, score: socket.assigns.score + 25)
+        socket |> assign(category: nil) |> add_power() |> assign_score()
       else
         score = socket.assigns.score - 5
         score = if score < 0, do: 0, else: score
@@ -411,5 +410,20 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp increment_position(categories, category, current_position) do
     %{categories | category => current_position + 1}
+  end
+
+  defp assign_score(socket) do
+    socket |> assign(score: socket.assigns.score + 25)
+  end
+
+  defp add_power(socket) do
+    case socket.assigns.qna[:powerup] do
+      nil ->
+        socket
+
+      power ->
+        current_powers = socket.assigns.powers
+        assign(socket, powers: [power | current_powers])
+    end
   end
 end
