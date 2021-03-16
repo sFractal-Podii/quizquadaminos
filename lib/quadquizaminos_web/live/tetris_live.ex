@@ -17,7 +17,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     {:ok,
      socket
-     |> assign(qna: %{}, category: nil, categories: init_categories(), powers: [])
+     |> assign(
+       qna: %{},
+       category: nil,
+       categories: init_categories(),
+       powers: [],
+       coord_modal: false
+     )
      |> start_game()}
   end
 
@@ -87,10 +93,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
             </div>
             <div class="column">
             <a class="button", href = <%= Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions) %> > How to play </a>
+            <br/>
+            <%= if @coord_modal do %>
+               <%= live_component @socket,  QuadquizaminosWeb.CoordModalComponent, id: 2, powers: @powers %>
+              <% end %>
             </div>
-          <%= debug(assigns) %>
+          <br/>
         </div>
     </div>
+     <%= debug(assigns) %>
     """
   end
 
@@ -208,6 +219,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp shades(:green), do: %{light: "8BBF57", dark: "769359"}
   defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
   defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
+  defp shades(:purple), do: %{light: "800080", dark: "4d004d"}
 
   defp color(%{name: :t}), do: :red
   defp color(%{name: :i}), do: :blue
@@ -319,6 +331,24 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
+
+  def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
+    {:noreply, socket |> assign(coord_modal: true, modal: false)}
+  end
+
+  def handle_event("powerup", _, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("add_block", %{"coord" => %{"x" => x, "y" => y}}, socket) do
+    {x, _} = Integer.parse(x)
+    {y, _} = Integer.parse(y)
+    powers = socket.assigns.powers -- [:addblock]
+    bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
+
+    {:noreply,
+     socket |> assign(bottom: bottom, coord_modal: false, state: :playing, powers: powers)}
+  end
 
   def handle_info(:tick, socket) do
     {:noreply, drop(socket.assigns.state, socket, false)}

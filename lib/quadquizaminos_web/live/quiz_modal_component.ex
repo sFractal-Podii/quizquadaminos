@@ -47,7 +47,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
   defp show_powers(assigns) do
     ~L"""
      <%= for power <- @powers do %>
-     <i class="fas <%=power_icon(power)%>"></i>
+     <i class="fas <%=power_icon(power)%>" phx-click="powerup" phx-value-powerup="<%= power %>"></i>
      <% end %>
     """
   end
