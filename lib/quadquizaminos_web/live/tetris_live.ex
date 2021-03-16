@@ -355,12 +355,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def debug(assigns, true, :dev) do
     ~L"""
-    <div class="container">
     <pre>
     <%= raw( @tetromino |> inspect) %>
     <%= raw( @bottom |> inspect) %>
     </pre>
-    </div>
     """
   end
 
