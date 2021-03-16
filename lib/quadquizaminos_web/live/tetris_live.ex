@@ -308,7 +308,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       if correct_answer?(socket.assigns.qna, guess) do
         socket |> assign(category: nil) |> add_power() |> assign_score()
       else
-        score = socket.assigns.score - 5
+        points = wrong_points(socket)
+        score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
         socket = assign(socket, score: score)
         pause_game(socket)
@@ -323,8 +324,33 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, drop(socket.assigns.state, socket, false)}
   end
 
+  # defp return_to_categories_or_pause_game(true, socket) do
+  #   points = right_points(socket)
+  #   socket |> assign(category: nil, score: socket.assigns.score + points)
+  # end
+
+  # defp return_to_categories_or_pause_game(_, socket) do
+  #   points = wrong_points(socket)
+  #   score = socket.assigns.score - points
+  #   score = if score < 0, do: 0, else: score
+  #   socket = assign(socket, score: score)
+  #   pause_game(socket)
+  # end
+
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
+
+  defp wrong_points(socket) do
+    %{"Wrong" => points} = socket.assigns.qna.score
+    {points, _} = Integer.parse(points)
+    points
+  end
+
+  defp right_points(socket) do
+    %{"Right" => points} = socket.assigns.qna.score
+    {points, _} = Integer.parse(points)
+    points
+  end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
 
@@ -349,7 +375,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp assign_score(socket) do
-    socket |> assign(score: socket.assigns.score + 25)
+    points = right_points(socket)
+    socket |> assign(score: socket.assigns.score + points)
   end
 
   defp add_power(socket) do

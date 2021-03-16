@@ -32,7 +32,15 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
         <% end %>
        <%= submit  "Continue" %>
        </form>
-        <div>
+       <br/>
+       <%= unless Enum.empty?(@qna.score) do %>
+       <h2>Scores</h2>
+       <ul>
+         <li>Right answer:<b>+<%= @qna.score["Right"] %></b></li>
+         <li>Wrong answer:<b>-<%= @qna.score["Wrong"] %></b></li>
+       </ul>
+       <% end %>
+    <div>
     """
   end
 
