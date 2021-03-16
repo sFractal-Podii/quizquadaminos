@@ -10,6 +10,7 @@ ENV LANG=C.UTF-8 \
 RUN mkdir /opt/release
 WORKDIR /opt/release
 RUN mix local.hex --force && mix local.rebar --force
+RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.10.3/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli
 
 COPY mix.exs .
 COPY mix.lock .
@@ -27,10 +28,9 @@ COPY assets ./assets
 COPY config ./config
 COPY lib ./lib
 COPY priv ./priv
-COPY qna ./qna  
+COPY qna ./qna
 COPY Makefile ./Makefile
 
-RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.10.3/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli
 RUN make sbom
 RUN cp bom* ./assets/static
 RUN npm install --prefix ./assets && \

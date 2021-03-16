@@ -11,8 +11,19 @@ defmodule Quadquizaminos.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       build_embedded: true,
-      deps: deps()
+      deps: deps(),
+      releases: [
+        quadquizaminos: [
+          steps: [:assemble, &copy_qna/1]
+        ]
+      ]
     ]
+  end
+
+  defp copy_qna(release) do
+    IO.puts("Copying qna folder.....")
+    File.cp_r!("qna", release.path <> "/qna")
+    release
   end
 
   # Configuration for the OTP application.
