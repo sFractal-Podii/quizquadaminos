@@ -17,7 +17,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     {:ok,
      socket
-     |> assign(qna: %{}, category: nil, categories: init_categories(), powers: [])
+     |> assign(
+       qna: %{},
+       category: nil,
+       categories: init_categories(),
+       powers: [],
+       coord_modal: false
+     )
      |> start_game()}
   end
 
@@ -87,10 +93,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
             </div>
             <div class="column">
             <a class="button", href = <%= Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions) %> > How to play </a>
+            <br/>
+            <%= if @coord_modal do %>
+               <%= live_component @socket,  QuadquizaminosWeb.CoordModalComponent, id: 2, powers: @powers %>
+              <% end %>
             </div>
-          <%= debug(assigns) %>
+          <br/>
         </div>
     </div>
+     <%= debug(assigns) %>
     """
   end
 
@@ -319,6 +330,20 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
 
+  def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
+    {:noreply, socket |> assign(coord_modal: true, modal: false)}
+  end
+
+  def handle_event("add_block", %{"coord" => %{"x" => x, "y" => y}}, socket) do
+    {x, _} = Integer.parse(x)
+    {y, _} = Integer.parse(y)
+    powers = socket.assigns.powers -- [:addblock]
+    bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :blue}})
+
+    {:noreply,
+     socket |> assign(bottom: bottom, coord_modal: false, state: :playing, powers: powers)}
+  end
+
   def handle_info(:tick, socket) do
     {:noreply, drop(socket.assigns.state, socket, false)}
   end
@@ -330,10 +355,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def debug(assigns, true, :dev) do
     ~L"""
+    <div class="container">
     <pre>
     <%= raw( @tetromino |> inspect) %>
     <%= raw( @bottom |> inspect) %>
     </pre>
+    </div>
     """
   end
 
