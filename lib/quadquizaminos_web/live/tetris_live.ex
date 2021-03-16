@@ -219,6 +219,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp shades(:green), do: %{light: "8BBF57", dark: "769359"}
   defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
   defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
+  defp shades(:purple), do: %{light: "800080", dark: "4d004d"}
 
   defp color(%{name: :t}), do: :red
   defp color(%{name: :i}), do: :blue
@@ -342,7 +343,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {x, _} = Integer.parse(x)
     {y, _} = Integer.parse(y)
     powers = socket.assigns.powers -- [:addblock]
-    bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :blue}})
+    bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
 
     {:noreply,
      socket |> assign(bottom: bottom, coord_modal: false, state: :playing, powers: powers)}
