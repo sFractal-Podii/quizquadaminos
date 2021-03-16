@@ -334,6 +334,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(coord_modal: true, modal: false)}
   end
 
+  def handle_event("powerup", _, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("add_block", %{"coord" => %{"x" => x, "y" => y}}, socket) do
     {x, _} = Integer.parse(x)
     {y, _} = Integer.parse(y)
