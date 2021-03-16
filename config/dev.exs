@@ -31,7 +31,7 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
   ]
 
 config :quadquizaminos,
-  qna_directory: Path.join(Path.dirname(__DIR__), "priv/static/qna")
+  qna_directory: Path.join(Path.dirname(__DIR__), "qna")
 
 # ## SSL Support
 #

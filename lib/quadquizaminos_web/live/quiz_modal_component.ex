@@ -32,14 +32,22 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
         <% end %>
        <%= submit  "Continue" %>
        </form>
-        <div>
+       <br/>
+       <%= unless Enum.empty?(@qna.score) do %>
+       <h2>Scores</h2>
+       <ul>
+         <li>Right answer:<b>+<%= @qna.score["Right"] %></b></li>
+         <li>Wrong answer:<b>-<%= @qna.score["Wrong"] %></b></li>
+       </ul>
+       <% end %>
+    <div>
     """
   end
 
   defp show_powers(assigns) do
     ~L"""
      <%= for power <- @powers do %>
-     <i class="fas <%=power_icon(power)%>"></i>
+     <i class="fas <%=power_icon(power)%>" phx-click="powerup" phx-value-powerup="<%= power %>"></i>
      <% end %>
     """
   end
