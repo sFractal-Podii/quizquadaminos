@@ -9,7 +9,9 @@
     <div>
       <img src="<%= @current_user.avatar %>" />
     </div>
-    <%= link "Play Game", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TetrisLive), class: "button" %>
+    <%= link "Play Game", to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris), class: "button" %>
+    <br/>
+    <%= link "How to play", to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions), class: "button" %>
     <br>
   <% else %>
     <ul style="list-style: none">

@@ -4,15 +4,26 @@ defmodule Quadquizaminos.MixProject do
   def project do
     [
       app: :quadquizaminos,
-      version: "0.1.0",
+      version: "0.4.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      build_embedded: true,
       aliases: aliases(),
-      deps: deps()
+      build_embedded: true,
+      deps: deps(),
+      releases: [
+        quadquizaminos: [
+          steps: [:assemble, &copy_qna/1]
+        ]
+      ]
     ]
+  end
+
+  defp copy_qna(release) do
+    IO.puts("Copying qna folder.....")
+    File.cp_r!("qna", release.path <> "/qna")
+    release
   end
 
   # Configuration for the OTP application.
@@ -27,7 +38,7 @@ defmodule Quadquizaminos.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_), do: ["lib", "qna"]
 
   # Specifies your project dependencies.
   #
