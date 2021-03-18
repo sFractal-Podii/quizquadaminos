@@ -112,7 +112,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                          
                           style="fill:#<%= shades(color).light %>;"
                           width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>">
-                          <%= if @deleting_block do %>
+                          <%= if @deleting_block and block_in_bottom?(x1, y1, @bottom) do %>
                            <title>delete block at {<%= x1 %>,<%= y1 %>} </title>
                            <% end %>
                           </rect>
@@ -420,9 +420,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp delete_block(socket, x, y, true = _deleting_block) do
-    x = String.to_integer(x)
-    y = String.to_integer(y)
-    bottom = socket.assigns.bottom |> Map.delete({x, y})
+    bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
     powers = socket.assigns.powers -- [:deleteblock]
     socket |> assign(bottom: bottom, deleting_block: false, state: :playing, powers: powers)
   end
@@ -431,9 +429,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
     socket
   end
 
+  defp block_in_bottom?(x, y, bottom) do
+    Map.has_key?(bottom, {x, y})
+  end
+
   defp add_block(socket, x, y, true = _adding_block) do
-    x = String.to_integer(x)
-    y = String.to_integer(y)
+    {x, y} = parse_to_integer(x, y)
     powers = socket.assigns.powers -- [:addblock]
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
     socket |> assign(bottom: bottom, adding_block: false, state: :playing, powers: powers)
@@ -441,6 +442,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp add_block(socket, _x, _y, false = _adding_block) do
     socket
+  end
+
+  defp parse_to_integer(x, y) do
+    x = String.to_integer(x)
+    y = String.to_integer(y)
+    {x, y}
   end
 
   def handle_info(:tick, socket) do
