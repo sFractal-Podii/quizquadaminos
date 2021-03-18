@@ -75,25 +75,20 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp answers(content, answers) do
-    regex = ~r/# answers(?<answers>.*)#/iU
+    regex = ~r/# answers(?<answers>.*)#/iUs
 
-    case named_captures(regex, content) do
+    case Regex.named_captures(regex, content) do
       %{"answers" => answers} ->
-        answers
-        |> String.trim()
-        |> String.split(["-", "*"], trim: true)
-        |> Enum.with_index()
+        answers(answers)
 
       nil ->
-        nil
         answers(answers)
     end
   end
 
   defp answers(answers) do
     answers
-    |> String.replace("\n", "")
-    |> String.split(["-", "*"], trim: true)
+    |> String.split(["\n-", "\n*", "\n"], trim: true)
     |> Enum.with_index()
   end
 
