@@ -20,7 +20,7 @@ config :logger, level: :info
 config :quadquizaminos, QuadquizaminosWeb.Endpoint, server: true
 
 config :quadquizaminos,
-  qna_directory: "/home/app/prod/lib/quadquizaminos/priv/static/qna"
+  qna_directory: "/home/app/prod/rel/quadquizaminos/qna"
 
 # ## SSL Support
 #

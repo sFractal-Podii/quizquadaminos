@@ -32,13 +32,62 @@ defmodule Quadquizaminos.QnA do
 
   defp build(category, position \\ 0) do
     {:ok, content} = category |> choose_file(position) |> File.read()
+
     [question, answers] = content |> String.split(~r/## answers/i)
 
     %{
       question: question_as_html(question),
-      answers: answers(answers),
-      correct: correct_answer(answers)
+      answers: answers(content, answers),
+      correct: correct_answer(answers),
+      powerup: powerup(content),
+      score: score(content)
     }
+  end
+
+  defp score(content) do
+    regex = ~r/# score(?<score>.*)/i
+
+    case named_captures(regex, content) do
+      %{"score" => score} ->
+        [score | _] = String.split(score, ~r/## powerup/i)
+
+        score
+        |> String.trim()
+        |> String.split("-", trim: true)
+        |> Enum.map(fn score -> score |> String.trim() |> String.split(":") |> List.to_tuple() end)
+        |> Map.new()
+
+      nil ->
+        %{"Right" => "25", "Wrong" => "5"}
+    end
+  end
+
+  defp powerup(content) do
+    regex = ~r/# powerup(?<powerup>.*)/i
+
+    case named_captures(regex, content) do
+      %{"powerup" => powerup} ->
+        powerup |> String.trim() |> String.downcase() |> String.to_atom()
+
+      nil ->
+        nil
+    end
+  end
+
+  defp answers(content, answers) do
+    regex = ~r/# answers(?<answers>.*)#/iU
+
+    case named_captures(regex, content) do
+      %{"answers" => answers} ->
+        answers
+        |> String.trim()
+        |> String.split(["-", "*"], trim: true)
+        |> Enum.with_index()
+
+      nil ->
+        nil
+        answers(answers)
+    end
   end
 
   defp answers(answers) do
@@ -46,6 +95,10 @@ defmodule Quadquizaminos.QnA do
     |> String.replace("\n", "")
     |> String.split(["-", "*"], trim: true)
     |> Enum.with_index()
+  end
+
+  defp named_captures(regex, content) do
+    Regex.named_captures(regex, content |> String.replace("\n", " "))
   end
 
   defp question_as_html(question) do

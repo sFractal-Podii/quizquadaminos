@@ -10,6 +10,8 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     <%= for category <- QnA.categories() do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
+
+    <%= show_powers(assigns) %>
     </div>
     """
   end
@@ -30,7 +32,30 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
         <% end %>
        <%= submit  "Continue" %>
        </form>
-        <div>
+       <br/>
+       <%= unless Enum.empty?(@qna.score) do %>
+       <h2>Scores</h2>
+       <ul>
+         <li>Right answer:<b>+<%= @qna.score["Right"] %></b></li>
+         <li>Wrong answer:<b>-<%= @qna.score["Wrong"] %></b></li>
+       </ul>
+       <% end %>
+    <div>
     """
+  end
+
+  defp show_powers(assigns) do
+    ~L"""
+     <%= for power <- @powers do %>
+     <i class="fas <%=power_icon(power)%>" phx-click="powerup" phx-value-powerup="<%= power %>"></i>
+     <% end %>
+    """
+  end
+
+  defp power_icon(power) do
+    case power do
+      :deleteblock -> "fa-minus-square"
+      :addblock -> "fa-plus-square"
+    end
   end
 end

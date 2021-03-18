@@ -4,15 +4,26 @@ defmodule Quadquizaminos.MixProject do
   def project do
     [
       app: :quadquizaminos,
-      version: "0.3.6",
+      version: "0.4.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       build_embedded: true,
-      deps: deps()
+      deps: deps(),
+      releases: [
+        quadquizaminos: [
+          steps: [:assemble, &copy_qna/1]
+        ]
+      ]
     ]
+  end
+
+  defp copy_qna(release) do
+    IO.puts("Copying qna folder.....")
+    File.cp_r!("qna", release.path <> "/qna")
+    release
   end
 
   # Configuration for the OTP application.

@@ -12,11 +12,39 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @box_width 20
   @box_height 20
 
+  # 20/s, 50 ms
+  @drop_speeds [
+    %{name: "full throttle", ratio: 1},
+    # 10/s, 100 ms
+    %{name: "high speed", ratio: 2},
+    # 4/s, 250 ms. - default game starts with
+    %{name: "fast", ratio: 5},
+    # ~3/s, 350 ms
+    %{name: "moderate", ratio: 7},
+    # 2/s, 500 ms
+    %{name: "leisurely", ratio: 10},
+    # 3/2s, 750 ms
+    %{name: "sedate", ratio: 15},
+    # 1/s, 1000 ms
+    %{name: "lethargic", ratio: 20}
+  ]
+
   def mount(_param, _session, socket) do
-    :timer.send_interval(250, self(), :tick)
+    :timer.send_interval(50, self(), :tick)
 
     {:ok,
-     socket |> assign(qna: %{}, category: nil, categories: init_categories(), instructions_modal: false) |> start_game()}  
+     socket
+     |> assign(
+       qna: %{},
+       category: nil,
+       categories: init_categories(),
+       powers: [],
+       adding_block: false,
+       coord_modal: false,
+       instructions_modal: false
+     )
+     |> assign(speed: 2, tick_count: 5)
+     |> start_game()}
   end
 
   def render(%{state: :starting, live_action: live_action} = assigns) do   
@@ -56,7 +84,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def render(assigns) do
     ~L"""
-      <div class="container">
+      <div class="container" >
         <div class="row">
           <div class="column column-75">
               <div class="row">
@@ -65,13 +93,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                 <%= if @instructions_modal do %>
                  <%= live_modal @socket, QuadquizaminosWeb.InstructionsComponent, id: 2, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris) %>
                 <% end %>
-                  <div phx-window-keydown="keydown">
+                  <div phx-window-keydown="keydown" class="grid">
                     <%= raw svg_head() %>
+                    <%= for x1 <- 1..10, y1 <- 1..20 do %>
+                    <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
+                    <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
+                    x="<%= x + 1 %>" y="<%= y + 1 %>"
+                    class="position-block <%= if @adding_block, do: "hover-block" %>"
+                    width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                    <% end %>
+
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
                       <%= for {x, y, color} <- row do %>
                         <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %>
@@ -81,6 +117,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                           width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
                         <% end %>
                     <% end %>
+
                     <%= raw svg_foot() %>
                   </div>
                 </div>
@@ -88,10 +125,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
             </div>
             <div class="column">
             <a class="button" phx-click="instructions">  How to play </a>
+            <%= if @coord_modal do %>
+               <%= live_component @socket,  QuadquizaminosWeb.CoordModalComponent, id: 2, powers: @powers %>
+              <% end %>
             </div>
-          <%= debug(assigns) %>
+          <br/>
         </div>
     </div>
+    <%= debug(assigns) %>
     """
   end
 
@@ -102,6 +143,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
           <li>Up arrow key rotates the blocks</li>
           <li>Left arrow key moves the blocks to the left</li>
           <li>Right arrow key moves the blocks to the right</li>
+          <li>Down arrow key moves the blocks down</li>
+          <li>Debug until powerups: "r" raises dropping speed</li>
+          <li>Debug until powerups: "l" lowers dropping speed</li>
+          <li>Debug until powerups: "c" clears bottom blocks</li>
         </ol>
     """
   end
@@ -113,9 +158,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp start_game(socket) do
     assign(socket,
       state: :starting,
-      box_width: 20,
+      box_width: @box_width,
       modal: false,
-      box_height: 20
+      box_height: @box_height
     )
   end
 
@@ -129,11 +174,29 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> show
   end
 
-  def new_block(socket) do
-    brick =
-      Quadquizaminos.Brick.new_random()
-      |> Map.put(:location, {3, -3})
+  defp raise_speed(socket) do
+    speed = socket.assigns.speed - 1
+    speed = if speed < 0, do: 0, else: speed
+    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    tick_count = speed_info.ratio
+    assign(socket, speed: speed, tick_count: tick_count)
+  end
 
+  defp lower_speed(socket) do
+    speed = socket.assigns.speed + 1
+    lowest_speed = length(@drop_speeds) - 1
+    speed = if speed > lowest_speed, do: lowest_speed, else: speed
+    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    tick_count = speed_info.ratio
+    assign(socket, speed: speed, tick_count: tick_count)
+  end
+
+  defp clear_blocks(socket) do
+    assign(socket, bottom: %{})
+  end
+
+  def new_block(socket) do
+    brick = Quadquizaminos.Brick.new_random()
     assign(socket, brick: brick)
   end
 
@@ -209,6 +272,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp shades(:green), do: %{light: "8BBF57", dark: "769359"}
   defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
   defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
+  defp shades(:purple), do: %{light: "800080", dark: "4d004d"}
 
   defp color(%{name: :t}), do: :red
   defp color(%{name: :i}), do: :blue
@@ -298,6 +362,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, pause_game(socket)}
   end
 
+  ## until powerups and for debugging - take out eventually
+  def handle_event("keydown", %{"key" => "l"}, socket) do
+    {:noreply, lower_speed(socket)}
+  end
+
+  ## until powerups and for debugging - take out eventually
+  def handle_event("keydown", %{"key" => "r"}, socket) do
+    {:noreply, raise_speed(socket)}
+  end
+
+  ## until powerups and for debugging - take out eventually
+  def handle_event("keydown", %{"key" => "c"}, socket) do
+    {:noreply, clear_blocks(socket)}
+  end
+
   def handle_event("keydown", _, socket), do: {:noreply, socket}
 
   def handle_event("start", _, socket) do
@@ -307,9 +386,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
     socket =
       if correct_answer?(socket.assigns.qna, guess) do
-        socket |> assign(category: nil, score: socket.assigns.score + 25)
+        socket |> assign(category: nil) |> add_power() |> assign_score()
       else
-        score = socket.assigns.score - 5
+        points = wrong_points(socket)
+        score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
         socket = assign(socket, score: score)
         pause_game(socket)
@@ -327,13 +407,75 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("close_instructions", _param, socket)do
     {:noreply, socket |> assign(instructions_modal: false, state: :playing)}
   end
+  
+  def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
+    {:noreply, socket |> assign(adding_block: true, modal: false)}
+  end
+
+  def handle_event("powerup", _, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("add_block", %{"x" => x, "y" => y}, socket) do
+    {:noreply, add_block(socket, x, y, socket.assigns.adding_block)}
+  end
+
+  defp add_block(socket, x, y, true = _adding_block) do
+    x = String.to_integer(x)
+    y = String.to_integer(y)
+    powers = socket.assigns.powers -- [:addblock]
+    bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
+    socket |> assign(bottom: bottom, adding_block: false, state: :playing, powers: powers)
+  end
+
+  defp add_block(socket, _x, _y, false = _adding_block) do
+    socket
+  end
 
   def handle_info(:tick, socket) do
-    {:noreply, drop(socket.assigns.state, socket, false)}
+    tick_count = socket.assigns.tick_count - 1
+
+    if tick_count > 0 do
+      ## don't drop yet
+      socket = assign(socket, tick_count: tick_count)
+      {:noreply, socket}
+    else
+      ## reset counter and drop
+      {:ok, speed_info} = Enum.fetch(@drop_speeds, socket.assigns.speed)
+      tick_count = speed_info.ratio
+
+      socket = assign(socket, tick_count: tick_count)
+      {:noreply, drop(socket.assigns.state, socket, false)}
+    end
   end
+
+  # defp return_to_categories_or_pause_game(true, socket) do
+  #   points = right_points(socket)
+  #   socket |> assign(category: nil, score: socket.assigns.score + points)
+  # end
+
+  # defp return_to_categories_or_pause_game(_, socket) do
+  #   points = wrong_points(socket)
+  #   score = socket.assigns.score - points
+  #   score = if score < 0, do: 0, else: score
+  #   socket = assign(socket, score: score)
+  #   pause_game(socket)
+  # end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
+
+  defp wrong_points(socket) do
+    %{"Wrong" => points} = socket.assigns.qna.score
+    {points, _} = Integer.parse(points)
+    points
+  end
+
+  defp right_points(socket) do
+    %{"Right" => points} = socket.assigns.qna.score
+    {points, _} = Integer.parse(points)
+    points
+  end
 
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
 
@@ -355,5 +497,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp increment_position(categories, category, current_position) do
     %{categories | category => current_position + 1}
+  end
+
+  defp assign_score(socket) do
+    points = right_points(socket)
+    socket |> assign(score: socket.assigns.score + points)
+  end
+
+  defp add_power(socket) do
+    case socket.assigns.qna[:powerup] do
+      nil ->
+        socket
+
+      power ->
+        current_powers = socket.assigns.powers
+        assign(socket, powers: [power | current_powers])
+    end
   end
 end
