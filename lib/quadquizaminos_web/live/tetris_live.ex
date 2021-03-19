@@ -398,7 +398,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
 
   def handle_event("powerup", %{"powerup" => "moveblock"}, socket) do
-    {:noreply, socket |> assign(moving_block: true, modal: false)}
+    {:noreply, socket |> assign(modal: false)}
   end 
   
   def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
