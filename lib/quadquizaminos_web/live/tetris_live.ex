@@ -436,7 +436,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, bottom: bottom, powers: powers, state: :playing, adding_block: false, moving_block: false) 
   end
 
-  defp move_block(socket, _x, _y, _block_coord, false = _adding_block, false = _moving_block) do
+  defp move_block(socket, _x, _y, _block_coord, _adding_block, _moving_block) do
     socket
   end
 
