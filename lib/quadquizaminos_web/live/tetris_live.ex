@@ -91,7 +91,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                 </div>
                 <div class="column column-50">
-                <%= if @modal do%>
+                <%= if @modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown" class="grid">
@@ -397,10 +397,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
 
+  def handle_event("powerup", %{"powerup" => "moveblock"}, socket) do
+    {:noreply, socket |> assign(moving_block: true, modal: false)}
+  end 
+  
   def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
     {:noreply, socket |> assign(adding_block: true, modal: false)}
   end
-
+ 
   def handle_event("powerup", _, socket) do
     {:noreply, socket}
   end
