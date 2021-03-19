@@ -40,7 +40,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
        categories: init_categories(),
        powers: [],
        adding_block: false,
-       coord_modal: false
+       coord_modal: false,
+       block_coord: nil,
+       moving_block: false
      )
      |> assign(speed: 2, tick_count: 5)
      |> start_game()}
@@ -105,9 +107,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <% end %>
 
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
-                      <%= for {x, y, color} <- row do %>
-                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %>
-                        <rect
+                      <%= for {x1, y1, color} <- row do %>
+                        <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
+                        <rect phx-click="move_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %> phx-value-color=<%= color %>
                           x="<%= x+1 %>" y="<%= y+1 %>"
                           style="fill:#<%= shades(color).light %>;"
                           width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
@@ -398,9 +400,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
 
   def handle_event("powerup", %{"powerup" => "moveblock"}, socket) do
-    {:noreply, socket |> assign(modal: false)}
+    {:noreply, socket |> assign(modal: false, moving_block: true)}
   end 
-  
+
   def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
     {:noreply, socket |> assign(adding_block: true, modal: false)}
   end
@@ -409,8 +411,33 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket}
   end
 
-  def handle_event("add_block", %{"x" => x, "y" => y}, socket) do
+  def handle_event("move_block", %{"x" => x, "y" => y, "color" => color}, socket) do
+    x = String.to_integer(x)
+    y = String.to_integer(y)
+    color = String.to_atom(color)  
+    {:noreply, socket |> assign(block_coord: {x, y, color}, adding_block: true)}
+  end
+
+  def handle_event("add_block", %{"x" => x, "y" => y}, %{assigns: %{block_coord: nil}} = socket) do
     {:noreply, add_block(socket, x, y, socket.assigns.adding_block)}
+  end
+
+  def handle_event("add_block", %{"x" => x, "y" => y}, %{assigns: %{block_coord: block_coord}} = socket)do
+    # IO.inspect(socket.assigns.adding_block)
+    {:noreply, socket |> move_block(x, y, block_coord, socket.assigns.adding_block, socket.assigns.moving_block)}
+  end
+
+  defp move_block(socket, x, y, block_coord, true = _adding_block, true = _moving_block)do
+    x = String.to_integer(x)
+    y = String.to_integer(y)
+    {x1, y1, color} = block_coord
+    powers = socket.assigns.powers -- [:moveblock]
+    bottom = socket.assigns.bottom |> Map.delete({x1,y1}) |> Map.merge(%{{x,y} => {x,y, color}})
+    assign(socket, bottom: bottom, powers: powers, state: :playing, adding_block: false, moving_block: false) 
+  end
+
+  defp move_block(socket, _x, _y, _block_coord, false = _adding_block, false = _moving_block) do
+    socket
   end
 
   defp add_block(socket, x, y, true = _adding_block) do
