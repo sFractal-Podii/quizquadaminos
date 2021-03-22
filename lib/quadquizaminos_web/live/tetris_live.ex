@@ -40,7 +40,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
        categories: init_categories(),
        powers: [],
        adding_block: false,
-       block_coord: nil,
+       block_coordinates: nil,
        moving_block: false
        deleting_block: false,
        instructions_modal: false
