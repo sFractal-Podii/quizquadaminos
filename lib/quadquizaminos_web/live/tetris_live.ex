@@ -43,16 +43,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
        coord_modal: false,
        block_coord: nil,
        moving_block: false
+       instructions_modal: false
+
      )
      |> assign(speed: 2, tick_count: 5)
      |> start_game()}
   end
 
-  def render(%{state: :starting, live_action: live_action} = assigns) do
+  def render(%{state: :starting, live_action: live_action} = assigns) do   
     ~L"""
     <%= if live_action == :instructions do %>
-      <div class="column">
-        <%= raw game_instruction() %>
+    <div class = "phx-modal-content">
+        <%= raw QuadquizaminosWeb.Instructions.game_instruction() %>
       </div>
       <% else %>
         <div class ="container">
@@ -96,6 +98,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <%= if @modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
+                <%= if @instructions_modal do %>
+                 <%= live_modal @socket, QuadquizaminosWeb.InstructionsComponent, id: 2, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris) %>
+                <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw svg_head() %>
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
@@ -122,8 +127,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
               </div>
             </div>
             <div class="column">
-            <a class="button", href = <%= Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions) %> > How to play </a>
-            <br/>
+            <a class="button" phx-click="instructions">  How to play </a>
             <%= if @coord_modal do %>
                <%= live_component @socket,  QuadquizaminosWeb.CoordModalComponent, id: 2, powers: @powers %>
               <% end %>
@@ -132,21 +136,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
         </div>
     </div>
     <%= debug(assigns) %>
-    """
-  end
-
-  defp game_instruction do
-    """
-    <h2>How to play</h2>
-        <ol>
-          <li>Up arrow key rotates the blocks</li>
-          <li>Left arrow key moves the blocks to the left</li>
-          <li>Right arrow key moves the blocks to the right</li>
-          <li>Down arrow key moves the blocks down</li>
-          <li>Debug until powerups: "r" raises dropping speed</li>
-          <li>Debug until powerups: "l" lowers dropping speed</li>
-          <li>Debug until powerups: "c" clears bottom blocks</li>
-        </ol>
     """
   end
 
@@ -399,10 +388,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
 
+  def handle_event("instructions", _params, socket) do
+    {:noreply, socket |> assign(instructions_modal: true, state: :paused)}
+  end
+
+  def handle_event("close_instructions", _param, socket)do
+    {:noreply, socket |> assign(instructions_modal: false, state: :playing)}
+  end
+  
   def handle_event("powerup", %{"powerup" => "moveblock"}, socket) do
     {:noreply, socket |> assign(modal: false, moving_block: true)}
   end 
-
+  
   def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
     {:noreply, socket |> assign(adding_block: true, modal: false)}
   end
