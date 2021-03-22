@@ -411,11 +411,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket}
   end
 
-  def handle_event("move_block", %{"x" => x, "y" => y, "color" => color}, socket) do
+  def handle_event("move_block", %{"x" => x, "y" => y, "color" => color}, %{assigns: %{moving_block: true}} = socket) do
     x = String.to_integer(x)
     y = String.to_integer(y)
     color = String.to_atom(color)  
     {:noreply, socket |> assign(block_coord: {x, y, color}, adding_block: true)}
+  end
+
+  def handle_event("move_block", _params, socket) do
+    {:noreply, socket}
   end
 
   def handle_event("add_block", %{"x" => x, "y" => y}, %{assigns: %{block_coord: nil}} = socket) do
@@ -423,7 +427,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("add_block", %{"x" => x, "y" => y}, %{assigns: %{block_coord: block_coord}} = socket)do
-    # IO.inspect(socket.assigns.adding_block)
     {:noreply, socket |> move_block(x, y, block_coord, socket.assigns.adding_block, socket.assigns.moving_block)}
   end
 
