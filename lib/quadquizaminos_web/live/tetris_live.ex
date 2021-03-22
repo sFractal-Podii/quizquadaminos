@@ -40,14 +40,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
        categories: init_categories(),
        powers: [],
        adding_block: false,
-       coord_modal: false,
+       deleting_block: false,
        instructions_modal: false
      )
      |> assign(speed: 2, tick_count: 5)
      |> start_game()}
   end
 
-  def render(%{state: :starting, live_action: live_action} = assigns) do   
+  def render(%{state: :starting, live_action: live_action} = assigns) do
     ~L"""
     <%= if live_action == :instructions do %>
     <div class = "phx-modal-content">
@@ -109,12 +109,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <% end %>
 
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
-                      <%= for {x, y, color} <- row do %>
-                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %>
-                        <rect
+                      <%= for {x1, y1, color} <- row do %>
+                        <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
+                        <rect phx-click="delete_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
                           x="<%= x+1 %>" y="<%= y+1 %>"
+                         
                           style="fill:#<%= shades(color).light %>;"
-                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>">
+                          <%= if @deleting_block and block_in_bottom?(x1, y1, @bottom) do %>
+                           <title>delete block at {<%= x1 %>,<%= y1 %>} </title>
+                           <% end %>
+                          </rect>
                         <% end %>
                     <% end %>
 
@@ -125,9 +130,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
             </div>
             <div class="column">
             <a class="button" phx-click="instructions">  How to play </a>
-            <%= if @coord_modal do %>
-               <%= live_component @socket,  QuadquizaminosWeb.CoordModalComponent, id: 2, powers: @powers %>
-              <% end %>
             </div>
           <br/>
         </div>
@@ -207,7 +209,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     xmlns:xlink="http://www.w3.org/1999/xlink"
     width="200" height="400"
     viewBox="0 0 200 400"
-    xml:space="preserve">
+    xml:space="preserve"
+    aria-labelledby="title">
     """
   end
 
@@ -389,12 +392,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(instructions_modal: true, state: :paused)}
   end
 
-  def handle_event("close_instructions", _param, socket)do
+  def handle_event("close_instructions", _param, socket) do
     {:noreply, socket |> assign(instructions_modal: false, state: :playing)}
   end
-  
+
   def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
     {:noreply, socket |> assign(adding_block: true, modal: false)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "deleteblock"}, socket) do
+    {:noreply, socket |> assign(deleting_block: true, modal: false)}
   end
 
   def handle_event("powerup", _, socket) do
@@ -405,9 +412,26 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, add_block(socket, x, y, socket.assigns.adding_block)}
   end
 
+  def handle_event("delete_block", %{"x" => x, "y" => y}, socket) do
+    {:noreply, delete_block(socket, x, y, socket.assigns.deleting_block)}
+  end
+
+  defp delete_block(socket, x, y, true = _deleting_block) do
+    bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
+    powers = socket.assigns.powers -- [:deleteblock]
+    socket |> assign(bottom: bottom, deleting_block: false, state: :playing, powers: powers)
+  end
+
+  defp delete_block(socket, _x, _y, false = _deleting_block) do
+    socket
+  end
+
+  defp block_in_bottom?(x, y, bottom) do
+    Map.has_key?(bottom, {x, y})
+  end
+
   defp add_block(socket, x, y, true = _adding_block) do
-    x = String.to_integer(x)
-    y = String.to_integer(y)
+    {x, y} = parse_to_integer(x, y)
     powers = socket.assigns.powers -- [:addblock]
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
     socket |> assign(bottom: bottom, adding_block: false, state: :playing, powers: powers)
@@ -415,6 +439,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp add_block(socket, _x, _y, false = _adding_block) do
     socket
+  end
+
+  defp parse_to_integer(x, y) do
+    x = String.to_integer(x)
+    y = String.to_integer(y)
+    {x, y}
   end
 
   def handle_info(:tick, socket) do
@@ -433,19 +463,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
       {:noreply, drop(socket.assigns.state, socket, false)}
     end
   end
-
-  # defp return_to_categories_or_pause_game(true, socket) do
-  #   points = right_points(socket)
-  #   socket |> assign(category: nil, score: socket.assigns.score + points)
-  # end
-
-  # defp return_to_categories_or_pause_game(_, socket) do
-  #   points = wrong_points(socket)
-  #   score = socket.assigns.score - points
-  #   score = if score < 0, do: 0, else: score
-  #   socket = assign(socket, score: score)
-  #   pause_game(socket)
-  # end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
