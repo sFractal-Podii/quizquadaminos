@@ -22,7 +22,7 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
 config :logger, level: :warn
 
 config :quadquizaminos,
-  qna_directory: Path.join(Path.dirname(__DIR__), "priv/static/qna")
+  qna_directory: Path.join(Path.dirname(__DIR__), "test/quadquizaminos/qna")
 
 config :ueberauth, Ueberauth,
   providers: [
