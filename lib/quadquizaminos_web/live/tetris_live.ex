@@ -44,7 +44,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
        moving_block: false,
        deleting_block: false,
        instructions_modal: false
-
      )
      |> assign(speed: 2, tick_count: 5)
      |> start_game()}
@@ -434,6 +433,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> move_block(x, y, block_coord, socket.assigns.adding_block, socket.assigns.moving_block)}
   end
 
+  def handle_event("delete_block", %{"x" => x, "y" => y}, socket) do
+    {:noreply, delete_block(socket, x, y, socket.assigns.deleting_block)}
+  end
+    
   defp move_block(socket, x, y, block_coord, true = _adding_block, true = _moving_block)do
     x = String.to_integer(x)
     y = String.to_integer(y)
@@ -445,10 +448,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp move_block(socket, _x, _y, _block_coord, _adding_block, _moving_block) do
     socket
-  end
-
-  def handle_event("delete_block", %{"x" => x, "y" => y}, socket) do
-    {:noreply, delete_block(socket, x, y, socket.assigns.deleting_block)}
   end
 
   defp delete_block(socket, x, y, true = _deleting_block) do
