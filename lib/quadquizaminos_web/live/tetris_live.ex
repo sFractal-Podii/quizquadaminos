@@ -41,7 +41,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
        powers: [],
        adding_block: false,
        block_coordinates: nil,
-       moving_block: false
+       moving_block: false,
        deleting_block: false,
        instructions_modal: false
 
