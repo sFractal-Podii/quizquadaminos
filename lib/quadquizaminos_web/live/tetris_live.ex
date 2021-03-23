@@ -120,6 +120,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                           <%= if @deleting_block and block_in_bottom?(x1, y1, @bottom) do %>
                            <title>delete block at {<%= x1 %>,<%= y1 %>} </title>
                            <% end %>
+                           <%= if @moving_block and block_in_bottom?(x1, y1, @bottom) do %>
+                           <title>click to move block </title>
+                           <% end %>
                           </rect>
                         <% end %>
                     <% end %>
