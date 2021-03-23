@@ -40,12 +40,6 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       [html: html, view: view]
     end
 
-    test "powerup is displayed when qna question with addblock powerup is answered correctly", %{
-      html: html
-    } do
-      assert html =~ "<i class=\"fas fa-plus-square\""
-    end
-
     test "powerup when clicked modal disappears", %{view: view} do
       html = render_click(view, "powerup", %{"powerup" => "addblock"})
       refute html =~ "<div class=\"phx-modal-content\">"
@@ -80,13 +74,6 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       [html: html, view: view]
     end
 
-    test "powerup is displayed when qna question with deleteblock powerup is answered correctly",
-         %{
-           html: html
-         } do
-      assert html =~ "<i class=\"fas fa-minus-square\""
-    end
-
     test "powerup when clicked modal disappears", %{view: view} do
       html = render_click(view, "powerup", %{"powerup" => "addblock"})
       refute html =~ "<div class=\"phx-modal-content\">"
@@ -94,13 +81,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
 
     test "powerup provide ability to delete block", %{view: view} do
       # add block
-      render_click(view, "choose_category", %{"category" => "supply_chain_sample"})
-
-      right_answer = Quadquizaminos.QnA.question("supply_chain_sample").correct
-      render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-
-      render_click(view, "powerup", %{"powerup" => "addblock"})
-      html = render_click(view, "add_block", %{"x" => "5", "y" => "20"})
+      html = add_block(view)
 
       assert html =~
                "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
@@ -115,17 +96,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
 
     test "powerup is depleted once used", %{view: view} do
       # add block
-      render_click(view, "choose_category", %{"category" => "supply_chain_sample"})
-
-      right_answer = Quadquizaminos.QnA.question("supply_chain_sample").correct
-      render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-
-      render_click(view, "powerup", %{"powerup" => "addblock"})
-      html = render_click(view, "add_block", %{"x" => "5", "y" => "20"})
-
-      assert html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
-
+      add_block(view)
       # delete block
       render_click(view, "powerup", %{"powerup" => "deleteblock"})
       render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20"})
@@ -148,12 +119,6 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       [html: html, view: view]
     end
 
-    test "powerup is displayed when qna question with moveblock powerup is answered correctly", %{
-      html: html
-    } do
-      assert html =~ "<i class=\"fas fa-angle-double-right\""
-    end
-
     test "powerup when clicked modal disappears", %{view: view} do
       html = render_click(view, "powerup", %{"powerup" => "addblock"})
       refute html =~ "<div class=\"phx-modal-content\">"
@@ -161,13 +126,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
 
     test "powerup provide ability to move block", %{view: view} do
       # add block
-      render_click(view, "choose_category", %{"category" => "supply_chain_sample"})
-
-      right_answer = Quadquizaminos.QnA.question("supply_chain_sample").correct
-      render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-
-      render_click(view, "powerup", %{"powerup" => "addblock"})
-      html = render_click(view, "add_block", %{"x" => "5", "y" => "20"})
+      html = add_block(view)
 
       assert html =~
                "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
@@ -188,16 +147,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
 
     test "powerup is depleted once used", %{view: view} do
       # add block
-      render_click(view, "choose_category", %{"category" => "supply_chain_sample"})
-
-      right_answer = Quadquizaminos.QnA.question("supply_chain_sample").correct
-      render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-
-      render_click(view, "powerup", %{"powerup" => "addblock"})
-      html = render_click(view, "add_block", %{"x" => "5", "y" => "20"})
-
-      assert html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
+      add_block(view)
 
       # move block
       render_keydown(view, "keydown", %{"key" => " "})
@@ -216,5 +166,15 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     render_click(view, "start")
     html = render_keydown(view, "keydown", %{"key" => " "})
     {view, html}
+  end
+
+  defp add_block(view, x \\ "5", y \\ "20") do
+    render_click(view, "choose_category", %{"category" => "supply_chain_sample"})
+
+    right_answer = Quadquizaminos.QnA.question("supply_chain_sample").correct
+    render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+
+    render_click(view, "powerup", %{"powerup" => "addblock"})
+    render_click(view, "add_block", %{"x" => x, "y" => y})
   end
 end
