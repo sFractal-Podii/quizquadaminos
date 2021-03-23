@@ -40,6 +40,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
        categories: init_categories(),
        powers: [],
        adding_block: false,
+       block_coordinates: nil,
+       moving_block: false,
        deleting_block: false,
        instructions_modal: false
      )
@@ -111,13 +113,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
                       <%= for {x1, y1, color} <- row do %>
                         <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
-                        <rect phx-click="delete_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
+                        <rect phx-click="move_or_delete_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %> phx-value-color=<%= color %>
                           x="<%= x+1 %>" y="<%= y+1 %>"
-                         
                           style="fill:#<%= shades(color).light %>;"
                           width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>">
                           <%= if @deleting_block and block_in_bottom?(x1, y1, @bottom) do %>
                            <title>delete block at {<%= x1 %>,<%= y1 %>} </title>
+                           <% end %>
+                           <%= if @moving_block and block_in_bottom?(x1, y1, @bottom) do %>
+                           <title>click to move block </title>
                            <% end %>
                           </rect>
                         <% end %>
@@ -396,6 +400,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(instructions_modal: false, state: :playing)}
   end
 
+  def handle_event("powerup", %{"powerup" => "moveblock"}, socket) do
+    {:noreply, socket |> assign(modal: false, moving_block: true)}
+  end
+
   def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
     {:noreply, socket |> assign(adding_block: true, modal: false)}
   end
@@ -408,22 +416,77 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket}
   end
 
-  def handle_event("add_block", %{"x" => x, "y" => y}, socket) do
+  def handle_event(
+        "move_or_delete_block",
+        %{"x" => x, "y" => y, "color" => color},
+        %{assigns: %{moving_block: true}} = socket
+      ) do
+    {x, y} = parse_to_integer(x, y)
+    color = String.to_atom(color)
+    {:noreply, socket |> assign(block_coordinates: {x, y, color}, adding_block: true)}
+  end
+
+  def handle_event(
+        "move_or_delete_block",
+        %{"x" => x, "y" => y},
+        %{assigns: %{deleting_block: true}} = socket
+      ) do
+    {:noreply, delete_block(socket, x, y)}
+  end
+
+  def handle_event("move_or_delete_block", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event(
+        "add_block",
+        %{"x" => x, "y" => y},
+        %{assigns: %{block_coordinates: nil}} = socket
+      ) do
     {:noreply, add_block(socket, x, y, socket.assigns.adding_block)}
   end
 
-  def handle_event("delete_block", %{"x" => x, "y" => y}, socket) do
-    {:noreply, delete_block(socket, x, y, socket.assigns.deleting_block)}
+  def handle_event(
+        "add_block",
+        %{"x" => x, "y" => y},
+        %{assigns: %{block_coordinates: block_coordinates}} = socket
+      ) do
+    {:noreply,
+     socket
+     |> move_block(
+       x,
+       y,
+       block_coordinates,
+       socket.assigns.adding_block,
+       socket.assigns.moving_block
+     )}
   end
 
-  defp delete_block(socket, x, y, true = _deleting_block) do
+  defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
+    {x, y} = parse_to_integer(x, y)
+    {x1, y1, color} = block_coordinates
+    powers = socket.assigns.powers -- [:moveblock]
+
+    bottom =
+      socket.assigns.bottom |> Map.delete({x1, y1}) |> Map.merge(%{{x, y} => {x, y, color}})
+
+    assign(socket,
+      bottom: bottom,
+      powers: powers,
+      state: :playing,
+      adding_block: false,
+      moving_block: false
+    )
+  end
+
+  defp move_block(socket, _x, _y, _block_coordinates, _adding_block, _moving_block) do
+    socket
+  end
+
+  defp delete_block(socket, x, y) do
     bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
     powers = socket.assigns.powers -- [:deleteblock]
     socket |> assign(bottom: bottom, deleting_block: false, state: :playing, powers: powers)
-  end
-
-  defp delete_block(socket, _x, _y, false = _deleting_block) do
-    socket
   end
 
   defp block_in_bottom?(x, y, bottom) do
