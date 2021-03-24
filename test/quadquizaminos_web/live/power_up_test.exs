@@ -4,6 +4,8 @@ defmodule QuadquizaminosWeb.PowerUpTest do
   import Phoenix.LiveViewTest
   alias Quadquizaminos.Accounts.User
 
+  @purple_shade %{light: "800080", dark: "4d004d"}
+
   setup %{conn: conn} do
     user = %User{name: "Quiz Block ", user_id: 40_000_000}
     conn = assign(conn, :current_user, user.user_id)
@@ -50,7 +52,10 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       html = render_click(view, "add_block", %{"x" => "5", "y" => "20"})
 
       assert html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
+               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
+
+      assert html =~ @purple_shade.light
+      assert html =~ @purple_shade.dark
     end
 
     test "powerup is depleted once used", %{view: view} do
@@ -84,14 +89,17 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       html = add_block(view)
 
       assert html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
+               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       # delete block
       render_click(view, "powerup", %{"powerup" => "deleteblock"})
       html = render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20"})
 
       refute html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
+               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
+
+      refute html =~ @purple_shade.light
+      refute html =~ @purple_shade.dark
     end
 
     test "powerup is depleted once used", %{view: view} do
@@ -129,7 +137,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       html = add_block(view)
 
       assert html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
+               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       # move block
       render_keydown(view, "keydown", %{"key" => " "})
@@ -139,10 +147,10 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       html = render_click(view, "add_block", %{"x" => "7", "y" => "18"})
 
       refute html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\""
+               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       assert html =~
-               "</rect><rect phx-click=\"move_or_delete_block\" phx-value-x=\"7\" phx-value-y=\"18\" phx-value-color=\"purple\""
+               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"7\" phx-value-y=\"18\" phx-value-color=\"purple\">"
     end
 
     test "powerup is depleted once used", %{view: view} do
