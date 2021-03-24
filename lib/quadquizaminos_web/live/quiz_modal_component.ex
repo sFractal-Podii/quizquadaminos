@@ -56,6 +56,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     case power do
       :deleteblock -> "fa-minus-square"
       :addblock -> "fa-plus-square"
+      :moveblock -> "fa-angle-double-right"
     end
   end
 end

@@ -1,5 +1,3 @@
-
-
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
@@ -14,22 +12,39 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @box_width 20
   @box_height 20
 
-  @drop_speeds [ %{name: "full throttle", ratio: 1}, # 20/s, 50 ms
-                 %{name: "high speed", ratio: 2},    # 10/s, 100 ms
-                 %{name: "fast", ratio: 5},          # 4/s, 250 ms. - default game starts with
-                 %{name: "moderate", ratio: 7},      # ~3/s, 350 ms
-                 %{name: "leisurely", ratio: 10},    # 2/s, 500 ms
-                 %{name: "sedate", ratio: 15},       # 3/2s, 750 ms
-                 %{name: "lethargic", ratio: 20}     # 1/s, 1000 ms
-                  ]
-
+  # 20/s, 50 ms
+  @drop_speeds [
+    %{name: "full throttle", ratio: 1},
+    # 10/s, 100 ms
+    %{name: "high speed", ratio: 2},
+    # 4/s, 250 ms. - default game starts with
+    %{name: "fast", ratio: 5},
+    # ~3/s, 350 ms
+    %{name: "moderate", ratio: 7},
+    # 2/s, 500 ms
+    %{name: "leisurely", ratio: 10},
+    # 3/2s, 750 ms
+    %{name: "sedate", ratio: 15},
+    # 1/s, 1000 ms
+    %{name: "lethargic", ratio: 20}
+  ]
 
   def mount(_param, _session, socket) do
     :timer.send_interval(50, self(), :tick)
 
     {:ok,
      socket
-     |> assign(qna: %{}, category: nil, categories: init_categories(), powers: [], coord_modal: false)
+     |> assign(
+       qna: %{},
+       category: nil,
+       categories: init_categories(),
+       powers: [],
+       adding_block: false,
+       block_coordinates: nil,
+       moving_block: false,
+       deleting_block: false,
+       instructions_modal: false
+     )
      |> assign(speed: 2, tick_count: 5)
      |> start_game()}
   end
@@ -37,8 +52,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def render(%{state: :starting, live_action: live_action} = assigns) do
     ~L"""
     <%= if live_action == :instructions do %>
-      <div class="column">
-        <%= raw game_instruction() %>
+    <div class = "phx-modal-content">
+        <%= raw QuadquizaminosWeb.Instructions.game_instruction() %>
       </div>
       <% else %>
         <div class ="container">
@@ -71,7 +86,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def render(assigns) do
     ~L"""
-      <div class="container">
+      <div class="container" >
         <div class="row">
           <div class="column column-75">
               <div class="row">
@@ -79,51 +94,51 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                 </div>
                 <div class="column column-50">
-                <%= if @modal do%>
+                <%= if @modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
-                  <div phx-window-keydown="keydown">
+                <%= if @instructions_modal do %>
+                 <%= live_modal @socket, QuadquizaminosWeb.InstructionsComponent, id: 2, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris) %>
+                <% end %>
+                  <div phx-window-keydown="keydown" class="grid">
                     <%= raw svg_head() %>
+                    <%= for x1 <- 1..10, y1 <- 1..20 do %>
+                    <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
+                    <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
+                    x="<%= x + 1 %>" y="<%= y + 1 %>"
+                    class="position-block <%= if @adding_block, do: "hover-block" %>"
+                    width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                    <% end %>
+
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
-                      <%= for {x, y, color} <- row do %>
-                        <% {x, y} = to_pixels( {x, y}, @box_width, @box_height ) %>
-                        <rect
+                      <%= for {x1, y1, color} <- row do %>
+                        <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
+                        <rect phx-click="move_or_delete_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %> phx-value-color=<%= color %>
                           x="<%= x+1 %>" y="<%= y+1 %>"
                           style="fill:#<%= shades(color).light %>;"
-                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>">
+                          <%= if @deleting_block and block_in_bottom?(x1, y1, @bottom) do %>
+                           <title>delete block at {<%= x1 %>,<%= y1 %>} </title>
+                           <% end %>
+                           <%= if @moving_block and block_in_bottom?(x1, y1, @bottom) do %>
+                           <title>click to move block </title>
+                           <% end %>
+                          </rect>
                         <% end %>
                     <% end %>
+
                     <%= raw svg_foot() %>
                   </div>
                 </div>
               </div>
             </div>
             <div class="column">
-            <a class="button", href = <%= Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions) %> > How to play </a>
-            <br/>
-            <%= if @coord_modal do %>
-               <%= live_component @socket,  QuadquizaminosWeb.CoordModalComponent, id: 2, powers: @powers %>
-              <% end %>
+            <a class="button" phx-click="instructions">  How to play </a>
             </div>
           <br/>
         </div>
     </div>
-     <%= debug(assigns) %>
-    """
-  end
-
-  defp game_instruction do
-    """
-    <h2>How to play</h2>
-        <ol>
-          <li>Up arrow key rotates the blocks</li>
-          <li>Left arrow key moves the blocks to the left</li>
-          <li>Right arrow key moves the blocks to the right</li>
-          <li>Down arrow key moves the blocks down</li>
-          <li>Debug until powerups: "r" raises dropping speed</li>
-          <li>Debug until powerups: "l" lowers dropping speed</li>
-          <li>Debug until powerups: "c" clears bottom blocks</li>
-        </ol>
+    <%= debug(assigns) %>
     """
   end
 
@@ -172,10 +187,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def new_block(socket) do
-    brick =
-      Quadquizaminos.Brick.new_random()
-      |> Map.put(:location, {3, -3})
-
+    brick = Quadquizaminos.Brick.new_random()
     assign(socket, brick: brick)
   end
 
@@ -201,7 +213,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     xmlns:xlink="http://www.w3.org/1999/xlink"
     width="200" height="400"
     viewBox="0 0 200 400"
-    xml:space="preserve">
+    xml:space="preserve"
+    aria-labelledby="title">
     """
   end
 
@@ -373,31 +386,133 @@ defmodule QuadquizaminosWeb.TetrisLive do
         socket = assign(socket, score: score)
         pause_game(socket)
       end
+
     {:noreply, socket}
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
 
+  def handle_event("instructions", _params, socket) do
+    {:noreply, socket |> assign(instructions_modal: true, state: :paused)}
+  end
+
+  def handle_event("close_instructions", _param, socket) do
+    {:noreply, socket |> assign(instructions_modal: false, state: :playing)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "moveblock"}, socket) do
+    {:noreply, socket |> assign(modal: false, moving_block: true)}
+  end
+
   def handle_event("powerup", %{"powerup" => "addblock"}, socket) do
-    {:noreply, socket |> assign(coord_modal: true, modal: false)}
+    {:noreply, socket |> assign(adding_block: true, modal: false)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "deleteblock"}, socket) do
+    {:noreply, socket |> assign(deleting_block: true, modal: false)}
   end
 
   def handle_event("powerup", _, socket) do
     {:noreply, socket}
   end
 
-  def handle_event("add_block", %{"coord" => %{"x" => x, "y" => y}}, socket) do
-    {x, _} = Integer.parse(x)
-    {y, _} = Integer.parse(y)
+  def handle_event(
+        "move_or_delete_block",
+        %{"x" => x, "y" => y, "color" => color},
+        %{assigns: %{moving_block: true}} = socket
+      ) do
+    {x, y} = parse_to_integer(x, y)
+    color = String.to_atom(color)
+    {:noreply, socket |> assign(block_coordinates: {x, y, color}, adding_block: true)}
+  end
+
+  def handle_event(
+        "move_or_delete_block",
+        %{"x" => x, "y" => y},
+        %{assigns: %{deleting_block: true}} = socket
+      ) do
+    {:noreply, delete_block(socket, x, y)}
+  end
+
+  def handle_event("move_or_delete_block", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event(
+        "add_block",
+        %{"x" => x, "y" => y},
+        %{assigns: %{block_coordinates: nil}} = socket
+      ) do
+    {:noreply, add_block(socket, x, y, socket.assigns.adding_block)}
+  end
+
+  def handle_event(
+        "add_block",
+        %{"x" => x, "y" => y},
+        %{assigns: %{block_coordinates: block_coordinates}} = socket
+      ) do
+    {:noreply,
+     socket
+     |> move_block(
+       x,
+       y,
+       block_coordinates,
+       socket.assigns.adding_block,
+       socket.assigns.moving_block
+     )}
+  end
+
+  defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
+    {x, y} = parse_to_integer(x, y)
+    {x1, y1, color} = block_coordinates
+    powers = socket.assigns.powers -- [:moveblock]
+
+    bottom =
+      socket.assigns.bottom |> Map.delete({x1, y1}) |> Map.merge(%{{x, y} => {x, y, color}})
+
+    assign(socket,
+      bottom: bottom,
+      powers: powers,
+      state: :playing,
+      adding_block: false,
+      moving_block: false
+    )
+  end
+
+  defp move_block(socket, _x, _y, _block_coordinates, _adding_block, _moving_block) do
+    socket
+  end
+
+  defp delete_block(socket, x, y) do
+    bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
+    powers = socket.assigns.powers -- [:deleteblock]
+    socket |> assign(bottom: bottom, deleting_block: false, state: :playing, powers: powers)
+  end
+
+  defp block_in_bottom?(x, y, bottom) do
+    Map.has_key?(bottom, {x, y})
+  end
+
+  defp add_block(socket, x, y, true = _adding_block) do
+    {x, y} = parse_to_integer(x, y)
     powers = socket.assigns.powers -- [:addblock]
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
+    socket |> assign(bottom: bottom, adding_block: false, state: :playing, powers: powers)
+  end
 
-    {:noreply,
-     socket |> assign(bottom: bottom, coord_modal: false, state: :playing, powers: powers)}
+  defp add_block(socket, _x, _y, false = _adding_block) do
+    socket
+  end
+
+  defp parse_to_integer(x, y) do
+    x = String.to_integer(x)
+    y = String.to_integer(y)
+    {x, y}
   end
 
   def handle_info(:tick, socket) do
     tick_count = socket.assigns.tick_count - 1
+
     if tick_count > 0 do
       ## don't drop yet
       socket = assign(socket, tick_count: tick_count)
@@ -411,19 +526,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
       {:noreply, drop(socket.assigns.state, socket, false)}
     end
   end
-
-  # defp return_to_categories_or_pause_game(true, socket) do
-  #   points = right_points(socket)
-  #   socket |> assign(category: nil, score: socket.assigns.score + points)
-  # end
-
-  # defp return_to_categories_or_pause_game(_, socket) do
-  #   points = wrong_points(socket)
-  #   score = socket.assigns.score - points
-  #   score = if score < 0, do: 0, else: score
-  #   socket = assign(socket, score: score)
-  #   pause_game(socket)
-  # end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
