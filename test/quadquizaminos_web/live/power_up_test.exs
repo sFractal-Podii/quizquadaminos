@@ -26,8 +26,24 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     html = render_keydown(view, "keydown", %{"key" => " "})
 
     assert html =~ "<i class=\"fas fa-angle-double-right\""
-    assert html =~ "<i class=\"fas fa-angle-double-right\""
+    assert html =~ "<i class=\"fas fa-minus-square\""
     assert html =~ "<i class=\"fas fa-plus-square\""
+  end
+
+  test "powers don't display on questions that don't have them if answered correctly" , %{conn: conn}do
+    {view, _html} = pause_game(conn)
+    
+     #this is hard coded think of a better way to handle this
+     Enum.each(["open_c2"], fn category -> 
+      render_click(view, "choose_category", %{"category" => category})
+      
+      right_answer = Quadquizaminos.QnA.question(category).correct
+      render_click(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+     end)
+
+      html = render_keydown(view, "keydown", %{"key" => " "})
+      refute html =~ "<i class=\"fas fa-angle-double-right\""
+      refute html =~ "<i class=\"fas fa-plus-square\""
   end
 
   describe "Addblock" do
@@ -80,7 +96,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     end
 
     test "powerup when clicked modal disappears", %{view: view} do
-      html = render_click(view, "powerup", %{"powerup" => "addblock"})
+      html = render_click(view, "powerup", %{"powerup" => "deleteblock"})
       refute html =~ "<div class=\"phx-modal-content\">"
     end
 
@@ -128,7 +144,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     end
 
     test "powerup when clicked modal disappears", %{view: view} do
-      html = render_click(view, "powerup", %{"powerup" => "addblock"})
+      html = render_click(view, "powerup", %{"powerup" => "moveblock"})
       refute html =~ "<div class=\"phx-modal-content\">"
     end
 
@@ -162,7 +178,9 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       render_click(view, "powerup", %{"powerup" => "moveblock"})
 
       render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20", "color" => "purple"})
-      html = render_click(view, "add_block", %{"x" => "7", "y" => "18"})
+      render_click(view, "add_block", %{"x" => "7", "y" => "18"})
+      
+      html = render_keydown(view, "keydown", %{"key" => " "})
 
       refute html =~ "<i class=\"fas fa-angle-double-right\""
     end
