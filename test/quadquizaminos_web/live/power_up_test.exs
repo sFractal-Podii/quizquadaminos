@@ -33,7 +33,6 @@ defmodule QuadquizaminosWeb.PowerUpTest do
   test "powers don't display on questions that don't have them if answered correctly" , %{conn: conn}do
     {view, _html} = pause_game(conn)
     
-     #this is hard coded think of a better way to handle this
      Enum.each(["open_c2"], fn category -> 
       render_click(view, "choose_category", %{"category" => category})
       
