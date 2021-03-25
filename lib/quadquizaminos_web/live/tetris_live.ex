@@ -92,6 +92,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
               <div class="row">
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
+                    <h1><%= @gametime_counter %></h1>
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
@@ -265,6 +266,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
   defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
   defp shades(:purple), do: %{light: "800080", dark: "4d004d"}
+  defp shades(:grey_yellow), do: %{light: "7F7F7E", dark: "ffff00"}
 
   defp color(%{name: :t}), do: :red
   defp color(%{name: :i}), do: :blue
@@ -512,6 +514,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_info(:tick, socket) do
     tick_count = socket.assigns.tick_count - 1
+    gametime_counter = gametime_counter(socket)
+    can_be_marked? = can_be_marked?(gametime_counter, tick_count)
+
+    socket = mark_block_vulnerable(socket, socket.assigns[:bottom], can_be_marked?)
 
     if tick_count > 0 do
       ## don't drop yet
@@ -522,10 +528,48 @@ defmodule QuadquizaminosWeb.TetrisLive do
       {:ok, speed_info} = Enum.fetch(@drop_speeds, socket.assigns.speed)
       tick_count = speed_info.ratio
 
-      socket = assign(socket, tick_count: tick_count)
+      socket = assign(socket, tick_count: tick_count, gametime_counter: gametime_counter)
       {:noreply, drop(socket.assigns.state, socket, false)}
     end
   end
+
+  defp gametime_counter(socket) do
+    state = socket.assigns.state
+
+    if state == :starting or state == :game_over do
+      0
+    else
+      socket.assigns.gametime_counter + 1
+    end
+  end
+
+  defp can_be_marked?(gametime_counter, tick_count) do
+    gametime_counter == 78 and tick_count <= 0
+  end
+
+  defp mark_block_vulnerable(socket, nil, _can_be_marked?), do: socket
+
+  defp mark_block_vulnerable(socket, bottom, can_be_marked?) do
+    socket =
+      if Enum.empty?(bottom) do
+        socket
+      else
+        assign(socket, bottom: mark_block_vulnerable(can_be_marked?, bottom))
+      end
+  end
+
+  defp mark_block_vulnerable(true, bottom) do
+    {{x, y}, _} = Enum.random(bottom)
+
+    {_, new_bottom} =
+      Map.get_and_update(bottom, {x, y}, fn current_value ->
+        {current_value, {x, y, :grey_yellow}}
+      end)
+
+    new_bottom
+  end
+
+  defp mark_block_vulnerable(_ = can_be_marked?, bottom), do: bottom
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
