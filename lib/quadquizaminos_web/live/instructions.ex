@@ -47,6 +47,39 @@ defmodule QuadquizaminosWeb.Instructions do
       Play the game and find out!
       </p>
     <h2>How to play</h2>
+    The game involves completing rows for points or answering questions for points.
+    There are many different aspects covered in the following sections:
+    <ol>
+      <li>Objective</li>
+      <li>Movement</li>
+      <li>Speed</li>
+      <li>Scoring</li>
+      <li>Quiz</li>
+      <li>Sponsors</li>
+      <li>Powerups</li>
+      <li>Strategy</li>
+      <li>Developer Hacks</li>
+    </ol>
+
+    Note that some of the features described here
+    are still in development.
+    If a feature has a "#", it indicates the feature is incomplete.
+    A number after the hash tag means it it that issue/story on the project board.
+
+    <h3>Objective</h3>
+    The objective of the game is to move and rotate falling geometric shapes
+    (quadblocks)
+    to form complete rows at the bottom of the game board,
+    gaining points in process.
+    Answering questions also adds points and sometimes gives the player
+    "powerups" which help with playing the game.
+
+    Of course, the real objective is teach you about supply chain security
+    in a fun an entertainging manner.
+
+    The game ends when "your supply chain gets too long"
+    i.e. the stack of blocks reaches the top of the game board.
+
     <h3>Movement</h3>
         <ol>
           <li>Up arrow key rotates the blocks</li>
@@ -56,44 +89,220 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>space bar pauses game and brings up quiz</li>
         </ol>
     <h3>Speed</h3>
-            <ol>
-              <li>blah blah</li>
-            </ol>
-    <h3>Scoring</h3>
+      Speed refers to how fast the quadblocks fall.
+      There are 7 speeds to the game:
         <ol>
-          <li>blah blah</li>
+          <li>"full throttle" - ~20 rows per second</li>
+          <li>"high speed" - ~10 rows per second</li>
+          <li>"fast" - ~4 rows per second</li>
+          <li>"moderate" - ~3 rows per second</li>
+          <li>"leisurely" - ~2 rows per second</li>
+          <li>"sedate" - ~1.5 rows per second</li>
+          <li>"lethargic" - ~1 rows per second</li>
         </ol>
+      Speed affects scoring in several ways which will be described under scoring/
+
+      The game starts at a "fast" speed.
+      The game speeds up gradually (ie one step in above list) over time (#?).
+      If a "Cyberattack" (see section whatever) occurs,
+      the game jumps to "full throttle" from whatever speed it was on (#?).
+      If a "License Lawsuit" (see section whatever) occurs,
+      the game jumps to "lethargic" from whatever speed it was on(#?).
+      Powerups (see later section) can be used to:
+        <ol>
+          <li>speed up one notch (#?)</li>
+          <li>slow down one notch (#?)</li>
+        </ol>
+    <h3>Scoring</h3>
+    Points are scored in several ways:
+        <ol>
+          <li>clock ticks / block drops</li>
+          <li>clearing rows</li>
+          <li>answering questions</li>
+        </ol>
+    The amount of points scored is also influenced by multipliers.
+    The multipliers may increase the score
+    (e.g. operating at quicker speeds mulitplies the value of clearing a row)(#?)
+    or may decrease the score (e.g. the more vulnerabilities on the board,
+    the lower the value of clearing a row)(#?)
+
+    For each clock tick, the block in play drops one row and the score changes.
+    How much it increases/decreases depends on the speed.
+    Obviously faster speeds make clock ticks more often.
+    But in addition, each tick is worth more at faster speeds(#?):
+      <ol>
+        <li>"full throttle": 4 points per tick</li>
+        <li>"high speed": 3 points per tick</li>
+        <li>"fast": 2 points per tick</li>
+        <li>"moderate": 1 point per tick</li>
+        <li>"leisurely": 0 points per tick (ie score does not increase)</li>
+        <li>"sedate": (-1) point per tick(ie score actually decreases)</li>
+        <li>"lethargic": (-5) points per tick(ie score actually decreases)</li>
+      </ol>
+
+    Clearing rows gains points as well as frees up space to play longer.
+    The amount of points for clearing a row depends on
+    (1) the number of rows cleared in that tick
+    (2) the multipliers.
+
+    It is possible to fill more than one row
+    when a quadblock reaches the "bottom".
+    The amount of points goes up exponentially
+    with the number of rows filled.
+    If no multipliers are in affect, then the points are
+    100 times 2 to the power of the number of rows. eg:
+      <ol>
+        <li>1 row = 200 points</li>
+        <li>2 row = 400 points</li>
+        <li>3 row = 800 points</li>
+        <li>4 row = 1,600 points</li>
+        <li>etc</li>
+      </ol>
+    It might appear that the highest number of rows that could be cleared
+    in one tick would be 4 - the length of the longest quadblock.
+    Howevers there are some tips & tricks with powerups (see later section)
+    that the clock is 'frozen' while you are doing add/delete/move/etc
+    and more importantly that rows completed with add/move do not score
+    until the falling brick touches joins the bottom blocks.
+
+    put 5 row example gif here
+
+    Which means you could, in theory at least,
+    complete almost as many rows as there are on the board.
+    10 rows would be 102,400 points.
+    15 rows would be 3,276,800 points.
+    And that is before multipliers.
+
+    Multipliers increase the score.
+    One multiplier is the speed at the tick that clears the row:
+      <ol>
+        <li>"full throttle": Multiplier = 4</li>
+        <li>"high speed": Multiplier = 3</li>
+        <li>"fast": Multiplier = 2</li>
+        <li>"moderate": Multiplier = 1</li>
+        <li>"leisurely": Multiplier = 1</li>
+        <li>"sedate": Multiplier = 1</li>
+        <li>"lethargic": Multiplier = 0.5 (ie less points)</li>
+      </ol>
+
+    Other multipliers are TBD
+
+    The third way to score points is by answering questions.
+    Each question gives a certain amount of points for a correct answer.
+    It also subtracts for incorrect answers,
+    but the scoring is setup such that even if you don't get it correct
+    until the last guess, you will still be ahead
+    albeit not as far ahead as getting it correct on first try.
+
+    Points per question increase as you get further into questions
+    in a given category.
+
+    Answering questions also adds powerups for some questions.
+    See later section.
+
+    <h3>Vulnerabilities, Licencing Errors, Cyberattacks, Lawsuits</h3>
+    Vulnerabilities and Licencing Errors:
+    Normal blocks are squares of one color (two tones).
+    But just like in real life, problems can crop up in your supply chain.
+    There are two types of vulnerabilies.
+    Known vulnerabilities are yellow/gray blocks
+    that show up at random in either dropping blocks
+    or in the blocks at the bottom that haven't been cleared yet.
+    Invisible vulnerabilities (zero days) are white-on-white blocks
+    that you only notice thru behavior (#?).
+
+    Vulnerabilities have several impacts.
+    The main impact is that any vulnerability in a row will prevent
+    it being cleared (#?).
+    There is also a subtle impact that the more vulnerabilities,
+    the more likely you will be hit with a cyber attack(#?).
+    The speed at which vulnerabilities arrive is a function of time(#?),
+    a function of the number of wrong answers to questions(#?),
+    and are slowed down by enabling certain powerups(#?).
+
+    License errors are similar.
+    They are brown/grey blocks (#?),
+    and also prevent a row from being cleared.
+    The more license errors,
+    the higher the likelihood of a lawsuit(#?).
+    The speed at which license errors arrive is a function of time (#?),
+    a function of the number of wrong answers to questions(#?),
+    and are slowed down by enabling certain powerups(#?).
+
+    Cyberattacks occur from ignoring vulnerabilities
+    in your supply chain(#?).
+    Cyberattacks speed the game up to the highest speed(#?),
+    and cause an entire blocking row of IOCs (grey/yellow)
+    at row 10 (#?).
+    Cyberattacks are cleared with powerups.
+
+    Lawsuits occur from ignoring license errors
+    in your supply chain(#?).
+    Lawsuits slow the game down to the lowest speed(#?),
+    and cause lawsuit blockers (grey/brown)
+    in rows 5-15
+    at column 5(#?).
+    Lawsuits are cleared with powerups.
+
     <h3>Quiz</h3>
       <ol>
-        <li>blah blah</li>
+        <li>answer questions to gain points</li>
+        <li>answer questions to gain powerups</li>
+        <li>different categories of questions</li>
+        <li>points/question increase deeper into a category</li>
+        <li>"more powerful" powerups deeper into a category</li>
+        <li>powerups 'relate' to a category (eg SBOM "blow up", OpenC2 'commands', Phoenix 'rebirth', ...)</li>
+        <li> ... </li>
       </ol>
+
     <h3>Powerups</h3>
       <ol>
-        <li>+ add a block</li>
-        <li>- remove a block</li>
-        <li>blah move a block</li>
+        <li><i class="fas fa-plus-square"></i> add a block</li>
+        <li><i class="fas fa-minus-square"></i> remove a block</li>
+        <li><i class="fas fa-arrows-alt"></i> move a block</li>
+        <li><i class="fas fa-eraser"></i> clear blocks</li>
+        <li><i class="fas fa-fast-forward"></i> speed up</li>
+        <li><i class="fas fa-fast-backward"></i> slow down</li>
+        <li><i class="fas fa-file-prescription"></i> fix a cyberattack</li>
+        <li><i class="fas fa-syringe"></i> fix a lawsuite</li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li><i class="fab fa-superpowers"></i> Superpower</li>
       </ol>
-- Arrows for move (https://fontawesome.com/icons/arrows-alt?style=solid)
-- eraser for clearblocks (https://fontawesome.com/icons/eraser?style=solid)
-- fast-forward for speedup (https://fontawesome.com/icons/fast-forward?style=solid)
-- fastbackwards for slow down (https://fontawesome.com/icons/fast-backward?style=solid)
 - Wrench for fixing a vulnerability (https://fontawesome.com/icons/wrench?style=solid)
 - screwdriver for fixing a license error (https://fontawesome.com/icons/screwdriver?style=solid)
 - 3/4 battery for reducing vulnerability/license-error arrival rates (https://fontawesome.com/icons/battery-three-quarters?style=solid)
 - Toolbox (https://fontawesome.com/icons/toolbox?style=solid) for autofixing all vulnerabilities
 - Tools https://fontawesome.com/icons/tools?style=solid
-- Superpowers (https://fontawesome.com/icons/superpowers?style=brands)
 - Plug (https://fontawesome.com/icons/plug?style=solid)
 - Bomb (https://fontawesome.com/icons/bomb?style=solid)
 - File-contract (https://fontawesome.com/icons/file-contract?style=solid)
 - ID card (https://fontawesome.com/icons/id-card?style=regular)
-- Prescription (https://fontawesome.com/icons/file-prescription?style=solid)
+
+Strategy
+    <h3>Strategy, Tips & Tricks</h3>
+    tetris vs quiz
+
+    timing funny wrt QnA/powerups
+
+
     <h3>Developer Debug</h3>
-    will be removed
+    This section contains "cheats" used by developers
+    while the game is still in development.
+    Like any good hacker, you can watch this section
+    and maybe find some backdoors if we forget to take them out.
+    OR it's possible we will tie these keys to intrusion alarms
+    and it will be game over if you use them.
+
+    Hopefully these will be removed
         <ol>
-          <li>Debug until powerups: "r" raises dropping speed</li>
-          <li>Debug until powerups: "l" lowers dropping speed</li>
-          <li>Debug until powerups: "c" clears bottom blocks</li>
+          <li>"r" raises dropping speed (change to add raise-speed powerup)</li>
+          <li>"l" lowers dropping speed (change to add lower-speed powerup)</li>
+          <li>"c" clears bottom blocks (change to add clear-blocks powerup)</li>
+          <li>"s" to add superpowers powerup</li>
+          <li>"1" to switch to stored block configuraton 1</li>
         </ol>
     """
     end
