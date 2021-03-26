@@ -1,6 +1,5 @@
 defmodule QuadquizaminosWeb.Instructions do
 
-
     def game_instruction() do
     """
     <h2>Why Play?</h2>
@@ -47,7 +46,7 @@ defmodule QuadquizaminosWeb.Instructions do
       Play the game and find out!
       </p>
     <h2>How to play</h2>
-    The game involves completing rows for points or answering questions for points.
+    <p>The game involves completing rows for points or answering questions for points.
     There are many different aspects covered in the following sections:
     <ol>
       <li>Objective</li>
@@ -61,24 +60,26 @@ defmodule QuadquizaminosWeb.Instructions do
       <li>Prizes / Contests</li>
       <li>Strategy, Tips & Tricks</li>
       <li>Developer Hacks</li>
-    </ol>
-
+    </ol></p>
+    <p>
     Note that some of the features described here
     are still in development.
     If a feature has a "#", it indicates the feature is incomplete.
     A number after the hash tag means it it that issue/story on the project board.
-
+    </p>
     <h3>Objective</h3>
-    The objective of the game is to move and rotate falling geometric shapes
+    <p>The objective of the game is to move and rotate falling geometric shapes
     (quadblocks)
     to form complete rows at the bottom of the game board,
     gaining points in process.
     Answering questions also adds points and sometimes gives the player
     "powerups" which help with playing the game.
-
+    </p>
+    <p>
     Of course, the real objective is teach you about supply chain security
     in a fun an entertaining manner.
-
+    </p>
+    <p>
     The game ends when you go out of business because
     "your supply chain gets too long"
     and something goes wrong in your supply chain
@@ -92,8 +93,9 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>Down arrow key moves the blocks down</li>
           <li>space bar pauses game and brings up quiz</li>
         </ol>
+
     <h3>Speed</h3>
-      Speed refers to how fast the quadblocks fall.
+    <p>Speed refers to how fast the quadblocks fall.
       There are 7 speeds to the game:
         <ol>
           <li>"full throttle" - ~20 rows per second</li>
@@ -104,21 +106,27 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>"sedate" - ~1.5 rows per second</li>
           <li>"lethargic" - ~1 rows per second</li>
         </ol>
-      Speed affects scoring in several ways which will be described under scoring/
-
+      </p>
+      <p>
+      Speed affects scoring in several ways which will be described under scoring
+      </p>
+      <p>
       The game starts at a "fast" speed.
       The game speeds up gradually (ie one step in above list) over time (#?).
-      If a "Cyberattack" (see section whatever) occurs,
+      </p>
+      <p>If a "Cyberattack" (see section whatever) occurs,
       the game jumps to "full throttle" from whatever speed it was on (#?).
-      If a "License Lawsuit" (see section whatever) occurs,
+      </p>
+      <p>If a "License Lawsuit" (see section whatever) occurs,
       the game jumps to "lethargic" from whatever speed it was on(#?).
-      Powerups (see later section) can be used to:
+      </p>
+      <p>Powerups (see later section) can be used to:
         <ol>
           <li>speed up one notch (#?)</li>
           <li>slow down one notch (#?)</li>
         </ol>
     <h3>Scoring</h3>
-    Points are scored in several ways:
+    <p>Points are scored in several ways:
         <ol>
           <li>clock ticks / block drops</li>
           <li>clearing rows</li>
@@ -129,7 +137,8 @@ defmodule QuadquizaminosWeb.Instructions do
     (e.g. operating at quicker speeds mulitplies the value of clearing a row)(#?)
     or may decrease the score (e.g. the more vulnerabilities on the board,
     the lower the value of clearing a row)(#?)
-
+    </p>
+    <p>
     For each clock tick, the block in play drops one row and the score changes.
     How much it increases/decreases depends on the speed.
     Obviously faster speeds make clock ticks more often.
@@ -143,12 +152,14 @@ defmodule QuadquizaminosWeb.Instructions do
         <li>"sedate": (-1) point per tick(ie score actually decreases)</li>
         <li>"lethargic": (-5) points per tick(ie score actually decreases)</li>
       </ol>
-
+    </p>
+    <p>
     Clearing rows gains points as well as frees up space to play longer.
     The amount of points for clearing a row depends on
     (1) the number of rows cleared in that tick
     (2) the multipliers.
-
+    </p>
+    <p>
     It is possible to fill more than one row
     when a quadblock reaches the "bottom".
     The amount of points goes up exponentially
@@ -168,15 +179,18 @@ defmodule QuadquizaminosWeb.Instructions do
     that the clock is 'frozen' while you are doing add/delete/move/etc
     and more importantly that rows completed with add/move do not score
     until the falling brick touches joins the bottom blocks.
-
+    </p>
+    <p>
     put 5 row example gif here
-
+    </p>
+    <p>
     Which means you could, in theory at least,
     complete almost as many rows as there are on the board.
     10 rows would be 102,400 points.
     15 rows would be 3,276,800 points.
     And that is before multipliers.
-
+    </p>
+    <p>
     Multipliers increase the score.
     One multiplier is the speed at the tick that clears the row:
       <ol>
@@ -188,23 +202,28 @@ defmodule QuadquizaminosWeb.Instructions do
         <li>"sedate": Multiplier = 1</li>
         <li>"lethargic": Multiplier = 0.5 (ie less points)</li>
       </ol>
-
+    </p>
+    <p>
     Other multipliers are TBD
-
+    </p>
+    <p>
     The third way to score points is by answering questions.
     Each question gives a certain amount of points for a correct answer.
     It also subtracts for incorrect answers,
     but the scoring is setup such that even if you don't get it correct
     until the last guess, you will still be ahead
     albeit not as far ahead as getting it correct on first try.
-
+    </p>
+    <p>
     Points per question increase as you get further into questions
     in a given category.
-
+    </p>
+    <p>
     Answering questions also adds powerups for some questions.
     See later section.
-
+    </p>
     <h3>Vulnerabilities, Licensing Issues, Cyberattacks, Lawsuits</h3>
+    <p>
     Normal blocks are squares of one color (two tones).
     But just like in real life, problems can crop up in your supply chain.
     There are two types of vulnerabilies.
@@ -213,7 +232,8 @@ defmodule QuadquizaminosWeb.Instructions do
     or in the blocks at the bottom that haven't been cleared yet.
     Invisible vulnerabilities (zero days) are white-on-white blocks
     that you only notice thru behavior (#?).
-
+    </p>
+    <p>
     Vulnerabilities have several impacts.
     The main impact is that any vulnerability in a row will prevent
     it being cleared (#?).
@@ -222,7 +242,8 @@ defmodule QuadquizaminosWeb.Instructions do
     The speed at which vulnerabilities arrive is a function of time(#?),
     a function of the number of wrong answers to questions(#?),
     and is slowed down by enabling certain powerups(#?).
-
+    </p>
+    <p>
     License errors are similar.
     They are brown/grey blocks (#?),
     and also prevent a row from being cleared.
@@ -231,14 +252,16 @@ defmodule QuadquizaminosWeb.Instructions do
     The speed at which license errors arrive is a function of time (#?),
     a function of the number of wrong answers to questions(#?),
     and is slowed down by enabling certain powerups(#?).
-
+    </p>
+    <p>
     Cyberattacks occur from ignoring vulnerabilities
     in your supply chain(#?).
     Cyberattacks speed the game up to the highest speed(#?),
     and cause an entire blocking row of IOCs (grey/yellow)
     at row 10 (#?).
     Cyberattacks are cleared with powerups.
-
+    </p>
+    <p>
     Lawsuits occur from ignoring license errors
     in your supply chain(#?).
     Lawsuits slow the game down to the lowest speed(#?),
@@ -246,7 +269,7 @@ defmodule QuadquizaminosWeb.Instructions do
     in rows 5-15
     at column 5(#?).
     Lawsuits are cleared with powerups.
-
+    </p>
     <h3>Quiz</h3>
       <ol>
         <li>answer questions to gain points</li>
@@ -259,29 +282,32 @@ defmodule QuadquizaminosWeb.Instructions do
       </ol>
 
     <h3>Sponsors</h3>
-    Sponsors make the game possible.
-
-    Sponsors offer prizes (see section)
-
+    <p>Sponsors make the game possible.</p>
+    <p>Sponsors offer prizes (see section)</p>
+    <p>
     Sponsor category of quiz is the only quiz category
     where you can get the 'superpower' powerup
     which allows you to pick anyother powerup when you need it.
-
+    </p>
+    <p>
     Please visit the sponsor quiz questions.
-
+    </p>
+    <p>
     To be a sponsor required donating resources to the game
     (dollars or sweat equity) but it also required
     truthfully answering questions about their own supply chain.
     This included, in most cases, confessing ignorance to
     certain aspects of supply chain learned by playing this game.
-
+    </p>
     <h3>Powerups</h3>
-    The game starts with certain powerups (#?).
+    <p>The game starts with certain powerups (#?).
     Powerups are won by correctly answering certain questions.
     Powerups appear on the categories bar when paused.
-
+    </p>
+    <p>
     add pic here
-
+    </p>
+    <p>
       <ol>
         <li><i class="fas fa-plus-square"></i> add a block</li>
         <li><i class="fas fa-minus-square"></i> remove a block</li>
@@ -305,12 +331,15 @@ defmodule QuadquizaminosWeb.Instructions do
         <li><i class="fas fa-balance-scale"></i> fix a lawsuite</li>
         <li><i class="fab fa-superpowers"></i> Superpower</li>
       </ol>
-
+    </p>
+    <p>
       Some powerups only can be obtained from obtaining multiple other powerups.
-
+    </p>
+    <p>
       All combo superpowers require having the superpower powerup as well as the
       other necessary powerups.
-
+      </p>
+      <p>
       For example, the <i class="fas fa-ribbon"></i> ribbon/badge slows
       down the arrival rate of vulnerabilties.
       To obtain this ribbon/badge, you must have and click on the
@@ -321,16 +350,19 @@ defmodule QuadquizaminosWeb.Instructions do
       Picking it removes one superpower, one SBOM, and one automation
       from your stash and adds one ribbon/badge to your stash.
       Note you still need to click on the ribbon/badge to activate it.
-
+      </p>
+      <p>
       Similarly, the <i class="fas fa-certificate"></i> certificate badge
       requires superpower, SBOM, OpenChain.
-
+      </p>
+      <p>
       <i class="fas fa-file-prescription"></i> fix a cyberattack
       requires superpower, SBOM, forensics, automation, legal, cyberinsurance
-
+      </p>
+      <p>
       <i class="fas fa-syringe"></i> fix a lawsuit
       requires superpower, SBOM, legal, openchain, cyberinsurance
-
+      </p>
   <h3>Prizes, Contests</h3>
   Prizes can be won in several ways.
 
@@ -340,10 +372,11 @@ defmodule QuadquizaminosWeb.Instructions do
   Some sponsors offer prizes as part of a contest.
 
   <h3>Strategy, Tips & Tricks</h3>
-    tetris vs quiz
-
+  <p>tetris vs quiz</p>
+    <p>
     timing funny wrt QnA/powerups - multi-row clearing trick
-
+    </p>
+    <p>
     just like in real life, it is sometimes expedient
     to defer patches due to more imediate revenue needs,
     sometimes leaving vuln or lic-issue in place lets you build rows
@@ -358,7 +391,8 @@ defmodule QuadquizaminosWeb.Instructions do
     The best strategy is trading off between the two,
     and investing in areas that reduce the likelihood
     (e.g. SBOM, Automation, OpenChain) of them occuring in the first place.
-
+    </p>
+    <p>
     Note some of the powerups work best in tandem.
     For example having an SBOM by itself does not do anything.
     Neither does having automation.
@@ -366,14 +400,16 @@ defmodule QuadquizaminosWeb.Instructions do
     drastrically reduces the vulnerability arrival rate
     as well as reducing the chance of cyberattack.
     Similarly with SBOM and OpenChain for licensing issues.
-
+    </p>
+    <p>
     Note slowing down vuln/lic means it can still happen,
     just less likely.
-
+    </p>
+    <p>
     The richer you are (ie the higher your score),
     the more  tempting target you are for cyberattack
     and lawsuits (#?) so the more you need your ducks in a row.
-
+    </p>
     <h3>Developer Debug</h3>
     This section contains "cheats" used by developers
     while the game is still in development.
@@ -381,7 +417,8 @@ defmodule QuadquizaminosWeb.Instructions do
     and maybe find some backdoors if we forget to take them out.
     OR it's possible we will tie these keys to intrusion alarms
     and it will be game over if you use them.
-
+    </p>
+    <p>
     Hopefully these will be removed
         <ol>
           <li>"r" raises dropping speed (change to add raise-speed powerup)</li>
