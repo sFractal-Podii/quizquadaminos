@@ -54,10 +54,12 @@ defmodule QuadquizaminosWeb.Instructions do
       <li>Movement</li>
       <li>Speed</li>
       <li>Scoring</li>
+      <li>Vulnerabilities, Licensing Issues, Cyberattacks, Lawsuits</li>
       <li>Quiz</li>
       <li>Sponsors</li>
       <li>Powerups</li>
-      <li>Strategy</li>
+      <li>Prizes / Contests</li>
+      <li>Strategy, Tips & Tricks</li>
       <li>Developer Hacks</li>
     </ol>
 
@@ -75,9 +77,11 @@ defmodule QuadquizaminosWeb.Instructions do
     "powerups" which help with playing the game.
 
     Of course, the real objective is teach you about supply chain security
-    in a fun an entertainging manner.
+    in a fun an entertaining manner.
 
-    The game ends when "your supply chain gets too long"
+    The game ends when you go out of business because
+    "your supply chain gets too long"
+    and something goes wrong in your supply chain
     i.e. the stack of blocks reaches the top of the game board.
 
     <h3>Movement</h3>
@@ -200,13 +204,12 @@ defmodule QuadquizaminosWeb.Instructions do
     Answering questions also adds powerups for some questions.
     See later section.
 
-    <h3>Vulnerabilities, Licencing Errors, Cyberattacks, Lawsuits</h3>
-    Vulnerabilities and Licencing Errors:
+    <h3>Vulnerabilities, Licensing Issues, Cyberattacks, Lawsuits</h3>
     Normal blocks are squares of one color (two tones).
     But just like in real life, problems can crop up in your supply chain.
     There are two types of vulnerabilies.
     Known vulnerabilities are yellow/gray blocks
-    that show up at random in either dropping blocks
+    that show up at random either in dropping blocks
     or in the blocks at the bottom that haven't been cleared yet.
     Invisible vulnerabilities (zero days) are white-on-white blocks
     that you only notice thru behavior (#?).
@@ -218,7 +221,7 @@ defmodule QuadquizaminosWeb.Instructions do
     the more likely you will be hit with a cyber attack(#?).
     The speed at which vulnerabilities arrive is a function of time(#?),
     a function of the number of wrong answers to questions(#?),
-    and are slowed down by enabling certain powerups(#?).
+    and is slowed down by enabling certain powerups(#?).
 
     License errors are similar.
     They are brown/grey blocks (#?),
@@ -227,7 +230,7 @@ defmodule QuadquizaminosWeb.Instructions do
     the higher the likelihood of a lawsuit(#?).
     The speed at which license errors arrive is a function of time (#?),
     a function of the number of wrong answers to questions(#?),
-    and are slowed down by enabling certain powerups(#?).
+    and is slowed down by enabling certain powerups(#?).
 
     Cyberattacks occur from ignoring vulnerabilities
     in your supply chain(#?).
@@ -255,7 +258,30 @@ defmodule QuadquizaminosWeb.Instructions do
         <li> ... </li>
       </ol>
 
+    <h3>Sponsors</h3>
+    Sponsors make the game possible.
+
+    Sponsors offer prizes (see section)
+
+    Sponsor category of quiz is the only quiz category
+    where you can get the 'superpower' powerup
+    which allows you to pick anyother powerup when you need it.
+
+    Please visit the sponsor quiz questions.
+
+    To be a sponsor required donating resources to the game
+    (dollars or sweat equity) but it also required
+    truthfully answering questions about their own supply chain.
+    This included, in most cases, confessing ignorance to
+    certain aspects of supply chain learned by playing this game.
+
     <h3>Powerups</h3>
+    The game starts with certain powerups (#?).
+    Powerups are won by correctly answering certain questions.
+    Powerups appear on the categories bar when paused.
+
+    add pic here
+
       <ol>
         <li><i class="fas fa-plus-square"></i> add a block</li>
         <li><i class="fas fa-minus-square"></i> remove a block</li>
@@ -263,30 +289,90 @@ defmodule QuadquizaminosWeb.Instructions do
         <li><i class="fas fa-eraser"></i> clear blocks</li>
         <li><i class="fas fa-fast-forward"></i> speed up</li>
         <li><i class="fas fa-fast-backward"></i> slow down</li>
+        <li><i class="fas fa-microscope"></i> forensics?</li>
+        <li><i class="fas fa-ribbon"></i>ribbon/badge slows down vulns</li>
+        <li><i class="fas fa-certificate"></i>certificate/badge slows down licensing issues</li>
+        <li><i class="fas fa-gavel"></i>gavel represents having legal trained and ready on cyber</li>
+        <li><i class="fas fa-file-contract"></i>Cyber Insurance</li>
+        <li><i class="far fa-id-card"></i>SBOM</li>
+        <li><i class="fas fa-wrench"></i>fix a vulnerability</li>
+        <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
+        <li><i class="fas fa-hammer"></i>fix all vulnerabilities</li>
+        <li><i class="fas fa-tape"></i> fix all licensing issues</li>
+        <li><i class="fas fa-toolbox"></i> automation</li>
+        <li><i class="fas fa-tools"></i> OpenChain</li>
         <li><i class="fas fa-file-prescription"></i> fix a cyberattack</li>
-        <li><i class="fas fa-syringe"></i> fix a lawsuite</li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li><i class="fas fa-balance-scale"></i> fix a lawsuite</li>
         <li><i class="fab fa-superpowers"></i> Superpower</li>
       </ol>
-- Wrench for fixing a vulnerability (https://fontawesome.com/icons/wrench?style=solid)
-- screwdriver for fixing a license error (https://fontawesome.com/icons/screwdriver?style=solid)
-- 3/4 battery for reducing vulnerability/license-error arrival rates (https://fontawesome.com/icons/battery-three-quarters?style=solid)
-- Toolbox (https://fontawesome.com/icons/toolbox?style=solid) for autofixing all vulnerabilities
-- Tools https://fontawesome.com/icons/tools?style=solid
-- Plug (https://fontawesome.com/icons/plug?style=solid)
-- Bomb (https://fontawesome.com/icons/bomb?style=solid)
-- File-contract (https://fontawesome.com/icons/file-contract?style=solid)
-- ID card (https://fontawesome.com/icons/id-card?style=regular)
 
-Strategy
-    <h3>Strategy, Tips & Tricks</h3>
+      Some powerups only can be obtained from obtaining multiple other powerups.
+
+      All combo superpowers require having the superpower powerup as well as the
+      other necessary powerups.
+
+      For example, the <i class="fas fa-ribbon"></i> ribbon/badge slows
+      down the arrival rate of vulnerabilties.
+      To obtain this ribbon/badge, you must have and click on the
+      superpower badge after already having at least one SBOM powerup
+      and one automation powerup in your stash.
+      When you click on the superpower powerup, the ribbon/badge
+      will appear as one of powers you can exchange for.
+      Picking it removes one superpower, one SBOM, and one automation
+      from your stash and adds one ribbon/badge to your stash.
+      Note you still need to click on the ribbon/badge to activate it.
+
+      Similarly, the <i class="fas fa-certificate"></i> certificate badge
+      requires superpower, SBOM, OpenChain.
+
+      <i class="fas fa-file-prescription"></i> fix a cyberattack
+      requires superpower, SBOM, forensics, automation, legal, cyberinsurance
+
+      <i class="fas fa-syringe"></i> fix a lawsuit
+      requires superpower, SBOM, legal, openchain, cyberinsurance
+
+  <h3>Prizes, Contests</h3>
+  Prizes can be won in several ways.
+
+  Some sponsors offer no prizes.
+  Some sponsors offer
+  prizes for correctly answering a particular question.
+  Some sponsors offer prizes as part of a contest.
+
+  <h3>Strategy, Tips & Tricks</h3>
     tetris vs quiz
 
-    timing funny wrt QnA/powerups
+    timing funny wrt QnA/powerups - multi-row clearing trick
 
+    just like in real life, it is sometimes expedient
+    to defer patches due to more imediate revenue needs,
+    sometimes leaving vuln or lic-issue in place lets you build rows
+    that can be cleared in a larger block
+    - but be careful since it also increases you likelihood
+    of a cyberattack or lawsuit.
+    It's not an easy tradeoff.
+    The game is not tilted towards fixing - you will get a lower
+    score if you spend all your time fixing.
+    Conversely you will likely go out of business due to
+    a cyberattack or lawsuit if ignore them entirely.
+    The best strategy is trading off between the two,
+    and investing in areas that reduce the likelihood
+    (e.g. SBOM, Automation, OpenChain) of them occuring in the first place.
+
+    Note some of the powerups work best in tandem.
+    For example having an SBOM by itself does not do anything.
+    Neither does having automation.
+    But having an SBOM in combination with automation
+    drastrically reduces the vulnerability arrival rate
+    as well as reducing the chance of cyberattack.
+    Similarly with SBOM and OpenChain for licensing issues.
+
+    Note slowing down vuln/lic means it can still happen,
+    just less likely.
+
+    The richer you are (ie the higher your score),
+    the more  tempting target you are for cyberattack
+    and lawsuits (#?) so the more you need your ducks in a row.
 
     <h3>Developer Debug</h3>
     This section contains "cheats" used by developers
