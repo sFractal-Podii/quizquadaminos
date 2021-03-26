@@ -20,6 +20,9 @@
           <i class="fa fa-github"></i>
           Sign in with GitHub
         </a>
+        <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous)%>">
+          Sign in anonymously
+        </a>
       </li>
     </ul>
   <% end %>
