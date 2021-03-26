@@ -221,7 +221,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> Enum.join("\n")
   end
 
-  def box({x, y} = point, color) do
+  def box({_x, _y} = point, color) do
     """
     #{square(point, shades(color).light)}
     #{triangle(point, shades(color).dark)}
