@@ -424,7 +424,7 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>"r" raises dropping speed (change to add raise-speed powerup)</li>
           <li>"l" lowers dropping speed (change to add lower-speed powerup)</li>
           <li>"c" clears bottom blocks (change to add clear-blocks powerup)</li>
-          <li>"s" to add superpowers powerup</li>
+          <li>"p" to add all powerup</li>
           <li>"1" to switch to stored block configuraton 1</li>
         </ol>
     """
