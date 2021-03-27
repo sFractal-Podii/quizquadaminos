@@ -93,7 +93,6 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>Down arrow key moves the blocks down</li>
           <li>space bar pauses game and brings up quiz</li>
         </ol>
-
     <h3>Speed</h3>
     <p>Speed refers to how fast the quadblocks fall.
       There are 7 speeds to the game:
