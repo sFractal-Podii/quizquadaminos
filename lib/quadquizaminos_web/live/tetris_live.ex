@@ -547,22 +547,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp mark_block_vulnerable(socket, nil, _can_be_marked?), do: socket
 
   defp mark_block_vulnerable(socket, bottom, can_be_marked?) do
-    socket =
-      if Enum.empty?(bottom) do
-        socket
-      else
-        assign(socket,
-          bottom: mark_block_vulnerable(can_be_marked?, bottom),
-          gametime_counter:
-            if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
-              do: 0,
-              else: socket.assigns.gametime_counter
-            )
-        )
-      end
+    if Enum.empty?(bottom) do
+      socket
+    else
+      assign(socket,
+        bottom: mark_block_vulnerable(can_be_marked?, bottom),
+        gametime_counter:
+          if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
+            do: 0,
+            else: socket.assigns.gametime_counter
+          )
+      )
+    end
   end
 
-  defp mark_block_vulnerable(true, bottom) do
+  defp mark_block_vulnerable(true = _can_be_marked?, bottom) do
     {{x, y}, _} = Enum.random(bottom)
 
     {_, new_bottom} =
@@ -573,7 +572,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     new_bottom
   end
 
-  defp mark_block_vulnerable(_ = can_be_marked?, bottom), do: bottom
+  defp mark_block_vulnerable(_, bottom), do: bottom
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
