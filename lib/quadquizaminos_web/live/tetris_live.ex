@@ -112,19 +112,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <% end %>
 
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
-                      <%= for {x1, y1, color} <- row do %>
-                        <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
-                        <rect phx-click="move_or_delete_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %> phx-value-color=<%= color %>
-                          x="<%= x+1 %>" y="<%= y+1 %>"
-                          style="fill:#<%= shades(color).light %>;"
-                          width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>">
-                          <%= if @deleting_block and block_in_bottom?(x1, y1, @bottom) do %>
-                           <title>delete block at {<%= x1 %>,<%= y1 %>} </title>
-                           <% end %>
-                           <%= if @moving_block and block_in_bottom?(x1, y1, @bottom) do %>
-                           <title>click to move block </title>
-                           <% end %>
-                          </rect>
+                      <%= for {x, y, color} <- row do %>
+                      <svg phx-click="move_or_delete_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
+                       <%= raw box({x, y}, color)%>
+                          <%= raw deleting_title({x, y}, @deleting_block, block_in_bottom?(x, y, @bottom)) %>
+                           <%= raw moving_title(@moving_block, block_in_bottom?(x, y, @bottom))  %>
+                       </svg>
                         <% end %>
                     <% end %>
 
@@ -229,7 +222,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> Enum.join("\n")
   end
 
-  def box(point, color) do
+  def box({_x, _y} = point, color) do
     """
     #{square(point, shades(color).light)}
     #{triangle(point, shades(color).dark)}
@@ -623,4 +616,20 @@ defmodule QuadquizaminosWeb.TetrisLive do
         assign(socket, powers: [power | current_powers])
     end
   end
+
+  defp deleting_title({x, y} = _point, true = _deleting_block, true = _block_in_bottom) do
+    """
+    <title>delete block at {#{x}, #{y}} </title>
+    """
+  end
+
+  defp deleting_title(_point, _deleting_block, _block_in_bottom), do: ""
+
+  defp moving_title(true = _moving_block, true = _block_in_bottom) do
+    """
+     <title>click to move block </title>
+    """
+  end
+
+  defp moving_title(_moving_block, _block_in_bottom), do: ""
 end
