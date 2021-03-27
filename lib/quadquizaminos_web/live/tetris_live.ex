@@ -11,6 +11,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @debug false
   @box_width 20
   @box_height 20
+  @bottom_vulnerability_value Application.get_env(:quadquizaminos, :bottom_vulnerability_value)
 
   # 20/s, 50 ms
   @drop_speeds [
@@ -508,7 +509,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_info(:tick, socket) do
     tick_count = socket.assigns.tick_count - 1
-    gametime_counter = gametime_counter(socket)
+    gametime_counter = gametime_counter(socket.assigns.state, socket.assigns.gametime_counter)
     can_be_marked? = can_be_marked?(gametime_counter, tick_count)
 
     socket = mark_block_vulnerable(socket, socket.assigns[:bottom], can_be_marked?)
@@ -527,18 +528,20 @@ defmodule QuadquizaminosWeb.TetrisLive do
     end
   end
 
-  defp gametime_counter(socket) do
-    state = socket.assigns.state
+  defp gametime_counter(:playing, gametime_counter) do
+    gametime_counter + 1
+  end
 
-    if state == :starting or state == :game_over do
-      0
-    else
-      socket.assigns.gametime_counter + 1
-    end
+  defp gametime_counter(:paused, gametime_counter) do
+    gametime_counter
+  end
+
+  defp gametime_counter(_state, _gametime_counter) do
+    0
   end
 
   defp can_be_marked?(gametime_counter, tick_count) do
-    gametime_counter == 78 and tick_count <= 0
+    gametime_counter == @bottom_vulnerability_value + 1 and tick_count <= 0
   end
 
   defp mark_block_vulnerable(socket, nil, _can_be_marked?), do: socket
@@ -551,7 +554,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
         assign(socket,
           bottom: mark_block_vulnerable(can_be_marked?, bottom),
           gametime_counter:
-            if(socket.assigns.gametime_counter > 77, do: 0, else: socket.assigns.gametime_counter)
+            if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
+              do: 0,
+              else: socket.assigns.gametime_counter
+            )
         )
       end
   end
