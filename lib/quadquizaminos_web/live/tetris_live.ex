@@ -43,7 +43,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
        block_coordinates: nil,
        moving_block: false,
        deleting_block: false,
-       instructions_modal: false
+       instructions_modal: false,
+       gametime_counter: 0
      )
      |> assign(speed: 2, tick_count: 5)
      |> start_game()}
@@ -547,7 +548,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
       if Enum.empty?(bottom) do
         socket
       else
-        assign(socket, bottom: mark_block_vulnerable(can_be_marked?, bottom))
+        assign(socket,
+          bottom: mark_block_vulnerable(can_be_marked?, bottom),
+          gametime_counter:
+            if(socket.assigns.gametime_counter > 77, do: 0, else: socket.assigns.gametime_counter)
+        )
       end
   end
 
