@@ -312,10 +312,11 @@ defmodule QuadquizaminosWeb.Instructions do
         <li><i class="fas fa-minus-square"></i> remove a block</li>
         <li><i class="fas fa-arrows-alt"></i> move a block</li>
         <li><i class="fas fa-eraser"></i> clear blocks</li>
+        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall</li>
         <li><i class="fas fa-fast-forward"></i> speed up</li>
         <li><i class="fas fa-fast-backward"></i> slow down</li>
         <li><i class="fas fa-microscope"></i> forensics?</li>
-        <li><i class="fas fa-ribbon"></i>ribbon/badge slows down vulns</li>
+        <li><i class="fas fa-clipboard-check"></i> slows down vulns</li>
         <li><i class="fas fa-certificate"></i>certificate/badge slows down licensing issues</li>
         <li><i class="fas fa-gavel"></i>gavel represents having legal trained and ready on cyber</li>
         <li><i class="fas fa-file-contract"></i>Cyber Insurance</li>
