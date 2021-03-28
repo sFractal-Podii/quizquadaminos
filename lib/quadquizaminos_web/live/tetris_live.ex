@@ -439,6 +439,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(bottom: %{}, powers: powers)}
   end
 
+  def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
+    powers = socket.assigns.powers -- [:speedup]
+    speed = socket.assigns.speed - 1
+    speed = if speed < 0, do: 0, else: speed
+    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    tick_count = speed_info.ratio
+    assign(socket, speed: speed, tick_count: tick_count, powers: powers)
+  end
+
   def handle_event("powerup", _, socket) do
     {:noreply, socket}
   end
