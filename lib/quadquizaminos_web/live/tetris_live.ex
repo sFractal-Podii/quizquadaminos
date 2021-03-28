@@ -388,7 +388,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       :winlawsuit,
       :superpower
     ]
-    {:noreply, socket |> assign(powers: powers)}
+    {:noreply, socket |> assign(powers: powers |> Enum.sort)}
   end
 
   def handle_event("keydown", _, socket), do: {:noreply, socket}
