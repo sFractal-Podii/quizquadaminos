@@ -158,6 +158,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> show
   end
 
+  ## raise_speed gets removed once dev cheat gets removed
   defp raise_speed(socket) do
     speed = socket.assigns.speed - 1
     speed = if speed < 0, do: 0, else: speed
@@ -166,6 +167,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
+  ## lower_speed gets removed once dev cheat gets removed
   defp lower_speed(socket) do
     speed = socket.assigns.speed + 1
     lowest_speed = length(@drop_speeds) - 1
@@ -175,6 +177,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
+  ## clear_blocks gets removed once dev cheat gets removed
   defp clear_blocks(socket) do
     assign(socket, bottom: %{})
   end
@@ -364,31 +367,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   ## until powerups and for debugging - take out eventually
   def handle_event("keydown", %{"key" => "p"}, socket) do
-    powers = socket.assigns.powers ++ [
-      :deleteblock,
-      :addblock,
-      :moveblock,
-      :clearblocks,
-      :nextblock,
-      :speedup,
-      :slowdown,
-      :forensics,
-      :slowvulns,
-      :slowlicense,
-      :legal,
-      :insurance,
-      :sbom,
-      :fixvuln,
-      :fixlicense,
-      :fixallvulns,
-      :fixalllicenses,
-      :automation,
-      :openchain,
-      :stopattack,
-      :winlawsuit,
-      :superpower
-    ]
-    {:noreply, socket |> assign(powers: powers |> Enum.sort)}
+    powers = socket.assigns.powers ++
+              Quadquizaminos.Powers.all_powers()
+              |> Enum.sort
+    {:noreply, socket |> assign(powers: powers)}
   end
 
   def handle_event("keydown", _, socket), do: {:noreply, socket}
