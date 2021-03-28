@@ -445,7 +445,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     speed = if speed < 0, do: 0, else: speed
     {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
     tick_count = speed_info.ratio
-    assign(socket, speed: speed, tick_count: tick_count, powers: powers)
+    {:noreply, assign(socket, speed: speed, tick_count: tick_count, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
@@ -455,7 +455,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     speed = if speed > lowest_speed, do: lowest_speed, else: speed
     {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
     tick_count = speed_info.ratio
-    assign(socket, speed: speed, tick_count: tick_count, powers: powers)
+    {:noreply, assign(socket, speed: speed, tick_count: tick_count, powers: powers)}
   end
 
   def handle_event("powerup", _, socket) do
