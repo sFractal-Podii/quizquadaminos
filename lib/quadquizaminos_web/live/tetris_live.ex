@@ -434,6 +434,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(deleting_block: true, modal: false)}
   end
 
+  def handle_event("powerup", %{"powerup" => "clearblocks"}, socket) do
+    powers = socket.assigns.powers -- [:clearblocks]
+    {:noreply, socket |> assign(bottom: %{}, powers: powers)}
+  end
+
   def handle_event("powerup", _, socket) do
     {:noreply, socket}
   end
