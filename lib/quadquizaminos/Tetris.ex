@@ -46,7 +46,7 @@ defmodule Quadquizaminos.Tetris do
       brick: new_block,
       bottom: bottom,
       score: 1,
-      row_count: count,
+      row_count: 0,  # no rows completed since didn't reach bottom yet
       game_over: false
     }
   end
