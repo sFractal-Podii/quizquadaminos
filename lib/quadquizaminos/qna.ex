@@ -27,7 +27,7 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp build do
-    categories |> Enum.random() |> build()
+    categories() |> Enum.random() |> build()
   end
 
   defp build(category, position \\ 0) do

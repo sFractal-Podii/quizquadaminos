@@ -37,7 +37,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(qna: %{}, powers: [])
      |> assign(category: nil, categories: init_categories())
      |> assign(block_coordinates: nil)
-     |> assign(adding_block: false, moving_block: false, deleting_block: false,)
+     |> assign(adding_block: false, moving_block: false, deleting_block: false)
      |> assign(instructions_modal: false)
      |> assign(speed: 2, tick_count: 5)
      |> assign(brick_count: 0)
@@ -183,7 +183,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(correct_answers: 0)
     |> new_block
     |> show
-    
+
   end
 
   ## raise_speed gets removed once dev cheat gets removed
@@ -308,13 +308,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
       )
 
     bonus = if fast, do: 2, else: 0
+    row_count = socket.assigns.row_count + response.row_count
+    score = socket.assigns.score + response.score + bonus
 
     socket
     |> assign(
       brick: response.brick,
       bottom: response.bottom,
-      row_count: socket.assigns.row_count + response.row_count
-      score: socket.assigns.score + response.score + bonus,
+      row_count: row_count,
+      score: score,
       state: if(response.game_over, do: :game_over, else: :playing)
     )
     |> show
