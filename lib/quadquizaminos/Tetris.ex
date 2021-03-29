@@ -36,6 +36,7 @@ defmodule Quadquizaminos.Tetris do
       brick: new_brick,
       bottom: new_bottom,
       score: score(count),
+      row_count: count,
       game_over: Bottom.collides?(new_bottom, prepare(new_brick))
     }
   end
@@ -45,6 +46,7 @@ defmodule Quadquizaminos.Tetris do
       brick: new_block,
       bottom: bottom,
       score: 1,
+      row_count: count,
       game_over: false
     }
   end

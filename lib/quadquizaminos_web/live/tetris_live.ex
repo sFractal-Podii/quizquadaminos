@@ -41,6 +41,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(instructions_modal: false)
      |> assign(speed: 2, tick_count: 5)
      |> assign(brick_count: 0)
+     |> assign(row_count: 0)
      |> start_game()}
   end
 
@@ -105,7 +106,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h3>@brick_count</h3>
                     <h3>QuadBlocks</h3>
                     <hr>
-                    <h3>TBI</h3>
+                    <h3>@row_count</h3>
                     <h2>Rows</h2>
                     <hr>
                     <h3>TBI</h3>
@@ -176,7 +177,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       brick_count: 0,
       powers: [],
       speed: 2,
-      tick_count: 5
+      tick_count: 5,
+      row_count: 0
     )
     |> new_block
     |> show
@@ -309,6 +311,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(
       brick: response.brick,
       bottom: response.bottom,
+      row_count: socket.assigns.row_count + response.row_count
       score: socket.assigns.score + response.score + bonus,
       state: if(response.game_over, do: :game_over, else: :playing)
     )
