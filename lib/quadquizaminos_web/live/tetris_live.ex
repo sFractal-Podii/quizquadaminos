@@ -362,6 +362,35 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, clear_blocks(socket)}
   end
 
+  ## until powerups and for debugging - take out eventually
+  def handle_event("keydown", %{"key" => "p"}, socket) do
+    powers = socket.assigns.powers ++ [
+      :deleteblock,
+      :addblock,
+      :moveblock,
+      :clearblocks,
+      :nextblock,
+      :speedup,
+      :slowdown,
+      :forensics,
+      :slowvulns,
+      :slowlicense,
+      :legal,
+      :insurance,
+      :sbom,
+      :fixvuln,
+      :fixlicense,
+      :fixallvulns,
+      :fixalllicenses,
+      :automation,
+      :openchain,
+      :stopattack,
+      :winlawsuit,
+      :superpower
+    ]
+    {:noreply, socket |> assign(powers: powers)}
+  end
+
   def handle_event("keydown", _, socket), do: {:noreply, socket}
 
   def handle_event("start", _, socket) do

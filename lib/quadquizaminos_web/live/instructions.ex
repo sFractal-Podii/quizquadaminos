@@ -313,14 +313,14 @@ defmodule QuadquizaminosWeb.Instructions do
         <li><i class="fas fa-gavel"></i>gavel represents having legal trained and ready on cyber</li>
         <li><i class="fas fa-file-contract"></i>Cyber Insurance</li>
         <li><i class="far fa-id-card"></i>SBOM</li>
+        <li><i class="fas fa-toolbox"></i> automation</li>
+        <li><i class="fas fa-tools"></i> OpenChain</li>
         <li><i class="fas fa-wrench"></i>fix a vulnerability</li>
         <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
         <li><i class="fas fa-hammer"></i>fix all vulnerabilities</li>
         <li><i class="fas fa-tape"></i> fix all licensing issues</li>
-        <li><i class="fas fa-toolbox"></i> automation</li>
-        <li><i class="fas fa-tools"></i> OpenChain</li>
-        <li><i class="fas fa-file-prescription"></i> fix a cyberattack</li>
-        <li><i class="fas fa-balance-scale"></i> fix a lawsuite</li>
+        <li><i class="fas fa-file-prescription"></i> stop a cyberattack</li>
+        <li><i class="fas fa-balance-scale"></i> win a lawsuite</li>
         <li><i class="fab fa-superpowers"></i> Superpower</li>
       </ol>
     </p>
@@ -416,7 +416,7 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>"r" raises dropping speed (change to add raise-speed powerup)</li>
           <li>"l" lowers dropping speed (change to add lower-speed powerup)</li>
           <li>"c" clears bottom blocks (change to add clear-blocks powerup)</li>
-          <li>"s" to add superpowers powerup</li>
+          <li>"p" to add all powerup</li>
           <li>"1" to switch to stored block configuraton 1</li>
         </ol>
     """
