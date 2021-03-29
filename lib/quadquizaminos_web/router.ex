@@ -18,12 +18,17 @@ defmodule QuadquizaminosWeb.Router do
   pipeline :authorize do
     plug QuadquizaminosWeb.Authorize
   end
+  
+  pipeline :anonymous do
+    plug QuadquizaminosWeb.AnonymousAuth
+  end
 
   scope "/", QuadquizaminosWeb do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/tetris", PageController, :anonymous
+    pipe_through :anonymous
+    get "/home", PageController, :anonymous
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris

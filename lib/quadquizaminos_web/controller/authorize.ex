@@ -14,16 +14,14 @@ defmodule QuadquizaminosWeb.Authorize do
   end
 
   defp authorize_user(nil, conn) do
-    
-    # if Map.get(conn, :type) == "anonymous" do
-    #   conn
-    #   |> redirect(to: "/tetris")
-    # else
+    if Map.get(conn.assigns, :type) == "anonymous" do
+      conn
+    else
       conn
       |> put_flash(:error, "Please login first")
       |> redirect(to: "/")
       |> halt()
-    # end
+    end
   end
 
   defp authorize_user(_user, conn), do: conn
