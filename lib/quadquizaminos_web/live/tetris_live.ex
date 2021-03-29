@@ -173,17 +173,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
     ## should qna be reset or carryover between games????
     socket
     |> assign(state: :playing)
-      score: 0,
-      bottom: %{},
-      powers: [],
-      speed: 2,
-      tick_count: 5,
-      brick_count: 0,
-      row_count: 0,
-      correct_answers: 0
-    )
+    |> assign(score: 0)
+    |> assign(bottom: %{})
+    |> assign(powers: [])
+    |> assign(speed: 2)
+    |> assign(tick_count: 5)
+    |> assign(brick_count: 0)
+    |> assign(row_count: 0)
+    |> assign(correct_answers: 0)
     |> new_block
     |> show
+    
   end
 
   ## raise_speed gets removed once dev cheat gets removed
