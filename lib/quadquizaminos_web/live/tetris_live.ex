@@ -104,14 +104,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                     <h2>Score</h2>
                     <hr>
-                    <h3>@brick_count</h3>
-                    <h3>QuadBlocks</h3>
+                    <%= @brick_count %>
+                    QuadBlocks
                     <hr>
-                    <h3>@row_count</h3>
-                    <h3>Rows</h3>
+                    <h4><%= @row_count %></h4>
+                    <h4>Rows</h4>
                     <hr>
-                    <h3>@correct_answers</h3>
-                    <h3>Answers</h3>
+                    <h5><%= @correct_answers %></h5>
+                    <h5>Answers</h5>
                     <hr>
                 </div>
                 <div class="column column-50">
