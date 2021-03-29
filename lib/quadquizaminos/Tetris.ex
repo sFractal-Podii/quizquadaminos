@@ -21,7 +21,6 @@ defmodule Quadquizaminos.Tetris do
 
   def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color) do
     new_brick = Brick.new_random()
-    brick_count = blowuphere
 
     points =
       old_brick
