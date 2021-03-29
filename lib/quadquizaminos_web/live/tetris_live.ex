@@ -73,8 +73,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Game Over</h1>
+          <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
+            This section To Be Implemented (TBI).
+            You are bankrupt because either
+            due to a cyberattack or a lawsuit.
+            This may be because you let your supply chain get to long.
+            Or may be due to unfixed vulnerabilities were turned into exploits.
+            Or uncleared licensing errors caused you to be sued.
+            Or maybe you were too busy answering cybersecurity questions
+            and not paying attention to business.
+            Future editions will tell you which it was, and give
+            more info in addition to the score
+            (quadblocks dropped, rows cleared, 
+            questions answered, ...)
+              <hr>
               <button phx-click="start">Play again?</button>
         </div>
       </div>
@@ -92,6 +105,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
               <div class="row">
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
+                    <h2>Score</h2>
+                    <hr>
+                    <h3>TBI</h3>
+                    <h2>QuadBlocks</h2>
+                    <hr>
+                    <h3>TBI</h3>
+                    <h2>Rows</h2>
+                    <hr>
+                    <h3>TBI</h3>
+                    <h2>Answers</h2>
+                    <hr>
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
