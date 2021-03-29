@@ -1,6 +1,8 @@
 defmodule QuadquizaminosWeb.PageControllerTest do
   use QuadquizaminosWeb.ConnCase
 
+  import Phoenix.LiveViewTest
+
   test "user is restricted to access tetris game if not logged in", %{conn: conn} do
     conn = get(conn, "/tetris")
     assert get_flash(conn, :error) == "Please login first"
@@ -48,5 +50,15 @@ defmodule QuadquizaminosWeb.PageControllerTest do
       |> QuadquizaminosWeb.AuthController.callback(%{})
 
     assert get_flash(conn, :info) == "Successfully authenticated."
+  end
+
+  test "users can access game when logged in anonymously", %{conn: conn} do
+    conn =
+      conn
+      |> post("/anonymous")
+
+    {:ok, _view, html} = live(conn, "/tetris")
+
+    assert html =~ "<h1>Welcome to QuizQuadBlocks!</h1>"
   end
 end
