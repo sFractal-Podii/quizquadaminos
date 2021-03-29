@@ -2,7 +2,6 @@ defmodule QuadquizaminosWeb.PageController do
   @moduledoc """
   Static page controller
   """
-  import Phoenix.LiveView.Controller
 
   use QuadquizaminosWeb, :controller
   alias Quadquizaminos.UserFromAuth
