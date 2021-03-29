@@ -25,7 +25,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
 
     html = render_keydown(view, "keydown", %{"key" => " "})
 
-    assert html =~ "<i class=\"fas fa-angle-double-right\""
+    assert html =~ "<i class=\"fas fa-arrows-alt\""
     assert html =~ "<i class=\"fas fa-minus-square\""
     assert html =~ "<i class=\"fas fa-plus-square\""
   end
@@ -41,7 +41,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
      end)
 
       html = render_keydown(view, "keydown", %{"key" => " "})
-      refute html =~ "<i class=\"fas fa-angle-double-right\""
+      refute html =~ "<i class=\"fas fa-arrows-alt\""
       refute html =~ "<i class=\"fas fa-plus-square\""
   end
 
@@ -181,7 +181,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       
       html = render_keydown(view, "keydown", %{"key" => " "})
 
-      refute html =~ "<i class=\"fas fa-angle-double-right\""
+      refute html =~ "<i class=\"fas fa-arrows-alt\""
     end
   end
 
