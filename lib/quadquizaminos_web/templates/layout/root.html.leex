@@ -18,16 +18,16 @@
         <H1>QuadBlocksQuiz</H1>
         <H3>Supply Chain Edition</H3>
       </section>
-    </header>
-    <%= @inner_content %>
-<section class="container">
-  <nav role="navigation">
+      <nav role="navigation">
     <ul>
       <%= if @current_user do %>
         <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button" %>
       <% end %>
     </ul>
   </nav>
+    </header>
+    <%= @inner_content %>
+  <footer>
   <table>
   <tr>
     <td>
@@ -57,6 +57,6 @@
     </td>
 </tr>
 <table>
-</section>
+</footer>
   </body>
 </html>

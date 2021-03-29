@@ -4,11 +4,8 @@
   <h4>Version <%= Quadquizaminos.Meta.version() %></h4>
   <h4><a href="bom.json" target="_blank">SBOM available here</a></h4>
 
-  <%= if @current_user do %>
-    <h2>Welcome, <%= @current_user.name %>!</h2>
-    <div>
-      <img src="<%= @current_user.avatar %>" />
-    </div>
+  <%= if @current_user  do %>
+    <%= display_name_and_avatar(@current_user) %>
     <%= link "Play Game", to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris), class: "button" %>
     <br/>
     <%= link "How to play", to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions), class: "button" %>
@@ -19,6 +16,9 @@
         <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
           <i class="fa fa-github"></i>
           Sign in with GitHub
+        </a>
+        <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous )%>">
+          Sign in anonymously
         </a>
       </li>
     </ul>

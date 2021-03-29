@@ -37,7 +37,10 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 
 config :quadquizaminos,
   # add github_id of authorized users
-  github_ids: [1, 2]
+  github_ids: [1, 2],
+
+  # set bottom vulnerability defaulting value
+  bottom_vulnerability_value: 77
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
