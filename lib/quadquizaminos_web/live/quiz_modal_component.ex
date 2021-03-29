@@ -56,7 +56,27 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     case power do
       :deleteblock -> "fa-minus-square"
       :addblock -> "fa-plus-square"
-      :moveblock -> "fa-angle-double-right"
+      :moveblock -> "fa-arrows-alt"
+      :clearblocks -> "fa-eraser"
+      :nextblock -> "fa-crosshairs"
+      :speedup -> "fa-fast-forward"
+      :slowdown -> "fa-fast-backward"
+      :forensics -> "fa-microscope"
+      :slowvulns -> "fa-clipboard-check"
+      :slowlicense -> "fa-certificate"
+      :legal -> "fa-gavel"
+      :insurance -> "fa-file-contract"
+      :sbom -> "fa-id-card"
+      :fixvuln -> "fa-wrench"
+      :fixlicense -> "fa-screwdriver"
+      :fixallvulns -> "fa-hammer"
+      :fixalllicenses -> "fa-tape"
+      :automation -> "fa-toolbox"
+      :openchain -> "fa-tools"
+      :stopattack -> "fa-file-prescription"
+      :winlawsuit -> "fa-balance-scale"
+      :superpower -> "fa-superpowers"
+
     end
   end
 end
