@@ -42,6 +42,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(speed: 2, tick_count: 5)
      |> assign(brick_count: 0)
      |> assign(row_count: 0)
+     |> assign(correct_answers: 0)
      |> start_game()}
   end
 
@@ -107,10 +108,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h3>QuadBlocks</h3>
                     <hr>
                     <h3>@row_count</h3>
-                    <h2>Rows</h2>
+                    <h3>Rows</h3>
                     <hr>
-                    <h3>TBI</h3>
-                    <h2>Answers</h2>
+                    <h3>@correct_answers</h3>
+                    <h3>Answers</h3>
                     <hr>
                 </div>
                 <div class="column column-50">
@@ -170,15 +171,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp new_game(socket) do
     ## should qna be reset or carryover between games????
-    assign(socket,
-      state: :playing,
+    socket
+    |> assign(state: :playing)
       score: 0,
       bottom: %{},
-      brick_count: 0,
       powers: [],
       speed: 2,
       tick_count: 5,
-      row_count: 0
+      brick_count: 0,
+      row_count: 0,
+      correct_answers: 0
     )
     |> new_block
     |> show
@@ -410,7 +412,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
     socket =
       if correct_answer?(socket.assigns.qna, guess) do
-        socket |> assign(category: nil) |> add_power() |> assign_score()
+        socket
+        |> assign(category: nil)
+        |> add_power()
+        |> assign(correct_answers: socket.assigns.correct_answers + 1)
+        |> assign_score()
       else
         points = wrong_points(socket)
         score = socket.assigns.score - points
