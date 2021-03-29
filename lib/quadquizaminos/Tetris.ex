@@ -21,6 +21,7 @@ defmodule Quadquizaminos.Tetris do
 
   def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color) do
     new_brick = Brick.new_random()
+    brick_count = blowuphere
 
     points =
       old_brick
@@ -37,6 +38,7 @@ defmodule Quadquizaminos.Tetris do
       bottom: new_bottom,
       score: score(count),
       row_count: count,
+      brick_count: 1,  #hit bottom so increment brick_count
       game_over: Bottom.collides?(new_bottom, prepare(new_brick))
     }
   end
@@ -47,6 +49,7 @@ defmodule Quadquizaminos.Tetris do
       bottom: bottom,
       score: 1,
       row_count: 0,  # no rows completed since didn't reach bottom yet
+      brick_count: 0,  # didn't hit bottom so do not increment brick_count
       game_over: false
     }
   end

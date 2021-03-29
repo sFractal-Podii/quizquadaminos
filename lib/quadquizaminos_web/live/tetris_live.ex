@@ -107,11 +107,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <%= @brick_count %>
                     QuadBlocks
                     <hr>
-                    <h4><%= @row_count %></h4>
-                    <h4>Rows</h4>
+                    <%= @row_count %>
+                    Rows
                     <hr>
-                    <h5><%= @correct_answers %></h5>
-                    <h5>Answers</h5>
+                    <%= @correct_answers %>
+                    Answers
                     <hr>
                 </div>
                 <div class="column column-50">
@@ -310,11 +310,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
     bonus = if fast, do: 2, else: 0
     row_count = socket.assigns.row_count + response.row_count
     score = socket.assigns.score + response.score + bonus
+    brick_count = socket.assigns.brick_count + response.brick_count
 
     socket
     |> assign(
       brick: response.brick,
       bottom: response.bottom,
+      brick_count: brick_count,
       row_count: row_count,
       score: score,
       state: if(response.game_over, do: :game_over, else: :playing)
