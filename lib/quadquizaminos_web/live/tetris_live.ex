@@ -34,18 +34,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     {:ok,
      socket
-     |> assign(
-       qna: %{},
-       category: nil,
-       categories: init_categories(),
-       powers: [],
-       adding_block: false,
-       block_coordinates: nil,
-       moving_block: false,
-       deleting_block: false,
-       instructions_modal: false
-     )
+     |> assign(qna: %{}, powers: [])
+     |> assign(category: nil, categories: init_categories())
+     |> assign(block_coordinates: nil)
+     |> assign(adding_block: false, moving_block: false, deleting_block: false,)
+     |> assign(instructions_modal: false)
      |> assign(speed: 2, tick_count: 5)
+     |> assign(brick_count: 0)
      |> start_game()}
   end
 
@@ -85,7 +80,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             and not paying attention to business.
             Future editions will tell you which it was, and give
             more info in addition to the score
-            (quadblocks dropped, rows cleared, 
+            (quadblocks dropped, rows cleared,
             questions answered, ...)
               <hr>
               <button phx-click="start">Play again?</button>
@@ -107,8 +102,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                     <h2>Score</h2>
                     <hr>
-                    <h3>TBI</h3>
-                    <h2>QuadBlocks</h2>
+                    <h3>@brick_count</h3>
+                    <h3>QuadBlocks</h3>
                     <hr>
                     <h3>TBI</h3>
                     <h2>Rows</h2>
@@ -173,10 +168,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp new_game(socket) do
+    ## should qna be reset or carryover between games????
     assign(socket,
       state: :playing,
       score: 0,
-      bottom: %{}
+      bottom: %{},
+      brick_count: 0,
+      powers: [],
+      speed: 2,
+      tick_count: 5
     )
     |> new_block
     |> show
@@ -207,8 +207,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def new_block(socket) do
+    brick_count = socket.assigns.brick_count + 1
     brick = Quadquizaminos.Brick.new_random()
-    assign(socket, brick: brick)
+    assign(socket, brick: brick, brick_count: brick_count)
   end
 
   def show(socket) do
