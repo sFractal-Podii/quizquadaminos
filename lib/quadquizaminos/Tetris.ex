@@ -36,6 +36,8 @@ defmodule Quadquizaminos.Tetris do
       brick: new_brick,
       bottom: new_bottom,
       score: score(count),
+      row_count: count,
+      brick_count: 1,  #hit bottom so increment brick_count
       game_over: Bottom.collides?(new_bottom, prepare(new_brick))
     }
   end
@@ -45,6 +47,8 @@ defmodule Quadquizaminos.Tetris do
       brick: new_block,
       bottom: bottom,
       score: 1,
+      row_count: 0,  # no rows completed since didn't reach bottom yet
+      brick_count: 0,  # didn't hit bottom so do not increment brick_count
       game_over: false
     }
   end

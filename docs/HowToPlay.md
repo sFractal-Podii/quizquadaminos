@@ -1,5 +1,5 @@
-# QuizQuadBlocks - Supply Chain Village Edition
-QuizQuadBlocks is a tetris-like game
+# QuadBlocksQuiz - Supply Chain Edition
+QuadBlocksQuiz is a tetris-like game
 that is part Tetris and part trivia quiz.
 Being honest, the trivia is to educate on
 supply chain.
