@@ -14,21 +14,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @bottom_vulnerability_value Application.get_env(:quadquizaminos, :bottom_vulnerability_value)
 
   # 20/s, 50 ms
-  @drop_speeds [
-    %{name: "full throttle", ratio: 1},
-    # 10/s, 100 ms
-    %{name: "high speed", ratio: 2},
-    # 4/s, 250 ms. - default game starts with
-    %{name: "fast", ratio: 5},
-    # ~3/s, 350 ms
-    %{name: "moderate", ratio: 7},
-    # 2/s, 500 ms
-    %{name: "leisurely", ratio: 10},
-    # 3/2s, 750 ms
-    %{name: "sedate", ratio: 15},
-    # 1/s, 1000 ms
-    %{name: "lethargic", ratio: 20}
-  ]
+  #@drop_speeds [
+  #  %{name: "full throttle", ratio: 1},
+  #  # 10/s, 100 ms
+  #  %{name: "high speed", ratio: 2},
+  #  # 4/s, 250 ms. - default game starts with
+  #  %{name: "fast", ratio: 5},
+  #  # ~3/s, 350 ms
+  #  %{name: "moderate", ratio: 7},
+  #  # 2/s, 500 ms
+  #  %{name: "leisurely", ratio: 10},
+  #  # 3/2s, 750 ms
+  #  %{name: "sedate", ratio: 15},
+  #  # 1/s, 1000 ms
+  #  %{name: "lethargic", ratio: 20}
+  #]
 
   def mount(_param, _session, socket) do
     :timer.send_interval(50, self(), :tick)
@@ -105,6 +105,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
                     <h2>Score</h2>
+                    <hr>
+                    Speed: <%= @speed %>
                     <hr>
                     <%= @brick_count %>
                     QuadBlocks
@@ -192,20 +194,24 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   ## raise_speed gets removed once dev cheat gets removed
   defp raise_speed(socket) do
-    speed = socket.assigns.speed - 1
-    speed = if speed < 0, do: 0, else: speed
-    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
-    tick_count = speed_info.ratio
+    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
+    tick_count = Quadquizaminos.Speed.tick_count(speed)
+    #speed = socket.assigns.speed - 1
+    #speed = if speed < 0, do: 0, else: speed
+    #{:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    #tick_count = speed_info.ratio
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
   ## lower_speed gets removed once dev cheat gets removed
   defp lower_speed(socket) do
-    speed = socket.assigns.speed + 1
-    lowest_speed = length(@drop_speeds) - 1
-    speed = if speed > lowest_speed, do: lowest_speed, else: speed
-    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
-    tick_count = speed_info.ratio
+    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
+    tick_count = Quadquizaminos.Speed.tick_count(speed)
+    #speed = socket.assigns.speed + 1
+    #lowest_speed = length(@drop_speeds) - 1
+    #speed = if speed > lowest_speed, do: lowest_speed, else: speed
+    #{:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    #tick_count = speed_info.ratio
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
@@ -466,21 +472,33 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
     powers = socket.assigns.powers -- [:speedup]
-    speed = socket.assigns.speed - 1
-    speed = if speed < 0, do: 0, else: speed
-    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
-    tick_count = speed_info.ratio
-    {:noreply, assign(socket, speed: speed, tick_count: tick_count, powers: powers)}
+    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
+    tick_count = Quadquizaminos.Speed.tick_count(speed)
+    #speed = socket.assigns.speed - 1
+    #speed = if speed < 0, do: 0, else: speed
+    #{:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    #tick_count = speed_info.ratio
+    #{:noreply, assign(socket, speed: speed, tick_count: tick_count, powers: powers)}
+    {:noreply, socket
+                |> assign(speed: speed)
+                |> assign(tick_count: tick_count)
+                |> assign(powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
     powers = socket.assigns.powers -- [:slowdown]
-    speed = socket.assigns.speed + 1
-    lowest_speed = length(@drop_speeds) - 1
-    speed = if speed > lowest_speed, do: lowest_speed, else: speed
-    {:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
-    tick_count = speed_info.ratio
-    {:noreply, assign(socket, speed: speed, tick_count: tick_count, powers: powers)}
+    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
+    tick_count = Quadquizaminos.Speed.tick_count(speed)
+    #speed = socket.assigns.speed + 1
+    #lowest_speed = length(@drop_speeds) - 1
+    #speed = if speed > lowest_speed, do: lowest_speed, else: speed
+    #{:ok, speed_info} = Enum.fetch(@drop_speeds, speed)
+    #tick_count = speed_info.ratio
+    #{:noreply, assign(socket, speed: speed, tick_count: tick_count, powers: powers)}
+    {:noreply, socket
+                |> assign(speed: speed)
+                |> assign(tick_count: tick_count)
+                |> assign(powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
@@ -674,8 +692,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
       {:noreply, socket}
     else
       ## reset counter and drop
-      {:ok, speed_info} = Enum.fetch(@drop_speeds, socket.assigns.speed)
-      tick_count = speed_info.ratio
+      #{:ok, speed_info} = Enum.fetch(@drop_speeds, socket.assigns.speed)
+      #tick_count = speed_info.ratio
+      tick_count = Quadquizaminos.Speed.tick_count(speed)
 
       socket = assign(socket, tick_count: tick_count, gametime_counter: gametime_counter)
       {:noreply, drop(socket.assigns.state, socket, false)}
