@@ -33,7 +33,6 @@ defmodule Quadquizaminos.Speed do
     length(@drop_speeds) - 1
   end
 
-
   def increase_speed(speed) do
     if speed - 1 < highest_speed(), do: highest_speed(), else: speed - 1
   end
