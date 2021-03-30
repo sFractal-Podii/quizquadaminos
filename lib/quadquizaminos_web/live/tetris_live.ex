@@ -74,8 +74,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
-            This section To Be Implemented (TBI).
-            You are bankrupt because either
+            <p>This section is still under construction.</p>
+            <p>You are bankrupt because either
             due to a cyberattack or a lawsuit.
             This may be because you let your supply chain get to long.
             Or may be due to unfixed vulnerabilities were turned into exploits.
@@ -85,7 +85,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             Future editions will tell you which it was, and give
             more info in addition to the score
             (quadblocks dropped, rows cleared,
-            questions answered, ...)
+            questions answered, ...)</p>
               <hr>
               <button phx-click="start">Play again?</button>
         </div>
