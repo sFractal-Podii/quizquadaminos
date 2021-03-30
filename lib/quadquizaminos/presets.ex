@@ -65,8 +65,8 @@ defmodule Quadquizaminos.Presets do
       {5, 10} => {5, 10, :attack_yellow_gold},
       {6, 10} => {6, 10, :attack_yellow_gold},
       {7, 10} => {7, 10, :attack_yellow_gold},
-      {8, 10} => {7, 10, :attack_yellow_gold},
-      {9, 10} => {7, 10, :attack_yellow_gold}
+      {8, 10} => {8, 10, :attack_yellow_gold},
+      {9, 10} => {9, 10, :attack_yellow_gold}
     }
   end
 
