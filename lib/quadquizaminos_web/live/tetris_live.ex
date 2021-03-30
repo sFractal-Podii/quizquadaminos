@@ -449,7 +449,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
     powers = socket.assigns.powers -- [:speedup]
-    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
+    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
     tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
     {:noreply, socket
                 |> assign(speed: speed)
@@ -459,7 +459,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
     powers = socket.assigns.powers -- [:slowdown]
-    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
+    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
     tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
     {:noreply, socket
                 |> assign(speed: speed)
