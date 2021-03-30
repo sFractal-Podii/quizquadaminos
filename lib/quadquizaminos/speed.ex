@@ -2,19 +2,19 @@ defmodule Quadquizaminos.Speed do
 
   @drop_speeds [
     # 20/s, 50 ms
-    %{name: "full throttle", ratio: 1},
+    %{name: "full throttle", tick_count: 1},
     # 10/s, 100 ms
-    %{name: "high speed", ratio: 2},
+    %{name: "high speed", tick_count: 2},
     # 4/s, 250 ms. - default game starts with
-    %{name: "fast", ratio: 5},
+    %{name: "fast", tick_count: 5},
     # ~3/s, 350 ms
-    %{name: "moderate", ratio: 7},
+    %{name: "moderate", tick_count: 7},
     # 2/s, 500 ms
-    %{name: "leisurely", ratio: 10},
+    %{name: "leisurely", tick_count: 10},
     # 3/2s, 750 ms
-    %{name: "sedate", ratio: 15},
+    %{name: "sedate", tick_count: 15},
     # 1/s, 1000 ms
-    %{name: "lethargic", ratio: 20}
+    %{name: "lethargic", tick_count: 20}
   ]
 
   def speed_name(speed) do
