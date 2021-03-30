@@ -694,7 +694,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       ## reset counter and drop
       #{:ok, speed_info} = Enum.fetch(@drop_speeds, socket.assigns.speed)
       #tick_count = speed_info.ratio
-      tick_count = Quadquizaminos.Speed.tick_count(speed)
+      tick_count = Quadquizaminos.Speed.tick_count(socket.assigns.speed)
 
       socket = assign(socket, tick_count: tick_count, gametime_counter: gametime_counter)
       {:noreply, drop(socket.assigns.state, socket, false)}
