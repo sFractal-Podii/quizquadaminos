@@ -268,13 +268,20 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp to_pixels({x, y}, bw, bh), do: {(x - 1) * bw, (y - 1) * bh}
 
-  defp shades(:red), do: %{light: "DB7160", dark: "AB574B"}
-  defp shades(:blue), do: %{light: "83C1C8", dark: "66969C"}
-  defp shades(:green), do: %{light: "8BBF57", dark: "769359"}
-  defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
-  defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
-  defp shades(:purple), do: %{light: "800080", dark: "4d004d"}
-  defp shades(:grey_yellow), do: %{light: "7F7F7E", dark: "ffff00"}
+#  defp shades(:red), do: %{light: "DB7160", dark: "AB574B"}
+#  defp shades(:blue), do: %{light: "83C1C8", dark: "66969C"}
+#  defp shades(:green), do: %{light: "8BBF57", dark: "769359"}
+#  defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
+#  defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
+#  defp shades(:purple), do: %{light: "800080", dark: "4d004d"}
+#  defp shades(:grey_yellow), do: %{light: "7F7F7E", dark: "ffff00"}
+defp shades(:red), do: %{light: "f8070a", dark: "FA383B"}
+defp shades(:blue), do: %{light: "00BFFF", dark: "1E90FF"}
+defp shades(:green), do: %{light: "00ff00", dark: "00c300"}
+defp shades(:orange), do: %{light: "FFA500", dark: "FF8C00"}
+defp shades(:grey), do: %{light: "FF69B4", dark: "FF1493"}
+defp shades(:purple), do: %{light: "ff00ff", dark: "800080"}
+defp shades(:grey_yellow), do: %{light: "A1A09E", dark: "ffff00"}
 
   defp color(%{name: :t}), do: :red
   defp color(%{name: :i}), do: :blue
