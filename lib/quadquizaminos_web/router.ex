@@ -23,6 +23,8 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/anonymous", PageController, :anonymous
+    post "/anonymous", PageController, :anonymous
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris

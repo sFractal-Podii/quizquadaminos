@@ -8,17 +8,18 @@ defmodule QuadquizaminosWeb.Authorize do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    conn.assigns
-    |> Map.get(:current_user)
-    |> authorize_user(conn)
+    current_user = Map.get(conn.assigns, :current_user)
+    authorize_user(conn, current_user)
   end
 
-  defp authorize_user(nil, conn) do
-    conn
-    |> put_flash(:error, "Please login first")
-    |> redirect(to: "/")
-    |> halt()
+  defp authorize_user(conn, current_user) do
+    if current_user do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Please login first")
+      |> redirect(to: "/")
+      |> halt()
+    end
   end
-
-  defp authorize_user(_user, conn), do: conn
 end
