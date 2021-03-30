@@ -106,7 +106,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                     <h2>Score</h2>
                     <hr>
-                    Speed: <%= @speed %>
+                    Speed: <%= Quadquizaminos.Speed.speed_name(@speed) %>
                     <hr>
                     <%= @brick_count %>
                     QuadBlocks
