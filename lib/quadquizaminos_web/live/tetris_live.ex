@@ -268,26 +268,22 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp to_pixels({x, y}, bw, bh), do: {(x - 1) * bw, (y - 1) * bh}
 
-#  defp shades(:red), do: %{light: "DB7160", dark: "AB574B"}
-#  defp shades(:blue), do: %{light: "83C1C8", dark: "66969C"}
-#  defp shades(:green), do: %{light: "8BBF57", dark: "769359"}
-#  defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
-#  defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
-#  defp shades(:purple), do: %{light: "800080", dark: "4d004d"}
-#  defp shades(:grey_yellow), do: %{light: "7F7F7E", dark: "ffff00"}
-defp shades(:red), do: %{light: "f8070a", dark: "FA383B"}
-defp shades(:blue), do: %{light: "00BFFF", dark: "1E90FF"}
-defp shades(:green), do: %{light: "00ff00", dark: "00c300"}
-defp shades(:orange), do: %{light: "FFA500", dark: "FF8C00"}
-defp shades(:grey), do: %{light: "FF69B4", dark: "FF1493"}
-defp shades(:purple), do: %{light: "ff00ff", dark: "800080"}
-defp shades(:grey_yellow), do: %{light: "A1A09E", dark: "ffff00"}
+  defp shades(:red), do: %{light: "f8070a", dark: "FA383B"}
+  defp shades(:blue), do: %{light: "00BFFF", dark: "1E90FF"}
+  defp shades(:green), do: %{light: "00ff00", dark: "00c300"}
+  defp shades(:orange), do: %{light: "FFA500", dark: "FF8C00"}
+  defp shades(:pink), do: %{light: "FF69B4", dark: "FF1493"}
+  defp shades(:purple), do: %{light: "ff00ff", dark: "800080"}
+  defp shades(:vuln_grey_yellow), do: %{light: "A1A09E", dark: "ffff00"}
+  defp shades(:license_grey_brown), do: %{light: "A1A09E", dark: "8B4513"}
+  defp shades(:attack_yellow_gold), do: %{light: "ffff00", dark: "DAA520"}
+  defp shades(:lawsuit_brown_gold), do: %{light: "8B4513", dark: "DAA520"}
 
   defp color(%{name: :t}), do: :red
   defp color(%{name: :i}), do: :blue
   defp color(%{name: :l}), do: :green
   defp color(%{name: :o}), do: :orange
-  defp color(%{name: :z}), do: :grey
+  defp color(%{name: :z}), do: :pink
 
   def drop(:playing, socket, fast) do
     old_brick = socket.assigns.brick
@@ -787,7 +783,7 @@ defp shades(:grey_yellow), do: %{light: "A1A09E", dark: "ffff00"}
 
     {_, new_bottom} =
       Map.get_and_update(bottom, {x, y}, fn current_value ->
-        {current_value, {x, y, :grey_yellow}}
+        {current_value, {x, y, :vuln_grey_yellow}}
       end)
 
     new_bottom
