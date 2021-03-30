@@ -4,37 +4,37 @@ defmodule QuadquizaminosWeb.Instructions do
     """
     <h2>Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game</h2>
     <p>We proudly present the SupplyChainSandbox edition of QuadBlocksQuiz -
-       a reimagined take on Tetris where playful spatial negotiations are infused with 
+       a reimagined take on Tetris where playful spatial negotiations are infused with
        real-life Trivia challenges from the world of supply chain security.</p>
     <h2>Why Play?</h2>
-    <p>Whether you're attending RSAC because you "sell security" or "buy security," you can't afford  
-       to pass on this love child of Tetris and Trivia. More than abstract configurations of digital blocks, 
-       our Tetris spin-off envisions the classic arcade game as a potent metaphor for supply chain cyber security. 
-       You can choose to let the blocks fall as they may and scramble to cope with the accumulated consequences at 
-       a later point in time, or you can utilize savvy forecasting and informational superiority to address each 
+    <p>Whether you're attending RSAC because you "sell security" or "buy security," you can't afford
+       to pass on this love child of Tetris and Trivia. More than abstract configurations of digital blocks,
+       our Tetris spin-off envisions the classic arcade game as a potent metaphor for supply chain cyber security.
+       You can choose to let the blocks fall as they may and scramble to cope with the accumulated consequences at
+       a later point in time, or you can utilize savvy forecasting and informational superiority to address each
        element as it appears on the horizon.</p>
-     <p>As recent events have shown, you are only as protected as the weakest link in your supply chain. 
+     <p>As recent events have shown, you are only as protected as the weakest link in your supply chain.
        Guarding your organization’s information in a digitally-connected world
        means understanding not only your organization’s immediate supply chain,
-       but also the security of the extended ecosystem and all entities involved. 
-       Besides the obvious enterprise advantage of robust supply chain security knowledge, 
+       but also the security of the extended ecosystem and all entities involved.
+       Besides the obvious enterprise advantage of robust supply chain security knowledge,
        the tidbits offered up here will reappear as in-game trivia challenges. </p>
      <h2>Power Up!</h2>
        <p>You don't need to be a supply chain expert - this game assumes you are a novice
-       and it teaches you what you need to know. You gain points by clearing rows as in a typical Tetris game. 
+       and it teaches you what you need to know. You gain points by clearing rows as in a typical Tetris game.
        Here's the twist - you can answer quiz questions about supply chain both to gain points and to gain powerups.</p>
       <p>Powerups help with classic Tetris strategy but also are needed
        to combat:</p>
         <ul>
-        <li>vulnerabilities (unfortunate gaps in an otherwise functioning security paradigm)</li> 
-        <li>licensing issues (extraneous blocks that gunk up the works)</li> 
+        <li>vulnerabilities (unfortunate gaps in an otherwise functioning security paradigm)</li>
+        <li>licensing issues (extraneous blocks that gunk up the works)</li>
         <li>cyber attacks(rapid changes in operating conditions that take over entire sections
             of the gameboard and speed the game up uncontrollably)</li>
         <li>licensing lawsuits (tiresome procedures that gum up entire sections of the game board
             and slow the game to a snail's pace)</li>
         </ul>
-       <p>Just like in real life, information powerups can prevent attacks 
-            and address emerging vulnerabilities as the operational environment speeds up and slows down around us. 
+       <p>Just like in real life, information powerups can prevent attacks
+            and address emerging vulnerabilities as the operational environment speeds up and slows down around us.
             Play the game and find out!
         </p>
     <h2>How to play</h2>
@@ -88,7 +88,7 @@ defmodule QuadquizaminosWeb.Instructions do
     <h3>Speed</h3>
     <p>Speed refers to how fast the quadblocks fall.
       There are 7 speeds to the game:
-        <ol>
+        <ul>
           <li>"full throttle" - ~20 rows per second</li>
           <li>"high speed" - ~10 rows per second</li>
           <li>"fast" - ~4 rows per second</li>
@@ -134,7 +134,7 @@ defmodule QuadquizaminosWeb.Instructions do
     How much it increases/decreases depends on the speed.
     Obviously faster speeds make clock ticks more often.
     But in addition, each tick is worth more at faster speeds(#?):
-      <ol>
+      <ul>
         <li>"full throttle": 4 points per tick</li>
         <li>"high speed": 3 points per tick</li>
         <li>"fast": 2 points per tick</li>
@@ -184,7 +184,7 @@ defmodule QuadquizaminosWeb.Instructions do
     <p>
     Multipliers increase the score.
     One multiplier is the speed at the tick that clears the row:
-      <ol>
+      <ul>
         <li>"full throttle": Multiplier = 4</li>
         <li>"high speed": Multiplier = 3</li>
         <li>"fast": Multiplier = 2</li>
@@ -299,7 +299,7 @@ defmodule QuadquizaminosWeb.Instructions do
     add pic here
     </p>
     <p>
-      <ol>
+      <sl>
         <li><i class="fas fa-plus-square"></i> add a block</li>
         <li><i class="fas fa-minus-square"></i> remove a block</li>
         <li><i class="fas fa-arrows-alt"></i> move a block</li>
@@ -307,17 +307,17 @@ defmodule QuadquizaminosWeb.Instructions do
         <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall</li>
         <li><i class="fas fa-fast-forward"></i> speed up</li>
         <li><i class="fas fa-fast-backward"></i> slow down</li>
-        <li><i class="fas fa-microscope"></i> forensics?</li>
+        <li><i class="fas fa-microscope"></i> forensics</li>
         <li><i class="fas fa-clipboard-check"></i> slows down vulns</li>
-        <li><i class="fas fa-certificate"></i>certificate/badge slows down licensing issues</li>
-        <li><i class="fas fa-gavel"></i>gavel represents having legal trained and ready on cyber</li>
-        <li><i class="fas fa-file-contract"></i>Cyber Insurance</li>
-        <li><i class="far fa-id-card"></i>SBOM</li>
+        <li><i class="fas fa-certificate"></i> certificate/badge slows down licensing issues</li>
+        <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber</li>
+        <li><i class="fas fa-file-contract"></i> Cyber Insurance</li>
+        <li><i class="far fa-id-card"></i> SBOM</li>
         <li><i class="fas fa-toolbox"></i> automation</li>
         <li><i class="fas fa-tools"></i> OpenChain</li>
-        <li><i class="fas fa-wrench"></i>fix a vulnerability</li>
+        <li><i class="fas fa-wrench"></i> fix a vulnerability</li>
         <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
-        <li><i class="fas fa-hammer"></i>fix all vulnerabilities</li>
+        <li><i class="fas fa-hammer"></i> fix all vulnerabilities</li>
         <li><i class="fas fa-tape"></i> fix all licensing issues</li>
         <li><i class="fas fa-file-prescription"></i> stop a cyberattack</li>
         <li><i class="fas fa-balance-scale"></i> win a lawsuite</li>
@@ -419,7 +419,7 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>"p" to add all powerup</li>
           <li>"1" to switch to stored block configuraton 1</li>
         </ol>
-        
+
     """
     end
 
