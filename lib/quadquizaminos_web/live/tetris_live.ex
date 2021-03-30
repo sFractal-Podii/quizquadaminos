@@ -75,7 +75,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
           <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
             <p>This section is still under construction.</p>
-            <p>You are bankrupt because either
+            <p>You are bankrupt either
             due to a cyberattack or a lawsuit.
             This may be because you let your supply chain get to long.
             Or may be due to unfixed vulnerabilities were turned into exploits.
