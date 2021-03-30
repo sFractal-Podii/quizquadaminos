@@ -417,7 +417,9 @@ defmodule QuadquizaminosWeb.Instructions do
           <li>"l" lowers dropping speed (change to add lower-speed powerup)</li>
           <li>"c" clears bottom blocks (change to add clear-blocks powerup)</li>
           <li>"p" to add all powerup</li>
-          <li>"1" to switch to stored block configuraton 1</li>
+          <li>"1" to switch to stored block configuraton</li>
+          <li>"2" to switch to stored attack configuraton</li>
+          <li>"3" to switch to stored lawsuit configuraton</li>
         </ol>
 
     """
