@@ -172,7 +172,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(correct_answers: 0)
     |> new_block
     |> show
-
   end
 
   ## raise_speed gets removed once dev cheat gets removed
@@ -207,7 +206,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       brick
       |> Quadquizaminos.Brick.prepare()
       |> Quadquizaminos.Points.move_to_location(brick.location)
-      |> Quadquizaminos.Points.with_color(color(brick))
+      |> Quadquizaminos.Points.with_color(color(brick), socket.assigns.brick_count)
 
     assign(socket, tetromino: points)
   end
@@ -292,7 +291,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Tetris.drop(
         old_brick,
         socket.assigns.bottom,
-        color(old_brick)
+        color(old_brick),
+        socket.assigns.brick_count
       )
 
     bonus = if fast, do: 2, else: 0
@@ -389,9 +389,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   ## until powerups and for debugging - take out eventually
   def handle_event("keydown", %{"key" => "p"}, socket) do
-    powers = socket.assigns.powers ++
-              Quadquizaminos.Powers.all_powers()
-              |> Enum.sort
+    powers =
+      (socket.assigns.powers ++
+         Quadquizaminos.Powers.all_powers())
+      |> Enum.sort()
+
     {:noreply, socket |> assign(powers: powers)}
   end
 
@@ -467,20 +469,24 @@ defmodule QuadquizaminosWeb.TetrisLive do
     powers = socket.assigns.powers -- [:speedup]
     speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
     tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
-    {:noreply, socket
-                |> assign(speed: speed)
-                |> assign(tick_count: tick_count)
-                |> assign(powers: powers)}
+
+    {:noreply,
+     socket
+     |> assign(speed: speed)
+     |> assign(tick_count: tick_count)
+     |> assign(powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
     powers = socket.assigns.powers -- [:slowdown]
     speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
     tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
-    {:noreply, socket
-                |> assign(speed: speed)
-                |> assign(tick_count: tick_count)
-                |> assign(powers: powers)}
+
+    {:noreply,
+     socket
+     |> assign(speed: speed)
+     |> assign(tick_count: tick_count)
+     |> assign(powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
