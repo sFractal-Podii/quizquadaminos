@@ -65,7 +65,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
       :slowvulns -> "fa-clipboard-check"
       :slowlicense -> "fa-certificate"
       :legal -> "fa-gavel"
-      :insurance -> "fa-file-contract"
+      :cyberinsurance -> "fa-file-contract"
       :sbom -> "fa-id-card"
       :fixvuln -> "fa-wrench"
       :fixlicense -> "fa-screwdriver"

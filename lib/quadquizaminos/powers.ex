@@ -11,7 +11,7 @@ defmodule Quadquizaminos.Powers do
     :slowvulns,
     :slowlicense,
     :legal,
-    :insurance,
+    :cyberinsurance,
     :sbom,
     :fixvuln,
     :fixlicense,
