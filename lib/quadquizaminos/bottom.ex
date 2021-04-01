@@ -14,6 +14,17 @@ defmodule Quadquizaminos.Bottom do
   def collides?(bottom, points) when is_list(points) do
     Enum.any?(points, &collides?(bottom, &1))
   end
+   
+  def remove_vulnerable(bottom) do
+   value = 
+    bottom
+    |> Enum.map(map, fn({_key, value}) -> value end)
+    #To loop the result of value over the case function below
+    #To pass this function before map.keys in complete_ys function
+    case value = {x,y, ::vuln_grey_yellow} do
+      Map.drop(bottom, [{x,y}]) 
+    end
+  end
 
   def complete_ys(bottom) do
     bottom
