@@ -43,6 +43,13 @@ defmodule Quadquizaminos.Points do
       0 ->
         position = div(brick_count, threshold)
 
+        position =
+          if position > 3 do
+            0
+          else
+            position
+          end
+
         points =
           List.update_at(points, position, fn {x, y} ->
             {x, y, :vuln_grey_yellow}
