@@ -227,7 +227,7 @@ defmodule Quadquizaminos.Instructions do
     <p>
     Vulnerabilities have several impacts.
     The main impact is that any vulnerability in a row will prevent
-    it being cleared (#?).
+    it being cleared (#104).
     There is also a subtle impact that the more vulnerabilities,
     the more likely you will be hit with a cyber attack(#?).
     The speed at which vulnerabilities arrive is a function of time(#?),
