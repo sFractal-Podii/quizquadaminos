@@ -303,6 +303,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       bottom: response.bottom,
       brick_count: brick_count,
       row_count: row_count,
+      hint: if(response.brick_count > 0, do: Hints.next_hint(socket.assigns.hint), else: socket.assigns.hint),
       score: score,
       state: if(response.game_over, do: :game_over, else: :playing)
     )
