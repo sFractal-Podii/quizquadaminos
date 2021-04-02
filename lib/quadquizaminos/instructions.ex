@@ -1,4 +1,4 @@
-defmodule QuadquizaminosWeb.Instructions do
+defmodule Quadquizaminos.Instructions do
 
     def game_instruction() do
     """
