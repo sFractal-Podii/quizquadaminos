@@ -293,20 +293,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
       )
 
     bonus = if fast, do: 2, else: 0
-    row_count = socket.assigns.row_count + response.row_count
-    score = socket.assigns.score + response.score + bonus
-    brick_count = socket.assigns.brick_count + response.brick_count
 
     socket
-    |> assign(
-      brick: response.brick,
-      bottom: response.bottom,
-      brick_count: brick_count,
-      row_count: row_count,
-      hint: if(response.brick_count > 0, do: Hints.next_hint(socket.assigns.hint), else: socket.assigns.hint),
-      score: score,
-      state: if(response.game_over, do: :game_over, else: :playing)
-    )
+    |> assign(brick: response.brick)
+    |> assign(bottom: response.bottom)
+    |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
+    |> assign(row_count: socket.assigns.row_count + response.row_count)
+    |> assign(hint: if(response.brick_count > 0,
+      do: Hints.next_hint(socket.assigns.hint),
+      else: socket.assigns.hint))
+    |> assign(score: socket.assigns.score + response.score + bonus)
+    |> assign(state: if(response.game_over,
+      do: :game_over,
+      else: :playing))
     |> show
   end
 
