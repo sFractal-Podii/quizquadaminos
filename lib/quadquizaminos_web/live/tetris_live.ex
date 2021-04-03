@@ -131,7 +131,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
               </div>
             </div>
-            <div class="column">
+            <div class="column column-50">
             <a class="button" phx-click="instructions">  How to play </a>
             <%= raw Hints.tldr(@hint) %>
             </div>
