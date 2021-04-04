@@ -217,7 +217,7 @@ defmodule QuadquizaminosWeb.Instructions do
     <p>
     Normal blocks are squares of one color (two tones).
     But just like in real life, problems can crop up in your supply chain.
-    There are two types of vulnerabilies.
+    There are two types of vulnerabilities.
     Known vulnerabilities are yellow/gray blocks
     that show up at random either in dropping blocks
     or in the blocks at the bottom that haven't been cleared yet.

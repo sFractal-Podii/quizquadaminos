@@ -85,4 +85,22 @@ defmodule Quadquizaminos.Bottom do
          ls_value
        end)
   end
+
+  def add_vulnerability(%{} = bottom) do
+    ## if no blocks to turn vulnerable, add one anyway
+    %{{1, 20} => {1, 20, :vuln_grey_yellow}}
+  end
+
+  def add_vulnerability(bottom) do
+    ## pick random bottom block and change to add_vulnerability
+    {{x, y}, _} = Enum.random(bottom)
+    bottom
+    |> Map.merge(
+       bottom,
+       %{{x, y} => {x, y, :vuln_grey_yellow}},
+       fn _k, _b, vuln_value ->
+         vuln_value
+       end)
+  end
+
 end
