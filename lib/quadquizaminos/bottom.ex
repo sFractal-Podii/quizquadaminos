@@ -63,4 +63,14 @@ defmodule Quadquizaminos.Bottom do
 
     {Enum.count(rows), new_bottom}
   end
+
+  def add_attack(bottom) do
+    bottom
+    |> Map.merge(
+       bottom,
+       Presets.attack(),
+       fn _k, _b, attack_value ->
+         attack_value
+       end)
+  end
 end
