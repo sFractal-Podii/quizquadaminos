@@ -1,4 +1,6 @@
 defmodule Quadquizaminos.Bottom do
+  Alias Quadquizaminos.Presests
+
   def merge(bottom, points) do
     points
     |> Enum.map(fn {x, y, c} -> {{x, y}, {x, y, c}} end)
@@ -71,6 +73,16 @@ defmodule Quadquizaminos.Bottom do
        Presets.attack(),
        fn _k, _b, attack_value ->
          attack_value
+       end)
+  end
+
+  def add_lawsuit(bottom) do
+    bottom
+    |> Map.merge(
+       bottom,
+       Presets.attack(),
+       fn _k, _b, ls_value ->
+         ls_value
        end)
   end
 end
