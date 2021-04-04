@@ -402,12 +402,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("keydown", %{"key" => "2"}, socket) do
-    bottom = Quadquizaminos.Presets.attack()
+    bottom = Quadquizaminos.Bottom.attack(socket.assigns.bottom)
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
   def handle_event("keydown", %{"key" => "3"}, socket) do
-    bottom = Quadquizaminos.Presets.lawsuit()
+    bottom = Quadquizaminos.Bottom.lawsuit(socket.assigns.bottom)
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
