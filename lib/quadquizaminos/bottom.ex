@@ -67,21 +67,25 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def add_attack(bottom) do
+    @doc """
+    overlay attack on gameboard
+    """
     bottom
     |> Map.merge(
-       bottom,
        Presets.attack(),
-       fn _k, _b, attack_value ->
+       fn _k, _prev_valuse, attack_value ->
          attack_value
        end)
   end
 
   def add_lawsuit(bottom) do
+    @doc """
+    overlay lawsuit on gameboard
+    """
     bottom
     |> Map.merge(
-       bottom,
-       Presets.attack(),
-       fn _k, _b, ls_value ->
+       Presets.lawsuit(),
+       fn _k, _prev_value, ls_value ->
          ls_value
        end)
   end
@@ -96,11 +100,48 @@ defmodule Quadquizaminos.Bottom do
     {{x, y}, _} = Enum.random(bottom)
     bottom
     |> Map.merge(
-       bottom,
        %{{x, y} => {x, y, :vuln_grey_yellow}},
        fn _k, _b, vuln_value ->
          vuln_value
        end)
+  end
+
+  def add_license_issue(%{} = bottom) do
+    ## if no blocks to have issue, add one anyway
+    %{{1, 20} => {1, 20, :license_grey_brown}}
+  end
+
+  def add_license_issue(bottom) do
+    ## pick random bottom block and change to add_vulnerability
+    {{x, y}, _} = Enum.random(bottom)
+    bottom
+    |> Map.merge(
+       %{{x, y} => {x, y, :license_grey_brown}},
+       fn _k, _b, ls_value ->
+         ls_value
+       end)
+  end
+
+  def remove_all_vulnerabilities(bottom) do
+    @doc """
+    remove all vulnerabilites from gameboard
+    """
+    bottom
+    |> Map.filter(
+      fn {{x,y} -> {x,y,color}} ->
+        color != :vuln_grey_yellow
+      end)
+  end
+
+  def remove_all_license_issues(bottom) do
+    @doc """
+    remove all license issues from gameboard
+    """
+    bottom
+    |> Map.filter(
+      fn {{x,y} -> {x,y,color}} ->
+        color != :license_grey_brown
+      end)
   end
 
 end
