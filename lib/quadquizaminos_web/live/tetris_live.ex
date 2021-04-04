@@ -508,8 +508,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, assign(socket, powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "insurance"}, socket) do
-    powers = socket.assigns.powers -- [:insurance]
+  def handle_event("powerup", %{"powerup" => "cyberinsurance"}, socket) do
+    powers = socket.assigns.powers -- [:cyberinsurance]
     {:noreply, assign(socket, powers: powers)}
   end
 
@@ -588,8 +588,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, assign(socket, powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "insurance"}, socket) do
-    powers = socket.assigns.powers -- [:insurance]
+  def handle_event("powerup", %{"powerup" => "cyberinsurance"}, socket) do
+    powers = socket.assigns.powers -- [:cyberinsurance]
     {:noreply, assign(socket, powers: powers)}
   end
 
