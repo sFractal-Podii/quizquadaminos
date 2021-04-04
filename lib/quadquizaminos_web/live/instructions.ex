@@ -355,16 +355,16 @@ defmodule QuadquizaminosWeb.Instructions do
       <i class="fas fa-syringe"></i> fix a lawsuit
       requires superpower, SBOM, legal, openchain, cyberinsurance
       </p>
-  <h3>Prizes, Contests</h3>
-  Prizes can be won in several ways.
+    <h3>Prizes, Contests</h3>
+    Prizes can be won in several ways.
 
-  Some sponsors offer no prizes.
-  Some sponsors offer
-  prizes for correctly answering a particular question.
-  Some sponsors offer prizes as part of a contest.
+    Some sponsors offer no prizes.
+    Some sponsors offer
+    prizes for correctly answering a particular question.
+    Some sponsors offer prizes as part of a contest.
 
-  <h3>Strategy, Tips & Tricks</h3>
-  <p>tetris vs quiz</p>
+    <h3>Strategy, Tips & Tricks</h3>
+    <p>tetris vs quiz</p>
     <p>
     timing funny wrt QnA/powerups - multi-row clearing trick
     </p>
