@@ -67,9 +67,6 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def add_attack(bottom) do
-    @doc """
-    overlay attack on gameboard
-    """
     bottom
     |> Map.merge(
        Presets.attack(),
@@ -79,9 +76,6 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def add_lawsuit(bottom) do
-    @doc """
-    overlay lawsuit on gameboard
-    """
     bottom
     |> Map.merge(
        Presets.lawsuit(),
@@ -90,7 +84,7 @@ defmodule Quadquizaminos.Bottom do
        end)
   end
 
-  def add_vulnerability(%{} = bottom) do
+  def add_vulnerability(%{} = _bottom) do
     ## if no blocks to turn vulnerable, add one anyway
     %{{1, 20} => {1, 20, :vuln_grey_yellow}}
   end
@@ -106,7 +100,7 @@ defmodule Quadquizaminos.Bottom do
        end)
   end
 
-  def add_license_issue(%{} = bottom) do
+  def add_license_issue(%{} = _bottom) do
     ## if no blocks to have issue, add one anyway
     %{{1, 20} => {1, 20, :license_grey_brown}}
   end
@@ -123,25 +117,19 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_all_vulnerabilities(bottom) do
-    @doc """
-    remove all vulnerabilites from gameboard
-    """
     bottom
     |> Enum.filter(
-      fn item ->
-        %{{x,y} => {_x,_y,color}} = item
+      fn _key,value ->
+        {_x,_y,color} = value
         color != :vuln_grey_yellow
       end)
   end
 
   def remove_all_license_issues(bottom) do
-    @doc """
-    remove all license issues from gameboard
-    """
     bottom
     |> Enum.filter(
-      fn item ->
-        %{{x,y} => {_x,_y,color}} = item
+      fn _key,value ->
+        {_x,_y,color} = value
         color != :license_grey_brown
       end)
   end
