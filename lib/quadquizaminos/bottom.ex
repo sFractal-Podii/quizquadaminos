@@ -101,7 +101,7 @@ defmodule Quadquizaminos.Bottom do
     bottom
     |> Map.merge(
        %{{x, y} => {x, y, :vuln_grey_yellow}},
-       fn _k, _b, vuln_value ->
+       fn _k, _prev_value, vuln_value ->
          vuln_value
        end)
   end
@@ -117,7 +117,7 @@ defmodule Quadquizaminos.Bottom do
     bottom
     |> Map.merge(
        %{{x, y} => {x, y, :license_grey_brown}},
-       fn _k, _b, ls_value ->
+       fn _k, _prev_value, ls_value ->
          ls_value
        end)
   end
@@ -128,7 +128,7 @@ defmodule Quadquizaminos.Bottom do
     """
     bottom
     |> Map.filter(
-      fn {{x,y} -> {x,y,color}} ->
+      fn %{{x,y} => {x,y,color}} ->
         color != :vuln_grey_yellow
       end)
   end
@@ -139,7 +139,7 @@ defmodule Quadquizaminos.Bottom do
     """
     bottom
     |> Map.filter(
-      fn {{x,y} -> {x,y,color}} ->
+      fn %{{x,y} => {x,y,color}} ->
         color != :license_grey_brown
       end)
   end
