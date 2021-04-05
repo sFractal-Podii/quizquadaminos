@@ -100,7 +100,7 @@ defmodule Quadquizaminos.Bottom do
         end)
   end
 
-  def add_license_issue when bottom == %{} do
+  def add_license_issue(bottom) when bottom == %{} do
     ## if no blocks to have issue, add one anyway
     %{{1, 20} => {1, 20, :license_grey_brown}}
   end
