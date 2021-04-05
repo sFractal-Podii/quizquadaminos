@@ -538,7 +538,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
     powers = socket.assigns.powers -- [:fixalllicenses]
-    {:noreply, assign(socket, powers: powers)}
+    bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
+    {:noreply, socket
+      |> assign(powers: powers)
+      |> assign(bottom: bottom)}
   end
 
   def handle_event("powerup", %{"powerup" => "automation"}, socket) do
