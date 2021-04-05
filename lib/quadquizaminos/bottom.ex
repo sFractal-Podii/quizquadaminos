@@ -140,7 +140,7 @@ defmodule Quadquizaminos.Bottom do
         bottom
         |> Enum.filter(
           fn block ->
-            {_key, {_x,_y,color}} = color
+            {_key, {_x,_y,color}} = block
             color == :vuln_grey_yellow
           end)
         |> Enum.count
@@ -154,7 +154,7 @@ defmodule Quadquizaminos.Bottom do
         bottom
         |> Enum.filter(
           fn block ->
-            {_key, {_x,_y,color}} = color
+            {_key, {_x,_y,color}} = block
             color == :vuln_grey_brown
           end)
         |> Enum.count
