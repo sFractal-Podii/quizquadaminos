@@ -337,13 +337,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
       end
 
     socket
-    |> assign(brick: response.brick),
-    |> assign(bottom: bottom),
-    |> assign(brick_count: brick_count),
-    |> assign(row_count: row_count),
-    |> assign(score: score),
-    |> assign(speed: speed),
-    |> assign(state: if(response.game_over, do: :game_over, else: :playing)),
+    |> assign(brick: response.brick)
+    |> assign(bottom: bottom)
+    |> assign(brick_count: brick_count)
+    |> assign(row_count: row_count)
+    |> assign(score: score)
+    |> assign(speed: speed)
+    |> assign(state: if(response.game_over, do: :game_over, else: :playing))
     |> show
   end
 
