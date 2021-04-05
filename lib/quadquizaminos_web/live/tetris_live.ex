@@ -28,6 +28,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(brick_count: 0)
      |> assign(row_count: 0)
      |> assign(correct_answers: 0)
+     |> assign(attack_threshold: 5)
+     |> assign(lawsuit_threshold: 5)
      |> start_game()}
   end
 
@@ -299,16 +301,49 @@ defmodule QuadquizaminosWeb.TetrisLive do
     row_count = socket.assigns.row_count + response.row_count
     score = socket.assigns.score + response.score + bonus
     brick_count = socket.assigns.brick_count + response.brick_count
+    ## see if under attack
+    under_attack? = Bottom.attacked?(response.bottom, socket.assigns.attack_threshold)
+    ## see if being sued
+    being_sued? = Bottom.sued?(response.bottom, socket.assigns.lawsuit_threshold)
+
+    {bottom, speed, score} =
+      case {under_attack?, being_sued?} do
+        {false, false} ->
+          ## normal state, return new bottom and leave speed/score alone
+          bottom = response.bottom
+          speed = socket.assigns.speed
+          score = socket.assigns.score
+          {bottom, speed, score}
+        {true, false} ->
+          ## under cyberattack means add attack blocks, reduce score, speed up game
+          bottom = Bottom.add_attack(response.bottom)
+          speed = 0
+          score = round(0.9 * socket.assigns.score)
+          {bottom, speed, score}
+        {false, true} ->
+          ## being sued means add lawsuit blocks, reduce score, slow down game
+          bottom = Bottom.add_lawsuit(response.bottom)
+          speed = 6
+          score = round(0.9 * socket.assigns.score)
+          {bottom, speed, score}
+        {true, true} ->
+          ## both lawsuit and cyberattack - add both blocks, reduce score more, speed up games
+          bottom = response.bottom
+            |> Bottom.add_lawsuit
+            |> Bottom.add_attack
+          speed = 0
+          score = round(0.8 * socket.assigns.score)
+          {bottom, speed, score}
+      end
 
     socket
-    |> assign(
-      brick: response.brick,
-      bottom: response.bottom,
-      brick_count: brick_count,
-      row_count: row_count,
-      score: score,
-      state: if(response.game_over, do: :game_over, else: :playing)
-    )
+    |> assign(brick: response.brick),
+    |> assign(bottom: bottom),
+    |> assign(brick_count: brick_count),
+    |> assign(row_count: row_count),
+    |> assign(score: score),
+    |> assign(speed: speed),
+    |> assign(state: if(response.game_over, do: :game_over, else: :playing)),
     |> show
   end
 

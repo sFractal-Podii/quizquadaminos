@@ -134,4 +134,32 @@ defmodule Quadquizaminos.Bottom do
       end)
   end
 
+  def attacked?(bottom, attack_threshold) do
+    ## see if under attack
+    vuln_count =
+        bottom
+        |> Enum.filter(
+          fn _key,value ->
+            {_x,_y,color} = value
+            color == :vuln_grey_yellow
+          end)
+        |> Enum.count
+    ## return true if more vuln's than attack_threshold
+    vuln_count >= attack_threshold
+  end
+
+  def sued?(bottom, suit_threshold) do
+    ## see if being sued (count license issues)
+    li_count =
+        bottom
+        |> Enum.filter(
+          fn _key,value ->
+            {_x,_y,color} = value
+            color == :vuln_grey_brown
+          end)
+        |> Enum.count
+    ## return true if more vuln's than attack_threshold
+    li_count >= suit_threshold
+  end
+
 end
