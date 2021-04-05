@@ -127,8 +127,9 @@ defmodule Quadquizaminos.Bottom do
     remove all vulnerabilites from gameboard
     """
     bottom
-    |> Map.filter(
-      fn %{{x,y} => {x,y,color}} ->
+    |> Enum.filter(
+      fn item ->
+        %{{x,y} => {_x,_y,color}} = item
         color != :vuln_grey_yellow
       end)
   end
@@ -138,8 +139,9 @@ defmodule Quadquizaminos.Bottom do
     remove all license issues from gameboard
     """
     bottom
-    |> Map.filter(
-      fn %{{x,y} => {x,y,color}} ->
+    |> Enum.filter(
+      fn item ->
+        %{{x,y} => {_x,_y,color}} = item
         color != :license_grey_brown
       end)
   end
