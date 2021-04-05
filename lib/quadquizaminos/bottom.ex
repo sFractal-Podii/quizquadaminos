@@ -1,5 +1,5 @@
 defmodule Quadquizaminos.Bottom do
-  Alias Quadquizaminos.Presests
+  Alias Quadquizaminos.Presets
 
   def merge(bottom, points) do
     points
