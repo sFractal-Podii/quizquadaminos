@@ -103,6 +103,7 @@ defmodule Quadquizaminos.Bottom do
             fn _k, _prev_value, vuln_value ->
               vuln_value
             end)
+    end
   end
 
   def add_license_issue(%{} = _bottom) do
