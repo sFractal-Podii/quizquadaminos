@@ -4,13 +4,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
-  alias Quadquizaminos.QnA
-
-  alias Quadquizaminos.Tetris
+  alias Quadquizaminos.{Bottom, QnA, Speed, Tetris}
 
   @debug false
   @box_width 20
   @box_height 20
+  ## Opinion(Duncan): I think next value should be set in mount, not fixed forever
+  ## since it will change with slowvulns powerup
   @bottom_vulnerability_value Application.get_env(:quadquizaminos, :bottom_vulnerability_value)
 
   def mount(_param, _session, socket) do
@@ -89,7 +89,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <h1><%= @score %></h1>
                     <h2>Score</h2>
                     <hr>
-                    Speed: <%= Quadquizaminos.Speed.speed_name(@speed) %>
+                    Speed: <%= Speed.speed_name(@speed) %>
                     <hr>
                     <%= @brick_count %>
                     QuadBlocks
@@ -177,15 +177,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   ## raise_speed gets removed once dev cheat gets removed
   defp raise_speed(socket) do
-    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.increase_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
   ## lower_speed gets removed once dev cheat gets removed
   defp lower_speed(socket) do
-    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.decrease_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
@@ -402,12 +402,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("keydown", %{"key" => "2"}, socket) do
-    bottom = Quadquizaminos.Bottom.add_attack(socket.assigns.bottom)
+    bottom = Bottom.add_attack(socket.assigns.bottom)
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
   def handle_event("keydown", %{"key" => "3"}, socket) do
-    bottom = Quadquizaminos.Bottom.add_lawsuit(socket.assigns.bottom)
+    bottom = Bottom.add_lawsuit(socket.assigns.bottom)
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
@@ -465,8 +465,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
     powers = socket.assigns.powers -- [:speedup]
-    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.increase_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     {:noreply, socket
                 |> assign(speed: speed)
                 |> assign(tick_count: tick_count)
@@ -475,8 +475,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
     powers = socket.assigns.powers -- [:slowdown]
-    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.decrease_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     {:noreply, socket
                 |> assign(speed: speed)
                 |> assign(tick_count: tick_count)
@@ -530,7 +530,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
     powers = socket.assigns.powers -- [:fixallvulns]
-    {:noreply, assign(socket, powers: powers)}
+    bottom = Bottom.remove_all_vulnerabilities(socket.assigns.bottom)
+    {:noreply, socket
+      |> assign(powers: powers)
+      |> assign(bottom: bottom)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
@@ -674,7 +677,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       {:noreply, socket}
     else
       ## reset counter and drop
-      tick_count = Quadquizaminos.Speed.speed_tick_count(socket.assigns.speed)
+      tick_count = Speed.speed_tick_count(socket.assigns.speed)
 
       socket = assign(socket, tick_count: tick_count, gametime_counter: gametime_counter)
       {:noreply, drop(socket.assigns.state, socket, false)}
