@@ -91,13 +91,18 @@ defmodule Quadquizaminos.Bottom do
 
   def add_vulnerability(bottom) do
     ## pick random bottom block and change to add_vulnerability
-    {{x, y}, _} = Enum.random(bottom)
-    bottom
-    |> Map.merge(
-       %{{x, y} => {x, y, :vuln_grey_yellow}},
-       fn _k, _prev_value, vuln_value ->
-         vuln_value
-       end)
+    ## two cases - empty map or map with blocks
+    case bottom do
+      %{} ->
+        %{{1, 20} => {1, 20, :vuln_grey_yellow}}
+      _ ->
+        {{x, y}, _} = Enum.random(bottom)
+        bottom
+        |> Map.merge(
+          %{{x, y} => {x, y, :vuln_grey_yellow}},
+            fn _k, _prev_value, vuln_value ->
+              vuln_value
+            end)
   end
 
   def add_license_issue(%{} = _bottom) do
