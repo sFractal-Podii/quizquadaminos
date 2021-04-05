@@ -84,11 +84,6 @@ defmodule Quadquizaminos.Bottom do
        end)
   end
 
-  def add_vulnerability(%{} = _bottom) do
-    ## if no blocks to turn vulnerable, add one anyway
-    %{{1, 20} => {1, 20, :vuln_grey_yellow}}
-  end
-
   def add_vulnerability(bottom) do
     ## pick random bottom block and change to add_vulnerability
     ## two cases - empty map or map with blocks
