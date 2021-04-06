@@ -1,5 +1,6 @@
 defmodule QuadquizaminosWeb.InstructionsComponent do
     use QuadquizaminosWeb, :live_component
+    alias Quadquizaminos.Instructions
 
     def render(assigns) do
         ~L"""
@@ -8,7 +9,7 @@ defmodule QuadquizaminosWeb.InstructionsComponent do
           <a phx-click="close_instructions">x</a>
          </div>
          <br>
-         <%= raw QuadquizaminosWeb.Instructions.game_instruction() %>
+         <%= raw Instructions.game_instruction() %>
          </div>
         """
     end
