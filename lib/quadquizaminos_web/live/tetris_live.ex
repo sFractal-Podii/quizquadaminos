@@ -752,7 +752,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
       being_sued? = Bottom.sued?(bottom, socket.assigns.lawsuit_threshold)
 
       {bottom, speed, score} = Threshold.bad_happen(
-        bottom, socket.assigns.speed, under_attack?, being_sued?)
+        bottom,
+        socket.assigns.speed,
+        socket.assigns.score,
+        under_attack?,
+        being_sued?)
 
 
       socket = assign(socket,
