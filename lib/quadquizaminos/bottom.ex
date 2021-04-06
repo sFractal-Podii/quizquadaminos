@@ -91,7 +91,11 @@ defmodule Quadquizaminos.Bottom do
 
   def add_vulnerability(bottom) do
     ## pick random bottom block and change to add_vulnerability
-    {{x, y}, _} = Enum.random(bottom)
+    ## only pick blocks that are not already marked with some 'trouble'
+    {{x, y}, _} = bottom
+    |> remove_trouble_blocks
+    |> Enum.random
+
     bottom
     |> Map.merge(
       %{{x, y} => {x, y, :vuln_grey_yellow}},
@@ -107,7 +111,13 @@ defmodule Quadquizaminos.Bottom do
 
   def add_license_issue(bottom) do
     ## pick random bottom block and change to license issue
-    {{x, y}, _} = Enum.random(bottom)
+    ## only pick blocks that are not already marked with some 'trouble'
+    {{x, y}, _} = bottom
+    |> remove_trouble_blocks
+    |> Enum.random
+    IO.inspect(x)
+    IO.inspect(y)
+
     bottom
     |> Map.merge(
       # block to be added
