@@ -146,7 +146,7 @@ defmodule Quadquizaminos.Bottom do
     bottom
     |> Enum.filter(
       fn block ->
-        {{_x,_y}{_x,_y,color}} = block
+        {{_x,_y},{_x,_y,color}} = block
         color != color_to_be_removed
       end)
   end
