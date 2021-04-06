@@ -129,23 +129,19 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_all_vulnerabilities(bottom) do
-    bottom
-    |> remove_a_color(:vuln_grey_yellow)
+    remove_a_color(bottom, :vuln_grey_yellow)
   end
 
   def remove_all_license_issues(bottom) do
-    bottom
-    |> remove_a_color(:license_grey_brown)
+    remove_a_color(bottom, :license_grey_brown)
   end
 
   def remove_attacks(bottom) do
-    bottom
-    |> remove_a_color(:attack_yellow_gold)
+    remove_a_color(bottom, :attack_yellow_gold)
   end
 
   def remove_lawsuits(bottom) do
-    bottom
-    |> remove_a_color(:lawsuit_brown_gold)
+    remove_a_color(bottom, :lawsuit_brown_gold)
   end
 
   def remove_a_color(bottom, color_to_be_removed) do
