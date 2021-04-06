@@ -433,6 +433,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
+  def handle_event("keydown", %{"key" => "4"}, socket) do
+    bottom = Quadquizaminos.Presets.preset_vuln()
+    {:noreply, socket |> assign(bottom: bottom)}
+  end
+
+  def handle_event("keydown", %{"key" => "5"}, socket) do
+    bottom = Quadquizaminos.Presets.preset_lic()
+    {:noreply, socket |> assign(bottom: bottom)}
+  end
+
   def handle_event("keydown", _, socket), do: {:noreply, socket}
 
   def handle_event("start", _, socket) do

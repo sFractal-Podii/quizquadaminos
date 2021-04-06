@@ -102,7 +102,7 @@ defmodule Quadquizaminos.Bottom do
 
   def add_license_issue(bottom) when bottom == %{} do
     ## if no blocks to have issue, add one anyway
-    %{{1, 20} => {1, 20, :license_grey_brown}}
+    %{{1, 20} => {10, 20, :license_grey_brown}}
   end
 
   def add_license_issue(bottom) do
@@ -118,19 +118,30 @@ defmodule Quadquizaminos.Bottom do
 
   def remove_all_vulnerabilities(bottom) do
     bottom
-    |> Enum.filter(
-      fn _key,value ->
-        {_x,_y,color} = value
-        color != :vuln_grey_yellow
-      end)
+    |> remove_a_color(:vuln_grey_yellow)
   end
 
   def remove_all_license_issues(bottom) do
     bottom
+    |> remove_a_color(:license_grey_brown)
+  end
+
+  def remove_all_attacks(bottom) do
+    bottom
+    |> remove_a_color(:attack_yellow_gold)
+  end
+
+  def remove_all_lawsuits(bottom) do
+    bottom
+    |> remove_a_color(:lawsuit_brown_gold)
+  end
+
+  def remove_a_color(bottom, color_to_be_removed) do
+    bottom
     |> Enum.filter(
       fn _key,value ->
         {_x,_y,color} = value
-        color != :license_grey_brown
+        color != color_to_be_removed
       end)
   end
 
@@ -160,6 +171,14 @@ defmodule Quadquizaminos.Bottom do
         |> Enum.count
     ## return true if more vuln's than attack_threshold
     li_count >= suit_threshold
+  end
+
+  def remove_trouble_blocks(bottom) do
+    bottom
+    |> remove_all_vulnerabilities
+    |> remove_all_license_issues
+    |> remove_attack
+    |> remove_lawsuit
   end
 
 end
