@@ -145,6 +145,7 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_a_color(bottom, color_to_be_removed) do
+    IO.inspect(color_to_be_removed)
     bottom
     |> Enum.filter(
       fn _key,value ->
