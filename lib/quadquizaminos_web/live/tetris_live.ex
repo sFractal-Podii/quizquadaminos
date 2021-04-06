@@ -18,6 +18,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     {:ok,
      socket
+     |> assign(bottom: %{})
      |> assign(qna: %{}, powers: [])
      |> assign(category: nil, categories: init_categories())
      |> assign(block_coordinates: nil)
