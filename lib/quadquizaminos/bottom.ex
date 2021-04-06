@@ -172,7 +172,7 @@ defmodule Quadquizaminos.Bottom do
         |> Enum.filter(
           fn block ->
             {_key, {_x,_y,color}} = block
-            color == :vuln_grey_brown
+            color == :license_grey_brown
           end)
         |> Enum.count
     ## return true if more vuln's than attack_threshold
