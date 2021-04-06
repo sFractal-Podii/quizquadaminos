@@ -115,8 +115,6 @@ defmodule Quadquizaminos.Bottom do
     {{x, y}, _} = bottom
     |> remove_trouble_blocks
     |> Enum.random
-    IO.inspect(x)
-    IO.inspect(y)
 
     bottom
     |> Map.merge(
@@ -129,14 +127,10 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_all_vulnerabilities(bottom) do
-    IO.puts("remove_all_vulnerabilities")
-    IO.inspect(bottom)
     remove_a_color(bottom, :vuln_grey_yellow)
   end
 
   def remove_all_license_issues(bottom) do
-    IO.puts("remove_all_license_issues")
-    IO.inspect(bottom)
     remove_a_color(bottom, :license_grey_brown)
   end
 
@@ -149,11 +143,10 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_a_color(bottom, color_to_be_removed) do
-    IO.inspect(color_to_be_removed)
     bottom
     |> Enum.filter(
-      fn _key,value ->
-        {_x,_y,color} = value
+      fn block ->
+        {_x,_y,color} = block
         color != color_to_be_removed
       end)
   end
