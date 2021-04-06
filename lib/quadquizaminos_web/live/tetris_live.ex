@@ -30,6 +30,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(correct_answers: 0)
      |> assign(attack_threshold: 5)
      |> assign(lawsuit_threshold: 5)
+     |> assign(vuln_threshold: 5)
+     |> assign(tech_vuln_debt:2)
+     |> assign(lic_threshold: 5)
+     |> assign(tech_lic_debt: 0)
      |> start_game()}
   end
 
@@ -714,10 +718,52 @@ defmodule QuadquizaminosWeb.TetrisLive do
       socket = assign(socket, tick_count: tick_count)
       {:noreply, socket}
     else
-      ## reset counter and drop
+      ## reset counter and drop after incrementing other counters
       tick_count = Speed.speed_tick_count(socket.assigns.speed)
 
-      socket = assign(socket, tick_count: tick_count, gametime_counter: gametime_counter)
+      ## check vuln Debt
+      {tech_vuln_debt, add_vuln?} = Threshold.reached_threshold(
+        socket.assigns.tech_vuln_debt,
+        socket.assigns.vuln_threshold
+        )
+
+      ## if reached threshold, add vulnerability
+      bottom = if add_vuln? do
+        Bottom.add_vulnerability(socket.assigns.bottom)
+      else
+        socket.assigns.bottom
+      end
+
+      ## check vuln Debt
+      {tech_lic_debt, add_lic?} = Threshold.reached_threshold(
+          socket.assigns.tech_lic_debt,
+          socket.assigns.lic_threshold
+          )
+
+      ## if reached lic debt threshold, add licensing errors
+      bottom = if add_lic? do
+        Bottom.add_license_issue(bottom)
+      else
+        bottom
+      end
+
+      ## see if other bad things happening
+      under_attack? = Bottom.attacked?(bottom, socket.assigns.attack_threshold)
+      being_sued? = Bottom.sued?(bottom, socket.assigns.lawsuit_threshold)
+
+      {bottom, speed, score} = Threshold.bad_happen(
+        bottom, socket.assigns.speed, under_attack?, being_sued?)
+
+
+      socket = assign(socket,
+        tick_count: tick_count,
+        gametime_counter: gametime_counter,
+        bottom: bottom,
+        tech_vuln_debt: tech_vuln_debt,
+        tech_lic_debt:, tech_lic_debt,
+        score: score,
+        speed: speed
+        )
       {:noreply, drop(socket.assigns.state, socket, false)}
     end
   end
