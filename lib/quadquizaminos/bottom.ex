@@ -15,15 +15,12 @@ defmodule Quadquizaminos.Bottom do
     Enum.any?(points, &collides?(bottom, &1))
   end
    
-  def remove_vulnerable(bottom) do
-   value = 
+  def ignore_vulnerable(bottom) do
     bottom
-    |> Enum.map(map, fn({_key, value}) -> value end)
-    #To loop the result of value over the case function below
-    #To pass this function before map.keys in complete_ys function
-    case value = {x,y, ::vuln_grey_yellow} do
-      Map.drop(bottom, [{x,y}]) 
-    end
+    |> Enum.map(fn({_key, value}) -> value end)
+    |> IO.inspect()
+    |> Enum.any?(fn({_x, _y, color}) -> color == :vuln_grey_yellow end)
+    |> IO.inspect(label: "===========")
   end
 
   def complete_ys(bottom) do
@@ -35,13 +32,17 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def complete?(bottom, row) do
+    ignore_result = ignore_vulnerable(bottom)
+
     count =
       bottom
       |> Map.keys()
       |> Enum.filter(fn {_x, y} -> y == row end)
+      |> IO.inspect(label: "==========")
       |> Enum.count()
 
-    count == 10
+    complete_row? = count == 10
+    complete_row? and !ignore_result 
   end
 
   def collapse_row(bottom, row) do
