@@ -35,6 +35,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(tech_vuln_debt: 2)
      |> assign(lic_threshold: 5)
      |> assign(tech_lic_debt: 0)
+     |> assign(score: 0)
      |> start_game()}
   end
 
