@@ -15,12 +15,11 @@ defmodule Quadquizaminos.Bottom do
     Enum.any?(points, &collides?(bottom, &1))
   end
    
-  def ignore_vulnerable(bottom) do
+  def vulnerable?(bottom, row) do
     bottom
     |> Enum.map(fn({_key, value}) -> value end)
-    |> IO.inspect()
+    |> Enum.filter(fn({_x, y, _color}) -> y == row end)
     |> Enum.any?(fn({_x, _y, color}) -> color == :vuln_grey_yellow end)
-    |> IO.inspect(label: "===========")
   end
 
   def complete_ys(bottom) do
@@ -32,13 +31,12 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def complete?(bottom, row) do
-    ignore_result = ignore_vulnerable(bottom)
+    ignore_result = vulnerable?(bottom, row)
 
     count =
       bottom
       |> Map.keys()
       |> Enum.filter(fn {_x, y} -> y == row end)
-      |> IO.inspect(label: "==========")
       |> Enum.count()
 
     complete_row? = count == 10
