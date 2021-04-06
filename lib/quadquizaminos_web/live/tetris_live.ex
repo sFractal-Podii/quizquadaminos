@@ -4,7 +4,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
-  alias Quadquizaminos.{Bottom, QnA, Speed, Tetris}
+  alias Quadquizaminos.{Bottom, QnA, Speed, Tetris, Threshold}
 
   @debug false
   @box_width 20
@@ -316,19 +316,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
           ## normal state, return new bottom and leave speed/score alone
           bottom = response.bottom
           speed = socket.assigns.speed
-          score = socket.assigns.score
+          score = score
           {bottom, speed, score}
         {true, false} ->
           ## under cyberattack means add attack blocks, reduce score, speed up game
           bottom = Bottom.add_attack(response.bottom)
           speed = 0
-          score = round(0.9 * socket.assigns.score)
+          score = round(0.9 * score)
           {bottom, speed, score}
         {false, true} ->
           ## being sued means add lawsuit blocks, reduce score, slow down game
           bottom = Bottom.add_lawsuit(response.bottom)
           speed = 6
-          score = round(0.9 * socket.assigns.score)
+          score = round(0.9 * score)
           {bottom, speed, score}
         {true, true} ->
           ## both lawsuit and cyberattack - add both blocks, reduce score more, speed up games
@@ -336,7 +336,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             |> Bottom.add_lawsuit
             |> Bottom.add_attack
           speed = 0
-          score = round(0.8 * socket.assigns.score)
+          score = round(0.8 * score)
           {bottom, speed, score}
       end
 
