@@ -177,7 +177,23 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(tick_count: 5)
     |> assign(brick_count: 0)
     |> assign(row_count: 0)
+    |> assign(qna: %{})
+    |> assign(category: nil, categories: init_categories())
     |> assign(correct_answers: 0)
+    |> assign(block_coordinates: nil)
+    |> assign(adding_block: false, moving_block: false, deleting_block: false)
+    |> assign(instructions_modal: false)
+    |> assign(gametime_counter: 0)
+    |> assign(speed: 2, tick_count: 5)
+    |> assign(brick_count: 0)
+    |> assign(row_count: 0)
+    |> assign(correct_answers: 0)
+    |> assign(attack_threshold: 5)
+    |> assign(lawsuit_threshold: 5)
+    |> assign(vuln_threshold: 79)
+    |> assign(tech_vuln_debt: 45)
+    |> assign(lic_threshold: 81)
+    |> assign(tech_lic_debt: 0)
     |> new_block
     |> show
 
@@ -709,6 +725,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_info(:tick, socket) do
+    {:noreply, on_tick(socket.assigns.state, socket)}
+  end
+
+  defp on_tick(:playing, socket) do
     tick_count = socket.assigns.tick_count - 1
     gametime_counter = gametime_counter(socket.assigns.state, socket.assigns.gametime_counter)
     can_be_marked? = can_be_marked?(gametime_counter, tick_count)
@@ -717,8 +737,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     if tick_count > 0 do
       ## don't drop yet
-      socket = assign(socket, tick_count: tick_count)
-      {:noreply, socket}
+      assign(socket, tick_count: tick_count)
     else
       ## reset counter and drop after incrementing other counters
       tick_count = Speed.speed_tick_count(socket.assigns.speed)
@@ -760,7 +779,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
         under_attack?,
         being_sued?)
 
-
       socket = assign(socket,
         tick_count: tick_count,
         gametime_counter: gametime_counter,
@@ -770,8 +788,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
         score: score,
         speed: speed
         )
-      {:noreply, drop(socket.assigns.state, socket, false)}
+      drop(socket.assigns.state, socket, false)
     end
+  end
+
+  defp on_tick(_state, socket) do
+    ## if not in playing state, don't do anything on tick
+    socket
   end
 
   defp gametime_counter(:playing, gametime_counter) do
