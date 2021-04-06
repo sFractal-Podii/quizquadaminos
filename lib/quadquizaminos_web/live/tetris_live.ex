@@ -31,7 +31,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(attack_threshold: 5)
      |> assign(lawsuit_threshold: 5)
      |> assign(vuln_threshold: 5)
-     |> assign(tech_vuln_debt:2)
+     |> assign(tech_vuln_debt: 2)
      |> assign(lic_threshold: 5)
      |> assign(tech_lic_debt: 0)
      |> start_game()}
@@ -760,7 +760,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         gametime_counter: gametime_counter,
         bottom: bottom,
         tech_vuln_debt: tech_vuln_debt,
-        tech_lic_debt:, tech_lic_debt,
+        tech_lic_debt: tech_lic_debt,
         score: score,
         speed: speed
         )
