@@ -1,4 +1,5 @@
 defmodule Quadquizaminos.Threshold do
+  alias Quadquizaminos.Bottom
 
   ## used for either tech_vuln_debt or tech_lic_debt
   def reached_threshold(debt, threshold) do
