@@ -183,7 +183,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(block_coordinates: nil)
     |> assign(adding_block: false, moving_block: false, deleting_block: false)
     |> assign(instructions_modal: false)
-#    |> assign(gametime_counter: 0)
     |> assign(speed: 2, tick_count: 5)
     |> assign(brick_count: 0)
     |> assign(row_count: 0)
@@ -705,10 +704,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp on_tick(:playing, socket) do
     tick_count = socket.assigns.tick_count - 1
-    #gametime_counter = gametime_counter(socket.assigns.state, socket.assigns.gametime_counter)
-    #can_be_marked? = can_be_marked?(gametime_counter, tick_count)
-
-    #socket = mark_block_vulnerable(socket, socket.assigns[:bottom], can_be_marked?)
 
     if tick_count > 0 do
       ## don't drop yet
@@ -771,52 +766,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     ## if not in playing state, don't do anything on tick
     socket
   end
-
-#  defp gametime_counter(:playing, gametime_counter) do
-#    gametime_counter + 1
-#  end
-
-#  defp gametime_counter(:paused, gametime_counter) do
-#    gametime_counter
-#  end
-
-#  defp gametime_counter(_state, _gametime_counter) do
-#    0
-#  end
-
-#  defp can_be_marked?(gametime_counter, tick_count) do
-#    gametime_counter == @bottom_vulnerability_value + 1 and tick_count <= 0
-#  end
-
-#  defp mark_block_vulnerable(socket, nil, _can_be_marked?), do: socket
-
-#  defp mark_block_vulnerable(socket, bottom, can_be_marked?) do
-#    if Enum.empty?(bottom) do
-#      socket
-#    else
-#      assign(socket,
-#        bottom: mark_block_vulnerable(can_be_marked?, bottom),
-#        gametime_counter:
-#          if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
-#            do: 0,
-#            else: socket.assigns.gametime_counter
-#          )
-#      )
-#    end
-#  end
-
-#  defp mark_block_vulnerable(true = _can_be_marked?, bottom) do
-#    {{x, y}, _} = Enum.random(bottom)
-
-#    {_, new_bottom} =
-#      Map.get_and_update(bottom, {x, y}, fn current_value ->
-#        {current_value, {x, y, :vuln_grey_yellow}}
-#      end)
-
-#    new_bottom
-#  end
-
-#  defp mark_block_vulnerable(_, bottom), do: bottom
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
