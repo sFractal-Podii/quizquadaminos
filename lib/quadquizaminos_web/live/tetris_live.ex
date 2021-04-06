@@ -324,8 +324,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     score = socket.assigns.score + response.score + bonus
     brick_count = socket.assigns.brick_count + response.brick_count
 
-    {bottom, speed, score} =
-
     socket
     |> assign(brick: response.brick)
     |> assign(bottom: response.bottom)
