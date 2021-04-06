@@ -84,7 +84,7 @@ defmodule Quadquizaminos.Bottom do
        end)
   end
 
-  def add_vulnerability(bottom) when bottom == %{} do
+  def add_vulnerability(bottom) when %{} == bottom do
     ## empty input map, so stick one in anyway
     %{{1, 20} => {1, 20, :vuln_grey_yellow}}
   end
@@ -100,18 +100,20 @@ defmodule Quadquizaminos.Bottom do
         end)
   end
 
-  def add_license_issue(bottom) when bottom == %{} do
+  def add_license_issue(bottom) when %{} == bottom do
     ## if no blocks to have issue, add one anyway
     %{{1, 20} => {10, 20, :license_grey_brown}}
   end
 
   def add_license_issue(bottom) do
-    ## pick random bottom block and change to add_vulnerability
+    ## pick random bottom block and change to license issue
     {{x, y}, _} = Enum.random(bottom)
     bottom
     |> Map.merge(
-       %{{x, y} => {x, y, :license_grey_brown}},
-       fn _k, _prev_value, ls_value ->
+      # block to be added
+      %{{x, y} => {x, y, :license_grey_brown}},
+      # if occupied, use licence issue color
+      fn _k, _prev_value, ls_value ->
          ls_value
        end)
   end
