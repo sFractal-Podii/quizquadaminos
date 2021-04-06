@@ -24,7 +24,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(block_coordinates: nil)
      |> assign(adding_block: false, moving_block: false, deleting_block: false)
      |> assign(instructions_modal: false)
-     |> assign(gametime_counter: 0)
+#     |> assign(gametime_counter: 0)
      |> assign(speed: 2, tick_count: 5)
      |> assign(brick_count: 0)
      |> assign(row_count: 0)
@@ -108,7 +108,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <%= @correct_answers %>
                     Answers
                     <hr>
-                    Tech Debt: <%= @gametime_counter %>
+                    Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %>
                     <hr>
                 </div>
                 <div class="column column-50">
@@ -183,7 +183,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(block_coordinates: nil)
     |> assign(adding_block: false, moving_block: false, deleting_block: false)
     |> assign(instructions_modal: false)
-    |> assign(gametime_counter: 0)
+#    |> assign(gametime_counter: 0)
     |> assign(speed: 2, tick_count: 5)
     |> assign(brick_count: 0)
     |> assign(row_count: 0)
@@ -323,48 +323,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
     row_count = socket.assigns.row_count + response.row_count
     score = socket.assigns.score + response.score + bonus
     brick_count = socket.assigns.brick_count + response.brick_count
-    ## see if under attack
-    under_attack? = Bottom.attacked?(response.bottom, socket.assigns.attack_threshold)
-    ## see if being sued
-    being_sued? = Bottom.sued?(response.bottom, socket.assigns.lawsuit_threshold)
 
     {bottom, speed, score} =
-      case {under_attack?, being_sued?} do
-        {false, false} ->
-          ## normal state, return new bottom and leave speed/score alone
-          bottom = response.bottom
-          speed = socket.assigns.speed
-          score = score
-          {bottom, speed, score}
-        {true, false} ->
-          ## under cyberattack means add attack blocks, reduce score, speed up game
-          bottom = Bottom.add_attack(response.bottom)
-          speed = 0
-          score = round(0.9 * score)
-          {bottom, speed, score}
-        {false, true} ->
-          ## being sued means add lawsuit blocks, reduce score, slow down game
-          bottom = Bottom.add_lawsuit(response.bottom)
-          speed = 6
-          score = round(0.9 * score)
-          {bottom, speed, score}
-        {true, true} ->
-          ## both lawsuit and cyberattack - add both blocks, reduce score more, speed up games
-          bottom = response.bottom
-            |> Bottom.add_lawsuit
-            |> Bottom.add_attack
-          speed = 0
-          score = round(0.8 * score)
-          {bottom, speed, score}
-      end
 
     socket
     |> assign(brick: response.brick)
-    |> assign(bottom: bottom)
+    |> assign(bottom: response.bottom)
     |> assign(brick_count: brick_count)
     |> assign(row_count: row_count)
     |> assign(score: score)
-    |> assign(speed: speed)
     |> assign(state: if(response.game_over, do: :game_over, else: :playing))
     |> show
   end
@@ -730,10 +697,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp on_tick(:playing, socket) do
     tick_count = socket.assigns.tick_count - 1
-    gametime_counter = gametime_counter(socket.assigns.state, socket.assigns.gametime_counter)
-    can_be_marked? = can_be_marked?(gametime_counter, tick_count)
+    #gametime_counter = gametime_counter(socket.assigns.state, socket.assigns.gametime_counter)
+    #can_be_marked? = can_be_marked?(gametime_counter, tick_count)
 
-    socket = mark_block_vulnerable(socket, socket.assigns[:bottom], can_be_marked?)
+    #socket = mark_block_vulnerable(socket, socket.assigns[:bottom], can_be_marked?)
 
     if tick_count > 0 do
       ## don't drop yet
@@ -781,7 +748,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
       socket = assign(socket,
         tick_count: tick_count,
-        gametime_counter: gametime_counter,
+        #gametime_counter: gametime_counter,
         bottom: bottom,
         tech_vuln_debt: tech_vuln_debt,
         tech_lic_debt: tech_lic_debt,
@@ -797,51 +764,51 @@ defmodule QuadquizaminosWeb.TetrisLive do
     socket
   end
 
-  defp gametime_counter(:playing, gametime_counter) do
-    gametime_counter + 1
-  end
+#  defp gametime_counter(:playing, gametime_counter) do
+#    gametime_counter + 1
+#  end
 
-  defp gametime_counter(:paused, gametime_counter) do
-    gametime_counter
-  end
+#  defp gametime_counter(:paused, gametime_counter) do
+#    gametime_counter
+#  end
 
-  defp gametime_counter(_state, _gametime_counter) do
-    0
-  end
+#  defp gametime_counter(_state, _gametime_counter) do
+#    0
+#  end
 
-  defp can_be_marked?(gametime_counter, tick_count) do
-    gametime_counter == @bottom_vulnerability_value + 1 and tick_count <= 0
-  end
+#  defp can_be_marked?(gametime_counter, tick_count) do
+#    gametime_counter == @bottom_vulnerability_value + 1 and tick_count <= 0
+#  end
 
-  defp mark_block_vulnerable(socket, nil, _can_be_marked?), do: socket
+#  defp mark_block_vulnerable(socket, nil, _can_be_marked?), do: socket
 
-  defp mark_block_vulnerable(socket, bottom, can_be_marked?) do
-    if Enum.empty?(bottom) do
-      socket
-    else
-      assign(socket,
-        bottom: mark_block_vulnerable(can_be_marked?, bottom),
-        gametime_counter:
-          if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
-            do: 0,
-            else: socket.assigns.gametime_counter
-          )
-      )
-    end
-  end
+#  defp mark_block_vulnerable(socket, bottom, can_be_marked?) do
+#    if Enum.empty?(bottom) do
+#      socket
+#    else
+#      assign(socket,
+#        bottom: mark_block_vulnerable(can_be_marked?, bottom),
+#        gametime_counter:
+#          if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
+#            do: 0,
+#            else: socket.assigns.gametime_counter
+#          )
+#      )
+#    end
+#  end
 
-  defp mark_block_vulnerable(true = _can_be_marked?, bottom) do
-    {{x, y}, _} = Enum.random(bottom)
+#  defp mark_block_vulnerable(true = _can_be_marked?, bottom) do
+#    {{x, y}, _} = Enum.random(bottom)
 
-    {_, new_bottom} =
-      Map.get_and_update(bottom, {x, y}, fn current_value ->
-        {current_value, {x, y, :vuln_grey_yellow}}
-      end)
+#    {_, new_bottom} =
+#      Map.get_and_update(bottom, {x, y}, fn current_value ->
+#        {current_value, {x, y, :vuln_grey_yellow}}
+#      end)
 
-    new_bottom
-  end
+#    new_bottom
+#  end
 
-  defp mark_block_vulnerable(_, bottom), do: bottom
+#  defp mark_block_vulnerable(_, bottom), do: bottom
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
