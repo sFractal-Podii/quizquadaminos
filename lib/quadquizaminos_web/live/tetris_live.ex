@@ -31,9 +31,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(correct_answers: 0)
      |> assign(attack_threshold: 5)
      |> assign(lawsuit_threshold: 5)
-     |> assign(vuln_threshold: 5)
-     |> assign(tech_vuln_debt: 2)
-     |> assign(lic_threshold: 5)
+     |> assign(vuln_threshold: 79)
+     |> assign(tech_vuln_debt: 45)
+     |> assign(lic_threshold: 81)
      |> assign(tech_lic_debt: 0)
      |> assign(score: 0)
      |> start_game()}
