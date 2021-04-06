@@ -129,10 +129,14 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_all_vulnerabilities(bottom) do
+    IO.puts("remove_all_vulnerabilities")
+    IO.inspect(bottom)
     remove_a_color(bottom, :vuln_grey_yellow)
   end
 
   def remove_all_license_issues(bottom) do
+    IO.puts("remove_all_license_issues")
+    IO.inspect(bottom)
     remove_a_color(bottom, :license_grey_brown)
   end
 
