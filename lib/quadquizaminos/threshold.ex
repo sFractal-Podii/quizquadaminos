@@ -31,7 +31,7 @@ defmodule Quadquizaminos.Threshold do
         speed = 0
         score = round(0.95 * score)
         {bottom, speed, score}
-    end
+      end
     end
 
 end
