@@ -4,8 +4,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
-  alias Quadquizaminos.{Instructions, Tetris, QnA, Speed,
-        Brick, Points, Powers, Presets, Hints}
+  alias Quadquizaminos.{Instructions, Tetris, QnA, Speed, Brick, Points, Powers, Presets, Hints}
 
   @debug false
   @box_width 20
@@ -28,6 +27,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(row_count: 0)
      |> assign(correct_answers: 0)
      |> assign(hint: :intro)
+     |> assign(fewer_vuln_power_tick: 0)
      |> start_game()}
   end
 
@@ -169,7 +169,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(correct_answers: 0)
     |> new_block
     |> show
-
   end
 
   ## raise_speed gets removed once dev cheat gets removed
@@ -299,13 +298,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(bottom: response.bottom)
     |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
     |> assign(row_count: socket.assigns.row_count + response.row_count)
-    |> assign(hint: if(response.brick_count > 0,
-      do: Hints.next_hint(socket.assigns.hint),
-      else: socket.assigns.hint))
+    |> assign(
+      hint:
+        if(response.brick_count > 0,
+          do: Hints.next_hint(socket.assigns.hint),
+          else: socket.assigns.hint
+        )
+    )
     |> assign(score: socket.assigns.score + response.score + bonus)
-    |> assign(state: if(response.game_over,
-      do: :game_over,
-      else: :playing))
+    |> assign(
+      state:
+        if(response.game_over,
+          do: :game_over,
+          else: :playing
+        )
+    )
     |> show
   end
 
@@ -386,9 +393,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   ## until powerups and for debugging - take out eventually
   def handle_event("keydown", %{"key" => "p"}, socket) do
-    powers = socket.assigns.powers ++
-              Powers.all_powers()
-              |> Enum.sort
+    powers =
+      (socket.assigns.powers ++
+         Powers.all_powers())
+      |> Enum.sort()
+
     {:noreply, socket |> assign(powers: powers)}
   end
 
@@ -464,20 +473,24 @@ defmodule QuadquizaminosWeb.TetrisLive do
     powers = socket.assigns.powers -- [:speedup]
     speed = Speed.increase_speed(socket.assigns.speed)
     tick_count = Speed.speed_tick_count(speed)
-    {:noreply, socket
-                |> assign(speed: speed)
-                |> assign(tick_count: tick_count)
-                |> assign(powers: powers)}
+
+    {:noreply,
+     socket
+     |> assign(speed: speed)
+     |> assign(tick_count: tick_count)
+     |> assign(powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
     powers = socket.assigns.powers -- [:slowdown]
     speed = Speed.decrease_speed(socket.assigns.speed)
     tick_count = Speed.speed_tick_count(speed)
-    {:noreply, socket
-                |> assign(speed: speed)
-                |> assign(tick_count: tick_count)
-                |> assign(powers: powers)}
+
+    {:noreply,
+     socket
+     |> assign(speed: speed)
+     |> assign(tick_count: tick_count)
+     |> assign(powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
@@ -638,6 +651,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
     powers = socket.assigns.powers -- [:superpower]
     {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event(
+        "powerup",
+        %{"powerup" => "fewervulnerability", "power_tick" => power_tick},
+        socket
+      ) do
+    {fewer_vuln_power_tick, _} = Integer.parse(power_tick)
+    fewer_vuln_power_tick = socket.assigns.gametime_counter + fewer_vuln_power_tick
+    powers = socket.assigns.powers -- [{:fewervulnerability, power_tick}]
+    {:noreply, socket |> assign(fewer_vuln_power_tick: fewer_vuln_power_tick, powers: powers)}
   end
 
   def handle_event("powerup", _, socket) do
@@ -780,14 +804,23 @@ defmodule QuadquizaminosWeb.TetrisLive do
     if Enum.empty?(bottom) do
       socket
     else
-      assign(socket,
-        bottom: mark_block_vulnerable(can_be_marked?, bottom),
-        gametime_counter:
-          if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
-            do: 0,
-            else: socket.assigns.gametime_counter
-          )
-      )
+      if socket.assigns.gametime_counter < socket.assigns.fewer_vuln_power_tick do
+        socket
+      else
+        assign(socket,
+          bottom: mark_block_vulnerable(can_be_marked?, bottom),
+          fewer_vuln_power_tick:
+            if(socket.assigns.gametime_counter >= socket.assigns.fewer_vuln_power_tick,
+              do: 0,
+              else: socket.assigns.fewer_vuln_power_tick
+            ),
+          gametime_counter:
+            if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
+              do: 0,
+              else: socket.assigns.gametime_counter
+            )
+        )
+      end
     end
   end
 

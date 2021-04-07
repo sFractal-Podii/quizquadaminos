@@ -47,13 +47,29 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
   defp show_powers(assigns) do
     ~L"""
      <%= for power <- @powers do %>
-     <i class="fas <%=power_icon(power)%>" phx-click="powerup" phx-value-powerup="<%= power %>"></i>
+     <%=  display(power) %>
      <% end %>
     """
   end
 
+  def display(power) do
+    case power do
+      {power, power_tick} ->
+        ~E"""
+        <i class="fas <%=power_icon(power)%>" phx-click="powerup" phx-value-powerup="<%= power %>" phx-value-power_tick="<%= power_tick %>"></i> 
+
+        """
+
+      power ->
+        ~E"""
+        <i class="fas <%=power_icon(power)%>" phx-click="powerup" phx-value-powerup="<%= power %>"></i> 
+        """
+    end
+  end
+
   defp power_icon(power) do
     case power do
+      :fewervulnerability -> "fa-clipboard-check"
       :deleteblock -> "fa-minus-square"
       :addblock -> "fa-plus-square"
       :moveblock -> "fa-arrows-alt"
@@ -76,7 +92,6 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
       :stopattack -> "fa-file-prescription"
       :winlawsuit -> "fa-balance-scale"
       :superpower -> "fa-superpowers"
-
     end
   end
 end
