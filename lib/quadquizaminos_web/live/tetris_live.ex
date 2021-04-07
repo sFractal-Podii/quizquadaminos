@@ -743,9 +743,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       else
         socket.assigns.bottom
       end
-  end
 
-      ## check vuln Debt
+      ## check lic debt
       {tech_lic_debt, add_lic?} = Threshold.reached_threshold(
           socket.assigns.tech_lic_debt,
           socket.assigns.lic_threshold
