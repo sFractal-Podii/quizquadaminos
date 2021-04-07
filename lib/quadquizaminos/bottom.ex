@@ -14,14 +14,11 @@ defmodule Quadquizaminos.Bottom do
   def collides?(bottom, points) when is_list(points) do
     Enum.any?(points, &collides?(bottom, &1))
   end
-   
+
   def has_vulnerable_block?(bottom, row) do
     bottom
     |> Enum.map(fn {_key, value} -> value end)
     |> Enum.any?(fn {_x, y, color} -> y == row and color == :vuln_grey_yellow end)
-    |> Enum.map(fn({_key, value}) -> value end)
-    |> Enum.filter(fn({_x, y, _color}) -> y == row end)
-    |> Enum.any?(fn({_x, _y, color}) -> color == :vuln_grey_yellow end)
   end
 
   def complete_ys(bottom) do
