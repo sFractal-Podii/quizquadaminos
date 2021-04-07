@@ -4,12 +4,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
-<<<<<<< HEAD
-  alias Quadquizaminos.{Bottom, QnA, Speed, Tetris, Threshold}
-=======
-  alias Quadquizaminos.{Instructions, Tetris, QnA, Speed,
-        Brick, Points, Powers, Presets, Hints}
->>>>>>> origin/v5.2-rc
+  alias Quadquizaminos.{
+    Bottom,
+    Brick,
+    Hints,
+    Instructions,
+    Points,
+    Powers,
+    Presets,
+    QnA,
+    Speed,
+    Tetris,
+    Threshold
+  }
 
   @debug false
   @box_width 20
@@ -29,12 +36,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(block_coordinates: nil)
      |> assign(adding_block: false, moving_block: false, deleting_block: false)
      |> assign(instructions_modal: false)
-#     |> assign(gametime_counter: 0)
      |> assign(speed: 2, tick_count: 5)
      |> assign(brick_count: 0)
      |> assign(row_count: 0)
      |> assign(correct_answers: 0)
-<<<<<<< HEAD
      |> assign(attack_threshold: 5)
      |> assign(lawsuit_threshold: 5)
      |> assign(vuln_threshold: 79)
@@ -42,9 +47,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(lic_threshold: 81)
      |> assign(tech_lic_debt: 0)
      |> assign(score: 0)
-=======
      |> assign(hint: :intro)
->>>>>>> origin/v5.2-rc
      |> start_game()}
   end
 
@@ -80,7 +83,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
             Maybe unfixed vulnerabilities were turned into exploits.
             Or uncleared licensing errors caused you to be sued.
             Or maybe you were too busy answering cybersecurity questions
-<<<<<<< HEAD
             and not paying attention to business.</p>
             <hr>
             <%= raw svg_head() %>
@@ -92,17 +94,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <% end %>
             <% end %>
             <%= raw svg_foot() %>
-=======
-            and not paying attention to business.
-            </p>
-            <hr><p><%= @brick_count %> QuadBlocks dropped</p>
-            <p><%= @row_count %> Rows were cleared</p>
-            <p><%= @correct_answers %> Questions were answered</p>
-            <hr><p>TBD Vulnerabilities</p>
-            <p>TBD License Issues</p>
-            <p>TBD Cyber Attacks</p>
-            <p>TBD Lawsuits</p>
->>>>>>> origin/v5.2-rc
             <hr>
               <button phx-click="start">Play again?</button>
         </div>
@@ -127,27 +118,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
                     <h2>Score</h2>
-<<<<<<< HEAD
-                    <hr>
-                    Speed: <%= Speed.speed_name(@speed) %>
-                    <hr>
-                    <%= @brick_count %>
-                    QuadBlocks
-                    <hr>
-                    <%= @row_count %>
-                    Rows
-                    <hr>
-                    <%= @correct_answers %>
-                    Answers
-                    <hr>
-                    Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %>
-=======
                     <hr><p>Speed: <%= Speed.speed_name(@speed) %></p>
                     <p><%= @brick_count %> QuadBlocks</p>
                     <p><%= @row_count %> Rows</p>
                     <p><%= @correct_answers %> Answers</p>
                     <p>Tech Debt: <%= @gametime_counter %></p>
->>>>>>> origin/v5.2-rc
                     <hr>
                 </div>
                 <div class="column column-50">
@@ -362,12 +337,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     socket
     |> assign(brick: response.brick)
     |> assign(bottom: response.bottom)
-<<<<<<< HEAD
-    |> assign(brick_count: brick_count)
-    |> assign(row_count: row_count)
-    |> assign(score: score)
-    |> assign(state: if(response.game_over, do: :game_over, else: :playing))
-=======
     |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
     |> assign(row_count: socket.assigns.row_count + response.row_count)
     |> assign(hint: if(response.brick_count > 0,
@@ -377,7 +346,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(state: if(response.game_over,
       do: :game_over,
       else: :playing))
->>>>>>> origin/v5.2-rc
     |> show
   end
 
@@ -472,16 +440,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("keydown", %{"key" => "2"}, socket) do
-<<<<<<< HEAD
     bottom = Bottom.add_attack(socket.assigns.bottom)
-=======
-    bottom = Presets.attack()
->>>>>>> origin/v5.2-rc
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
   def handle_event("keydown", %{"key" => "3"}, socket) do
-<<<<<<< HEAD
     bottom = Bottom.add_lawsuit(socket.assigns.bottom)
     {:noreply, socket |> assign(bottom: bottom)}
   end
@@ -493,9 +456,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("keydown", %{"key" => "5"}, socket) do
     bottom = Quadquizaminos.Presets.preset_lic()
-=======
-    bottom = Presets.lawsuit()
->>>>>>> origin/v5.2-rc
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
@@ -553,42 +513,25 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
     powers = socket.assigns.powers -- [:speedup]
-<<<<<<< HEAD
     speed = Speed.increase_speed(socket.assigns.speed)
     tick_count = Speed.speed_tick_count(speed)
-    {:noreply, socket
-                |> assign(speed: speed)
-                |> assign(tick_count: tick_count)
-                |> assign(powers: powers)}
-=======
-    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
-
     {:noreply,
      socket
      |> assign(speed: speed)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
->>>>>>> origin/v5.2-rc
   end
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
     powers = socket.assigns.powers -- [:slowdown]
     speed = Speed.decrease_speed(socket.assigns.speed)
     tick_count = Speed.speed_tick_count(speed)
-<<<<<<< HEAD
-    {:noreply, socket
-                |> assign(speed: speed)
-                |> assign(tick_count: tick_count)
-                |> assign(powers: powers)}
-=======
 
     {:noreply,
      socket
      |> assign(speed: speed)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
->>>>>>> origin/v5.2-rc
   end
 
   def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
@@ -785,7 +728,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
       ## don't drop yet
       assign(socket, tick_count: tick_count)
     else
-<<<<<<< HEAD
       ## reset counter and drop after incrementing other counters
       tick_count = Speed.speed_tick_count(socket.assigns.speed)
 
@@ -801,27 +743,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       else
         socket.assigns.bottom
       end
-=======
-      ## reset counter and drop
-      tick_count = Speed.speed_tick_count(socket.assigns.speed)
-
-      socket = assign(socket, tick_count: tick_count, gametime_counter: gametime_counter)
-      {:noreply, drop(socket.assigns.state, socket, false)}
-    end
   end
-
-  defp gametime_counter(:playing, gametime_counter) do
-    gametime_counter + 1
-  end
-
-  defp gametime_counter(:paused, gametime_counter) do
-    gametime_counter
-  end
-
-  defp gametime_counter(_state, _gametime_counter) do
-    0
-  end
->>>>>>> origin/v5.2-rc
 
       ## check vuln Debt
       {tech_lic_debt, add_lic?} = Threshold.reached_threshold(
