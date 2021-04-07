@@ -17,6 +17,8 @@ defmodule Quadquizaminos.Bottom do
    
   def has_vulnerable_block?(bottom, row) do
     bottom
+    |> Enum.map(fn {_key, value} -> value end)
+    |> Enum.any?(fn {_x, y, color} -> y == row and color == :vuln_grey_yellow end)
     |> Enum.map(fn({_key, value}) -> value end)
     |> Enum.filter(fn({_x, y, _color}) -> y == row end)
     |> Enum.any?(fn({_x, _y, color}) -> color == :vuln_grey_yellow end)
