@@ -4,7 +4,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
   import Phoenix.LiveViewTest
   alias Quadquizaminos.Accounts.User
 
-  @purple_shade %{light: "800080", dark: "4d004d"}
+  @purple_shade %{light: "ff00ff", dark: "800080"}
 
   setup %{conn: conn} do
     user = %User{name: "Quiz Block ", user_id: 40_000_000}
@@ -30,19 +30,21 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     assert html =~ "<i class=\"fas fa-plus-square\""
   end
 
-  test "powers don't display on questions that don't have them if answered correctly" , %{conn: conn}do
+  test "powers don't display on questions that don't have them if answered correctly", %{
+    conn: conn
+  } do
     {view, _html} = pause_game(conn)
-    
-     Enum.each(["open_c2"], fn category -> 
+
+    Enum.each(["open_c2"], fn category ->
       render_click(view, "choose_category", %{"category" => category})
-      
+
       right_answer = Quadquizaminos.QnA.question(category).correct
       render_click(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-     end)
+    end)
 
-      html = render_keydown(view, "keydown", %{"key" => " "})
-      refute html =~ "<i class=\"fas fa-arrows-alt\""
-      refute html =~ "<i class=\"fas fa-plus-square\""
+    html = render_keydown(view, "keydown", %{"key" => " "})
+    refute html =~ "<i class=\"fas fa-arrows-alt\""
+    refute html =~ "<i class=\"fas fa-plus-square\""
   end
 
   describe "Addblock" do
@@ -178,7 +180,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
 
       render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20", "color" => "purple"})
       render_click(view, "add_block", %{"x" => "7", "y" => "18"})
-      
+
       html = render_keydown(view, "keydown", %{"key" => " "})
 
       refute html =~ "<i class=\"fas fa-arrows-alt\""

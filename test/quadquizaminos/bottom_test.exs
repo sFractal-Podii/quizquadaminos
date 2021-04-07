@@ -57,6 +57,29 @@ defmodule Quadquizaminos.BottomTest do
     assert {19, 20} in Map.keys(actual_bottom)
   end
 
+  test "does not collapse row with vulnerabilty" do
+    bottom = bottom_with_vulnerability(20, [{{10, 20}, {10, 20, :vuln_grey_yellow}}, {{19, 19}, {19, 19, :red}}])
+    {count, unchanged_bottom} = full_collapse(bottom)
+    assert count == 0
+    assert {10, 20} in Map.keys(unchanged_bottom)
+  end
+
+  test "collapse other rows even when vulnerability is present in other rows" do
+    bottom = new_bottom(20, [{{1, 19}, {1, 19, :vuln_grey_yellow}}])
+    {count, updated_bottom} = full_collapse(bottom)
+    {:ok, value} = Map.fetch(updated_bottom, {1,20})
+    assert value == {1, 20, :vuln_grey_yellow}
+  end
+
+  def bottom_with_vulnerability(complete_row, xtras)do
+    (xtras ++
+       (1..9
+        |> Enum.map(fn x ->
+          {{x, complete_row}, {x, complete_row, :red}}
+        end)))
+    |> Map.new() 
+  end
+
   def new_bottom(complete_row, xtras) do
     (xtras ++
        (1..10

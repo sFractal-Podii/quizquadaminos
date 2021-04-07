@@ -17,6 +17,7 @@ defmodule Quadquizaminos.QnA do
     build(category, position)
   end
 
+  ## Should this be done once at compile instead of every popup?
   def categories do
     @qna_directory
     |> File.ls!()
