@@ -65,18 +65,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
-            <p>This section is still under construction.</p>
-            <p>You are bankrupt either
-            due to a cyberattack or a lawsuit.
-            This may be because you let your supply chain get to long.
-            Or may be due to unfixed vulnerabilities were turned into exploits.
+            <p>You are bankrupt!</p>
+            <p>This may be due to
+            a cyberattack or a lawsuit.
+            Or maybe you just let your supply chain get to long.
+            Maybe unfixed vulnerabilities were turned into exploits.
             Or uncleared licensing errors caused you to be sued.
             Or maybe you were too busy answering cybersecurity questions
-            and not paying attention to business.
-            Future editions will tell you which it was, and give
-            more info in addition to the score
-            (quadblocks dropped, rows cleared,
-            questions answered, ...)</p>
+            and not paying attention to business.</p>
+            <hr><%= @brick_count %> QuadBlocks dropped
+            <p><%= @row_count %> rows cleard</p>
+            <p><%= @correct_answers %> questions answered correctly</p>
               <hr>
               <button phx-click="start">Play again?</button>
         </div>
