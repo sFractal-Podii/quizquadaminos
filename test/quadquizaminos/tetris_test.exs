@@ -31,7 +31,9 @@ defmodule Quadquizaminos.TetrisTest do
       brick: Brick.down(brick),
       bottom: %{},
       score: 1,
-      game_over: false
+      game_over: false,
+      brick_count: 0,
+      row_count: 0
     }
 
     actual = drop(brick, bottom, :red, brick_count)
