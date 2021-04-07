@@ -150,6 +150,7 @@ defmodule Quadquizaminos.Bottom do
         {_key,{_x,_y,color}} = block
         color != color_to_be_removed
       end)
+    |> Map.new()
   end
 
   def attacked?(bottom, attack_threshold) do
