@@ -43,7 +43,6 @@ defmodule Quadquizaminos.QnA do
       powerup: powerup(content),
       score: score(content)
     }
-    |> IO.inspect(label: "========================================")
   end
 
   defp score(content) do

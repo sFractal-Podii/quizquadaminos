@@ -804,24 +804,35 @@ defmodule QuadquizaminosWeb.TetrisLive do
     if Enum.empty?(bottom) do
       socket
     else
-      if socket.assigns.gametime_counter < socket.assigns.fewer_vuln_power_tick do
-        socket
-      else
-        assign(socket,
-          bottom: mark_block_vulnerable(can_be_marked?, bottom),
-          fewer_vuln_power_tick:
-            if(socket.assigns.gametime_counter >= socket.assigns.fewer_vuln_power_tick,
-              do: 0,
-              else: socket.assigns.fewer_vuln_power_tick
-            ),
-          gametime_counter:
-            if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
-              do: 0,
-              else: socket.assigns.gametime_counter
-            )
-        )
-      end
+      socket.assigns.gametime_counter
+      |> active_fewer_vuln_powerup?(socket.assigns.fewer_vuln_power_tick)
+      |> mark_block_vulnerable(socket, bottom, can_be_marked?)
     end
+  end
+
+  defp mark_block_vulnerable(false = _active_fewer_vuln_powerup?, socket, bottom, can_be_marked?) do
+    assign(socket,
+      bottom: mark_block_vulnerable(can_be_marked?, bottom),
+      fewer_vuln_power_tick:
+        if(socket.assigns.gametime_counter >= socket.assigns.fewer_vuln_power_tick,
+          do: 0,
+          else: socket.assigns.fewer_vuln_power_tick
+        ),
+      gametime_counter:
+        if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
+          do: 0,
+          else: socket.assigns.gametime_counter
+        )
+    )
+  end
+
+  defp mark_block_vulnerable(
+         true = _active_fewer_vuln_powerup?,
+         socket,
+         _bottom,
+         _can_be_marked?
+       ) do
+    socket
   end
 
   defp mark_block_vulnerable(true = _can_be_marked?, bottom) do
@@ -836,6 +847,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp mark_block_vulnerable(_, bottom), do: bottom
+
+  defp active_fewer_vuln_powerup?(gametime_counter, fewer_vuln_power_tick) do
+    gametime_counter < fewer_vuln_power_tick
+  end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
   defp correct_answer?(_qna, _guess), do: false
