@@ -28,6 +28,7 @@ defmodule Quadquizaminos.Bottom do
   def complete?(bottom, row) do
     count =
       bottom
+      |> remove_trouble_blocks()
       |> Map.keys()
       |> Enum.filter(fn {_x, y} -> y == row end)
       |> Enum.count()
@@ -93,8 +94,8 @@ defmodule Quadquizaminos.Bottom do
     ## pick random bottom block and change to add_vulnerability
     ## only pick blocks that are not already marked with some 'trouble'
     {{x, y}, _} = bottom
-    |> remove_trouble_blocks
-    |> Enum.random
+    |> remove_trouble_blocks()
+    |> Enum.random()
 
     bottom
     |> Map.merge(
