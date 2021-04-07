@@ -65,7 +65,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
-            <p>You are bankrupt!</p>
             <p>This may be due to
             a cyberattack or a lawsuit.
             Or maybe you just let your supply chain get to long.
@@ -73,11 +72,23 @@ defmodule QuadquizaminosWeb.TetrisLive do
             Or uncleared licensing errors caused you to be sued.
             Or maybe you were too busy answering cybersecurity questions
             and not paying attention to business.</p>
-            <hr><%= @brick_count %> QuadBlocks dropped
-            <p><%= @row_count %> rows cleard</p>
-            <p><%= @correct_answers %> questions answered correctly</p>
-              <hr>
+            <hr>
+            <%= raw svg_head() %>
+            <%= for row <- [Map.values(@bottom)] do %>
+              <%= for {x, y, color} <- row do %>
+              <svg phx-click="move_or_delete_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
+               <%= raw box({x, y}, color)%>
+               </svg>
+                <% end %>
+            <% end %>
+            <%= raw svg_foot() %>
+            <hr>
               <button phx-click="start">Play again?</button>
+        </div>
+        <div class="column column-25 column-offset-25">
+        <p><%= @brick_count %> QuadBlocks dropped</p>
+        <p><%= @row_count %> rows cleard</p>
+        <p><%= @correct_answers %> questions answered correctly</p>
         </div>
       </div>
     </div>
