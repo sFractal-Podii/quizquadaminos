@@ -38,4 +38,7 @@ config :quadquizaminos,
   github_ids: [4_000_000],
 
   # set bottom vulnerability defaulting value
-  bottom_vulnerability_value: 77
+  bottom_vulnerability_value: 77,
+  # this threshold determines the marking of vulnerability to new incoming block when 
+  # brick counter is evenly divided by it
+  vulnerability_new_brick_threshold: 7

@@ -50,26 +50,6 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
       end)
     end
 
-    test "game  remains in paused state when wrong answer is picked", %{
-      conn: conn
-    } do
-      [category | _] = Quadquizaminos.QnA.categories()
-      {view, _html} = pause_game(conn)
-
-      render_click(view, "choose_category", %{"category" => category})
-      right_answer = Quadquizaminos.QnA.question(category).correct
-
-      wrong_answer =
-        Enum.find(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], fn guess ->
-          guess != right_answer
-        end)
-
-      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
-
-      assert html =~ "Question:"
-      assert html =~ "Continue</button></form>"
-    end
-
     test "choosing correct answer asks player to choose another category", %{conn: conn} do
       [category | _] = Quadquizaminos.QnA.categories()
       {view, _html} = pause_game(conn)
@@ -143,7 +123,7 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
       total_score =
         (score["Right"] |> String.to_integer()) - (next_score["Wrong"] |> String.to_integer())
 
-      assert pause_html =~ "Total Score:</b>#{total_score}</h2>"
+      assert pause_html =~ "<h1>#{total_score}</h1><h2>Score</h2>"
     end
   end
 

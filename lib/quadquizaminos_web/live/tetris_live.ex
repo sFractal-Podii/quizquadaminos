@@ -329,7 +329,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Tetris.drop(
         old_brick,
         socket.assigns.bottom,
-        color(old_brick)
+        color(old_brick),
+        socket.assigns.brick_count
       )
 
     bonus = if fast, do: 2, else: 0
@@ -339,13 +340,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(bottom: response.bottom)
     |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
     |> assign(row_count: socket.assigns.row_count + response.row_count)
-    |> assign(hint: if(response.brick_count > 0,
-      do: Hints.next_hint(socket.assigns.hint),
-      else: socket.assigns.hint))
+    |> assign(
+      hint:
+        if(response.brick_count > 0,
+          do: Hints.next_hint(socket.assigns.hint),
+          else: socket.assigns.hint
+        )
+    )
     |> assign(score: socket.assigns.score + response.score + bonus)
-    |> assign(state: if(response.game_over,
-      do: :game_over,
-      else: :playing))
+    |> assign(
+      state:
+        if(response.game_over,
+          do: :game_over,
+          else: :playing
+        )
+    )
     |> show
   end
 
@@ -428,7 +437,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("keydown", %{"key" => "p"}, socket) do
     powers =
       (socket.assigns.powers ++
-         Quadquizaminos.Powers.all_powers())
+         Powers.all_powers())
       |> Enum.sort()
     {:noreply, socket |> assign(powers: powers)}
   end
@@ -477,8 +486,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
         points = wrong_points(socket)
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
-        socket = assign(socket, score: score)
-        pause_game(socket)
+        new_bottom = mark_block_vulnerable(true, socket.assigns.bottom)
+        assign(socket, score: score, bottom: new_bottom, modal: false, category: nil)
       end
 
     {:noreply, socket}
@@ -515,6 +524,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     powers = socket.assigns.powers -- [:speedup]
     speed = Speed.increase_speed(socket.assigns.speed)
     tick_count = Speed.speed_tick_count(speed)
+
     {:noreply,
      socket
      |> assign(speed: speed)
