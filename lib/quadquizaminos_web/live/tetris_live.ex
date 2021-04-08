@@ -27,7 +27,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(row_count: 0)
      |> assign(correct_answers: 0)
      |> assign(hint: :intro)
-     |> assign(fewer_vuln_power_tick: 0)
+     |> assign(fewer_vuln_powerup: 0)
      |> start_game()}
   end
 
@@ -203,7 +203,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       brick
       |> Brick.prepare()
       |> Points.move_to_location(brick.location)
-      |> Points.with_color(color(brick))
+      |> Points.with_color(color(brick), socket)
 
     assign(socket, tetromino: points)
   end
@@ -289,7 +289,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         old_brick,
         socket.assigns.bottom,
         color(old_brick),
-        socket.assigns.brick_count
+        socket
       )
 
     bonus = if fast, do: 2, else: 0
@@ -436,7 +436,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
         points = wrong_points(socket)
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
-        new_bottom = mark_block_vulnerable(true, socket.assigns.bottom)
+
+        new_bottom =
+          if active_fewer_vuln_powerup?(
+               socket.assigns.gametime_counter,
+               socket.assigns.fewer_vuln_powerup
+             ) do
+            socket.assigns.bottom
+          else
+            mark_block_vulnerable(true, socket.assigns.bottom)
+          end
+
         assign(socket, score: score, bottom: new_bottom, modal: false, category: nil)
       end
 
@@ -659,10 +669,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
         %{"powerup" => "fewervulnerability", "power_tick" => power_tick},
         socket
       ) do
-    {fewer_vuln_power_tick, _} = Integer.parse(power_tick)
-    fewer_vuln_power_tick = socket.assigns.gametime_counter + fewer_vuln_power_tick
+    {fewer_vuln_powerup, _} = Integer.parse(power_tick)
+    fewer_vuln_powerup = socket.assigns.gametime_counter + fewer_vuln_powerup
     powers = socket.assigns.powers -- [{:fewervulnerability, power_tick}]
-    {:noreply, socket |> assign(fewer_vuln_power_tick: fewer_vuln_power_tick, powers: powers)}
+    {:noreply, socket |> assign(fewer_vuln_powerup: fewer_vuln_powerup, powers: powers)}
   end
 
   def handle_event("powerup", _, socket) do
@@ -805,7 +815,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       socket
     else
       socket.assigns.gametime_counter
-      |> active_fewer_vuln_powerup?(socket.assigns.fewer_vuln_power_tick)
+      |> active_fewer_vuln_powerup?(socket.assigns.fewer_vuln_powerup)
       |> mark_block_vulnerable(socket, bottom, can_be_marked?)
     end
   end
@@ -813,10 +823,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp mark_block_vulnerable(false = _active_fewer_vuln_powerup?, socket, bottom, can_be_marked?) do
     assign(socket,
       bottom: mark_block_vulnerable(can_be_marked?, bottom),
-      fewer_vuln_power_tick:
-        if(socket.assigns.gametime_counter >= socket.assigns.fewer_vuln_power_tick,
+      fewer_vuln_powerup:
+        if(socket.assigns.gametime_counter >= socket.assigns.fewer_vuln_powerup,
           do: 0,
-          else: socket.assigns.fewer_vuln_power_tick
+          else: socket.assigns.fewer_vuln_powerup
         ),
       gametime_counter:
         if(socket.assigns.gametime_counter > @bottom_vulnerability_value,
@@ -861,8 +871,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp mark_block_vulnerable(_, bottom), do: bottom
 
-  defp active_fewer_vuln_powerup?(gametime_counter, fewer_vuln_power_tick) do
-    gametime_counter < fewer_vuln_power_tick
+  defp active_fewer_vuln_powerup?(gametime_counter, fewer_vuln_powerup) do
+    gametime_counter < fewer_vuln_powerup
   end
 
   defp correct_answer?(%{correct: guess}, guess), do: true

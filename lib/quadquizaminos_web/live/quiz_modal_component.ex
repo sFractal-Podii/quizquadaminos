@@ -69,7 +69,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
 
   defp power_icon(power) do
     case power do
-      :fewervulnerability -> "fa-clipboard-check"
+      :fewervulnerability -> "fa-less-than"
       :deleteblock -> "fa-minus-square"
       :addblock -> "fa-plus-square"
       :moveblock -> "fa-arrows-alt"

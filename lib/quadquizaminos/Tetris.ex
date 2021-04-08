@@ -7,7 +7,7 @@ defmodule Quadquizaminos.Tetris do
     |> Points.move_to_location(brick.location)
   end
 
-  def drop(brick, bottom, color, brick_count) do
+  def drop(brick, bottom, color, socket) do
     new_brick = Brick.down(brick)
 
     maybe_do_drop(
@@ -16,17 +16,17 @@ defmodule Quadquizaminos.Tetris do
       brick,
       new_brick,
       color,
-      brick_count
+      socket
     )
   end
 
-  def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color, brick_count) do
+  def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color, socket) do
     new_brick = Brick.new_random()
 
     points =
       old_brick
       |> prepare
-      |> Points.with_color(color, brick_count)
+      |> Points.with_color(color, socket)
 
     {count, new_bottom} =
       bottom
@@ -44,7 +44,7 @@ defmodule Quadquizaminos.Tetris do
     }
   end
 
-  def maybe_do_drop(false = _collided, bottom, _old_block, new_block, _color, _brick_count) do
+  def maybe_do_drop(false = _collided, bottom, _old_block, new_block, _color, _socket) do
     %{
       brick: new_block,
       bottom: bottom,

@@ -36,28 +36,19 @@ defmodule Quadquizaminos.Points do
     )
   end
 
-  def with_color(points, color, brick_count) do
+  def with_color(points, color, socket) do
     threshold = Application.get_env(:quadquizaminos, :vulnerability_new_brick_threshold)
+    brick_count = socket.assigns.brick_count
+    gametime_counter = socket.assigns.gametime_counter
+    fewer_vuln_powerup = socket.assigns.fewer_vuln_powerup
 
     case rem(brick_count, threshold) do
       0 ->
-        position = div(brick_count, threshold)
+        position = vulnerability_position(brick_count, threshold)
 
-        position =
-          if position > 3 do
-            0
-          else
-            position
-          end
-
-        points =
-          List.update_at(points, position, fn {x, y} ->
-            {x, y, :vuln_grey_yellow}
-          end)
-
-        Enum.map(points, fn point ->
-          add_color(point, color)
-        end)
+        gametime_counter
+        |> active_fewer_vuln_powerup?(fewer_vuln_powerup)
+        |> mark_incoming_block_vulnerable(points, position, color)
 
       _ ->
         Enum.map(points, fn point -> add_color(point, color) end)
@@ -66,6 +57,47 @@ defmodule Quadquizaminos.Points do
 
   defp add_color({_x, _y, _c} = point, _color), do: point
   defp add_color({x, y}, color), do: {x, y, color}
+
+  defp active_fewer_vuln_powerup?(gametime_counter, fewer_vuln_powerup) do
+    gametime_counter < fewer_vuln_powerup
+  end
+
+  defp mark_incoming_block_vulnerable(
+         true = _active_fewer_vuln_powerup?,
+         points,
+         _position,
+         color
+       ) do
+    Enum.map(points, fn point ->
+      add_color(point, color)
+    end)
+  end
+
+  defp mark_incoming_block_vulnerable(
+         false = _active_fewer_vuln_powerup?,
+         points,
+         position,
+         color
+       ) do
+    points =
+      List.update_at(points, position, fn {x, y} ->
+        {x, y, :vuln_grey_yellow}
+      end)
+
+    Enum.map(points, fn point ->
+      add_color(point, color)
+    end)
+  end
+
+  defp vulnerability_position(brick_count, threshold) do
+    position = div(brick_count, threshold)
+
+    if position > 3 do
+      0
+    else
+      position
+    end
+  end
 
   def to_string(points) do
     map =
