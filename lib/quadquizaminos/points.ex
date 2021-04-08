@@ -36,8 +36,32 @@ defmodule Quadquizaminos.Points do
     )
   end
 
-  def with_color(points, color) do
-    Enum.map(points, fn point -> add_color(point, color) end)
+  def with_color(points, color, brick_count) do
+    threshold = Application.get_env(:quadquizaminos, :vulnerability_new_brick_threshold)
+
+    case rem(brick_count, threshold) do
+      0 ->
+        position = div(brick_count, threshold)
+
+        position =
+          if position > 3 do
+            0
+          else
+            position
+          end
+
+        points =
+          List.update_at(points, position, fn {x, y} ->
+            {x, y, :vuln_grey_yellow}
+          end)
+
+        Enum.map(points, fn point ->
+          add_color(point, color)
+        end)
+
+      _ ->
+        Enum.map(points, fn point -> add_color(point, color) end)
+    end
   end
 
   defp add_color({_x, _y, _c} = point, _color), do: point

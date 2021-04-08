@@ -288,7 +288,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Tetris.drop(
         old_brick,
         socket.assigns.bottom,
-        color(old_brick)
+        color(old_brick),
+        socket.assigns.brick_count
       )
 
     bonus = if fast, do: 2, else: 0
@@ -435,8 +436,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
         points = wrong_points(socket)
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
-        socket = assign(socket, score: score)
-        pause_game(socket)
+        new_bottom = mark_block_vulnerable(true, socket.assigns.bottom)
+        assign(socket, score: score, bottom: new_bottom, modal: false, category: nil)
       end
 
     {:noreply, socket}
@@ -725,7 +726,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket,
       bottom: bottom,
       powers: powers,
-      state: :playing,
       adding_block: false,
       moving_block: false
     )
@@ -738,7 +738,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp delete_block(socket, x, y) do
     bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
     powers = socket.assigns.powers -- [:deleteblock]
-    socket |> assign(bottom: bottom, deleting_block: false, state: :playing, powers: powers)
+    socket |> assign(bottom: bottom, deleting_block: false, powers: powers)
   end
 
   defp block_in_bottom?(x, y, bottom) do
@@ -749,7 +749,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {x, y} = parse_to_integer(x, y)
     powers = socket.assigns.powers -- [:addblock]
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
-    socket |> assign(bottom: bottom, adding_block: false, state: :playing, powers: powers)
+    socket |> assign(bottom: bottom, adding_block: false, powers: powers)
   end
 
   defp add_block(socket, _x, _y, false = _adding_block) do
@@ -836,14 +836,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp mark_block_vulnerable(true = _can_be_marked?, bottom) do
-    {{x, y}, _} = Enum.random(bottom)
-
-    {_, new_bottom} =
-      Map.get_and_update(bottom, {x, y}, fn current_value ->
-        {current_value, {x, y, :vuln_grey_yellow}}
+    pure_bottom =
+      bottom
+      |> Enum.reject(fn {_point, {_x, _y, color}} ->
+        color == :vuln_grey_yellow or color == :license_grey_brown or color == :attack_yellow_gold or
+          color == :lawsuit_brown_gold
       end)
 
-    new_bottom
+    case pure_bottom do
+      [] ->
+        bottom
+
+      _ ->
+        {{x, y}, _} = Enum.random(pure_bottom)
+
+        {_, new_bottom} =
+          Map.get_and_update(bottom, {x, y}, fn current_value ->
+            {current_value, {x, y, :vuln_grey_yellow}}
+          end)
+
+        new_bottom
+    end
   end
 
   defp mark_block_vulnerable(_, bottom), do: bottom
