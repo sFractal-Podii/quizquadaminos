@@ -7,7 +7,7 @@ defmodule Quadquizaminos.Tetris do
     |> Points.move_to_location(brick.location)
   end
 
-  def drop(brick, bottom, color) do
+  def drop(brick, bottom, color, brick_count) do
     new_brick = Brick.down(brick)
 
     maybe_do_drop(
@@ -15,17 +15,18 @@ defmodule Quadquizaminos.Tetris do
       bottom,
       brick,
       new_brick,
-      color
+      color,
+      brick_count
     )
   end
 
-  def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color) do
+  def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color, brick_count) do
     new_brick = Brick.new_random()
 
     points =
       old_brick
       |> prepare
-      |> Points.with_color(color)
+      |> Points.with_color(color, brick_count)
 
     {count, new_bottom} =
       bottom
@@ -37,18 +38,21 @@ defmodule Quadquizaminos.Tetris do
       bottom: new_bottom,
       score: score(count),
       row_count: count,
-      brick_count: 1,  #hit bottom so increment brick_count
+      # hit bottom so increment brick_count
+      brick_count: 1,
       game_over: Bottom.collides?(new_bottom, prepare(new_brick))
     }
   end
 
-  def maybe_do_drop(false = _collided, bottom, _old_block, new_block, _color) do
+  def maybe_do_drop(false = _collided, bottom, _old_block, new_block, _color, _brick_count) do
     %{
       brick: new_block,
       bottom: bottom,
       score: 1,
-      row_count: 0,  # no rows completed since didn't reach bottom yet
-      brick_count: 0,  # didn't hit bottom so do not increment brick_count
+      # no rows completed since didn't reach bottom yet
+      row_count: 0,
+      # didn't hit bottom so do not increment brick_count
+      brick_count: 0,
       game_over: false
     }
   end

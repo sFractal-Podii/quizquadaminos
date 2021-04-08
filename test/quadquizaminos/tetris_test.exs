@@ -25,6 +25,7 @@ defmodule Quadquizaminos.TetrisTest do
   test "drops without merging" do
     brick = Brick.new(location: {5, 5})
     bottom = %{}
+    brick_count = 0
 
     expected = %{
       brick: Brick.down(brick),
@@ -35,7 +36,7 @@ defmodule Quadquizaminos.TetrisTest do
       row_count: 0
     }
 
-    actual = drop(brick, bottom, :red)
+    actual = drop(brick, bottom, :red, brick_count)
 
     assert actual == expected
   end
@@ -43,8 +44,9 @@ defmodule Quadquizaminos.TetrisTest do
   test "drops and merges" do
     brick = Brick.new(location: {5, 16})
     bottom = %{}
+    brick_count = 1
 
-    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red)
+    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red, brick_count)
 
     assert Map.get(bottom, {7, 20}) == {7, 20, :red}
     assert score == 0
@@ -52,6 +54,7 @@ defmodule Quadquizaminos.TetrisTest do
 
   test "drops to bottom and compresses" do
     brick = Brick.new(location: {5, 16})
+    brick_count = 1
 
     bottom =
       for x <- 1..10, y <- 17..20, x != 7 do
@@ -59,7 +62,7 @@ defmodule Quadquizaminos.TetrisTest do
       end
       |> Map.new()
 
-    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red)
+    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red, brick_count)
 
     assert bottom == %{}
     assert score == 1600

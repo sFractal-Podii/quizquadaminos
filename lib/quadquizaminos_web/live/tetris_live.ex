@@ -287,7 +287,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Tetris.drop(
         old_brick,
         socket.assigns.bottom,
-        color(old_brick)
+        color(old_brick),
+        socket.assigns.brick_count
       )
 
     bonus = if fast, do: 2, else: 0
@@ -396,7 +397,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
       (socket.assigns.powers ++
          Powers.all_powers())
       |> Enum.sort()
-
     {:noreply, socket |> assign(powers: powers)}
   end
 
@@ -472,6 +472,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     powers = socket.assigns.powers -- [:speedup]
     speed = Speed.increase_speed(socket.assigns.speed)
     tick_count = Speed.speed_tick_count(speed)
+
 
     {:noreply,
      socket
@@ -713,7 +714,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket,
       bottom: bottom,
       powers: powers,
-      state: :playing,
       adding_block: false,
       moving_block: false
     )
@@ -726,7 +726,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp delete_block(socket, x, y) do
     bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
     powers = socket.assigns.powers -- [:deleteblock]
-    socket |> assign(bottom: bottom, deleting_block: false, state: :playing, powers: powers)
+    socket |> assign(bottom: bottom, deleting_block: false, powers: powers)
   end
 
   defp block_in_bottom?(x, y, bottom) do
@@ -737,7 +737,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {x, y} = parse_to_integer(x, y)
     powers = socket.assigns.powers -- [:addblock]
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
-    socket |> assign(bottom: bottom, adding_block: false, state: :playing, powers: powers)
+    socket |> assign(bottom: bottom, adding_block: false, powers: powers)
   end
 
   defp add_block(socket, _x, _y, false = _adding_block) do
