@@ -4,8 +4,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
-  alias Quadquizaminos.{Instructions, Tetris, QnA, Speed,
-        Brick, Points, Powers, Presets, Hints}
+  alias Quadquizaminos.{Instructions, Tetris, QnA, Speed, Brick, Points, Powers, Presets, Hints}
 
   @debug false
   @box_width 20
@@ -299,13 +298,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(bottom: response.bottom)
     |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
     |> assign(row_count: socket.assigns.row_count + response.row_count)
-    |> assign(hint: if(response.brick_count > 0,
-      do: Hints.next_hint(socket.assigns.hint),
-      else: socket.assigns.hint))
+    |> assign(
+      hint:
+        if(response.brick_count > 0,
+          do: Hints.next_hint(socket.assigns.hint),
+          else: socket.assigns.hint
+        )
+    )
     |> assign(score: socket.assigns.score + response.score + bonus)
-    |> assign(state: if(response.game_over,
-      do: :game_over,
-      else: :playing))
+    |> assign(
+      state:
+        if(response.game_over,
+          do: :game_over,
+          else: :playing
+        )
+    )
     |> show
   end
 
@@ -388,7 +395,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("keydown", %{"key" => "p"}, socket) do
     powers =
       (socket.assigns.powers ++
-         Quadquizaminos.Powers.all_powers())
+         Powers.all_powers())
       |> Enum.sort()
     {:noreply, socket |> assign(powers: powers)}
   end
@@ -427,8 +434,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
         points = wrong_points(socket)
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
-        socket = assign(socket, score: score)
-        pause_game(socket)
+        new_bottom = mark_block_vulnerable(true, socket.assigns.bottom)
+        assign(socket, score: score, bottom: new_bottom, modal: false, category: nil)
       end
 
     {:noreply, socket}
@@ -463,8 +470,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
     powers = socket.assigns.powers -- [:speedup]
-    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.increase_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
+
 
     {:noreply,
      socket
@@ -796,14 +804,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp mark_block_vulnerable(true = _can_be_marked?, bottom) do
-    {{x, y}, _} = Enum.random(bottom)
-
-    {_, new_bottom} =
-      Map.get_and_update(bottom, {x, y}, fn current_value ->
-        {current_value, {x, y, :vuln_grey_yellow}}
+    pure_bottom =
+      bottom
+      |> Enum.reject(fn {_point, {_x, _y, color}} ->
+        color == :vuln_grey_yellow or color == :license_grey_brown or color == :attack_yellow_gold or
+          color == :lawsuit_brown_gold
       end)
 
-    new_bottom
+    case pure_bottom do
+      [] ->
+        bottom
+
+      _ ->
+        {{x, y}, _} = Enum.random(pure_bottom)
+
+        {_, new_bottom} =
+          Map.get_and_update(bottom, {x, y}, fn current_value ->
+            {current_value, {x, y, :vuln_grey_yellow}}
+          end)
+
+        new_bottom
+    end
   end
 
   defp mark_block_vulnerable(_, bottom), do: bottom
