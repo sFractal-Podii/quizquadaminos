@@ -44,9 +44,12 @@ defmodule Quadquizaminos.TetrisTest do
   test "drops and merges" do
     brick = Brick.new(location: {5, 16})
     bottom = %{}
-    brick_count = 1
 
-    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red, brick_count)
+    socket = %{
+      assigns: %{brick_count: 1, gametime_counter: 1, fewer_vuln_powerup: 0}
+    }
+
+    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red, socket)
 
     assert Map.get(bottom, {7, 20}) == {7, 20, :red}
     assert score == 0
@@ -54,7 +57,10 @@ defmodule Quadquizaminos.TetrisTest do
 
   test "drops to bottom and compresses" do
     brick = Brick.new(location: {5, 16})
-    brick_count = 1
+
+    socket = %{
+      assigns: %{brick_count: 1, gametime_counter: 1, fewer_vuln_powerup: 0}
+    }
 
     bottom =
       for x <- 1..10, y <- 17..20, x != 7 do
@@ -62,7 +68,7 @@ defmodule Quadquizaminos.TetrisTest do
       end
       |> Map.new()
 
-    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red, brick_count)
+    %{score: score, bottom: bottom} = Quadquizaminos.Tetris.drop(brick, bottom, :red, socket)
 
     assert bottom == %{}
     assert score == 1600

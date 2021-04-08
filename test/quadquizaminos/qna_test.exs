@@ -5,9 +5,8 @@ defmodule Quadquizaminos.QnaTest do
 
   test "answers are determined by hyphen or asterisk in newline" do
     # category with two answers
-    [category | _] = QnA.categories()
 
-    %{answers: answers} = QnA.question(category)
+    %{answers: answers} = QnA.question("open_chain_sample")
 
     assert Enum.count(answers) == 2
   end
