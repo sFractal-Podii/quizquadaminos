@@ -288,7 +288,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Tetris.drop(
         old_brick,
         socket.assigns.bottom,
-        color(old_brick)
+        color(old_brick),
+        socket.assigns.brick_count
       )
 
     bonus = if fast, do: 2, else: 0
