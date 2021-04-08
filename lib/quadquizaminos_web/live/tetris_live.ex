@@ -122,7 +122,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <p><%= @brick_count %> QuadBlocks</p>
                     <p><%= @row_count %> Rows</p>
                     <p><%= @correct_answers %> Answers</p>
-                    <p>Tech Debt: <%= @gametime_counter %></p>
+                    <p>Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %></p>
                     <hr>
                 </div>
                 <div class="column column-50">
@@ -770,7 +770,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
       socket = assign(socket,
         tick_count: tick_count,
-        #gametime_counter: gametime_counter,
         bottom: bottom,
         tech_vuln_debt: tech_vuln_debt,
         tech_lic_debt: tech_lic_debt,
