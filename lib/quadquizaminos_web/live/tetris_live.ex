@@ -97,7 +97,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <p><%= @row_count %> Rows</p>
                     <p><%= @correct_answers %> Answers</p>
                     <%= inspect @fewer_vuln_powerup %>
-                    <%#= display_fewer_vuln_powerup(assigns) %>
                     <p>Tech Debt: <%= @gametime_counter %></p>
                     <hr>
                 </div>
@@ -945,18 +944,4 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp moving_title(_moving_block, _block_in_bottom), do: ""
-
-  # defp display_fewer_vuln_powerup(assigns) do
-  #   IO.inspect(@fewer_vuln_powerup)
-
-  #   cond do
-  #     @fewer_vuln_powerup == 0 or is_nil(@fewer_vuln_powerup) ->
-  #       ""
-
-  #     true ->
-  #       ~L"""
-  #       <p>Fewer vuln for <%= @fewer_vuln_powerup - @gametime_counter %>powerup</p>
-  #       """
-  #   end
-  # end
 end
