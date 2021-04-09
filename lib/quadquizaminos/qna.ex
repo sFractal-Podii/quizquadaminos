@@ -68,11 +68,23 @@ defmodule Quadquizaminos.QnA do
 
     case named_captures(regex, content) do
       %{"powerup" => powerup} ->
-        powerup |> String.trim() |> String.downcase() |> String.to_atom()
+        powerup = powerup |> String.split(":") |> transform_powerup()
 
       nil ->
         nil
     end
+  end
+
+  defp transform_powerup(powerup) when is_binary(powerup) do
+    powerup |> String.trim() |> String.downcase() |> String.to_atom()
+  end
+
+  defp transform_powerup([powerup | []]) do
+    transform_powerup(powerup)
+  end
+
+  defp transform_powerup([powerup | [value]]) do
+    {transform_powerup(powerup), String.trim(value)}
   end
 
   defp answers(content, answers) do

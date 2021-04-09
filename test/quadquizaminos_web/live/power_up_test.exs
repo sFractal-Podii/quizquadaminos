@@ -47,6 +47,31 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     refute html =~ "<i class=\"fas fa-plus-square\""
   end
 
+  describe "Fewer vulnerability" do
+    setup %{conn: conn} do
+      {view, _html} = pause_game(conn)
+
+      render_click(view, "choose_category", %{"category" => "open_c2"})
+
+      right_answer = Quadquizaminos.QnA.question("open_c2").correct
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+
+      [html: html, view: view]
+    end
+
+    test "powerup is shown when question with fewer vulnerability powerup is answered correctly",
+         %{html: html} do
+      assert html =~ "<i class=\"fas fa-less-than\""
+    end
+
+    test "powerup is depleted once used", %{view: view} do
+      html =
+        render_click(view, "powerup", %{"powerup" => "fewervulnerability", "power_tick" => "100"})
+
+      refute html =~ "<i class=\"fas fa-less-than\""
+    end
+  end
+
   describe "Addblock" do
     setup %{conn: conn} do
       {view, _html} = pause_game(conn)

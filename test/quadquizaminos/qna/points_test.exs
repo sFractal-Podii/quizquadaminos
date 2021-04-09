@@ -20,13 +20,35 @@ defmodule Quadquizaminos.PointsTest do
       points: points,
       color: color
     } do
-      actual = Points.with_color(points, color, 23)
+      socket = %{
+        assigns: %{brick_count: 23, gametime_counter: 1, fewer_vuln_powerup: 0}
+      }
+
+      actual = Points.with_color(points, color, socket)
       expected = [{2, 1, :red}, {2, 2, :red}, {2, 3, :red}, {2, 4, :red}]
 
       assert actual == expected
 
-      actual = Points.with_color(points, color, 21)
+      socket = %{
+        assigns: %{brick_count: 21, gametime_counter: 1, fewer_vuln_powerup: 0}
+      }
+
+      actual = Points.with_color(points, color, socket)
       expected = [{2, 1, :red}, {2, 2, :red}, {2, 3, :red}, {2, 4, :vuln_grey_yellow}]
+
+      assert actual == expected
+    end
+
+    test "vulnerability isn't added to incoming block if fewer vuln power up is triggered", %{
+      points: points,
+      color: color
+    } do
+      socket = %{
+        assigns: %{brick_count: 21, gametime_counter: 1, fewer_vuln_powerup: 100}
+      }
+
+      actual = Points.with_color(points, color, socket)
+      expected = [{2, 1, :red}, {2, 2, :red}, {2, 3, :red}, {2, 4, :red}]
 
       assert actual == expected
     end
