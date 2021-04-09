@@ -121,13 +121,13 @@ defmodule Quadquizaminos.QnA do
   defp file_position(position, _index, _count), do: position
 
   defp correct_answer(answers) do
-    regex = ~r/(-|\*)/
+    regex = ~r/(\n-|\n\*)/
 
     {_, correct} =
       Regex.scan(regex, answers, capture: :first)
       |> List.flatten()
       |> Enum.with_index()
-      |> Enum.find(fn {k, _v} -> k == "*" end)
+      |> Enum.find(fn {k, _v} -> k == "\n*" end)
 
     correct |> to_string()
   end
