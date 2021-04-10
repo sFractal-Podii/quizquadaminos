@@ -7,7 +7,7 @@ defmodule Quadquizaminos.Hints do
       <p>Right/left arrows move quads right/left.</p>
       <p>Up arrow rotates falling quad.</p>
       <p>Down arrow drops falling quad.</p>
-      <p>Space bar pops up quiz.</p>
+      <p>Space bar pauses game and pops up quiz.</p>
       """
   end
 
@@ -26,8 +26,9 @@ defmodule Quadquizaminos.Hints do
     """
     <p>Click "How to Play" for instructions.</p>
     <p>Space bar pops up quiz.</p>
-    <p>Answer questions for points and powerups</p>
-    <p>Powerups let you delete blocks, add blocks, move blocks. ...</p>
+    <p>Answer questions for points and powerups.</p>
+    <p>Powerups let you delete blocks, add blocks, move blocks,
+    prevent attacks, win lawsuits, etc</p>
     """
   end
 
@@ -40,9 +41,9 @@ defmodule Quadquizaminos.Hints do
     <p>Over time, your technical debt increases.
     At some point, vulnerabilities and/or licensing
     issues crop up in your supply chain</p>
-    <p>Vulnerabilites are yellow/grey blocks.</p>
-    <p>Licenseing issues are brown/grey blocks.</p>
-    <p>Both prevent rows from being cleared</p>
+    <p>Vulnerabilites are yellow/grey blocks.
+    Licenseing issues are brown/grey blocks.
+    Both prevent rows from being cleared</p>
     """
   end
 
@@ -50,19 +51,47 @@ defmodule Quadquizaminos.Hints do
     """
     <p>Click "How to Play" for instructions.</p>
     <p>Each tick of the game clock gets points</p>
+    <p>Clearing rows gets points. Clearing multiple Rows
+    at once gets expontially increasing number of points</p>
+    <p>Answering questions correctly gets points.
+    Later questions are worth more than the initial questions</p>
     <p></p>
-    <p></p>
-    <p></p>
+    """
+  end
+
+  def tldr(:scoring2) do
+    """
+    <p>Click "How to Play" for instructions.</p>
+    <p>You lose points if you answer incorrectly
+    (much fewer than you get for answering correctly
+    so ok to guess).</p>
+    <p>Attacks and lawsuits cause you to quickly lose points
+    with each tick of the clock
+    (hit spacebar to pause)</p>
     """
   end
 
   def tldr(:rm_vuln) do
     """
     <p>Click "How to Play" for instructions.</p>
-    <p>Certain powerups help with vulnerabilities</p>
+    <p>Too many vulnerabilities results in a cyberattack.
+    Too many licensing issues results in a lawsuit</p>
+    <p>Certain powerups help with vulnerabilities,
+    licensing issues, attacks, and lawsuits</p>
     <p></p>
     <p></p>
-    <p></p>
+    """
+  end
+
+  def tldr(:clrblocks) do
+    """
+    <p>Click "How to Play" for instructions.</p>
+    <p>ClearBlocks or the "eraser" powerup <i class="fas fa-eraser"></i>
+    is a valuable powerup which clears the board of all
+    blocks including vulnerabilities,
+    licensing issues, attacks, and lawsuits</p>
+    <p>The 9 Erasers are rewards for answering questions
+    in the Phoenix category (ie you rise from the ashes)</p>
     """
   end
 
@@ -80,9 +109,9 @@ defmodule Quadquizaminos.Hints do
   def tldr(:addblock) do
     """
     <p>Click "How to Play" for instructions.</p>
-    <p>need addblock hints</p>
-    <p></p>
-    <p></p>
+    <p><i class="fas fa-plus-square"></i> is the addblock powerup</p>
+    <p>It allows you to place a block in a free square</p>
+    <p>It is a reward for certain quiz questions in Supply Chain Category</p>
     """
   end
 
@@ -99,15 +128,6 @@ defmodule Quadquizaminos.Hints do
     """
     <p>Click "How to Play" for instructions.</p>
     <p>need moveblock hints</p>
-    <p></p>
-    <p></p>
-    """
-  end
-
-  def tldr(:clrblocks) do
-    """
-    <p>Click "How to Play" for instructions.</p>
-    <p>need clear blocks hints</p>
     <p></p>
     <p></p>
     """
@@ -162,10 +182,14 @@ defmodule Quadquizaminos.Hints do
       :quiz ->
         :scoring
       :scoring ->
+        :scoring2
+      :scoring2 ->
         :vuln
       :vuln ->
         :rm_vuln
       :rm_vuln ->
+        :clrblocks
+      :clrblocks ->
         :addblock
       :addblock ->
         :speed
@@ -174,8 +198,6 @@ defmodule Quadquizaminos.Hints do
       :delblock ->
         :mvblock
       :mvblock ->
-        :clrblocks
-      :clrblocks ->
         :speedup
       :speedup ->
         :slowdown
