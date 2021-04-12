@@ -202,7 +202,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       brick
       |> Brick.prepare()
       |> Points.move_to_location(brick.location)
-      |> Points.with_color(color(brick))
+      |> Points.with_color(color(brick), socket.assigns.brick_count)
 
     assign(socket, tetromino: points)
   end
@@ -397,6 +397,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       (socket.assigns.powers ++
          Powers.all_powers())
       |> Enum.sort()
+
     {:noreply, socket |> assign(powers: powers)}
   end
 
@@ -472,7 +473,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     powers = socket.assigns.powers -- [:speedup]
     speed = Speed.increase_speed(socket.assigns.speed)
     tick_count = Speed.speed_tick_count(speed)
-
 
     {:noreply,
      socket
