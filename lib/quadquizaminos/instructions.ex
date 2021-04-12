@@ -217,7 +217,7 @@ defmodule Quadquizaminos.Instructions do
     <p>
     Normal blocks are squares of one color (two tones).
     But just like in real life, problems can crop up in your supply chain.
-    There are two types of vulnerabilies.
+    There are two types of vulnerabilities.
     Known vulnerabilities are yellow/gray blocks
     that show up at random either in dropping blocks
     or in the blocks at the bottom that haven't been cleared yet.
@@ -355,16 +355,16 @@ defmodule Quadquizaminos.Instructions do
       <i class="fas fa-syringe"></i> fix a lawsuit
       requires superpower, SBOM, legal, openchain, cyberinsurance
       </p>
-  <h3>Prizes, Contests</h3>
-  Prizes can be won in several ways.
+    <h3>Prizes, Contests</h3>
+    Prizes can be won in several ways.
 
-  Some sponsors offer no prizes.
-  Some sponsors offer
-  prizes for correctly answering a particular question.
-  Some sponsors offer prizes as part of a contest.
+    Some sponsors offer no prizes.
+    Some sponsors offer
+    prizes for correctly answering a particular question.
+    Some sponsors offer prizes as part of a contest.
 
-  <h3>Strategy, Tips & Tricks</h3>
-  <p>tetris vs quiz</p>
+    <h3>Strategy, Tips & Tricks</h3>
+    <p>tetris vs quiz</p>
     <p>
     timing funny wrt QnA/powerups - multi-row clearing trick
     </p>
