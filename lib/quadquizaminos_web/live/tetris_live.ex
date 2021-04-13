@@ -4,6 +4,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
+
   alias Quadquizaminos.{
     Bottom,
     Brick,
@@ -245,7 +246,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       brick
       |> Brick.prepare()
       |> Points.move_to_location(brick.location)
-      |> Points.with_color(color(brick))
+      |> Points.with_color(color(brick), socket.assigns.brick_count)
 
     assign(socket, tetromino: points)
   end
@@ -431,6 +432,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       (socket.assigns.powers ++
          Quadquizaminos.Powers.all_powers())
       |> Enum.sort()
+
     {:noreply, socket |> assign(powers: powers)}
   end
 
@@ -478,8 +480,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
         points = wrong_points(socket)
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
-        socket = assign(socket, score: score)
-        pause_game(socket)
+        bottom_with_vuln = Bottom.add_vulnerability(socket.assigns.bottom)
+        assign(socket, score: score, bottom: bottom_with_vuln, modal: false, category: nil)
       end
 
     {:noreply, socket}
@@ -584,17 +586,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
     powers = socket.assigns.powers -- [:fixallvulns]
     bottom = Bottom.remove_all_vulnerabilities(socket.assigns.bottom)
-    {:noreply, socket
-      |> assign(powers: powers)
-      |> assign(bottom: bottom)}
+
+    {:noreply,
+     socket
+     |> assign(powers: powers)
+     |> assign(bottom: bottom)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
     powers = socket.assigns.powers -- [:fixalllicenses]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
-    {:noreply, socket
-      |> assign(powers: powers)
-      |> assign(bottom: bottom)}
+
+    {:noreply,
+     socket
+     |> assign(powers: powers)
+     |> assign(bottom: bottom)}
   end
 
   def handle_event("powerup", %{"powerup" => "automation"}, socket) do
@@ -734,50 +740,58 @@ defmodule QuadquizaminosWeb.TetrisLive do
       tick_count = Speed.speed_tick_count(socket.assigns.speed)
 
       ## check vuln Debt
-      {tech_vuln_debt, add_vuln?} = Threshold.reached_threshold(
-        socket.assigns.tech_vuln_debt,
-        socket.assigns.vuln_threshold
+      {tech_vuln_debt, add_vuln?} =
+        Threshold.reached_threshold(
+          socket.assigns.tech_vuln_debt,
+          socket.assigns.vuln_threshold
         )
 
       ## if reached threshold, add vulnerability
-      bottom = if add_vuln? do
-        Bottom.add_vulnerability(socket.assigns.bottom)
-      else
-        socket.assigns.bottom
-      end
+      bottom =
+        if add_vuln? do
+          Bottom.add_vulnerability(socket.assigns.bottom)
+        else
+          socket.assigns.bottom
+        end
 
       ## check lic debt
-      {tech_lic_debt, add_lic?} = Threshold.reached_threshold(
+      {tech_lic_debt, add_lic?} =
+        Threshold.reached_threshold(
           socket.assigns.tech_lic_debt,
           socket.assigns.lic_threshold
-          )
+        )
 
       ## if reached lic debt threshold, add licensing errors
-      bottom = if add_lic? do
-        Bottom.add_license_issue(bottom)
-      else
-        bottom
-      end
+      bottom =
+        if add_lic? do
+          Bottom.add_license_issue(bottom)
+        else
+          bottom
+        end
 
       ## see if other bad things happening
       under_attack? = Bottom.attacked?(bottom, socket.assigns.attack_threshold)
       being_sued? = Bottom.sued?(bottom, socket.assigns.lawsuit_threshold)
 
-      {bottom, speed, score} = Threshold.bad_happen(
-        bottom,
-        socket.assigns.speed,
-        socket.assigns.score,
-        under_attack?,
-        being_sued?)
-
-      socket = assign(socket,
-        tick_count: tick_count,
-        bottom: bottom,
-        tech_vuln_debt: tech_vuln_debt,
-        tech_lic_debt: tech_lic_debt,
-        score: score,
-        speed: speed
+      {bottom, speed, score} =
+        Threshold.bad_happen(
+          bottom,
+          socket.assigns.speed,
+          socket.assigns.score,
+          under_attack?,
+          being_sued?
         )
+
+      socket =
+        assign(socket,
+          tick_count: tick_count,
+          bottom: bottom,
+          tech_vuln_debt: tech_vuln_debt,
+          tech_lic_debt: tech_lic_debt,
+          score: score,
+          speed: speed
+        )
+
       drop(socket.assigns.state, socket, false)
     end
   end
