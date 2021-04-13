@@ -35,7 +35,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(qna: %{}, powers: [])
      |> assign(category: nil, categories: init_categories())
      |> assign(block_coordinates: nil)
-     |> assign(adding_block: false, moving_block: false, deleting_block: false)
+     |> assign(adding_block: false, moving_block: false, deleting_block: false, fix_vulnerability: false)
      |> assign(instructions_modal: false)
      |> assign(speed: 2, tick_count: 5)
      |> assign(brick_count: 0)
@@ -197,7 +197,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(category: nil, categories: init_categories())
     |> assign(correct_answers: 0)
     |> assign(block_coordinates: nil)
-    |> assign(adding_block: false, moving_block: false, deleting_block: false)
+    |> assign(adding_block: false, moving_block: false, deleting_block: false, fix_vulnerability: false)
     |> assign(instructions_modal: false)
     |> assign(speed: 2, tick_count: 5)
     |> assign(brick_count: 0)
@@ -380,7 +380,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def do_move(%{assigns: %{brick: _brick, bottom: bottom}} = socket, :turn) do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
-
+  
   def handle_event("choose_category", %{"category" => category}, socket) do
     categories = socket.assigns.categories
     question_position = categories[category]
@@ -583,12 +583,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
     powers = socket.assigns.powers -- [:fixvuln]
-    {:noreply, assign(socket, powers: powers)}
+    IO.inspect(socket.assigns.fix_vulnerability, label: "====initial=====")
+    bottom = Bottom.remove_a_color(socket.assigns.bottom, :vuln_grey_yellow)
+    {:noreply, socket |> assign(fix_vulnerability: true, modal: false, powers: powers, bottom: bottom)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
     powers = socket.assigns.powers -- [:fixlicense]
-    {:noreply, assign(socket, powers: powers)}
+    {:noreply, socket |> assign(fix_vulnerability: true, modal: false, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
@@ -598,7 +600,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply,
      socket
      |> assign(powers: powers)
-     |> assign(bottom: bottom)}
+     |> assign(bottom: bottom)
+     |> assign(fix_vulnerability: true, modal: false)
+    }
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
