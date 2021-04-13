@@ -76,19 +76,21 @@ defmodule Quadquizaminos.Bottom do
   def add_attack(bottom) do
     bottom
     |> Map.merge(
-       Presets.attack(),
-       fn _k, _prev_valuse, attack_value ->
-         attack_value
-       end)
+      Presets.attack(),
+      fn _k, _prev_valuse, attack_value ->
+        attack_value
+      end
+    )
   end
 
   def add_lawsuit(bottom) do
     bottom
     |> Map.merge(
-       Presets.lawsuit(),
-       fn _k, _prev_value, ls_value ->
-         ls_value
-       end)
+      Presets.lawsuit(),
+      fn _k, _prev_value, ls_value ->
+        ls_value
+      end
+    )
   end
 
   def add_vulnerability(bottom) when %{} == bottom do
@@ -99,16 +101,23 @@ defmodule Quadquizaminos.Bottom do
   def add_vulnerability(bottom) do
     ## pick random bottom block and change to add_vulnerability
     ## only pick blocks that are not already marked with some 'trouble'
-    {{x, y}, _} = bottom
-    |> remove_trouble_blocks()
-    |> Enum.random()
+    pure_bottom = bottom |> remove_trouble_blocks()
 
-    bottom
-    |> Map.merge(
-      %{{x, y} => {x, y, :vuln_grey_yellow}},
+    if pure_bottom |> Enum.empty?() do
+      bottom
+    else
+      {{x, y}, _} =
+        pure_bottom
+        |> Enum.random()
+
+      bottom
+      |> Map.merge(
+        %{{x, y} => {x, y, :vuln_grey_yellow}},
         fn _k, _prev_value, vuln_value ->
           vuln_value
-        end)
+        end
+      )
+    end
   end
 
   def add_license_issue(bottom) when %{} == bottom do
@@ -119,9 +128,10 @@ defmodule Quadquizaminos.Bottom do
   def add_license_issue(bottom) do
     ## pick random bottom block and change to license issue
     ## only pick blocks that are not already marked with some 'trouble'
-    {{x, y}, _} = bottom
-    |> remove_trouble_blocks
-    |> Enum.random
+    {{x, y}, _} =
+      bottom
+      |> remove_trouble_blocks
+      |> Enum.random()
 
     bottom
     |> Map.merge(
@@ -129,8 +139,9 @@ defmodule Quadquizaminos.Bottom do
       %{{x, y} => {x, y, :license_grey_brown}},
       # if occupied, use licence issue color
       fn _k, _prev_value, ls_value ->
-         ls_value
-       end)
+        ls_value
+      end
+    )
   end
 
   def remove_all_vulnerabilities(bottom) do
@@ -151,24 +162,23 @@ defmodule Quadquizaminos.Bottom do
 
   def remove_a_color(bottom, color_to_be_removed) do
     bottom
-    |> Enum.filter(
-      fn block ->
-        {_key,{_x,_y,color}} = block
-        color != color_to_be_removed
-      end)
+    |> Enum.filter(fn block ->
+      {_key, {_x, _y, color}} = block
+      color != color_to_be_removed
+    end)
     |> Map.new()
   end
 
   def attacked?(bottom, attack_threshold) do
     ## see if under attack
     vuln_count =
-        bottom
-        |> Enum.filter(
-          fn block ->
-            {_key, {_x,_y,color}} = block
-            color == :vuln_grey_yellow
-          end)
-        |> Enum.count
+      bottom
+      |> Enum.filter(fn block ->
+        {_key, {_x, _y, color}} = block
+        color == :vuln_grey_yellow
+      end)
+      |> Enum.count()
+
     ## return true if more vuln's than attack_threshold
     vuln_count >= attack_threshold
   end
@@ -176,13 +186,13 @@ defmodule Quadquizaminos.Bottom do
   def sued?(bottom, suit_threshold) do
     ## see if being sued (count license issues)
     li_count =
-        bottom
-        |> Enum.filter(
-          fn block ->
-            {_key, {_x,_y,color}} = block
-            color == :license_grey_brown
-          end)
-        |> Enum.count
+      bottom
+      |> Enum.filter(fn block ->
+        {_key, {_x, _y, color}} = block
+        color == :license_grey_brown
+      end)
+      |> Enum.count()
+
     ## return true if more vuln's than attack_threshold
     li_count >= suit_threshold
   end
@@ -194,5 +204,4 @@ defmodule Quadquizaminos.Bottom do
     |> remove_attacks
     |> remove_lawsuits
   end
-
 end
