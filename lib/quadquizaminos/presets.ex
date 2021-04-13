@@ -84,4 +84,33 @@ defmodule Quadquizaminos.Presets do
     }
   end
 
+  def preset_vuln() do
+    %{
+      {2, 20} => {2, 20, :pink},
+      {3, 20} => {3, 20, :red},
+      {4, 20} => {4, 20, :vuln_grey_yellow},
+      {5, 20} => {5, 20, :green},
+      {6, 20} => {6, 20, :vuln_grey_yellow},
+      {7, 20} => {7, 20, :green},
+      {8, 20} => {8, 20, :vuln_grey_yellow},
+      {9, 20} => {9, 20, :red},
+      {10, 20} => {10, 20, :vuln_grey_yellow}
+    }
+  end
+
+  def preset_lic() do
+    %{
+      {2, 20} => {2, 20, :pink},
+      {3, 20} => {3, 20, :red},
+      {4, 20} => {4, 20, :license_grey_brown},
+      {5, 20} => {5, 20, :green},
+      {6, 20} => {6, 20, :license_grey_brown},
+      {7, 20} => {7, 20, :green},
+      {8, 20} => {8, 20, :license_grey_brown},
+      {9, 20} => {9, 20, :red},
+      {10, 20} => {10, 20, :license_grey_brown}
+    }
+  end
+
+
 end

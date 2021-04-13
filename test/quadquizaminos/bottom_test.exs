@@ -88,4 +88,19 @@ defmodule Quadquizaminos.BottomTest do
         end)))
     |> Map.new()
   end
+
+  test "remove all vulnerabilities - empty bottom" do
+    bottom = %{}
+    actual = add_vulnerability(bottom)
+    expected = %{{1, 20} => {1, 20, :vuln_grey_yellow}}
+    assert actual == expected
+  end
+
+  test "remove all vulnerabilities" do
+    bottom = %{{4, 20} => {4, 20, :red}}
+    actual = add_vulnerability(bottom)
+    expected = %{{4, 20} => {4, 20, :vuln_grey_yellow}}
+    assert actual == expected
+  end
+
 end
