@@ -4,7 +4,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
-
   alias Quadquizaminos.{
     Bottom,
     Brick,
@@ -17,13 +16,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Speed,
     Tetris,
     Threshold
-  }
+    }
 
   @debug false
   @box_width 20
   @box_height 20
-  ## Opinion(Duncan): I think next value should be set in mount, not fixed forever
-  ## since it will change with slowvulns powerup
   @bottom_vulnerability_value Application.get_env(:quadquizaminos, :bottom_vulnerability_value)
 
   def mount(_param, _session, socket) do
@@ -78,10 +75,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
-            <p>This may be due to
-            a cyberattack or a lawsuit.
-            Or maybe you just let your supply chain get to long.
-            Maybe unfixed vulnerabilities were turned into exploits.
+            <p>You are bankrupt either
+            due to a cyberattack or a lawsuit.
+            This may be because you let your supply chain get to long.
+            Or may be due to unfixed vulnerabilities which turned into exploits.
             Or uncleared licensing errors caused you to be sued.
             Or maybe you were too busy answering cybersecurity questions
             and not paying attention to business.</p>
@@ -102,6 +99,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <p><%= @brick_count %> QuadBlocks dropped</p>
         <p><%= @row_count %> rows cleard</p>
         <p><%= @correct_answers %> questions answered correctly</p>
+        <p>Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %></p>
         </div>
       </div>
     </div>
@@ -185,30 +183,29 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp new_game(socket) do
     ## should qna be reset or carryover between games????
     socket
-    |> assign(state: :playing)
-    |> assign(score: 0)
+    |> assign(adding_block: false)
+    |> assign(attack_threshold: 5)
+    |> assign(block_coordinates: nil)
     |> assign(bottom: %{})
-    |> assign(powers: [])
-    |> assign(speed: 2)
-    |> assign(tick_count: 5)
     |> assign(brick_count: 0)
-    |> assign(row_count: 0)
-    |> assign(qna: %{})
     |> assign(category: nil, categories: init_categories())
     |> assign(correct_answers: 0)
-    |> assign(block_coordinates: nil)
-    |> assign(adding_block: false, moving_block: false, deleting_block: false)
+    |> assign(deleting_block: false)
+    |> assign(hint: :intro)
     |> assign(instructions_modal: false)
-    |> assign(speed: 2, tick_count: 5)
-    |> assign(brick_count: 0)
-    |> assign(row_count: 0)
-    |> assign(correct_answers: 0)
-    |> assign(attack_threshold: 5)
     |> assign(lawsuit_threshold: 5)
-    |> assign(vuln_threshold: 79)
-    |> assign(tech_vuln_debt: 45)
     |> assign(lic_threshold: 81)
+    |> assign(moving_block: false)
+    |> assign(powers: [])
+    |> assign(qna: %{})
+    |> assign(row_count: 0)
+    |> assign(score: 0)
+    |> assign(speed: 2)
+    |> assign(state: :playing)
     |> assign(tech_lic_debt: 0)
+    |> assign(tech_vuln_debt: 45)
+    |> assign(tick_count: 5)
+    |> assign(vuln_threshold: 79)
     |> new_block
     |> show
   end
@@ -341,21 +338,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(bottom: response.bottom)
     |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
     |> assign(row_count: socket.assigns.row_count + response.row_count)
-    |> assign(
-      hint:
-        if(response.brick_count > 0,
-          do: Hints.next_hint(socket.assigns.hint),
-          else: socket.assigns.hint
-        )
-    )
+    |> assign(hint: if(response.brick_count > 0,
+      do: Hints.next_hint(socket.assigns.hint),
+      else: socket.assigns.hint))
     |> assign(score: socket.assigns.score + response.score + bonus)
-    |> assign(
-      state:
-        if(response.game_over,
-          do: :game_over,
-          else: :playing
-        )
-    )
+    |> assign(state: if(response.game_over,
+      do: :game_over,
+      else: :playing))
     |> show
   end
 
@@ -604,11 +593,90 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
     powers = socket.assigns.powers -- [:fixalllicenses]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
-
     {:noreply,
      socket
      |> assign(powers: powers)
      |> assign(bottom: bottom)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "automation"}, socket) do
+    powers = socket.assigns.powers -- [:automation]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "openchain"}, socket) do
+    powers = socket.assigns.powers -- [:openchain]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "stopattack"}, socket) do
+    powers = socket.assigns.powers -- [:stopattack]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "winlawsuit"}, socket) do
+    powers = socket.assigns.powers -- [:winlawsuit]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
+    powers = socket.assigns.powers -- [:superpower]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
+    powers = socket.assigns.powers -- [:nextblock]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "forensics"}, socket) do
+    powers = socket.assigns.powers -- [:forensics]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "slowvulns"}, socket) do
+    powers = socket.assigns.powers -- [:slowvulns]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "slowlicense"}, socket) do
+    powers = socket.assigns.powers -- [:slowlicense]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "legal"}, socket) do
+    powers = socket.assigns.powers -- [:legal]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "cyberinsurance"}, socket) do
+    powers = socket.assigns.powers -- [:cyberinsurance]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "sbom"}, socket) do
+    powers = socket.assigns.powers -- [:sbom]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
+    powers = socket.assigns.powers -- [:fixvuln]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
+    powers = socket.assigns.powers -- [:fixlicense]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
+    powers = socket.assigns.powers -- [:fixallvulns]
+    {:noreply, assign(socket, powers: powers)}
+  end
+
+  def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
+    powers = socket.assigns.powers -- [:fixalllicenses]
+    {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "automation"}, socket) do
@@ -744,7 +812,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       ## don't drop yet
       assign(socket, tick_count: tick_count)
     else
-      ## reset counter and drop after incrementing other counters
+      ## reset counter and drop
       tick_count = Speed.speed_tick_count(socket.assigns.speed)
 
       ## check vuln Debt
