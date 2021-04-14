@@ -8,10 +8,11 @@ defmodule Quadquizaminos.Accounts.User do
     field :user_id, :integer, primary_key: true
     field :name, :string
     field :avatar, :string
+    field :role, :string
   end
 
   def changeset(user, attrs \\ %{}) do
     user
-    |> cast(attrs, [:user_id, :name, :avatar])
+    |> cast(attrs, [:user_id, :name, :avatar, :role])
   end
 end

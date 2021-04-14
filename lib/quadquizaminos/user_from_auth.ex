@@ -41,8 +41,19 @@ defmodule Quadquizaminos.UserFromAuth do
   end
 
   defp basic_info(auth) do
-    %{user_id: auth.uid, name: name_from_auth(auth), avatar: avatar_from_auth(auth)}
+    %{
+      user_id: auth.uid,
+      name: name_from_auth(auth),
+      avatar: avatar_from_auth(auth),
+      role: auth.uid |> configured_user?() |> role()
+    }
   end
+
+  defp role(true = _configured_user?), do: "admin"
+
+  defp role(_configured_user?), do: "player"
+
+  defp configured_user?(user_id), do: user_id in Application.get_env(:quadquizaminos, :github_ids)
 
   defp name_from_auth(auth) do
     if auth.info.name do
