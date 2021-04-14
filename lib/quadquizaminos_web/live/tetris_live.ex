@@ -194,7 +194,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(hint: :intro)
     |> assign(instructions_modal: false)
     |> assign(lawsuit_threshold: 5)
-    |> assign(lic_threshold: 81)
+    |> assign(lic_threshold: 143)
     |> assign(moving_block: false)
     |> assign(powers: [])
     |> assign(qna: %{})
@@ -203,9 +203,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(speed: 2)
     |> assign(state: :playing)
     |> assign(tech_lic_debt: 0)
-    |> assign(tech_vuln_debt: 45)
+    |> assign(tech_vuln_debt: 65)
     |> assign(tick_count: 5)
-    |> assign(vuln_threshold: 79)
+    |> assign(vuln_threshold: 143)
     |> new_block
     |> show
   end
