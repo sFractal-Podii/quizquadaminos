@@ -187,6 +187,25 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     end
   end
 
+  describe "Fixvuln single block" do
+    setup %{conn: conn} do
+      {view, _html} = pause_game(conn)
+
+      render_click(view, "choose_category", %{"category" => "open_chain"})
+
+      right_answer = Quadquizaminos.QnA.question("open_chain").correct
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+
+      [html: html, view: view]
+    end
+
+    test "powerup when clicked modal disappears", %{view: view} do
+      html = render_click(view, "powerup", %{"powerup" => "fixvuln"})
+      refute html =~ "<div class=\"phx-modal-content\">"
+    end
+  end
+  
+
   defp pause_game(conn) do
     {:ok, view, _html} = live(conn, "/tetris")
 

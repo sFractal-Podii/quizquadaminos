@@ -575,13 +575,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(modal: false, powers: powers, fix_vulnerability: true)}
   end
 
-  def handle_event("move_or_delete_block", %{"x" => x, "y" => y, "color" => color},  %{assigns: %{fix_vulnerability: true}} = socket) do
-    {x, y} = parse_to_integer(x,y)
-    color = String.to_atom(color)  
-    bottom = Bottom.remove_single_vuln(socket.assigns.bottom, {x, y, color})   
-    {:noreply, socket |> assign(bottom: bottom)} 
-  end
-
   def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
     powers = socket.assigns.powers -- [:fixlicense]
     {:noreply, assign(socket, powers: powers)}
@@ -733,6 +726,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, delete_block(socket, x, y)}
   end
 
+  def handle_event("move_or_delete_block", %{"x" => x, "y" => y, "color" => color},  %{assigns: %{fix_vulnerability: true}} = socket) do
+    {x, y} = parse_to_integer(x,y)
+    color = String.to_atom(color)  
+    bottom = Bottom.remove_single_vuln(socket.assigns.bottom, {x, y, color})   
+    {:noreply, socket |> assign(bottom: bottom)} 
+  end
+  
   def handle_event("move_or_delete_block", _params, socket) do
     {:noreply, socket}
   end
