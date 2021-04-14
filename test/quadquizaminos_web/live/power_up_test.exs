@@ -12,48 +12,52 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     [user: user, conn: conn]
   end
 
-  test "powerup hover display name of respective powerups", %{conn: conn} do
-    {view, _html} = pause_game(conn)
+  describe "powerup display" do
+    setup %{conn: conn} do
+      categories = Quadquizaminos.QnA.categories()
+      {view, _html} = pause_game(conn)
 
-    html = render_click(view, "keydown", %{"key" => "p"})
-    assert html =~ "title=\"fixlicense\""
-    assert html =~ "title=\"addblock\""
-    assert html =~ "title=\"cyberinsurance\""
-  end
+      Enum.each(categories, fn category ->
+        render_click(view, "choose_category", %{"category" => category})
 
-  test "respective qna powersups are displayed if questions are answered correctly", %{conn: conn} do
-    categories = Quadquizaminos.QnA.categories()
-    {view, _html} = pause_game(conn)
+        right_answer = Quadquizaminos.QnA.question(category).correct
+        render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+      end)
 
-    Enum.each(categories, fn category ->
-      render_click(view, "choose_category", %{"category" => category})
+      html = render_keydown(view, "keydown", %{"key" => " "})
+      [html: html]
+    end
 
-      right_answer = Quadquizaminos.QnA.question(category).correct
-      render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-    end)
+    test "powerup hover display name of respective powerups", %{html: html} do
+      assert html =~ "\"fas fa-plus-square\" title=\"addblock\""
+      assert html =~ "\"fas fa-minus-square\" title=\"deleteblock\""
+      assert html =~ "\"fas fa-file-contract\" title=\"cyberinsurance\""
+    end
 
-    html = render_keydown(view, "keydown", %{"key" => " "})
+    test "respective qna powersups are displayed if questions are answered correctly", %{
+      html: html
+    } do
+      assert html =~ "<i class=\"fas fa-arrows-alt\""
+      assert html =~ "<i class=\"fas fa-minus-square\""
+      assert html =~ "<i class=\"fas fa-plus-square\""
+    end
 
-    assert html =~ "<i class=\"fas fa-arrows-alt\""
-    assert html =~ "<i class=\"fas fa-minus-square\""
-    assert html =~ "<i class=\"fas fa-plus-square\""
-  end
+    test "powers don't display on questions that don't have them if answered correctly", %{
+      conn: conn
+    } do
+      {view, _html} = pause_game(conn)
 
-  test "powers don't display on questions that don't have them if answered correctly", %{
-    conn: conn
-  } do
-    {view, _html} = pause_game(conn)
+      Enum.each(["open_c2"], fn category ->
+        render_click(view, "choose_category", %{"category" => category})
 
-    Enum.each(["open_c2"], fn category ->
-      render_click(view, "choose_category", %{"category" => category})
+        right_answer = Quadquizaminos.QnA.question(category).correct
+        render_click(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+      end)
 
-      right_answer = Quadquizaminos.QnA.question(category).correct
-      render_click(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-    end)
-
-    html = render_keydown(view, "keydown", %{"key" => " "})
-    refute html =~ "<i class=\"fas fa-arrows-alt\""
-    refute html =~ "<i class=\"fas fa-plus-square\""
+      html = render_keydown(view, "keydown", %{"key" => " "})
+      refute html =~ "<i class=\"fas fa-arrows-alt\""
+      refute html =~ "<i class=\"fas fa-plus-square\""
+    end
   end
 
   describe "Addblock" do
