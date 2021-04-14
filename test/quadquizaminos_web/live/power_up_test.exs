@@ -12,6 +12,15 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     [user: user, conn: conn]
   end
 
+  test "powerup hover display name of respective powerups", %{conn: conn} do
+    {view, _html} = pause_game(conn)
+
+    html = render_click(view, "keydown", %{"key" => "p"})
+    assert html =~ "title=\"fixlicense\""
+    assert html =~ "title=\"addblock\""
+    assert html =~ "title=\"cyberinsurance\""
+  end
+
   test "respective qna powersups are displayed if questions are answered correctly", %{conn: conn} do
     categories = Quadquizaminos.QnA.categories()
     {view, _html} = pause_game(conn)
