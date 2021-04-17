@@ -317,15 +317,12 @@ defmodule Quadquizaminos.Instructions do
         <li><i class="fas fa-tools"></i> OpenChain</li>
         <li><i class="fas fa-wrench"></i> fix a vulnerability</li>
         <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
-        <li><i class="fas fa-hammer"></i> fix all vulnerabilities</li>
-        <li><i class="fas fa-tape"></i> fix all licensing issues</li>
+        <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
+        <li><i class="fas fa-tape"></i> remove all licensing issues</li>
         <li><i class="fas fa-file-prescription"></i> stop a cyberattack</li>
         <li><i class="fas fa-balance-scale"></i> win a lawsuite</li>
         <li><i class="fab fa-superpowers"></i> Superpower</li>
       </ol>
-    </p>
-    <p>
-      Some powerups only can be obtained from obtaining multiple other powerups.
     </p>
     <p>
       All combo superpowers require having the superpower powerup as well as the
@@ -356,12 +353,14 @@ defmodule Quadquizaminos.Instructions do
       requires superpower, SBOM, legal, openchain, cyberinsurance
       </p>
     <h3>Prizes, Contests</h3>
-    Prizes can be won in several ways.
+    There will be a contest on date at time.
+    You must be an RSAC registered attendee to win.
+    Any given person will only be entitled to one prize.
+    Winners will select from among the available prizes until
+    there are none left.
 
-    Some sponsors offer no prizes.
-    Some sponsors offer
-    prizes for correctly answering a particular question.
-    Some sponsors offer prizes as part of a contest.
+    Prizes include:
+    - fill in later
 
     <h3>Strategy, Tips & Tricks</h3>
     <p>tetris vs quiz</p>
@@ -418,8 +417,11 @@ defmodule Quadquizaminos.Instructions do
           <li>"c" clears bottom blocks (change to add clear-blocks powerup)</li>
           <li>"p" to add all powerup</li>
           <li>"1" to switch to stored block configuraton</li>
-          <li>"2" to switch to stored attack configuraton</li>
-          <li>"3" to switch to stored lawsuit configuraton</li>
+          <li>"2" to add attack to blocks</li>
+          <li>"3" to lawsuit to blocks</li>
+          <li>"4" to ...</li>
+          <li>"5" to ...</li>
+          <li>"6" to ...</li>
         </ol>
 
     """

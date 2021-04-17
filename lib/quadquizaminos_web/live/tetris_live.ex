@@ -581,7 +581,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:fixallvulns]
+    powers = socket.assigns.powers -- [:rmallvulns]
     bottom = Bottom.remove_all_vulnerabilities(socket.assigns.bottom)
 
     {:noreply,
@@ -591,7 +591,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:fixalllicenses]
+    powers = socket.assigns.powers -- [:rmalllicenses]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
     {:noreply,
      socket
@@ -670,12 +670,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:fixallvulns]
+    powers = socket.assigns.powers -- [:rmallvulns]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:fixalllicenses]
+    powers = socket.assigns.powers -- [:rmalllicenses]
     {:noreply, assign(socket, powers: powers)}
   end
 
