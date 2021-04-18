@@ -23,14 +23,10 @@ defmodule QuadquizaminosWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    auth.uid
-    |> authorized_user?()
-    |> find_or_create(auth, conn)
+    find_or_create(auth, conn)
   end
 
-  defp authorized_user?(user_id), do: user_id in Application.get_env(:quadquizaminos, :github_ids)
-
-  defp find_or_create(true, auth, conn) do
+  defp find_or_create(auth, conn) do
     case UserFromAuth.find_or_create(auth) do
       {:ok, user} ->
         conn
@@ -44,12 +40,5 @@ defmodule QuadquizaminosWeb.AuthController do
         |> put_flash(:error, reason)
         |> redirect(to: "/")
     end
-  end
-
-  defp find_or_create(_, _auth, conn) do
-    conn
-    |> put_flash(:error, "You are not authorized to access the page")
-    |> redirect(to: "/")
-    |> halt()
   end
 end
