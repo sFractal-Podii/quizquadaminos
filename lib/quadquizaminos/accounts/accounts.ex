@@ -15,8 +15,12 @@ defmodule Quadquizaminos.Accounts do
 
   def user_has_role?("anonymous", _roles), do: false
 
-  def user_has_role?(user_id, roles) do
-    user = get_user(user_id)
-    user.role in roles
+  def user_has_role?(current_user, roles) when is_struct(current_user) do
+    current_user.role in roles
+  end
+
+  def user_has_role?(current_user, roles) do
+    current_user = get_user(current_user)
+    current_user.role in roles
   end
 end
