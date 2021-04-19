@@ -23,6 +23,7 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/leaderboard", LeaderboardLive
     get "/anonymous", PageController, :anonymous
     post "/anonymous", PageController, :anonymous
 

@@ -86,7 +86,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             <%= raw svg_head() %>
             <%= for row <- [Map.values(@bottom)] do %>
               <%= for {x, y, color} <- row do %>
-              <svg phx-click="move_or_delete_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
+              <svg phx-click="transform_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
                <%= raw box({x, y}, color)%>
                </svg>
                 <% end %>
@@ -143,7 +143,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
                       <%= for {x, y, color} <- row do %>
-                      <svg phx-click="move_or_delete_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
+                      <svg phx-click="transform_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
                        <%= raw box({x, y}, color)%>
                           <%= raw deleting_title({x, y}, @deleting_block, block_in_bottom?(x, y, @bottom)) %>
                            <%= raw moving_title(@moving_block, block_in_bottom?(x, y, @bottom))  %>
@@ -193,6 +193,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(deleting_block: false)
     |> assign(hint: :intro)
     |> assign(instructions_modal: false)
+    |> assign(fix_vuln_or_license: false)
     |> assign(lawsuit_threshold: 5)
     |> assign(lic_threshold: 81)
     |> assign(moving_block: false)
@@ -572,12 +573,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
     powers = socket.assigns.powers -- [:fixvuln]
-    {:noreply, assign(socket, powers: powers)}
+    {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
     powers = socket.assigns.powers -- [:fixlicense]
-    {:noreply, assign(socket, powers: powers)}
+    {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
@@ -659,16 +660,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, assign(socket, powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
-    powers = socket.assigns.powers -- [:fixvuln]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
-    powers = socket.assigns.powers -- [:fixlicense]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
     powers = socket.assigns.powers -- [:fixallvulns]
     {:noreply, assign(socket, powers: powers)}
@@ -709,7 +700,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event(
-        "move_or_delete_block",
+        "transform_block",
         %{"x" => x, "y" => y, "color" => color},
         %{assigns: %{moving_block: true}} = socket
       ) do
@@ -719,14 +710,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event(
-        "move_or_delete_block",
+        "transform_block",
         %{"x" => x, "y" => y},
         %{assigns: %{deleting_block: true}} = socket
       ) do
     {:noreply, delete_block(socket, x, y)}
   end
 
-  def handle_event("move_or_delete_block", _params, socket) do
+  def handle_event("transform_block", %{"x" => x, "y" => y, "color" => color},  %{assigns: %{fix_vuln_or_license: true}} = socket) do
+    {x, y} = parse_to_integer(x,y)
+    color = String.to_atom(color)  
+    bottom = Bottom.remove_vuln_and_license(socket.assigns.bottom, {x, y, color})   
+    {:noreply, socket |> assign(bottom: bottom)} 
+  end
+  
+  def handle_event("transform_block", _params, socket) do
     {:noreply, socket}
   end
 
