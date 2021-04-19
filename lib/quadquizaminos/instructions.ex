@@ -300,21 +300,21 @@ defmodule Quadquizaminos.Instructions do
     </p>
     <p>
       <sl>
-        <li><i class="fas fa-plus-square"></i> add a block</li>
-        <li><i class="fas fa-minus-square"></i> remove a block</li>
-        <li><i class="fas fa-arrows-alt"></i> move a block</li>
-        <li><i class="fas fa-eraser"></i> clear blocks</li>
-        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall</li>
-        <li><i class="fas fa-fast-forward"></i> speed up</li>
-        <li><i class="fas fa-fast-backward"></i> slow down</li>
-        <li><i class="fas fa-microscope"></i> forensics</li>
-        <li><i class="fas fa-clipboard-check"></i> slows down vulns</li>
-        <li><i class="fas fa-certificate"></i> certificate/badge slows down licensing issues</li>
-        <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber</li>
-        <li><i class="fas fa-file-contract"></i> Cyber Insurance</li>
-        <li><i class="far fa-id-card"></i> SBOM</li>
-        <li><i class="fas fa-toolbox"></i> automation</li>
-        <li><i class="fas fa-tools"></i> OpenChain</li>
+        <li><i class="fas fa-plus-square"></i> add a block - useful to fill in holes</li>
+        <li><i class="fas fa-minus-square"></i> remove a block - useful to remove problem blocks</li>
+        <li><i class="fas fa-arrows-alt"></i> move a block - helpful both to get a block 'out of the way' and to fill in hole</li>
+        <li><i class="fas fa-eraser"></i> clear blocks - use in attacked or sued, helpful if supply chain gets too long</li>
+        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall - useful when you need a certain block to clear rows</li>
+        <li><i class="fas fa-fast-forward"></i> speed up - gets you more points on row clearing, needed if lawsuit is slowing your business</li>
+        <li><i class="fas fa-fast-backward"></i> slow down - necesary if attacked, useful if game is going too fast</li>
+        <li><i class="fas fa-microscope"></i> forensics - will remove an attack</li>
+        <li><i class="fas fa-clipboard-check"></i> slows down creation of vulns</li>
+        <li><i class="fas fa-certificate"></i> certificate/badge slows down creation of licensing issues</li>
+        <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber - which slows down licensing issues</li>
+        <li><i class="fas fa-file-contract"></i> Cyber Insurance - lessens the removal of points due to attacks and lawsuits</li>
+        <li><i class="far fa-id-card"></i> SBOM - slows down vulnerability creation, slows down license issues</li>
+        <li><i class="fas fa-toolbox"></i> automation - slows down vulnerability creation, slows down license issues</li>
+        <li><i class="fas fa-tools"></i> OpenChain - slows down slows down license issues</li>
         <li><i class="fas fa-wrench"></i> fix a vulnerability</li>
         <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
         <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
