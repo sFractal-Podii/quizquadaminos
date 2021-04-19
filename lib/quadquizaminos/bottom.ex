@@ -169,7 +169,7 @@ defmodule Quadquizaminos.Bottom do
     |> Map.new()
   end
 
-  def remove_single_vuln(bottom, {x, y, color} = value ) do
+  def remove_vuln_and_license(bottom, {x, y, color} = value ) do
     value = 
     case value do
         {x, y, :vuln_grey_yellow} ->  {x, y, :purple}

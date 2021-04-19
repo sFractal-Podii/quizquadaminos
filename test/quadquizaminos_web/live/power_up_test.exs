@@ -69,7 +69,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       html = render_click(view, "add_block", %{"x" => "5", "y" => "20"})
 
       assert html =~
-               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
+               "<svg phx-click=\"transform_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       assert html =~ @purple_shade.light
       assert html =~ @purple_shade.dark
@@ -106,14 +106,14 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       html = add_block(view)
 
       assert html =~
-               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
+               "<svg phx-click=\"transform_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       # delete block
       render_click(view, "powerup", %{"powerup" => "deleteblock"})
-      html = render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20"})
+      html = render_click(view, "transform_block", %{"x" => "5", "y" => "20"})
 
       refute html =~
-               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
+               "<svg phx-click=\"transform_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       refute html =~ @purple_shade.light
       refute html =~ @purple_shade.dark
@@ -124,7 +124,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       add_block(view)
       # delete block
       render_click(view, "powerup", %{"powerup" => "deleteblock"})
-      render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20"})
+      render_click(view, "transform_block", %{"x" => "5", "y" => "20"})
 
       html = render_keydown(view, "keydown", %{"key" => " "})
 
@@ -154,20 +154,20 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       html = add_block(view)
 
       assert html =~
-               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
+               "<svg phx-click=\"transform_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       # move block
       render_keydown(view, "keydown", %{"key" => " "})
       render_click(view, "powerup", %{"powerup" => "moveblock"})
 
-      render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20", "color" => "purple"})
+      render_click(view, "transform_block", %{"x" => "5", "y" => "20", "color" => "purple"})
       html = render_click(view, "add_block", %{"x" => "7", "y" => "18"})
 
       refute html =~
-               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
+               "<svg phx-click=\"transform_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       assert html =~
-               "<svg phx-click=\"move_or_delete_block\" phx-value-x=\"7\" phx-value-y=\"18\" phx-value-color=\"purple\">"
+               "<svg phx-click=\"transform_block\" phx-value-x=\"7\" phx-value-y=\"18\" phx-value-color=\"purple\">"
     end
 
     test "powerup is depleted once used", %{view: view} do
@@ -178,7 +178,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       render_keydown(view, "keydown", %{"key" => " "})
       render_click(view, "powerup", %{"powerup" => "moveblock"})
 
-      render_click(view, "move_or_delete_block", %{"x" => "5", "y" => "20", "color" => "purple"})
+      render_click(view, "transform_block", %{"x" => "5", "y" => "20", "color" => "purple"})
       render_click(view, "add_block", %{"x" => "7", "y" => "18"})
 
       html = render_keydown(view, "keydown", %{"key" => " "})
@@ -196,12 +196,37 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       right_answer = Quadquizaminos.QnA.question("open_chain").correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
-      [html: html, view: view]
+      [html: html, view: view, oc_right_answer: right_answer]
     end
 
     test "powerup when clicked modal disappears", %{view: view} do
       html = render_click(view, "powerup", %{"powerup" => "fixvuln"})
       refute html =~ "<div class=\"phx-modal-content\">"
+    end
+
+    test "power up provide ability to fix vulnerability", %{view: view, oc_right_answer: oc_right_answer} do
+      add_block(view)
+      right_answer = Quadquizaminos.QnA.question("open_c2").correct 
+   
+      wrong_answer =
+        Enum.find(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], fn guess ->
+          guess != right_answer
+        end)
+      render_keydown(view, "keydown", %{"key" => " "})
+
+      render_click(view, "choose_category", %{"category" => "open_c2"}) 
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}}) 
+      assert html =~ "vuln_grey_yellow"
+
+      render_keydown(view, "keydown", %{"key" => " "})
+      render_click(view, "choose_category", %{"category" => "open_chain"}) 
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => oc_right_answer}}) 
+      assert html =~ "\"fixvuln\">"
+
+      render_click(view, "powerup", %{"powerup" => "fixvuln"})
+      html = render_click(view, "transform_block",  %{"x" => "5", "y" => "20", "color" => "vuln_grey_yellow"})
+      refute html =~ "vuln_grey_yellow"
+      assert html =~ "purple"
     end
   end
   
