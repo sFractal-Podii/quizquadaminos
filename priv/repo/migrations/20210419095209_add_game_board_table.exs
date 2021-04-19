@@ -3,12 +3,12 @@ defmodule Quadquizaminos.Repo.Migrations.AddGameBoardTable do
 
   def change do
     create table("game_boards") do
-      add :start_time, :date
-      add :end_time, :date
+      add :start_time, :utc_datetime_usec
+      add :end_time, :utc_datetime_usec
       add :user_id, references("users", column: :user_id), on_delete: :delete_all
       add :score, :integer
       add :dropped_bricks, :integer
-      add :answered_question, :integer
+      add :correctly_answered_qna, :integer
     end
   end
 end
