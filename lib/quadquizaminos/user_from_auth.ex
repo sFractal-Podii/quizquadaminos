@@ -6,28 +6,18 @@ defmodule Quadquizaminos.UserFromAuth do
   require Jason
 
   alias Ueberauth.Auth
+  alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Repo
 
   def find_or_create(%Auth{} = auth) do
-    case get_user(auth.uid) do
+    case Accounts.get_user(auth.uid) do
       nil ->
-        create_user(%User{}, basic_info(auth))
+        Accounts.create_user(%User{}, basic_info(auth))
 
       user ->
         {:ok, user}
     end
-  end
-
-  def create_user(user, attrs) do
-    user
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def get_user(id) do
-    User
-    |> Repo.get(id)
   end
 
   # github does it this way

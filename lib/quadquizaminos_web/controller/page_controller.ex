@@ -4,6 +4,7 @@ defmodule QuadquizaminosWeb.PageController do
   """
 
   use QuadquizaminosWeb, :controller
+  alias Quadquizaminos.Accounts
   alias Quadquizaminos.UserFromAuth
 
   def index(conn, _params) do
@@ -24,6 +25,6 @@ defmodule QuadquizaminosWeb.PageController do
   defp current_user("anonymous"), do: "anonymous"
 
   defp current_user(user_id) do
-    UserFromAuth.get_user(user_id)
+    Accounts.get_user(user_id)
   end
 end
