@@ -23,7 +23,6 @@ defmodule QuadquizaminosWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    IO.inspect(auth, label: "=====first=====")
     find_or_create(auth, conn)
   end
 
