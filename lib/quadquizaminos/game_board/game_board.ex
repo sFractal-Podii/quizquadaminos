@@ -7,8 +7,8 @@ defmodule Quadquizaminos.GameBoard do
   @type t :: %__MODULE__{}
 
   schema "game_boards" do
-    field :start_time, :utc_datetime
-    field :end_time, :utc_datetime
+    field :start_time, :utc_datetime_usec
+    field :end_time, :utc_datetime_usec
     belongs_to :user, User, foreign_key: :user_id, references: :user_id
     field :score, :integer
     field :dropped_bricks, :integer
