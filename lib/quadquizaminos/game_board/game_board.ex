@@ -1,6 +1,7 @@
 defmodule Quadquizaminos.GameBoard do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias Quadquizaminos.Accounts.User
 
@@ -25,5 +26,13 @@ defmodule Quadquizaminos.GameBoard do
       :dropped_bricks,
       :correctly_answered_qna
     ])
+  end
+
+  def game_record_query do
+    from r in __MODULE__,
+      distinct: r.user_id,
+      order_by: [desc: r.score],
+      limit: 10,
+      preload: [:user]
   end
 end
