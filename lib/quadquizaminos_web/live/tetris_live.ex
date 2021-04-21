@@ -4,9 +4,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
-  alias Quadquizaminos.QnA
-
-  alias Quadquizaminos.Tetris
+  alias Quadquizaminos.{Presets, QnA, Speed, Tetris}
 
   @debug false
   @box_width 20
@@ -177,15 +175,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   ## raise_speed gets removed once dev cheat gets removed
   defp raise_speed(socket) do
-    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.increase_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
   ## lower_speed gets removed once dev cheat gets removed
   defp lower_speed(socket) do
-    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.decrease_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     assign(socket, speed: speed, tick_count: tick_count)
   end
 
@@ -196,7 +194,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def new_block(socket) do
     brick_count = socket.assigns.brick_count + 1
-    brick = Quadquizaminos.Brick.new_random()
+    brick = Brick.new_random()
     assign(socket, brick: brick, brick_count: brick_count)
   end
 
@@ -397,17 +395,30 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   ## for debugging - take out eventually
   def handle_event("keydown", %{"key" => "1"}, socket) do
-    bottom = Quadquizaminos.Presets.five_by_nine()
-    {:noreply, socket |> assign(bottom: bottom)}
+    bottom = Presets.five_by_nine()
+    powers = Presets.powers(:1)
+    {speed, tick_count} = Presets.speed1()
+    score = 1234
+
+    {:noreply, socket
+      |> assign(bottom: bottom)
+      |> assign(speed: speed)
+      |> assign(tick_count: tick_count)
+      |> assign(brick_count: 30)
+      |> assign(row_count: 5)
+      |> assign(correct_answers: 15)
+      |> assign(powers: powers)
+      |> assign(score: score)
+    }
   end
 
   def handle_event("keydown", %{"key" => "2"}, socket) do
-    bottom = Quadquizaminos.Presets.attack()
+    bottom = Presets.attack()
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
   def handle_event("keydown", %{"key" => "3"}, socket) do
-    bottom = Quadquizaminos.Presets.lawsuit()
+    bottom = Presets.lawsuit()
     {:noreply, socket |> assign(bottom: bottom)}
   end
 
@@ -465,8 +476,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
     powers = socket.assigns.powers -- [:speedup]
-    speed = Quadquizaminos.Speed.increase_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.increase_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     {:noreply, socket
                 |> assign(speed: speed)
                 |> assign(tick_count: tick_count)
@@ -475,8 +486,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "slowdown"}, socket) do
     powers = socket.assigns.powers -- [:slowdown]
-    speed = Quadquizaminos.Speed.decrease_speed(socket.assigns.speed)
-    tick_count = Quadquizaminos.Speed.speed_tick_count(speed)
+    speed = Speed.decrease_speed(socket.assigns.speed)
+    tick_count = Speed.speed_tick_count(speed)
     {:noreply, socket
                 |> assign(speed: speed)
                 |> assign(tick_count: tick_count)
@@ -754,7 +765,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       {:noreply, socket}
     else
       ## reset counter and drop
-      tick_count = Quadquizaminos.Speed.speed_tick_count(socket.assigns.speed)
+      tick_count = Speed.speed_tick_count(socket.assigns.speed)
 
       socket = assign(socket, tick_count: tick_count, gametime_counter: gametime_counter)
       {:noreply, drop(socket.assigns.state, socket, false)}
