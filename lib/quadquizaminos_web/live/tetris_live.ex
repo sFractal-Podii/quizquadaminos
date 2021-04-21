@@ -40,9 +40,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(correct_answers: 0)
      |> assign(attack_threshold: 5)
      |> assign(lawsuit_threshold: 5)
-     |> assign(vuln_threshold: 79)
-     |> assign(tech_vuln_debt: 45)
-     |> assign(lic_threshold: 81)
+     |> assign(vuln_threshold: 143)
+     |> assign(tech_vuln_debt: 65)
+     |> assign(lic_threshold: 143)
      |> assign(tech_lic_debt: 0)
      |> assign(score: 0)
      |> assign(hint: :intro)
@@ -195,7 +195,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(instructions_modal: false)
     |> assign(fix_vuln_or_license: false)
     |> assign(lawsuit_threshold: 5)
-    |> assign(lic_threshold: 81)
+    |> assign(lic_threshold: 143)
     |> assign(moving_block: false)
     |> assign(powers: [])
     |> assign(qna: %{})
@@ -204,9 +204,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(speed: 2)
     |> assign(state: :playing)
     |> assign(tech_lic_debt: 0)
-    |> assign(tech_vuln_debt: 45)
+    |> assign(tech_vuln_debt: 65)
     |> assign(tick_count: 5)
-    |> assign(vuln_threshold: 79)
+    |> assign(vuln_threshold: 143)
     |> new_block
     |> show
   end
@@ -582,7 +582,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:fixallvulns]
+    powers = socket.assigns.powers -- [:rmallvulns]
     bottom = Bottom.remove_all_vulnerabilities(socket.assigns.bottom)
 
     {:noreply,
@@ -592,7 +592,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:fixalllicenses]
+    powers = socket.assigns.powers -- [:rmalllicenses]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
     {:noreply,
      socket
@@ -661,12 +661,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:fixallvulns]
+    powers = socket.assigns.powers -- [:rmallvulns]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:fixalllicenses]
+    powers = socket.assigns.powers -- [:rmalllicenses]
     {:noreply, assign(socket, powers: powers)}
   end
 

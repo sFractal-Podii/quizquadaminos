@@ -300,32 +300,29 @@ defmodule Quadquizaminos.Instructions do
     </p>
     <p>
       <sl>
-        <li><i class="fas fa-plus-square"></i> add a block</li>
-        <li><i class="fas fa-minus-square"></i> remove a block</li>
-        <li><i class="fas fa-arrows-alt"></i> move a block</li>
-        <li><i class="fas fa-eraser"></i> clear blocks</li>
-        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall</li>
-        <li><i class="fas fa-fast-forward"></i> speed up</li>
-        <li><i class="fas fa-fast-backward"></i> slow down</li>
-        <li><i class="fas fa-microscope"></i> forensics</li>
-        <li><i class="fas fa-clipboard-check"></i> slows down vulns</li>
-        <li><i class="fas fa-certificate"></i> certificate/badge slows down licensing issues</li>
-        <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber</li>
-        <li><i class="fas fa-file-contract"></i> Cyber Insurance</li>
-        <li><i class="far fa-id-card"></i> SBOM</li>
-        <li><i class="fas fa-toolbox"></i> automation</li>
-        <li><i class="fas fa-tools"></i> OpenChain</li>
+        <li><i class="fas fa-plus-square"></i> add a block - useful to fill in holes</li>
+        <li><i class="fas fa-minus-square"></i> remove a block - useful to remove problem blocks</li>
+        <li><i class="fas fa-arrows-alt"></i> move a block - helpful both to get a block 'out of the way' and to fill in hole</li>
+        <li><i class="fas fa-eraser"></i> clear blocks - use in attacked or sued, helpful if supply chain gets too long</li>
+        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall - useful when you need a certain block to clear rows</li>
+        <li><i class="fas fa-fast-forward"></i> speed up - gets you more points on row clearing, needed if lawsuit is slowing your business</li>
+        <li><i class="fas fa-fast-backward"></i> slow down - necesary if attacked, useful if game is going too fast</li>
+        <li><i class="fas fa-microscope"></i> forensics - will remove an attack</li>
+        <li><i class="fas fa-clipboard-check"></i> slows down creation of vulns</li>
+        <li><i class="fas fa-certificate"></i> certificate/badge slows down creation of licensing issues</li>
+        <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber - which slows down licensing issues</li>
+        <li><i class="fas fa-file-contract"></i> Cyber Insurance - lessens the removal of points due to attacks and lawsuits</li>
+        <li><i class="far fa-id-card"></i> SBOM - slows down vulnerability creation, slows down license issues</li>
+        <li><i class="fas fa-toolbox"></i> automation - slows down vulnerability creation, slows down license issues</li>
+        <li><i class="fas fa-tools"></i> OpenChain - slows down slows down license issues</li>
         <li><i class="fas fa-wrench"></i> fix a vulnerability</li>
         <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
-        <li><i class="fas fa-hammer"></i> fix all vulnerabilities</li>
-        <li><i class="fas fa-tape"></i> fix all licensing issues</li>
+        <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
+        <li><i class="fas fa-tape"></i> remove all licensing issues</li>
         <li><i class="fas fa-file-prescription"></i> stop a cyberattack</li>
         <li><i class="fas fa-balance-scale"></i> win a lawsuite</li>
         <li><i class="fab fa-superpowers"></i> Superpower</li>
       </ol>
-    </p>
-    <p>
-      Some powerups only can be obtained from obtaining multiple other powerups.
     </p>
     <p>
       All combo superpowers require having the superpower powerup as well as the
@@ -356,12 +353,14 @@ defmodule Quadquizaminos.Instructions do
       requires superpower, SBOM, legal, openchain, cyberinsurance
       </p>
     <h3>Prizes, Contests</h3>
-    Prizes can be won in several ways.
+    There will be a contest on date at time.
+    You must be an RSAC registered attendee to win.
+    Any given person will only be entitled to one prize.
+    Winners will select from among the available prizes until
+    there are none left.
 
-    Some sponsors offer no prizes.
-    Some sponsors offer
-    prizes for correctly answering a particular question.
-    Some sponsors offer prizes as part of a contest.
+    Prizes include:
+    - fill in later
 
     <h3>Strategy, Tips & Tricks</h3>
     <p>tetris vs quiz</p>
@@ -418,8 +417,11 @@ defmodule Quadquizaminos.Instructions do
           <li>"c" clears bottom blocks (change to add clear-blocks powerup)</li>
           <li>"p" to add all powerup</li>
           <li>"1" to switch to stored block configuraton</li>
-          <li>"2" to switch to stored attack configuraton</li>
-          <li>"3" to switch to stored lawsuit configuraton</li>
+          <li>"2" to add attack to blocks</li>
+          <li>"3" to lawsuit to blocks</li>
+          <li>"4" to ...</li>
+          <li>"5" to ...</li>
+          <li>"6" to ...</li>
         </ol>
 
     """
