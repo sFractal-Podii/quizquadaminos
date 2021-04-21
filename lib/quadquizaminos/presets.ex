@@ -92,7 +92,7 @@ defmodule Quadquizaminos.Presets do
     }
   end
 
-  def powers(:1) do
+  def powers() do
     [ :nextblock, :fixvuln, :fixlicense,
       :deleteblock, :deleteblock,
       :addblock, :addblock, :addblock,

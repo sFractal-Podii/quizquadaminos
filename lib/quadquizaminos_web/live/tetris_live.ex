@@ -437,7 +437,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   ## for debugging - take out eventually
   def handle_event("keydown", %{"key" => "1"}, socket) do
     bottom = Presets.five_by_nine()
-    powers = Presets.powers(:1)
+    powers = Presets.powers()
     {speed, tick_count} = Presets.speed1()
     score = 1234
 
@@ -732,11 +732,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("transform_block", %{"x" => x, "y" => y, "color" => color},  %{assigns: %{fix_vuln_or_license: true}} = socket) do
     {x, y} = parse_to_integer(x,y)
-    color = String.to_atom(color)  
-    bottom = Bottom.remove_vuln_and_license(socket.assigns.bottom, {x, y, color})   
-    {:noreply, socket |> assign(bottom: bottom)} 
+    color = String.to_atom(color)
+    bottom = Bottom.remove_vuln_and_license(socket.assigns.bottom, {x, y, color})
+    {:noreply, socket |> assign(bottom: bottom)}
   end
-  
+
   def handle_event("transform_block", _params, socket) do
     {:noreply, socket}
   end
