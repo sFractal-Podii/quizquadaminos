@@ -2,34 +2,58 @@ defmodule QuadquizaminosWeb.PageControllerTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
+  alias Quadquizaminos.Accounts.User
 
   test "user is restricted to access tetris game if not logged in", %{conn: conn} do
     conn = get(conn, "/tetris")
     assert get_flash(conn, :error) == "Please login first"
   end
 
-  test "non configured players are restricted from accessing tetris game", %{conn: conn} do
+  test "configured users are given admin role when authenticated", %{conn: conn} do
     auth = %Ueberauth.Auth{
       provider: :github,
       info: %{
         first_name: "John",
         last_name: "Doe",
         email: "john.doe@example.com",
-        image: "https://example.com/image.jpg"
-      }
+        image: "https://example.com/image.jpg",
+        name: "John Doe"
+      },
+      uid: 4_000_000
     }
 
-    conn =
-      conn
-      |> bypass_through(QuadquizaminosWeb.Router, [:browser])
-      |> get("/auth/github/callback")
-      |> assign(:ueberauth_auth, auth)
-      |> QuadquizaminosWeb.AuthController.callback(%{})
+    conn
+    |> bypass_through(QuadquizaminosWeb.Router, [:browser])
+    |> get("/auth/github/callback")
+    |> assign(:ueberauth_auth, auth)
+    |> QuadquizaminosWeb.AuthController.callback(%{})
 
-    assert get_flash(conn, :error) == "You are not authorized to access the page"
+    %User{role: "admin"} = Quadquizaminos.Repo.get(User, auth.uid)
   end
 
-  test "configured players get notified if Successfully authenticated", %{conn: conn} do
+  test "non configured users are given player role when authenticated", %{conn: conn} do
+    auth = %Ueberauth.Auth{
+      provider: :github,
+      info: %{
+        first_name: "John",
+        last_name: "Doe",
+        email: "john.doe@example.com",
+        image: "https://example.com/image.jpg",
+        name: "John Doe"
+      },
+      uid: 3_000_000
+    }
+
+    conn
+    |> bypass_through(QuadquizaminosWeb.Router, [:browser])
+    |> get("/auth/github/callback")
+    |> assign(:ueberauth_auth, auth)
+    |> QuadquizaminosWeb.AuthController.callback(%{})
+
+    %User{role: "player"} = Quadquizaminos.Repo.get(User, auth.uid)
+  end
+
+  test "users get notified if Successfully authenticated", %{conn: conn} do
     auth = %Ueberauth.Auth{
       provider: :github,
       info: %{
