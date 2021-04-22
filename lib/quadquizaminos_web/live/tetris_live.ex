@@ -438,7 +438,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("keydown", %{"key" => "1"}, socket) do
     bottom = Presets.five_by_nine()
     powers = Presets.powers()
-    {speed, tick_count} = Presets.speed1()
+    {speed, tick_count} = Presets.speed()
     score = 1234
 
     {:noreply, socket

@@ -101,7 +101,7 @@ defmodule Quadquizaminos.Presets do
       :slowdown,:slowdown,:slowdown ]
   end
 
-  def speed(:1) do
+  def speed() do
     {3, Quadquizaminos.Speed.speed_tick_count(3)}
   end
 
