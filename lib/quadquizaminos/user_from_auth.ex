@@ -6,28 +6,18 @@ defmodule Quadquizaminos.UserFromAuth do
   require Jason
 
   alias Ueberauth.Auth
+  alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Repo
 
   def find_or_create(%Auth{} = auth) do
-    case get_user(auth.uid) do
+    case Accounts.get_user(auth.uid) do
       nil ->
-        create_user(%User{}, basic_info(auth))
+        Accounts.create_user(%User{}, basic_info(auth))
 
       user ->
         {:ok, user}
     end
-  end
-
-  def create_user(user, attrs) do
-    user
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def get_user(id) do
-    User
-    |> Repo.get(id)
   end
 
   # github does it this way
@@ -41,8 +31,19 @@ defmodule Quadquizaminos.UserFromAuth do
   end
 
   defp basic_info(auth) do
-    %{user_id: auth.uid, name: name_from_auth(auth), avatar: avatar_from_auth(auth)}
+    %{
+      user_id: auth.uid,
+      name: name_from_auth(auth),
+      avatar: avatar_from_auth(auth),
+      role: auth.uid |> configured_user?() |> role()
+    }
   end
+
+  defp role(true = _configured_user?), do: "admin"
+
+  defp role(_configured_user?), do: "player"
+
+  defp configured_user?(user_id), do: user_id in Application.get_env(:quadquizaminos, :github_ids)
 
   defp name_from_auth(auth) do
     if auth.info.name do
