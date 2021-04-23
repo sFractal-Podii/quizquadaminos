@@ -26,6 +26,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+#github authentication
 config :ueberauth, Ueberauth,
   providers: [
     github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
@@ -37,13 +38,23 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 
 config :quadquizaminos,
   # add github_id of authorized users
-  github_ids: [1, 2],
+  github_ids: [1, 2]
 
-  # set bottom vulnerability defaulting value
-  bottom_vulnerability_value: 77,
-  # this threshold determines the marking of vulnerability to new incoming block when 
-  # brick counter is evenly divided by it
-  vulnerability_new_brick_threshold: 7
+#twitter authentication
+config :ueberauth, Ueberauth,
+  providers: [
+    twitter: {Ueberauth.Strategy.Twitter, []}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
+          consumer_key: "",
+          consumer_secret: "", 
+
+# set bottom vulnerability defaulting value
+bottom_vulnerability_value: 77,
+# this threshold determines the marking of vulnerability to new incoming block when 
+# brick counter is evenly divided by it
+vulnerability_new_brick_threshold: 7
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
