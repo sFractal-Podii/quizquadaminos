@@ -20,6 +20,7 @@
       </section>
       <nav role="navigation">
     <ul>
+      <%= link "Leaderboard", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive), class: "button" %>
       <%= if @current_user do %>
         <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button" %>
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
