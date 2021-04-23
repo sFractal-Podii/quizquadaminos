@@ -4,6 +4,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
+
   alias Quadquizaminos.{
     Bottom,
     Brick,
@@ -16,12 +17,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Speed,
     Tetris,
     Threshold
-    }
+  }
 
   @debug false
   @box_width 20
   @box_height 20
-  @bottom_vulnerability_value Application.get_env(:quadquizaminos, :bottom_vulnerability_value)
 
   def mount(_param, _session, socket) do
     :timer.send_interval(50, self(), :tick)
@@ -339,13 +339,21 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(bottom: response.bottom)
     |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
     |> assign(row_count: socket.assigns.row_count + response.row_count)
-    |> assign(hint: if(response.brick_count > 0,
-      do: Hints.next_hint(socket.assigns.hint),
-      else: socket.assigns.hint))
+    |> assign(
+      hint:
+        if(response.brick_count > 0,
+          do: Hints.next_hint(socket.assigns.hint),
+          else: socket.assigns.hint
+        )
+    )
     |> assign(score: socket.assigns.score + response.score + bonus)
-    |> assign(state: if(response.game_over,
-      do: :game_over,
-      else: :playing))
+    |> assign(
+      state:
+        if(response.game_over,
+          do: :game_over,
+          else: :playing
+        )
+    )
     |> show
   end
 
@@ -594,6 +602,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
     powers = socket.assigns.powers -- [:fixalllicenses]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
+
     {:noreply,
      socket
      |> assign(powers: powers)
@@ -633,7 +642,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
     powers = socket.assigns.powers -- [:fixalllicenses]
     {:noreply, assign(socket, powers: powers)}
-  end 
+  end
 
   def handle_event("powerup", _, socket) do
     {:noreply, socket}
@@ -657,13 +666,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, delete_block(socket, x, y)}
   end
 
-  def handle_event("transform_block", %{"x" => x, "y" => y, "color" => color},  %{assigns: %{fix_vuln_or_license: true}} = socket) do
-    {x, y} = parse_to_integer(x,y)
-    color = String.to_atom(color)  
-    bottom = Bottom.remove_vuln_and_license(socket.assigns.bottom, {x, y, color})   
-    {:noreply, socket |> assign(bottom: bottom)} 
+  def handle_event(
+        "transform_block",
+        %{"x" => x, "y" => y, "color" => color},
+        %{assigns: %{fix_vuln_or_license: true}} = socket
+      ) do
+    {x, y} = parse_to_integer(x, y)
+    color = String.to_atom(color)
+    bottom = Bottom.remove_vuln_and_license(socket.assigns.bottom, {x, y, color})
+    {:noreply, socket |> assign(bottom: bottom)}
   end
-  
+
   def handle_event("transform_block", _params, socket) do
     {:noreply, socket}
   end
