@@ -5,7 +5,6 @@ defmodule QuadquizaminosWeb.PageController do
 
   use QuadquizaminosWeb, :controller
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.UserFromAuth
 
   def index(conn, _params) do
     user_id = conn.assigns[:current_user]
@@ -15,7 +14,7 @@ defmodule QuadquizaminosWeb.PageController do
   def anonymous(conn, _params) do
     conn
     |> put_flash(:info, "Successfully authenticated.")
-    |> put_session(:user, "anonymous")
+    |> put_session(:user_id, "anonymous")
     |> configure_session(renew: true)
     |> redirect(to: "/")
   end
