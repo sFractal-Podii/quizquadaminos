@@ -20,12 +20,11 @@
       </section>
       <nav role="navigation">
     <ul>
+      <%= link "Leaderboard", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive), class: "button" %>
       <%= if @current_user do %>
         <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button" %>
-        <%= unless @current_user == "anonymous" do %>
-          <%= if @current_user.role == "admin" and Mix.env() == :prod do %>
-            <%= link "Live Dashboard", to: "/dashboard", class: "button" %>
-          <% end %>
+        <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
+         <%= link "Live Dashboard", to: "/dashboard", class: "button" %>
         <% end %>
       <% end %>
     </ul>

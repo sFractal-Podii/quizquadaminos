@@ -2,14 +2,14 @@ defmodule QuadquizaminosWeb.PowerUpTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Test.Auth
 
   @purple_shade %{light: "ff00ff", dark: "800080"}
 
-  setup %{conn: conn} do
-    user = %User{name: "Quiz Block ", user_id: 40_000_000}
-    conn = assign(conn, :current_user, user.user_id)
-    [user: user, conn: conn]
+  setup do
+    conn = Auth.login()
+
+    [conn: conn]
   end
 
   describe "powerup display" do
@@ -204,9 +204,9 @@ defmodule QuadquizaminosWeb.PowerUpTest do
     setup %{conn: conn} do
       {view, _html} = pause_game(conn)
 
-      render_click(view, "choose_category", %{"category" => "open_chain"})
+      render_click(view, "choose_category", %{"category" => "phoenix"})
 
-      right_answer = Quadquizaminos.QnA.question("open_chain").correct
+      right_answer = Quadquizaminos.QnA.question("phoenix").correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
       [html: html, view: view, oc_right_answer: right_answer]
@@ -217,32 +217,42 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       refute html =~ "<div class=\"phx-modal-content\">"
     end
 
-    test "power up provide ability to fix vulnerability", %{view: view, oc_right_answer: oc_right_answer} do
+    test "power up provide ability to fix vulnerability", %{
+      view: view,
+      oc_right_answer: oc_right_answer
+    } do
       add_block(view)
-      right_answer = Quadquizaminos.QnA.question("open_c2").correct 
-   
+      right_answer = Quadquizaminos.QnA.question("open_c2").correct
+
       wrong_answer =
         Enum.find(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], fn guess ->
           guess != right_answer
         end)
+
       render_keydown(view, "keydown", %{"key" => " "})
 
-      render_click(view, "choose_category", %{"category" => "open_c2"}) 
-      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}}) 
+      render_click(view, "choose_category", %{"category" => "open_c2"})
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
       assert html =~ "vuln_grey_yellow"
 
       render_keydown(view, "keydown", %{"key" => " "})
-      render_click(view, "choose_category", %{"category" => "open_chain"}) 
-      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => oc_right_answer}}) 
+      render_click(view, "choose_category", %{"category" => "phoenix"})
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => oc_right_answer}})
       assert html =~ "\"fixvuln\">"
 
       render_click(view, "powerup", %{"powerup" => "fixvuln"})
-      html = render_click(view, "transform_block",  %{"x" => "5", "y" => "20", "color" => "vuln_grey_yellow"})
+
+      html =
+        render_click(view, "transform_block", %{
+          "x" => "5",
+          "y" => "20",
+          "color" => "vuln_grey_yellow"
+        })
+
       refute html =~ "vuln_grey_yellow"
       assert html =~ "purple"
     end
   end
-  
 
   defp pause_game(conn) do
     {:ok, view, _html} = live(conn, "/tetris")
