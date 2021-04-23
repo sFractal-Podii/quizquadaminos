@@ -1,4 +1,4 @@
-defmodule QuadquizaminosWeb.TetrisLiveTest do
+defmodule QuadquizaminosWeb.LeaderboardLiveTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
