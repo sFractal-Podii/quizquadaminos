@@ -29,7 +29,7 @@ config :phoenix, :json_library, Jason
 #Google authentication configuration
 config :ueberauth, Ueberauth,
   providers: [
-    google: {Ueberauth.Strategy.Google, [allow_private_emails: true]}
+    google: {Ueberauth.Strategy.Google, [default_scope: "email profile", allow_private_emails: true]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
