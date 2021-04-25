@@ -56,6 +56,10 @@
         <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous )%>">
           Sign in anonymously
         </a>
+        <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "facebook") %>">
+          <i class="fa fa-github"></i>
+          Sign in with Facebook
+        </a>
       </li>
     </ul>
   <% end %>
