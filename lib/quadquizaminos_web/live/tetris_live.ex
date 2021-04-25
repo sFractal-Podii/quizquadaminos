@@ -575,46 +575,57 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:nextblock]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "forensics"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:forensics]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "slowvulns"}, socket) do
+    ## to do
+    ## does this become badge instead of powerup
     powers = socket.assigns.powers -- [:slowvulns]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "slowlicense"}, socket) do
+    ## to do
+    ## does this become badge instead of powerup
     powers = socket.assigns.powers -- [:slowlicense]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "legal"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:legal]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "cyberinsurance"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:cyberinsurance]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "sbom"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:sbom]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
+    ## more to do?
     powers = socket.assigns.powers -- [:fixvuln]
     {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
+    ## more to do?
     powers = socket.assigns.powers -- [:fixlicense]
     {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
   end
@@ -640,37 +651,34 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "automation"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:automation]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "openchain"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:openchain]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "stopattack"}, socket) do
+    ## to do
+    ## do away with?
     powers = socket.assigns.powers -- [:stopattack]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "winlawsuit"}, socket) do
+    ## to do
+    ## do away with?
     powers = socket.assigns.powers -- [:winlawsuit]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:superpower]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:rmallvulns]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:rmalllicenses]
     {:noreply, assign(socket, powers: powers)}
   end
 
