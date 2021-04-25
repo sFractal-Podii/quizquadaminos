@@ -27,6 +27,15 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
+      providers: [
+        linkedin: {Ueberauth.Strategy.LinkedIn, []}
+      ]
+  
+config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
+        client_id: System.get_env("LINKEDIN_CLIENT_ID"),
+        client_secret: System.get_env("LINKEDIN_CLIENT_SECRET")
+        
+config :ueberauth, Ueberauth,
   providers: [
     github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
   ]
