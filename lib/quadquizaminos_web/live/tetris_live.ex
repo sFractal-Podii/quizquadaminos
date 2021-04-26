@@ -31,24 +31,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:ok,
      socket
      |> assign(current_user: current_user)
-     |> assign(bottom: %{})
-     |> assign(qna: %{}, powers: [])
-     |> assign(category: nil, categories: init_categories())
-     |> assign(block_coordinates: nil)
-     |> assign(adding_block: false, moving_block: false, deleting_block: false)
-     |> assign(instructions_modal: false)
-     |> assign(speed: 2, tick_count: 5)
-     |> assign(brick_count: 0)
-     |> assign(row_count: 0)
-     |> assign(correct_answers: 0)
-     |> assign(attack_threshold: 5)
-     |> assign(lawsuit_threshold: 5)
-     |> assign(vuln_threshold: 143)
-     |> assign(tech_vuln_debt: 65)
-     |> assign(lic_threshold: 143)
-     |> assign(tech_lic_debt: 0)
-     |> assign(score: 0)
-     |> assign(hint: :intro)
+     |> init_game
      |> start_game()}
   end
 
@@ -186,32 +169,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp new_game(socket) do
     ## should qna be reset or carryover between games????
     socket
-    |> assign(adding_block: false)
-    |> assign(attack_threshold: 5)
-    |> assign(block_coordinates: nil)
-    |> assign(bottom: %{})
-    |> assign(brick_count: 0)
-    |> assign(category: nil, categories: init_categories())
-    |> assign(correct_answers: 0)
-    |> assign(deleting_block: false)
-    |> assign(hint: :intro)
-    |> assign(instructions_modal: false)
-    |> assign(fix_vuln_or_license: false)
-    |> assign(lawsuit_threshold: 5)
-    |> assign(lic_threshold: 143)
-    |> assign(moving_block: false)
-    |> assign(powers: [])
-    |> assign(qna: %{})
-    |> assign(row_count: 0)
-    |> assign(score: 0)
-    |> assign(speed: 2)
-    |> assign(state: :playing)
-    |> assign(tech_lic_debt: 0)
-    |> assign(tech_vuln_debt: 65)
-    |> assign(tick_count: 5)
-    |> assign(vuln_threshold: 79)
-    |> assign(start_time: DateTime.utc_now())
-    |> assign(vuln_threshold: 143)
+    |> init_game
     |> new_block
     |> show
   end
@@ -251,6 +209,38 @@ defmodule QuadquizaminosWeb.TetrisLive do
       |> Points.with_color(color(brick), socket.assigns.brick_count)
 
     assign(socket, tetromino: points)
+  end
+
+  defp init_game(socket) do
+    socket
+    |> assign(adding_block: false)
+    |> assign(attack_threshold: 5)
+    |> assign(block_coordinates: nil)
+    |> assign(bottom: %{})
+    |> assign(brick_count: 0)
+    |> assign(category: nil, categories: init_categories())
+    |> assign(correct_answers: 0)
+    |> assign(deleting_block: false)
+    |> assign(fix_vuln_or_license: false)
+    |> assign(hint: :intro)
+    |> assign(instructions_modal: false)
+    |> assign(lawsuit_threshold: 5)
+    |> assign(lic_threshold: 143)
+    |> assign(moving_block: false)
+    |> assign(powers: [])
+    |> assign(qna: %{})
+    |> assign(row_count: 0)
+    |> assign(score: 0)
+    |> assign(speed: 2)
+    |> assign(start_time: DateTime.utc_now())
+    |> assign(state: :playing)
+    |> assign(tick_count: 5)
+    |> assign(tech_lic_debt: 0)
+    |> assign(tech_vuln_debt: 65)
+    |> assign(vuln_threshold: 143)
+
+ end
+
   end
 
   def svg_head() do
