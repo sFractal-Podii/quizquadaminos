@@ -241,8 +241,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
  end
 
-  end
-
   def svg_head() do
     """
     <svg
