@@ -2,12 +2,11 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Test.Auth
 
-  setup %{conn: conn} do
-    user = %User{name: "Quiz Block ", user_id: 40_000_000}
-    conn = assign(conn, :current_user, user.user_id)
-    [user: user, conn: conn]
+  setup do
+    conn = Auth.login()
+    [conn: conn]
   end
 
   describe "Pausing game:" do

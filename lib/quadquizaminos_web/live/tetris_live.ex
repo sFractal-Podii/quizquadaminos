@@ -19,15 +19,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Threshold
   }
 
+  alias Quadquizaminos.GameBoard.Records
+
   @debug false
   @box_width 20
   @box_height 20
 
-  def mount(_param, _session, socket) do
+  def mount(_param, %{"user_id" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
 
     {:ok,
      socket
+     |> assign(current_user: current_user)
      |> assign(bottom: %{})
      |> assign(qna: %{}, powers: [])
      |> assign(category: nil, categories: init_categories())
@@ -206,6 +209,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(tech_lic_debt: 0)
     |> assign(tech_vuln_debt: 65)
     |> assign(tick_count: 5)
+    |> assign(vuln_threshold: 79)
+    |> assign(start_time: DateTime.utc_now())
     |> assign(vuln_threshold: 143)
     |> new_block
     |> show
@@ -321,6 +326,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp color(%{name: :o}), do: :orange
   defp color(%{name: :z}), do: :pink
 
+  defp game_record(socket) do
+    %{
+      start_time: socket.assigns.start_time,
+      end_time: DateTime.utc_now(),
+      user_id: socket.assigns.current_user,
+      score: socket.assigns.score,
+      dropped_bricks: socket.assigns.brick_count,
+      correctly_answered_qna: socket.assigns.correct_answers
+    }
+  end
+
   def drop(:playing, socket, fast) do
     old_brick = socket.assigns.brick
 
@@ -333,6 +349,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       )
 
     bonus = if fast, do: 2, else: 0
+    Records.record_player_game(response.game_over, game_record(socket))
 
     socket
     |> assign(brick: response.brick)
