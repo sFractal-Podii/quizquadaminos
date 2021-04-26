@@ -34,14 +34,19 @@ defmodule QuadquizaminosWeb.AdminLive do
 
   def handle_event("login_levels", %{"login_levels" => selected_level}, socket) do
     initially_selected_level = initially_selected_level(selected_level, socket)
+    {:noreply, update_login_level(socket, selected_level, initially_selected_level)}
+  end
 
-    Accounts.update_login_level(selected_level, initially_selected_level)
+  defp update_login_level(socket, selected_level, initially_selected_level) do
+    case Accounts.update_login_level(selected_level, initially_selected_level) do
+      {:ok, _} ->
+        socket
+        |> assign(to_atom(initially_selected_level), false)
+        |> assign(to_atom(selected_level), true)
 
-    initially_selected_level = assigned_login_level(initially_selected_level, socket.assigns)
-
-    selected_level = assigned_login_level(selected_level, socket.assigns)
-
-    {:noreply, socket |> assign(initially_selected_level, false) |> assign(selected_level, true)}
+      _ ->
+        socket
+    end
   end
 
   defp selected?(level) do
@@ -57,9 +62,7 @@ defmodule QuadquizaminosWeb.AdminLive do
     end
   end
 
-  defp assigned_login_level(login_level, assigns) do
-    {login_level, _} = Enum.find(assigns, fn {k, _v} -> k == String.to_atom(login_level) end)
-
-    login_level
+  defp to_atom(login_level) do
+    String.to_atom(login_level)
   end
 end
