@@ -1,4 +1,5 @@
 defmodule Quadquizaminos.Accounts do
+  alias Quadquizaminos.Accounts.LoginLevel
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Repo
 
@@ -23,5 +24,24 @@ defmodule Quadquizaminos.Accounts do
   def user_has_role?(current_user, roles) do
     current_user = get_user(current_user)
     current_user.role in roles
+  end
+
+  def get_login_level(level) do
+    Repo.get_by(LoginLevel, name: level)
+  end
+
+  def update_login_level(selected_level, initially_selected_level) do
+    initially_selected_query =
+      LoginLevel.base_query()
+      |> LoginLevel.by_name(initially_selected_level)
+
+    selected_level_query =
+      LoginLevel.base_query()
+      |> LoginLevel.by_name(selected_level)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update_all(:selected_level, selected_level_query, set: [active: true])
+    |> Ecto.Multi.update_all(:initially_selected, initially_selected_query, set: [active: false])
+    |> Repo.transaction()
   end
 end
