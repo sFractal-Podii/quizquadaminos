@@ -41,4 +41,5 @@ defmodule QuadquizaminosWeb.AuthController do
         |> redirect(to: "/")
     end
   end
+
 end

@@ -53,7 +53,7 @@ defmodule QuadquizaminosWeb.PageControllerTest do
     %User{role: "player"} = Quadquizaminos.Repo.get(User, auth.uid)
   end
 
-  test "users get notified if Successfully authenticated", %{conn: conn} do
+  test "users get notified if Successfully authenticated via github", %{conn: conn} do
     auth = %Ueberauth.Auth{
       provider: :github,
       info: %{
@@ -74,6 +74,39 @@ defmodule QuadquizaminosWeb.PageControllerTest do
       |> QuadquizaminosWeb.AuthController.callback(%{})
 
     assert get_flash(conn, :info) == "Successfully authenticated."
+  end
+
+  describe "login with google" do
+    setup %{conn: conn} do
+      auth = %Ueberauth.Auth{
+        provider: :google,
+        info: %{
+          first_name: "John",
+          last_name: "Doe",
+          email: "john.doe@example.com",
+          image: "https://example.com/image.jpg",
+          name: "John Doe"
+        },
+        uid: "12345678"
+      }
+
+      conn =
+        conn
+        |> bypass_through(QuadquizaminosWeb.Router, [:browser])
+        |> get("/auth/google/callback")
+        |> assign(:ueberauth_auth, auth)
+        |> QuadquizaminosWeb.AuthController.callback(%{})
+
+      [conn: conn, auth: auth]
+    end
+
+    test "users get notified if Successfully authenticated via google", %{conn: conn} do
+      assert get_flash(conn, :info) == "Successfully authenticated."
+    end
+
+    test "user role is saved as player", %{auth: auth} do
+      %User{role: "player"} = Quadquizaminos.Repo.get(User, auth.uid)
+    end
   end
 
   test "users can access game when logged in anonymously", %{conn: conn} do
