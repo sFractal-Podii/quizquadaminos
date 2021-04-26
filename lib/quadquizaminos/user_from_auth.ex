@@ -8,7 +8,6 @@ defmodule Quadquizaminos.UserFromAuth do
   alias Ueberauth.Auth
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
-  alias Quadquizaminos.Repo
 
   def find_or_create(%Auth{} = auth) do
     case Accounts.get_user(uid(auth)) do
