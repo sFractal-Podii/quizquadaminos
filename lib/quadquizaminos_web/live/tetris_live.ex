@@ -574,20 +574,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, assign(socket, powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "slowvulns"}, socket) do
-    ## to do
-    ## does this become badge instead of powerup
-    powers = socket.assigns.powers -- [:slowvulns]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "slowlicense"}, socket) do
-    ## to do
-    ## does this become badge instead of powerup
-    powers = socket.assigns.powers -- [:slowlicense]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
   def handle_event("powerup", %{"powerup" => "legal"}, socket) do
     ## to do
     powers = socket.assigns.powers -- [:legal]
@@ -619,7 +605,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:rmallvulns]
+    powers = socket.assigns.powers -- [:rm_all_vulns]
     bottom = Bottom.remove_all_vulnerabilities(socket.assigns.bottom)
 
     {:noreply,
@@ -629,7 +615,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:rmalllicenses]
+    powers = socket.assigns.powers -- [:rm_all_lic_issues]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
 
     {:noreply,
@@ -647,20 +633,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "openchain"}, socket) do
     ## to do
     powers = socket.assigns.powers -- [:openchain]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "stopattack"}, socket) do
-    ## to do
-    ## do away with?
-    powers = socket.assigns.powers -- [:stopattack]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "winlawsuit"}, socket) do
-    ## to do
-    ## do away with?
-    powers = socket.assigns.powers -- [:winlawsuit]
     {:noreply, assign(socket, powers: powers)}
   end
 
