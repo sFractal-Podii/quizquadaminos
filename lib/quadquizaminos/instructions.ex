@@ -307,9 +307,7 @@ defmodule Quadquizaminos.Instructions do
         <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall - useful when you need a certain block to clear rows</li>
         <li><i class="fas fa-fast-forward"></i> speed up - gets you more points on row clearing, needed if lawsuit is slowing your business</li>
         <li><i class="fas fa-fast-backward"></i> slow down - necesary if attacked, useful if game is going too fast</li>
-        <li><i class="fas fa-microscope"></i> forensics - will remove an attack</li>
-        <li><i class="fas fa-clipboard-check"></i> slows down creation of vulns</li>
-        <li><i class="fas fa-certificate"></i> certificate/badge slows down creation of licensing issues</li>
+        <li><i class="fas fa-microscope"></i> forensics - helps prepare for attacks</li>
         <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber - which slows down licensing issues</li>
         <li><i class="fas fa-file-contract"></i> Cyber Insurance - lessens the removal of points due to attacks and lawsuits</li>
         <li><i class="far fa-id-card"></i> SBOM - slows down vulnerability creation, slows down license issues</li>
@@ -319,39 +317,10 @@ defmodule Quadquizaminos.Instructions do
         <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
         <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
         <li><i class="fas fa-tape"></i> remove all licensing issues</li>
-        <li><i class="fas fa-file-prescription"></i> stop a cyberattack</li>
-        <li><i class="fas fa-balance-scale"></i> win a lawsuite</li>
-        <li><i class="fab fa-superpowers"></i> Superpower</li>
+        <li><i class="fab fa-superpowers"></i> Superpower - exchange for any other powerup</li>
       </ol>
     </p>
-    <p>
-      All combo superpowers require having the superpower powerup as well as the
-      other necessary powerups.
-      </p>
-      <p>
-      For example, the <i class="fas fa-ribbon"></i> ribbon/badge slows
-      down the arrival rate of vulnerabilties.
-      To obtain this ribbon/badge, you must have and click on the
-      superpower badge after already having at least one SBOM powerup
-      and one automation powerup in your stash.
-      When you click on the superpower powerup, the ribbon/badge
-      will appear as one of powers you can exchange for.
-      Picking it removes one superpower, one SBOM, and one automation
-      from your stash and adds one ribbon/badge to your stash.
-      Note you still need to click on the ribbon/badge to activate it.
-      </p>
-      <p>
-      Similarly, the <i class="fas fa-certificate"></i> certificate badge
-      requires superpower, SBOM, OpenChain.
-      </p>
-      <p>
-      <i class="fas fa-file-prescription"></i> fix a cyberattack
-      requires superpower, SBOM, forensics, automation, legal, cyberinsurance
-      </p>
-      <p>
-      <i class="fas fa-syringe"></i> fix a lawsuit
-      requires superpower, SBOM, legal, openchain, cyberinsurance
-      </p>
+
     <h3>Prizes, Contests</h3>
     There will be a contest on date at time.
     You must be an RSAC registered attendee to win.

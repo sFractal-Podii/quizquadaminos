@@ -28,7 +28,7 @@ defmodule Quadquizaminos.Hints do
     <p>Space bar pops up quiz.</p>
     <p>Answer questions for points and powerups.</p>
     <p>Powerups let you delete blocks, add blocks, move blocks,
-    prevent attacks, win lawsuits, etc</p>
+    prevent attacks, prevent lawsuits, etc</p>
     """
   end
 
