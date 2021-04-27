@@ -32,8 +32,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
-      client_id: System.get_env("FACEBOOK_CLIENT_ID"),
-      client_secret: System.get_env("FACEBOOK_CLIENT_SECRET")  
+      client_id: "3795489590506840",
+      client_secret: "dec9b61180d7ee0f43009e165e362377" 
 
 config :ueberauth, Ueberauth,
   providers: [
