@@ -36,6 +36,12 @@ defmodule QuadquizaminosWeb.Router do
     live "/tetris/instructions", TetrisLive, :instructions
   end
 
+  scope "/admin", QuadquizaminosWeb do
+    pipe_through [:browser, :authorize_admin]
+
+    live "/login_levels", AdminLive
+  end
+
   scope "/auth", QuadquizaminosWeb do
     pipe_through :browser
 
