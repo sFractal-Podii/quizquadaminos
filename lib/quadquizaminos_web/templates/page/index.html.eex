@@ -59,6 +59,9 @@
         <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "google") %>">
         Sign in with Google
         </a>
+         <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "linkedin") %>">
+        Sign in with Linkedin
+        </a>
       </li>
     </ul>
   <% end %>

@@ -44,8 +44,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
-  client_id: System.get_env("LINKEDIN_CLIENT_ID"),
-  client_secret: System.get_env("LINKEDIN_CLIENT_SECRET")
+  client_id: "77oypqbpa236ch",
+  client_secret: "uj3PCnO7U9RGYadT"
 
 # Github authentication configuration        
 config :ueberauth, Ueberauth,
