@@ -40,7 +40,7 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
 # Linkedin authentication configuration 
 config :ueberauth, Ueberauth,
   providers: [
-    linkedin: {Ueberauth.Strategy.LinkedIn, []}
+    linkedin: {Ueberauth.Strategy.LinkedIn, [default_scope: "r_liteprofile r_emailaddress"]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
