@@ -19,12 +19,16 @@
         <H3>Supply Chain Edition</H3>
       </section>
       <nav role="navigation">
-    <ul>
-      <%= link "Leaderboard", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive), class: "button" %>
-      <%= if @current_user do %>
-        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button" %>
+        <ul class="nav">
+         <li><a href="/">Home</a></li>  
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive) %> >Leaderboard</a></li>
+        <%= if @current_user do %>
+        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
-         <%= link "Live Dashboard", to: "/dashboard", class: "button" %>
+        <li><a href="/dashboard">Live Dashboard</a></li> 
+        <% end %>
+        <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
+        <li><a href="/admin/login_levels">Login levels</a></li> 
         <% end %>
       <% end %>
     </ul>
