@@ -10,17 +10,18 @@ defmodule Quadquizaminos.UserFromAuth do
   alias Quadquizaminos.Accounts.User
 
   def find_or_create(%Auth{} = auth) do
-    case Accounts.get_user(auth.uid) do
+    case Accounts.get_user(uid(auth)) do
       nil ->
         Accounts.create_user(%User{}, basic_info(auth))
 
       user ->
         {:ok, user}
-    end
+    end 
   end
 
   # github does it this way
-  defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}}), do: image
+  defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}, provider: _provider}), do: image
+  defp avatar_from_auth(%{info: %{image: image}, provider: :google}), do: image
 
   # default case if nothing matches
   defp avatar_from_auth(auth) do
@@ -31,11 +32,18 @@ defmodule Quadquizaminos.UserFromAuth do
 
   defp basic_info(auth) do
     %{
-      user_id: auth.uid,
+      user_id: uid(auth),
       name: name_from_auth(auth),
       avatar: avatar_from_auth(auth),
       role: auth.uid |> configured_user?() |> role()
     }
+  end
+
+  defp uid(auth) do
+        case auth.provider do
+          :google -> String.slice(auth.uid, 0, 8)
+                _ -> auth.uid 
+        end
   end
 
   defp role(true = _configured_user?), do: "admin"

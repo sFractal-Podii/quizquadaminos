@@ -4,7 +4,7 @@ defmodule Quadquizaminos.MixProject do
   def project do
     [
       app: :quadquizaminos,
-      version: "0.5.8",
+      version: "0.5.9",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -32,7 +32,7 @@ defmodule Quadquizaminos.MixProject do
   def application do
     [
       mod: {Quadquizaminos.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth_linkedin, :ueberauth, :mix]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth_google, :ueberauth_linkedin, :ueberauth, :mix]
     ]
   end
 
@@ -62,7 +62,8 @@ defmodule Quadquizaminos.MixProject do
       {:ueberauth, "~> 0.6"},
       {:ueberauth_github, "~> 0.7"},
       {:ueberauth_linkedin, "~>0.3"},
-      {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
+      {:ueberauth_google, "~>0.10"},
+      # {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
       {:earmark, "~> 1.4"}
     ]
   end
