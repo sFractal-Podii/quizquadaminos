@@ -3,22 +3,6 @@ defmodule Quadquizaminos.Instructions do
     def game_instruction() do
     """
     <h2>Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game</h2>
-    <p>We proudly present the SupplyChainSandbox edition of QuadBlocksQuiz -
-       a reimagined take on Tetris where playful spatial negotiations are infused with
-       real-life Trivia challenges from the world of supply chain security.</p>
-    <h2>Why Play?</h2>
-    <p>Whether you're attending RSAC because you "sell security" or "buy security," you can't afford
-  to pass on this love child of Tetris and Trivia. More than abstract configurations of digital blocks,
-  our Tetris spin-off envisions the classic arcade game as a potent metaphor for supply chain cyber security.
-  You can choose to let the blocks fall as they may and scramble to cope with the accumulated consequences at
-  a later point in time, or you can utilize savvy forecasting and informational superiority to address each
-  element as it appears on the horizon.</p>
- <p>As recent events have shown, you are only as protected as the weakest link in your supply chain.
-  Guarding your organization’s information in a digitally-connected world
-  means understanding not only your organization’s immediate supply chain,
-  but also the security of the extended ecosystem and all entities involved.
-  Besides the obvious enterprise advantage of robust supply chain security knowledge,
-  the tidbits offered up here will reappear as in-game trivia challenges. </p>
 <h2>Power Up!</h2>
   <p>You don't need to be a supply chain expert - this game assumes you are a novice
   and it teaches you what you need to know. You gain points by clearing rows as in a typical Tetris game.
@@ -51,14 +35,7 @@ defmodule Quadquizaminos.Instructions do
       <li>Powerups</li>
       <li>Prizes / Contests</li>
       <li>Strategy, Tips & Tricks</li>
-      <li>Developer Hacks</li>
     </ol></p>
-    <p>
-    Note that some of the features described here
-    are still in development.
-    If a feature has a "#", it indicates the feature is incomplete.
-    A number after the hash tag means it it that issue/story on the project board.
-    </p>
     <h3>Objective</h3>
     <p>The objective of the game is to move and rotate falling geometric shapes
     (quadblocks)
@@ -291,7 +268,7 @@ defmodule Quadquizaminos.Instructions do
     certain aspects of supply chain learned by playing this game.
     </p>
     <h3>Powerups</h3>
-    <p>The game starts with certain powerups (#?).
+    <p>
     Powerups are won by correctly answering certain questions.
     Powerups appear on the categories bar when paused.
     </p>
@@ -304,20 +281,21 @@ defmodule Quadquizaminos.Instructions do
         <li><i class="fas fa-minus-square"></i> remove a block - useful to remove problem blocks</li>
         <li><i class="fas fa-arrows-alt"></i> move a block - helpful both to get a block 'out of the way' and to fill in hole</li>
         <li><i class="fas fa-eraser"></i> clear blocks - use in attacked or sued, helpful if supply chain gets too long</li>
-        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall - useful when you need a certain block to clear rows</li>
         <li><i class="fas fa-fast-forward"></i> speed up - gets you more points on row clearing, needed if lawsuit is slowing your business</li>
         <li><i class="fas fa-fast-backward"></i> slow down - necesary if attacked, useful if game is going too fast</li>
+        <li><i class="fas fa-wrench"></i> fix a vulnerability</li>
+        <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
+        <li>above here works, below here will work soon</li>
+        <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
+        <li><i class="fas fa-tape"></i> remove all licensing issues</li>
+        <li><i class="fab fa-superpowers"></i> Superpower - exchange for any other powerup</li>
+        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall - useful when you need a certain block to clear rows</li>
+        <li><i class="fas fa-tools"></i> OpenChain - slows down slows down license issues</li>
         <li><i class="fas fa-microscope"></i> forensics - helps prepare for attacks</li>
         <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber - which slows down licensing issues</li>
         <li><i class="fas fa-file-contract"></i> Cyber Insurance - lessens the removal of points due to attacks and lawsuits</li>
         <li><i class="far fa-id-card"></i> SBOM - slows down vulnerability creation, slows down license issues</li>
         <li><i class="fas fa-toolbox"></i> automation - slows down vulnerability creation, slows down license issues</li>
-        <li><i class="fas fa-tools"></i> OpenChain - slows down slows down license issues</li>
-        <li><i class="fas fa-wrench"></i> fix a vulnerability</li>
-        <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
-        <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
-        <li><i class="fas fa-tape"></i> remove all licensing issues</li>
-        <li><i class="fab fa-superpowers"></i> Superpower - exchange for any other powerup</li>
       </ol>
     </p>
 
@@ -329,12 +307,20 @@ defmodule Quadquizaminos.Instructions do
     there are none left.
 
     Prizes include:
-    - fill in later
+    - Win a private Cocktail Session via Zoom with Mixologist/Sommelier Chantal Tseng. This will include an in depth demo of three recipes catered to your favorite novel or other source of group inspiration. Chantal will provide advance recipes and a tool list for your unlimited number of guests who are then encouraged to make the drinks alongside and ask questions along the way.
+    - Win a private Absinthe tutorial with Mixologist/Sommelier Chantal Tseng. You and your unlimited number of guests will schedule a time on Zoom where Chantal will teach a condensed class covering the history and myths of Absinthe, proper service and its usage in cocktails
+    - sFractal consulting (5 hours)
+    - Podii software development (5 hours)
+    - Briar Cutter technical writing (5 hours)
+    - Win your very own custom cocktail recipe designed by Mixologist/Sommelier Chantal Tseng based on your home bar inventory and literary tastes
 
     <h3>Strategy, Tips & Tricks</h3>
     <p>tetris vs quiz</p>
     <p>
-    timing funny wrt QnA/powerups - multi-row clearing trick
+    timing funny wrt QnA/powerups
+    </p>
+    <p>
+    multi-row clearing trick
     </p>
     <p>
     just like in real life, it is sometimes expedient
@@ -353,15 +339,6 @@ defmodule Quadquizaminos.Instructions do
     (e.g. SBOM, Automation, OpenChain) of them occuring in the first place.
     </p>
     <p>
-    Note some of the powerups work best in tandem.
-    For example having an SBOM by itself does not do anything.
-    Neither does having automation.
-    But having an SBOM in combination with automation
-    drastrically reduces the vulnerability arrival rate
-    as well as reducing the chance of cyberattack.
-    Similarly with SBOM and OpenChain for licensing issues.
-    </p>
-    <p>
     Note slowing down vuln/lic means it can still happen,
     just less likely.
     </p>
@@ -370,29 +347,6 @@ defmodule Quadquizaminos.Instructions do
     the more  tempting target you are for cyberattack
     and lawsuits (#?) so the more you need your ducks in a row.
     </p>
-    <h3>Developer Debug</h3>
-    This section contains "cheats" used by developers
-    while the game is still in development.
-    Like any good hacker, you can watch this section
-    and maybe find some backdoors if we forget to take them out.
-    OR it's possible we will tie these keys to intrusion alarms
-    and it will be game over if you use them.
-    </p>
-    <p>
-    Hopefully these will be removed
-        <ol>
-          <li>"r" raises dropping speed (change to add raise-speed powerup)</li>
-          <li>"l" lowers dropping speed (change to add lower-speed powerup)</li>
-          <li>"c" clears bottom blocks (change to add clear-blocks powerup)</li>
-          <li>"p" to add all powerup</li>
-          <li>"1" to switch to stored block configuraton</li>
-          <li>"2" to add attack to blocks</li>
-          <li>"3" to lawsuit to blocks</li>
-          <li>"4" to ...</li>
-          <li>"5" to ...</li>
-          <li>"6" to ...</li>
-        </ol>
-
     """
     end
 
