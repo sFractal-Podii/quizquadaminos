@@ -25,7 +25,7 @@ I added test users as the publishing status was testing then click save and cont
 ![Screenshot 2021-04-28 at 11 17 28](https://user-images.githubusercontent.com/32665021/116373318-e1bd6f00-a815-11eb-80f6-49d269213d2c.png)
 
 
-Once this is set you can change the publishing status by clicking the publish app button
+Once this is set you can change the publishing status by clicking the publish app button to ensure the app is available to other google account users 
 
 ![Screenshot 2021-04-28 at 11 38 01](https://user-images.githubusercontent.com/32665021/116373788-5a243000-a816-11eb-996f-f4fb9455d628.png)
 
