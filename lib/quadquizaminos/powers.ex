@@ -8,19 +8,15 @@ defmodule Quadquizaminos.Powers do
     :speedup,
     :slowdown,
     :forensics,
-    :slowvulns,
-    :slowlicense,
     :legal,
     :cyberinsurance,
     :sbom,
     :fixvuln,
     :fixlicense,
-    :rmallvulns,
-    :rmalllicenses,
+    :rm_all_vulns,
+    :rm_all_lic_issues,
     :automation,
     :openchain,
-    :stopattack,
-    :winlawsuit,
     :superpower
   ]
 
