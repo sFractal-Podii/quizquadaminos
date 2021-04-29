@@ -5,9 +5,9 @@ defmodule Quadquizaminos.Instructions do
     <h2>Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game</h2>
 <h2>Power Up!</h2>
   <p>You don't need to be a supply chain expert - this game assumes you are a novice
-  and it teaches you what you need to know. You gain points by clearing rows as in a typical Tetris game.
+  and it teaches you what you need to know. You gain points by clearing rows as in a typical tetrominoes game.
   Here's the twist - you can answer quiz questions about supply chain both to gain points and to gain powerups.</p>
-  <p>Powerups help with classic Tetris strategy but also are needed
+  <p>Powerups help with classic tetrominoes strategy but also are needed
   to combat:</p>
    <ul>
    <li>vulnerabilities (unfortunate gaps in an otherwise functioning security paradigm)</li>
@@ -315,7 +315,7 @@ defmodule Quadquizaminos.Instructions do
     - Win your very own custom cocktail recipe designed by Mixologist/Sommelier Chantal Tseng based on your home bar inventory and literary tastes
 
     <h3>Strategy, Tips & Tricks</h3>
-    <p>tetris vs quiz</p>
+    <p>tetrominoes vs quiz</p>
     <p>
     timing funny wrt QnA/powerups
     </p>
