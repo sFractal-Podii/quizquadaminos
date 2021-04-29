@@ -61,7 +61,7 @@ defmodule Quadquizaminos.GameRecordTest do
       assert Records.top_10_games() |> Enum.count() == 10
     end
 
-    test "returns distinct records of the top 10 played games" do
+    test "returns all records of the top 10 played games" do
       attrs = %{name: "Quiz Block ", user_id: 31_000_000, role: "player"}
       {:ok, user} = Accounts.create_user(%User{}, attrs)
 
@@ -78,7 +78,7 @@ defmodule Quadquizaminos.GameRecordTest do
         Records.record_player_game(true, game_record)
       end)
 
-      assert Records.top_10_games() |> Enum.count() == 1
+      assert Records.top_10_games() |> Enum.count() == 5
     end
   end
 end
