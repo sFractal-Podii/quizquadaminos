@@ -17,6 +17,9 @@ defmodule QuadquizaminosWeb.AdminLive do
     ~L"""
     <div class="container">
     <h1>users level of login</h1>
+    <section class="phx-hero">
+    <h3><%= notification(assigns) %></h3>
+    </section>
      <form  phx-change="login_levels">
      <label>
     <input type="radio" id="by_config" name="login_levels" value="by_config" <%= if @by_config, do: 'checked' %>> by_config
@@ -47,6 +50,14 @@ defmodule QuadquizaminosWeb.AdminLive do
       _ ->
         socket
     end
+  end
+
+  defp notification(assigns) do
+    ~L"""
+      <%= if @by_config, do: "by_config user login level is active" %>
+      <%= if @oauth_login, do: "oauth_login user login level is active" %>
+      <%= if @anonymous_login, do: "anonymous_login user login level is active" %>
+    """
   end
 
   defp selected?(level) do

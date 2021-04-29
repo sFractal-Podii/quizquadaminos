@@ -6,8 +6,22 @@ defmodule QuadquizaminosWeb.Authorize do
   use QuadquizaminosWeb, :controller
 
   alias Quadquizaminos.Accounts
+  alias Quadquizaminos.GameBoard.Records
 
   def init(opts), do: opts
+
+  def call(conn, :login_level) do
+    current_user = Map.get(conn.assigns, :current_user)
+    login_level = Accounts.get_selected_login_level()
+
+    if Records.game_available?(current_user, login_level.name) do
+      conn
+    else
+      conn
+      |> redirect(to: "/")
+      |> halt()
+    end
+  end
 
   def call(conn, roles: roles) do
     current_user = Map.get(conn.assigns, :current_user)

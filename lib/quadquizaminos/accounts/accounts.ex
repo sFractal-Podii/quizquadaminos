@@ -30,6 +30,11 @@ defmodule Quadquizaminos.Accounts do
     Repo.get_by(LoginLevel, name: level)
   end
 
+  def get_selected_login_level() do
+    LoginLevel.selected_level()
+    |> Repo.one()
+  end
+
   def update_login_level(selected_level, initially_selected_level) do
     initially_selected_query =
       LoginLevel.base_query()

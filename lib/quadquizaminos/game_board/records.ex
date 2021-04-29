@@ -2,7 +2,7 @@ defmodule Quadquizaminos.GameBoard.Records do
   @moduledoc """
   This module is responsible for manipulating player game records.
   """
-
+  alias Quadquizaminos.Accounts
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Repo
 
@@ -26,6 +26,18 @@ defmodule Quadquizaminos.GameBoard.Records do
       |> Repo.insert()
     end
   end
+
+  def game_available?(nil = _user_id, _login_level), do: true
+
+  def game_available?(user_id, "oauth_login") do
+    Accounts.user_has_role?(user_id, ["admin", "player"])
+  end
+
+  def game_available?(user_id, "by_config") do
+    Accounts.user_has_role?(user_id, ["admin"])
+  end
+
+  def game_available?(_user_id, _login_level), do: true
 
   def change_game_board(attrs) do
     %GameBoard{}

@@ -23,13 +23,19 @@ defmodule QuadquizaminosWeb.Router do
     plug QuadquizaminosWeb.Authorize, roles: ["admin"]
   end
 
+  pipeline :authorize_by_login_level do
+    plug QuadquizaminosWeb.Authorize, :login_level
+  end
+
   scope "/", QuadquizaminosWeb do
     pipe_through :browser
 
     get "/", PageController, :index
-    live "/leaderboard", LeaderboardLive
     get "/anonymous", PageController, :anonymous
     post "/anonymous", PageController, :anonymous
+
+    pipe_through :authorize_by_login_level
+    live "/leaderboard", LeaderboardLive
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
