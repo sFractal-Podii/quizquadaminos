@@ -1,5 +1,5 @@
 # Quadquizaminos
-A tretrominoes (tetris-like) game with quiz questions to get powerups to help with game. This is an extension to quadblocks by Grox.io which is based on the Phoenix framework with liveview.
+A tretrominoes (tetrominoes-like) game with quiz questions to get powerups to help with game. This is an extension to quadblocks by Grox.io which is based on the Phoenix framework with liveview.
 
 ## Setup guide
 See [setup guide](./docs/setup.md) for how to install
