@@ -54,9 +54,9 @@ defmodule QuadquizaminosWeb.AdminLive do
 
   defp notification(assigns) do
     ~L"""
-      <%= if @by_config, do: "by_config user login level is active" %>
-      <%= if @oauth_login, do: "oauth_login user login level is active" %>
-      <%= if @anonymous_login, do: "anonymous_login user login level is active" %>
+      <%= if @by_config, do: "by_config is active" %>
+      <%= if @oauth_login, do: "oauth_login  is active" %>
+      <%= if @anonymous_login, do: "anonymous_login is active" %>
     """
   end
 

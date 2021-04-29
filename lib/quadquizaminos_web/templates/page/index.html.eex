@@ -50,7 +50,7 @@
   <% else %>
     <ul style="list-style: none">
       <li>
-        <%= hide_or_show_sign_up_link() %>
+        <%= hide_or_show_sign_up_button() %>
       </li>
     </ul>
   <% end %>

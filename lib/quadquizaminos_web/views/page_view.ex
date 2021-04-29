@@ -13,7 +13,7 @@ defmodule QuadquizaminosWeb.PageView do
     """
   end
 
-  def hide_or_show_sign_up_link do
+  def hide_or_show_sign_up_button do
     selected_login_level() |> sign_up_button()
   end
 
