@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.PageController do
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.GameBoard.Records
 
-  def index(conn, params) do
+  def index(conn, _params) do
     login_level = Accounts.get_selected_login_level()
     user_id = conn.assigns[:current_user]
 
