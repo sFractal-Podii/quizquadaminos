@@ -27,6 +27,10 @@ defmodule Quadquizaminos.GameBoard.Records do
     end
   end
 
+  def game_available?(user_id, login_level) when is_struct(login_level) do
+    game_available?(user_id, login_level.name)
+  end
+
   def game_available?(nil = _user_id, _login_level), do: true
 
   def game_available?(user_id, "oauth_login") do

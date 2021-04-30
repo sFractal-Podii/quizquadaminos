@@ -13,7 +13,7 @@ defmodule QuadquizaminosWeb.PageController do
 
     render(conn, "index.html",
       current_user: current_user(user_id),
-      game_available: Records.game_available?(user_id, login_level.name)
+      game_available: Records.game_available?(user_id, login_level)
     )
   end
 

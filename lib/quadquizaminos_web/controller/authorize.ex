@@ -14,7 +14,7 @@ defmodule QuadquizaminosWeb.Authorize do
     current_user = Map.get(conn.assigns, :current_user)
     login_level = Accounts.get_selected_login_level()
 
-    if Records.game_available?(current_user, login_level.name) do
+    if Records.game_available?(current_user, login_level) do
       conn
     else
       conn
