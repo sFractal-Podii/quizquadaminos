@@ -3,7 +3,7 @@ defmodule QuadquizaminosWeb.PrivacyLive do
 
     def render(assigns) do
         ~L"""
-        <h1>Privacy</h1>
+        <h1>Privacy Policy</h1>
         """
       end
 end
