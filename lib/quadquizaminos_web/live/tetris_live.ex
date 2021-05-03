@@ -238,8 +238,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(tech_lic_debt: 0)
     |> assign(tech_vuln_debt: 65)
     |> assign(vuln_threshold: 143)
-
- end
+  end
 
   def svg_head() do
     """
@@ -505,7 +504,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
         bottom_with_vuln = Bottom.add_vulnerability(socket.assigns.bottom)
-        assign(socket, score: score, bottom: bottom_with_vuln, modal: false, category: nil)
+        assign(socket, score: score, bottom: bottom_with_vuln)
       end
 
     {:noreply, socket}
