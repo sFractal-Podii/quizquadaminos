@@ -31,11 +31,12 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    live "/leaderboard", LeaderboardLive
+    live "/termsofservice", TermsOfServiceLive
+    live "/privacy", PrivacyLive
     get "/anonymous", PageController, :anonymous
     post "/anonymous", PageController, :anonymous
-
-    pipe_through :authorize_by_login_level
-    live "/leaderboard", LeaderboardLive
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
