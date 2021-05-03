@@ -28,6 +28,8 @@ defmodule QuadquizaminosWeb.Router do
 
     get "/", PageController, :index
     live "/leaderboard", LeaderboardLive
+    live "/termsofservice", TermsOfServiceLive
+    live "/privacy", PrivacyLive
     get "/anonymous", PageController, :anonymous
     post "/anonymous", PageController, :anonymous
 
