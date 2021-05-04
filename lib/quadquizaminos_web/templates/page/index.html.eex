@@ -48,6 +48,7 @@
     <%= link "How to play", to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :instructions), class: "button" %>
     <br>
   <% else %>
+
     <ul style="list-style: none">
       <li>
         <%= hide_or_show_sign_up_button() %>
