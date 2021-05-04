@@ -38,7 +38,7 @@ defmodule QuadquizaminosWeb.PageView do
     """
   end
 
-  defp sign_up_button("anonymous_login") do
+  defp sign_up_button(_login_level) do
     ~E"""
     <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
          <i class="fas fa-github"></i>
@@ -53,11 +53,10 @@ defmodule QuadquizaminosWeb.PageView do
     """
   end
 
-  defp sign_up_button(_) do
-    ""
-  end
-
   defp selected_login_level do
-    Accounts.get_selected_login_level().name
+    case Accounts.get_selected_login_level() do
+      nil -> nil
+      login_level -> login_level.name
+    end
   end
 end

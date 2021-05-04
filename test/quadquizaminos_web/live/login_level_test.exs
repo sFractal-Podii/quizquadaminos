@@ -6,6 +6,13 @@ defmodule QuadquizaminosWeb.LoginLevelTest do
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Test.Auth
 
+  test "all sign up button is displayed when there is login level selected", %{conn: conn} do
+    conn = get(conn, "/")
+    assert conn.resp_body =~ "Sign in with GitHub"
+    assert conn.resp_body =~ "Sign in anonymously"
+    assert conn.resp_body =~ "Sign in with Google"
+  end
+
   describe "by_config when selected:" do
     setup do
       # admin logging in
