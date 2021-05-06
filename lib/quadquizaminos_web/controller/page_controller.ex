@@ -5,17 +5,22 @@ defmodule QuadquizaminosWeb.PageController do
 
   use QuadquizaminosWeb, :controller
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.UserFromAuth
+  alias Quadquizaminos.GameBoard.Records
 
   def index(conn, _params) do
+    login_level = Accounts.get_selected_login_level()
     user_id = conn.assigns[:current_user]
-    render(conn, "index.html", current_user: current_user(user_id))
+
+    render(conn, "index.html",
+      current_user: current_user(user_id),
+      game_available: Records.game_available?(user_id, login_level)
+    )
   end
 
   def anonymous(conn, _params) do
     conn
     |> put_flash(:info, "Successfully authenticated.")
-    |> put_session(:user, "anonymous")
+    |> put_session(:user_id, "anonymous")
     |> configure_session(renew: true)
     |> redirect(to: "/")
   end

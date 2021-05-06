@@ -1,6 +1,6 @@
 import Config
 
-# host_url is the static IP address provided once VM instance has been launched. 
+# host_url is the static IP address provided once VM instance has been launched.
 # Replace this with the one provided.
 host_url = "35.232.208.120"
 
@@ -40,7 +40,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
   client_id: "",
   client_secret: ""
 
-# Provide github ids for users who will be allowed to play tetris game
+# Provide github ids for users who will be allowed to play this game
 # github_ids: [1111, 2222]
 config :quadquizaminos,
   github_ids: []
