@@ -63,7 +63,8 @@ defmodule Quadquizaminos.MixProject do
       {:ueberauth_github, "~> 0.7"},
       {:ueberauth_google, "~>0.10"},
       {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
-      {:earmark, "~> 1.4"}
+      {:earmark, "~> 1.4"},
+      {:timex, "~> 3.0"}
     ]
   end
 
