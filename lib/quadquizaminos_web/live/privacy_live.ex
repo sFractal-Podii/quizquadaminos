@@ -4,7 +4,7 @@ defmodule QuadquizaminosWeb.PrivacyLive do
     def render(assigns) do
         ~L"""
         <h1>Privacy Policy</h1>
-        <h3>Version 1.0.0 (last updated 4-May-2021)</h3>
+        <h3>Version 1.0.0 (last updated 6-May-2021)</h3>
 
         sFractal knows you take you privacy seriously
         and we do too.
@@ -131,10 +131,6 @@ defmodule QuadquizaminosWeb.PrivacyLive do
         to protect Your Personal Data,
         We cannot guarantee its absolute security.
 
-        <h1> draft </h1>
-
-
-
-        """
+"""
       end
 end
