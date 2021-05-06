@@ -76,23 +76,14 @@ defmodule Quadquizaminos.Instructions do
         </ol>
       </p>
       <p>
-      Speed affects scoring in several ways which will be described under scoring
-      </p>
-      <p>
       The game starts at a "fast" speed.
-      The game speeds up gradually (ie one step in above list) over time (#?).
+      Powerups can be used to slow down or speed up the game.
+      If a "Cyberattack" occurs,
+      the game jumps to "full throttle" from whatever speed it was on.
       </p>
-      <p>If a "Cyberattack" (see section whatever) occurs,
-      the game jumps to "full throttle" from whatever speed it was on (#?).
+      <p>If a "License Lawsuit" occurs,
+      the game jumps to "lethargic" from whatever speed it was on.
       </p>
-      <p>If a "License Lawsuit" (see section whatever) occurs,
-      the game jumps to "lethargic" from whatever speed it was on(#?).
-      </p>
-      <p>Powerups (see later section) can be used to:
-        <ol>
-          <li>speed up one notch (#?)</li>
-          <li>slow down one notch (#?)</li>
-        </ol>
     <h3>Scoring</h3>
     <p>Points are scored in several ways:
         <ol>
@@ -100,39 +91,23 @@ defmodule Quadquizaminos.Instructions do
           <li>clearing rows</li>
           <li>answering questions</li>
         </ol>
-    The amount of points scored is also influenced by multipliers.
-    The multipliers may increase the score
-    (e.g. operating at quicker speeds mulitplies the value of clearing a row)(#?)
-    or may decrease the score (e.g. the more vulnerabilities on the board,
-    the lower the value of clearing a row)(#?)
     </p>
     <p>
-    For each clock tick, the block in play drops one row and the score changes.
-    How much it increases/decreases depends on the speed.
+    For each clock tick, the block in play drops one row and the score
+    increases by 1 point.
     Obviously faster speeds make clock ticks more often.
-    But in addition, each tick is worth more at faster speeds(#?):
-      <ul>
-        <li>"full throttle": 4 points per tick</li>
-        <li>"high speed": 3 points per tick</li>
-        <li>"fast": 2 points per tick</li>
-        <li>"moderate": 1 point per tick</li>
-        <li>"leisurely": 0 points per tick (ie score does not increase)</li>
-        <li>"sedate": (-1) point per tick(ie score actually decreases)</li>
-        <li>"lethargic": (-5) points per tick(ie score actually decreases)</li>
-      </ol>
     </p>
     <p>
     Clearing rows gains points as well as frees up space to play longer.
     The amount of points for clearing a row depends on
-    (1) the number of rows cleared in that tick
-    (2) the multipliers.
+    the number of rows cleared in that tick.
     </p>
     <p>
     It is possible to fill more than one row
     when a quadblock reaches the "bottom".
     The amount of points goes up exponentially
     with the number of rows filled.
-    If no multipliers are in affect, then the points are
+    The points
     100 times 2 to the power of the number of rows. eg:
       <ol>
         <li>1 row = 200 points</li>
@@ -148,31 +123,14 @@ defmodule Quadquizaminos.Instructions do
     and more importantly that rows completed with add/move do not score
     until the falling brick touches joins the bottom blocks.
     </p>
-    <p>
-    put 5 row example gif here
-    </p>
+    <a class="phx-logo">
+      <img src="<%= Routes.static_path(@conn, "/images/qbq.09.x.score.gif") %>" />
+    </a>
     <p>
     Which means you could, in theory at least,
     complete almost as many rows as there are on the board.
     10 rows would be 102,400 points.
     15 rows would be 3,276,800 points.
-    And that is before multipliers.
-    </p>
-    <p>
-    Multipliers increase the score.
-    One multiplier is the speed at the tick that clears the row:
-      <ul>
-        <li>"full throttle": Multiplier = 4</li>
-        <li>"high speed": Multiplier = 3</li>
-        <li>"fast": Multiplier = 2</li>
-        <li>"moderate": Multiplier = 1</li>
-        <li>"leisurely": Multiplier = 1</li>
-        <li>"sedate": Multiplier = 1</li>
-        <li>"lethargic": Multiplier = 0.5 (ie less points)</li>
-      </ol>
-    </p>
-    <p>
-    Other multipliers are TBD
     </p>
     <p>
     The third way to score points is by answering questions.
@@ -204,39 +162,39 @@ defmodule Quadquizaminos.Instructions do
     <p>
     Vulnerabilities have several impacts.
     The main impact is that any vulnerability in a row will prevent
-    it being cleared (#104).
+    it being cleared.
     There is also a subtle impact that the more vulnerabilities,
-    the more likely you will be hit with a cyber attack(#?).
-    The speed at which vulnerabilities arrive is a function of time(#?),
-    a function of the number of wrong answers to questions(#?),
-    and is slowed down by enabling certain powerups(#?).
+    the more likely you will be hit with a cyber attack.
+    Vulnerabilities may also appear when you answer questions incorrectly.
     </p>
     <p>
     License errors are similar.
-    They are brown/grey blocks (#?),
+    They are brown/grey blocks,
     and also prevent a row from being cleared.
     The more license errors,
-    the higher the likelihood of a lawsuit(#?).
-    The speed at which license errors arrive is a function of time (#?),
-    a function of the number of wrong answers to questions(#?),
-    and is slowed down by enabling certain powerups(#?).
+    the higher the likelihood of a lawsuit.
     </p>
     <p>
     Cyberattacks occur from ignoring vulnerabilities
-    in your supply chain(#?).
-    Cyberattacks speed the game up to the highest speed(#?),
-    and cause an entire blocking row of IOCs (grey/yellow)
-    at row 10 (#?).
+    in your supply chain.
+    Cyberattacks speed the game up to the highest speed,
+    and cause an entire blocking row of compromised blocks (grey/yellow)
+    at row 10.
     Cyberattacks are cleared with powerups.
+    The :clearblocks powerup (received from answering Phoenix questions)
+    clears all the blocks on the board.
+    The :slowdown powerup slows down the game speed.
+    You can also use :deleteblock to remove compromised blocks.
+    Don't forget to remove the vulnerabilities as well or the attack will resume.
     </p>
     <p>
     Lawsuits occur from ignoring license errors
-    in your supply chain(#?).
-    Lawsuits slow the game down to the lowest speed(#?),
+    in your supply chain.
+    Lawsuits slow the game down to the lowest speed,
     and cause lawsuit blockers (grey/brown)
     in rows 5-15
-    at column 5(#?).
-    Lawsuits are cleared with powerups.
+    at column 5.
+    Lawsuits are cleared with powerups similar to attacks.
     </p>
     <h3>Quiz</h3>
       <ol>
@@ -289,13 +247,6 @@ defmodule Quadquizaminos.Instructions do
         <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
         <li><i class="fas fa-tape"></i> remove all licensing issues</li>
         <li><i class="fab fa-superpowers"></i> Superpower - exchange for any other powerup</li>
-        <li><i class="fas fa-crosshairs"></i> pick next quadblock to fall - useful when you need a certain block to clear rows</li>
-        <li><i class="fas fa-tools"></i> OpenChain - slows down slows down license issues</li>
-        <li><i class="fas fa-microscope"></i> forensics - helps prepare for attacks</li>
-        <li><i class="fas fa-gavel"></i> legal is trained and ready on cyber - which slows down licensing issues</li>
-        <li><i class="fas fa-file-contract"></i> Cyber Insurance - lessens the removal of points due to attacks and lawsuits</li>
-        <li><i class="far fa-id-card"></i> SBOM - slows down vulnerability creation, slows down license issues</li>
-        <li><i class="fas fa-toolbox"></i> automation - slows down vulnerability creation, slows down license issues</li>
       </ol>
     </p>
 
