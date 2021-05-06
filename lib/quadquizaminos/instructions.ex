@@ -244,7 +244,7 @@ defmodule Quadquizaminos.Instructions do
         <li><i class="fas fa-wrench"></i> fix a vulnerability</li>
         <li><i class="fas fa-screwdriver"></i> fix a licensing issue</li>
         <li>above here works, below here will work soon</li>
-        <li><i class="fas fa-hammer"></i> remove all vulnerabilities</li>
+        <li><i class="fas fa-hammer"></i> remove all vulnerabilities </li>
         <li><i class="fas fa-tape"></i> remove all licensing issues</li>
         <li><i class="fab fa-superpowers"></i> Superpower - exchange for any other powerup</li>
       </ol>
