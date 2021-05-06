@@ -56,7 +56,7 @@
         <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous )%>">
           Sign in anonymously
         </a>
-        <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous )%>">
+        <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "twitter" )%>">
           Sign in with twitter
         </a>
       </li>
