@@ -32,7 +32,7 @@ defmodule Quadquizaminos.MixProject do
   def application do
     [
       mod: {Quadquizaminos.Application, []},
-       extra_applications: [:logger, :runtime_tools, :ueberauth_github, ueberauth_google, :ueberauth_linkedin, :ueberauth, :mix]
+       extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth_google, :ueberauth_linkedin, :ueberauth, :mix]
     ]
   end
 
