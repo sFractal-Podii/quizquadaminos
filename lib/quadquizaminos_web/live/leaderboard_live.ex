@@ -15,8 +15,8 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <tr>
     <th>Player</th>
     <th>Score</th>
-    <th>Dropped Bricks</th>
-    <th>Correctly Answered Qna</th>
+    <th>Bricks</th>
+    <th>Questions</th>
     <th>Start time</th>
     <th>End time</th>
     <th>Date</th>
