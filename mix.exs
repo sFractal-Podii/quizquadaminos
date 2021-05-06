@@ -32,7 +32,7 @@ defmodule Quadquizaminos.MixProject do
   def application do
     [
       mod: {Quadquizaminos.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth_google, :ueberauth_linkedin, :ueberauth, :mix]
+       extra_applications: [:logger, :runtime_tools, :ueberauth_github, ueberauth_google, :ueberauth_linkedin, :ueberauth, :mix]
     ]
   end
 
@@ -59,11 +59,12 @@ defmodule Quadquizaminos.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:oauth2, "~> 2.0", override: true},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_github, "~> 0.7"},
-      {:ueberauth_linkedin, "~>0.3"},
+      {:ueberauth_linkedin, git: "https://github.com/fajarmf/ueberauth_linkedin"},
       {:ueberauth_google, "~>0.10"},
-      # {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
+      {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
       {:earmark, "~> 1.4"}
     ]
   end
