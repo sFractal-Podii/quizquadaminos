@@ -2,12 +2,11 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Test.Auth
 
-  setup %{conn: conn} do
-    user = %User{name: "Quiz Block ", user_id: 40_000_000}
-    conn = assign(conn, :current_user, user.user_id)
-    [user: user, conn: conn]
+  setup do
+    conn = Auth.login()
+    [conn: conn]
   end
 
   describe "Pausing game:" do
@@ -124,6 +123,23 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
         (score["Right"] |> String.to_integer()) - (next_score["Wrong"] |> String.to_integer())
 
       assert pause_html =~ "<h1>#{total_score}</h1><h2>Score</h2>"
+    end
+
+    test "player remains on the same question when wrongly answered", %{conn: conn} do
+      right_answer = Quadquizaminos.QnA.question("open_c2").correct
+
+      {view, _html} = pause_game(conn)
+
+      render_click(view, "choose_category", %{"category" => "open_c2"})
+
+      wrong_answer =
+        Enum.find(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], fn guess ->
+          guess != right_answer
+        end)
+
+      html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
+      assert html =~ "<h1>\nQuestion:"
+      assert html =~ "<h2> Answer </h2>"
     end
   end
 

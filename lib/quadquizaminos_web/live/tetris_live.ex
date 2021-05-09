@@ -19,33 +19,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Threshold
   }
 
+  alias Quadquizaminos.GameBoard.Records
+
   @debug false
   @box_width 20
   @box_height 20
 
-  def mount(_param, _session, socket) do
+  def mount(_param, %{"user_id" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
 
     {:ok,
      socket
-     |> assign(bottom: %{})
-     |> assign(qna: %{}, powers: [])
-     |> assign(category: nil, categories: init_categories())
-     |> assign(block_coordinates: nil)
-     |> assign(adding_block: false, moving_block: false, deleting_block: false)
-     |> assign(instructions_modal: false)
-     |> assign(speed: 2, tick_count: 5)
-     |> assign(brick_count: 0)
-     |> assign(row_count: 0)
-     |> assign(correct_answers: 0)
-     |> assign(attack_threshold: 5)
-     |> assign(lawsuit_threshold: 5)
-     |> assign(vuln_threshold: 143)
-     |> assign(tech_vuln_debt: 65)
-     |> assign(lic_threshold: 143)
-     |> assign(tech_lic_debt: 0)
-     |> assign(score: 0)
-     |> assign(hint: :intro)
+     |> assign(current_user: current_user)
+     |> init_game
      |> start_game()}
   end
 
@@ -183,30 +169,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp new_game(socket) do
     ## should qna be reset or carryover between games????
     socket
-    |> assign(adding_block: false)
-    |> assign(attack_threshold: 5)
-    |> assign(block_coordinates: nil)
-    |> assign(bottom: %{})
-    |> assign(brick_count: 0)
-    |> assign(category: nil, categories: init_categories())
-    |> assign(correct_answers: 0)
-    |> assign(deleting_block: false)
-    |> assign(hint: :intro)
-    |> assign(instructions_modal: false)
-    |> assign(fix_vuln_or_license: false)
-    |> assign(lawsuit_threshold: 5)
-    |> assign(lic_threshold: 143)
-    |> assign(moving_block: false)
-    |> assign(powers: [])
-    |> assign(qna: %{})
-    |> assign(row_count: 0)
-    |> assign(score: 0)
-    |> assign(speed: 2)
-    |> assign(state: :playing)
-    |> assign(tech_lic_debt: 0)
-    |> assign(tech_vuln_debt: 65)
-    |> assign(tick_count: 5)
-    |> assign(vuln_threshold: 143)
+    |> init_game
     |> new_block
     |> show
   end
@@ -246,6 +209,35 @@ defmodule QuadquizaminosWeb.TetrisLive do
       |> Points.with_color(color(brick), socket.assigns.brick_count)
 
     assign(socket, tetromino: points)
+  end
+
+  defp init_game(socket) do
+    socket
+    |> assign(adding_block: false)
+    |> assign(attack_threshold: 5)
+    |> assign(block_coordinates: nil)
+    |> assign(bottom: %{})
+    |> assign(brick_count: 0)
+    |> assign(category: nil, categories: init_categories())
+    |> assign(correct_answers: 0)
+    |> assign(deleting_block: false)
+    |> assign(fix_vuln_or_license: false)
+    |> assign(hint: :intro)
+    |> assign(instructions_modal: false)
+    |> assign(lawsuit_threshold: 5)
+    |> assign(lic_threshold: 143)
+    |> assign(moving_block: false)
+    |> assign(powers: [])
+    |> assign(qna: %{})
+    |> assign(row_count: 0)
+    |> assign(score: 0)
+    |> assign(speed: 2)
+    |> assign(start_time: DateTime.utc_now())
+    |> assign(state: :playing)
+    |> assign(tick_count: 5)
+    |> assign(tech_lic_debt: 0)
+    |> assign(tech_vuln_debt: 65)
+    |> assign(vuln_threshold: 143)
   end
 
   def svg_head() do
@@ -321,6 +313,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp color(%{name: :o}), do: :orange
   defp color(%{name: :z}), do: :pink
 
+  defp game_record(socket) do
+    %{
+      start_time: socket.assigns.start_time,
+      end_time: DateTime.utc_now(),
+      user_id: socket.assigns.current_user,
+      score: socket.assigns.score,
+      dropped_bricks: socket.assigns.brick_count,
+      correctly_answered_qna: socket.assigns.correct_answers
+    }
+  end
+
   def drop(:playing, socket, fast) do
     old_brick = socket.assigns.brick
 
@@ -333,6 +336,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       )
 
     bonus = if fast, do: 2, else: 0
+    Records.record_player_game(response.game_over, game_record(socket))
 
     socket
     |> assign(brick: response.brick)
@@ -500,7 +504,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
         bottom_with_vuln = Bottom.add_vulnerability(socket.assigns.bottom)
-        assign(socket, score: score, bottom: bottom_with_vuln, modal: false, category: nil)
+        assign(socket, score: score, bottom: bottom_with_vuln)
       end
 
     {:noreply, socket}
@@ -558,52 +562,49 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:nextblock]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "forensics"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:forensics]
     {:noreply, assign(socket, powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "slowvulns"}, socket) do
-    powers = socket.assigns.powers -- [:slowvulns]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "slowlicense"}, socket) do
-    powers = socket.assigns.powers -- [:slowlicense]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
   def handle_event("powerup", %{"powerup" => "legal"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:legal]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "cyberinsurance"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:cyberinsurance]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "sbom"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:sbom]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
+    ## more to do?
     powers = socket.assigns.powers -- [:fixvuln]
     {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
   end
 
   def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
+    ## more to do?
     powers = socket.assigns.powers -- [:fixlicense]
     {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
   end
 
-  def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:rmallvulns]
+  def handle_event("powerup", %{"powerup" => "rm_all_vulns"}, socket) do
+    powers = socket.assigns.powers -- [:rm_all_vulns]
     bottom = Bottom.remove_all_vulnerabilities(socket.assigns.bottom)
 
     {:noreply,
@@ -612,8 +613,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(bottom: bottom)}
   end
 
-  def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:rmalllicenses]
+  def handle_event("powerup", %{"powerup" => "rm_all_lic_issues"}, socket) do
+    powers = socket.assigns.powers -- [:rm_all_lic_issues]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
 
     {:noreply,
@@ -623,37 +624,20 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "automation"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:automation]
     {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "openchain"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:openchain]
     {:noreply, assign(socket, powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "stopattack"}, socket) do
-    powers = socket.assigns.powers -- [:stopattack]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "winlawsuit"}, socket) do
-    powers = socket.assigns.powers -- [:winlawsuit]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
+    ## to do
     powers = socket.assigns.powers -- [:superpower]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:rmallvulns]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:rmalllicenses]
     {:noreply, assign(socket, powers: powers)}
   end
 

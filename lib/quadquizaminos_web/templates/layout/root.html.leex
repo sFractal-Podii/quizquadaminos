@@ -12,20 +12,28 @@
   <body>
     <header>
       <section class="container">
-        <a href="https://sfractal.com/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/Supply Chain Sandbox logo_dark_draft.png") %>" alt="sFractal Logo" />
+        <a href="https://supplychainsandbox.org/" class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/scs-logo.png") %>" alt="supplychainsandbox Logo" />
+        </a>
+        <a class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
         </a>
         <H1>QuadBlocksQuiz</H1>
         <H3>Supply Chain Edition</H3>
       </section>
       <nav role="navigation">
-    <ul>
-      <%= if @current_user do %>
-        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button" %>
-        <%= unless @current_user == "anonymous" do %>
-          <%= if @current_user.role == "admin" and Mix.env() == :prod do %>
-            <%= link "Live Dashboard", to: "/dashboard", class: "button" %>
-          <% end %>
+        <ul class="nav">
+         <li><a href="/">Home</a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive) %> >Leaderboard</a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TermsOfServiceLive) %> > Terms Of Service </a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.PrivacyLive) %> > Privacy </a></li>
+        <%= if @current_user do %>
+        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
+        <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
+        <li><a href="/dashboard">Live Dashboard</a></li>
+        <% end %>
+        <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
+        <li><a href="/admin/login_levels">Login levels</a></li>
         <% end %>
       <% end %>
     </ul>
