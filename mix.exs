@@ -32,7 +32,14 @@ defmodule Quadquizaminos.MixProject do
   def application do
     [
       mod: {Quadquizaminos.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth_google, :ueberauth, :mix]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :ueberauth_github,
+        :ueberauth_google,
+        :ueberauth,
+        :mix
+      ]
     ]
   end
 
@@ -63,8 +70,7 @@ defmodule Quadquizaminos.MixProject do
       {:ueberauth_github, "~> 0.7"},
       {:ueberauth_google, "~>0.10"},
       {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
-      {:earmark, "~> 1.4"},
-      {:timex, "~> 3.0"}
+      {:earmark, "~> 1.4"}
     ]
   end
 

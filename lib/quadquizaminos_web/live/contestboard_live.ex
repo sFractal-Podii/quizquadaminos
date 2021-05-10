@@ -1,47 +1,71 @@
 defmodule QuadquizaminosWeb.ContestboardLive do
   use Phoenix.LiveView
-  use Timex
   @initial_hour 23
   @initial_minute 59
   @initial_second 59
   def mount(_params, _session, socket) do
     :timer.send_interval(1000, self(), :count_down)
     start_date = DateTime.utc_now()
-    time = current_time(start_date) 
-    {:ok, socket |> assign(hours: current_hour(time), minutes: current_minute(time), seconds: current_second(time), start_date: start_date)}
-  end
+    time = current_time(start_date)
 
-#Next step, use current hour, minutes and seconds
+    {:ok,
+     socket
+     |> assign(
+       hours: current_hour(time),
+       minutes: current_minute(time),
+       seconds: current_second(time),
+       start_date: start_date
+     )}
+  end
 
   def render(assigns) do
     ~L"""
-    <h1>Contest coming soon </h1>
-    <h2> Days <%=date_count(@start_date)%></h2>
-    <h3> Hours <%=time_display(@hours)%></h3>
-    <h3> Minutes <%=time_display(@minutes)%></h3>
-    <h3> Seconds <%=time_display(@seconds)%></h3>
+    <div class="container">
+    <section class="phx-hero">
+    <h1>Contest countdown </h1>
+    <div class="row">
+    <div class="column column-25">
+    <h2><%=date_count(@start_date)%></h2>
+    <h2>DAYS</h2>
+    </div>
+     <div class="column column-25">
+    <h2><%=time_display(@hours)%></h2>
+    <h2>HOURS</h2>
+    </div>
+     <div class="column column-25">
+    <h2><%=time_display(@minutes)%></h2>
+    <h2>MINUTES</h2>
+    </div>
+     <div class="column column-25">
+    <h2><%=time_display(@seconds)%></h2>
+    <h2>SECONDS</h2>
+    </div>
+    </div>
+    <h3>Time until 05th May 2021 </h3>
+    </section>
+    </div>
     """
   end
 
   def handle_info(:count_down, socket) do
-    start_date = DateTime.utc_now |> IO.inspect
-     seconds = second_count(socket.assigns.seconds) 
-     new_minute = minute_count(socket, seconds)
-     hours = hour_count(socket, socket.assigns.minutes)
-    {:noreply, socket |> assign(seconds: seconds , minutes: new_minute, hours: hours, start_date: start_date)}
+    seconds = second_count(socket.assigns.seconds)
+    minutes = minute_count(socket.assigns.seconds, socket.assigns.minutes)
+    hours = hour_count(socket.assigns.seconds, socket.assigns.minutes, socket.assigns.hours)
+
+    {:noreply, socket |> assign(seconds: seconds, minutes: minutes, hours: hours)}
   end
 
   def date_count(start_date) do
     d_day_time = Application.fetch_env!(:quadquizaminos, :contest_date)
-    Date.diff(DateTime.to_date(d_day_time), DateTime.to_date(start_date))
+    Date.diff(d_day_time, DateTime.to_date(start_date))
   end
 
   def current_time(start_date) do
-    start_date |> DateTime.to_time 
+    start_date |> DateTime.to_time()
   end
 
   defp current_hour(time) do
-     @initial_hour - time.hour
+    @initial_hour - time.hour
   end
 
   defp current_minute(time) do
@@ -52,49 +76,34 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     @initial_second - time.second
   end
 
-  def second_count(seconds) do
-    if seconds == 0 do
-      @initial_second
-    else
-       seconds - 1
-    end
-  end
-
   defp time_display(time_count) do
     count = time_count |> Integer.digits() |> Enum.count()
-    if count == 1 , do: "#{0}" <> "#{time_count}", else: "#{time_count}" 
+    if count == 1, do: "#{0}" <> "#{time_count}", else: "#{time_count}"
   end
 
+  def second_count(0), do: @initial_second
 
-  def minute_count(socket, seconds)do
-    if seconds == 0 do
-      minute_count(socket.assigns.minutes)
-    else 
-      socket.assigns.minutes
-    end
+  def second_count(seconds) do
+    seconds - 1
   end
 
-  defp minute_count(minutes)do
-      if minutes == 0 do
-        @initial_minute
-      else
-        minutes - 1
-      end
+  defp minute_count(0 = _seconds, minutes) do
+    minute_count(minutes)
   end
 
-  def hour_count(socket, minutes)do
-    if minutes == 59 and socket.assigns.seconds == 0 do
-      hour_count(socket.assigns.hours)
-    else
-      socket.assigns.hours 
-    end
+  defp minute_count(_seconds, minutes), do: minutes
+
+  defp minute_count(0), do: @initial_minute
+
+  defp minute_count(minutes), do: minutes - 1
+
+  defp hour_count(0 = _seconds, 59 = _minutes, hours) do
+    hour_count(hours)
   end
 
-  def hour_count(hours) do
-    if hours == 0 do
-      @initial_hour
-    else
-      hours - 1
-    end
-  end
+  defp hour_count(_seconds, _minutes, hours), do: hours
+
+  defp hour_count(0 = _hours), do: @initial_hour
+
+  defp hour_count(hours), do: hours - 1
 end
