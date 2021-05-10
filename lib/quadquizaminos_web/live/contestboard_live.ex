@@ -1,5 +1,8 @@
 defmodule QuadquizaminosWeb.ContestboardLive do
   use Phoenix.LiveView
+
+  alias Quadquizaminos.Util
+
   @initial_hour 23
   @initial_minute 59
   @initial_second 59
@@ -22,11 +25,14 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     ~L"""
     <div class="container">
     <section class="phx-hero">
+    <%= if date_count(@start_date) < 1 do %>
+    <h1>Contest Day</h1>
+    <% else %>
     <h1>Contest countdown </h1>
     <div class="row">
     <div class="column column-25">
-    <h2><%=date_count(@start_date)%></h2>
-    <h2>DAYS</h2>
+    <h1><%=date_count(@start_date)%></h1>
+    <h1>DAYS</h1>
     </div>
      <div class="column column-25">
     <h2><%=time_display(@hours)%></h2>
@@ -41,7 +47,8 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     <h2>SECONDS</h2>
     </div>
     </div>
-    <h3>Time until 05th May 2021 </h3>
+    <h3>Contest coming soon, Time until 05th May 2021 </h3>
+    <% end %>
     </section>
     </div>
     """
@@ -56,8 +63,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   end
 
   def date_count(start_date) do
-    d_day_time = Application.fetch_env!(:quadquizaminos, :contest_date)
-    Date.diff(d_day_time, DateTime.to_date(start_date))
+    Util.date_count(start_date)
   end
 
   def current_time(start_date) do
@@ -77,8 +83,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   end
 
   defp time_display(time_count) do
-    count = time_count |> Integer.digits() |> Enum.count()
-    if count == 1, do: "#{0}" <> "#{time_count}", else: "#{time_count}"
+    Util.time_display(time_count)
   end
 
   def second_count(0), do: @initial_second
@@ -97,7 +102,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
   defp minute_count(minutes), do: minutes - 1
 
-  defp hour_count(0 = _seconds, 59 = _minutes, hours) do
+  defp hour_count(59 = _seconds, 59 = _minutes, hours) do
     hour_count(hours)
   end
 
