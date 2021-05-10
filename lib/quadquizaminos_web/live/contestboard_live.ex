@@ -25,25 +25,25 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     ~L"""
     <div class="container">
     <section class="phx-hero">
-    <%= if date_count(@start_date) < 1 do %>
+    <%= if Util.date_count(@start_date) < 1 do %>
     <h1>Contest Day</h1>
     <% else %>
     <h1>Contest countdown </h1>
     <div class="row">
     <div class="column column-25">
-    <h1><%=date_count(@start_date)%></h1>
+    <h1><%= @start_date |> Util.date_count() |> Util.count_display() %></h1>
     <h1>DAYS</h1>
     </div>
      <div class="column column-25">
-    <h2><%=time_display(@hours)%></h2>
+    <h2><%= Util.count_display(@hours)%></h2>
     <h2>HOURS</h2>
     </div>
      <div class="column column-25">
-    <h2><%=time_display(@minutes)%></h2>
+    <h2><%=Util.count_display(@minutes)%></h2>
     <h2>MINUTES</h2>
     </div>
      <div class="column column-25">
-    <h2><%=time_display(@seconds)%></h2>
+    <h2><%=Util.count_display(@seconds)%></h2>
     <h2>SECONDS</h2>
     </div>
     </div>
@@ -62,10 +62,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     {:noreply, socket |> assign(seconds: seconds, minutes: minutes, hours: hours)}
   end
 
-  def date_count(start_date) do
-    Util.date_count(start_date)
-  end
-
   def current_time(start_date) do
     start_date |> DateTime.to_time()
   end
@@ -80,10 +76,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
   defp current_second(time) do
     @initial_second - time.second
-  end
-
-  defp time_display(time_count) do
-    Util.time_display(time_count)
   end
 
   def second_count(0), do: @initial_second

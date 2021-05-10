@@ -4,8 +4,8 @@ defmodule Quadquizaminos.Util do
     Date.diff(contest_date, DateTime.to_date(date))
   end
 
-  def time_display(time_count) do
-    count = time_count |> Integer.digits() |> Enum.count()
-    if count == 1, do: "#{0}" <> "#{time_count}", else: "#{time_count}"
+  def count_display(digits) do
+    count = digits |> Integer.digits() |> Enum.count()
+    if count == 1, do: "#{0}" <> "#{digits}", else: "#{digits}"
   end
 end

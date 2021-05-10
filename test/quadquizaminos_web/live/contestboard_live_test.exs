@@ -23,10 +23,13 @@ defmodule QuadquizaminosWeb.ContestboardLiveTest do
       assert html =~ "<h1>Contest Day</h1>"
     else
       assert html =~ "<h1>Contest countdown </h1>"
-      assert html =~ "<h1>#{start_date |> Util.date_count()}</h1><h1>DAYS</h1>"
-      assert html =~ "<h2>#{hour |> Util.time_display()}</h2><h2>HOURS</h2>"
-      assert html =~ "<h2>#{minutes |> Util.time_display()}</h2><h2>MINUTES</h2>"
-      assert html =~ "<h2>#{seconds |> Util.time_display()}</h2><h2>SECONDS</h2>"
+
+      assert html =~
+               "<h1>#{start_date |> Util.date_count() |> Util.count_display()}</h1><h1>DAYS</h1>"
+
+      assert html =~ "<h2>#{hour |> Util.count_display()}</h2><h2>HOURS</h2>"
+      assert html =~ "<h2>#{minutes |> Util.count_display()}</h2><h2>MINUTES</h2>"
+      assert html =~ "<h2>#{seconds |> Util.count_display()}</h2><h2>SECONDS</h2>"
     end
   end
 
