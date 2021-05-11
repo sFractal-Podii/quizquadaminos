@@ -45,7 +45,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class ="container">
           <div class="row">
               <div class="column column-50 column-offset-25">
-                <h1>Welcome to QuadBlocksQuiz!</h1>
+                <h1>Welcome to QuadBlockQuiz!</h1>
                   <button phx-click="start">Start</button>
               </div>
           </div>

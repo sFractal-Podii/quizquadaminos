@@ -1,5 +1,5 @@
-# QuadBlocksQuiz - Supply Chain Edition
-QuadBlocksQuiz is a tetrominoes-like game
+# QuadBlockQuiz - Supply Chain Edition
+QuadBlockQuiz is a tetrominoes-like game
 that is part tetrominoes and part trivia quiz.
 Being honest, the trivia is to educate on
 supply chain.
