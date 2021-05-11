@@ -1,5 +1,7 @@
 defmodule QuadquizaminosWeb.ContestRules do
     use Phoenix.LiveView
+    import QuadquizaminosWeb.LiveHelpers
+    alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
     def render(assigns) do
         ~L"""
@@ -82,7 +84,7 @@ defmodule QuadquizaminosWeb.ContestRules do
         See our
         <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.PrivacyLive) %> > Privacy </a>
         policy and our <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TermsOfServiceLive) %> > Terms Of Service </a>.
-        The TL;DR version is 
+        The TL;DR version is
         we only use your ID to put your name (as provided publicly by your ID) on the
         Leaderboard and Contest Scoreboard, and your email (as provided by your ID)
         for the purpose of contacting you regarding prizes.
