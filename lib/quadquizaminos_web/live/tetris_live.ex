@@ -403,6 +403,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
+    Records.record_player_game(true, game_record(socket))
     {:noreply, socket |> assign(state: :game_over, modal: false)}
   end
 
