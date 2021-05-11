@@ -31,8 +31,8 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     <h1>Contest countdown </h1>
     <div class="row">
     <div class="column column-25">
-    <h1><%= @start_date |> Util.date_count() |> Util.count_display() %></h1>
-    <h1>DAYS</h1>
+    <h2><%= @start_date |> Util.date_count() |> Util.count_display() %></h2>
+    <h2>DAYS</h2>
     </div>
      <div class="column column-25">
     <h2><%= Util.count_display(@hours)%></h2>
@@ -47,7 +47,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     <h2>SECONDS</h2>
     </div>
     </div>
-    <h3>Contest coming soon, Time until 05th May 2021 </h3>
+    <h3>Contest coming soon, Time until 18th May 2021(UTC + 0) </h3>
     <% end %>
     </section>
     </div>

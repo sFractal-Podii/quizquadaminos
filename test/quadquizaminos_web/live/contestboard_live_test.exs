@@ -25,7 +25,7 @@ defmodule QuadquizaminosWeb.ContestboardLiveTest do
       assert html =~ "<h1>Contest countdown </h1>"
 
       assert html =~
-               "<h1>#{start_date |> Util.date_count() |> Util.count_display()}</h1><h1>DAYS</h1>"
+               "<h2>#{start_date |> Util.date_count() |> Util.count_display()}</h2><h2>DAYS</h2>"
 
       assert html =~ "<h2>#{hour |> Util.count_display()}</h2><h2>HOURS</h2>"
       assert html =~ "<h2>#{minutes |> Util.count_display()}</h2><h2>MINUTES</h2>"
