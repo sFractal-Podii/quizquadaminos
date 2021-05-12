@@ -4,14 +4,16 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
 
   def render(%{category: nil} = assigns) do
     ~L"""
-    <div>
+    <div style="text-align:center;">
 
-    <button phx-click="unpause">Continue</button>
+    <button phx-click="unpause">Continue</button><br>
     <%= for category <- QnA.categories() do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
+    <br>
 
-    <%= show_powers(assigns) %>
+    <%= show_powers(assigns) %><br>
+    <button phx-click="endgame">End Game</button><br>
     </div>
     """
   end
