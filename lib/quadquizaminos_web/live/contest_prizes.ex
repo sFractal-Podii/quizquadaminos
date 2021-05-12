@@ -24,7 +24,7 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         must purchase their own alcohol and ingredients.
         </p>
         <a href="https://cocktailsforendtimes.com/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/Cocktail3.png") %>" alt="Cocktails For Endtimes Logo" />
+          <img src="/images/Cocktail3.png" alt="Cocktails For Endtimes Logo">
         </a>
         <h2>Absinthe Tutorial from an Award-Winning Mixologist</h2>
         <p>
@@ -55,7 +55,7 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         One lucky person will will 5 hours of consultation
         from Briar Cutter marketing/writing consultants.
         <a href="https://briarcutter.com/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/Briar Cutter Final PNG@2x.png") %>" alt="Briar Cutter Logo" />
+          <img src="/images/Briar Cutter Final PNG@2x.png">
         </a>
         </p>
         <h2>Podii Software Development</h2>
@@ -63,7 +63,7 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         One lucky person will will 5 hours of consultation
         from Podii, as software consulting company.
         <a href="https://podiihq.com/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/podiilogo.png") %>" alt="Podii Logo" />
+          <img src="/images/podiilogo.png">
         </a>
         </p>
         <h2>sFractal Cybersecurity</h2>
@@ -71,7 +71,7 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         One lucky person will will 5 hours of consultation
         from sFractal Consulting, a botique cybersecurity and software development company.
         <a href="https://sfractal.com/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/sFractalConsulting.png") %>" alt="sFractal Logo" />
+          <img src="/images/sFractalConsulting.png">
         </a>
         </p>
         """
