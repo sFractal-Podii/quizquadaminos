@@ -64,6 +64,7 @@ header section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin: 2rem;
   /*Duncan: maybe margin: 2rem; or margin: .75rem; would be a nice spacing fix here */
 }
 header section :first-child {
