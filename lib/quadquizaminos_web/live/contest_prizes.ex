@@ -7,21 +7,21 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         ~L"""
         <h1>Contest Prizes</h1>
         <p>
-        These prizes are in no particular order. See
+        See
         <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestRules) %> > Contest Rules </a>
-        for order winners will be selected. Winners will then pick from available prizes.
+        for more information on which order the prizes will be offered. 
         </p>
         <h2>Custom Cocktail Instruction from a Superlative Mixologist</h2>
         <p>
         One lucky person will win a private Cocktail Session via Zoom with
         Mixologist/Sommelier Chantal Tseng.
         This will include an in depth demo of three recipes catered to your favorite novel
-        or other source of group inspiration. Chantal will provide advance recipes
+        or other source of inspiration. Chantal will provide advance recipes
         and a tool list for your unlimited number of guests
         who are then encouraged to make the drinks alongside and ask questions along the way.
         Class runs usually one to one and half hours long.
-        Note the prize includes the recipes and the instruction but participants
-        must purchase their own alcohol and ingredients.
+        Note: the prize includes the recipes and the instruction, but <em>participants
+        must purchase their own alcohol and ingredients</em>.
         </p>
         <a href="https://cocktailsforendtimes.com/" class="phx-logo">
           <img src="/images/Cocktail3.png" alt="Cocktails For Endtimes Logo">
@@ -36,8 +36,8 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         Guests are encouraged to pick up a bottle beforehand
         and will be given a list of recommendations.
         Class will run 45 minutes to an hour long.
-        Note the prize includes the recipes and the instruction but participants
-        must purchase their own alcohol and ingredients.
+        Note: the prize includes the recipes and the instruction but <em>participants
+        must purchase their own alcohol and ingredients</em>.
         </p>
         <h2>Custom Cocktail Recipe</h2>
         <p>
@@ -60,8 +60,8 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         </p>
         <h2>Podii Software Development</h2>
         <p>
-        One lucky person will will 5 hours of consultation
-        from Podii, as software consulting company.
+        One lucky person will win 5 hours of consultation
+        from Podii, a software consulting company.
         <a href="https://podiihq.com/" class="phx-logo">
           <img src="/images/podiilogo.png">
         </a>
@@ -69,7 +69,7 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         <h2>sFractal Cybersecurity</h2>
         <p>
         One lucky person will will 5 hours of consultation
-        from sFractal Consulting, a botique cybersecurity and software development company.
+        from sFractal Consulting, a boutique cybersecurity and software development company.
         <a href="https://sfractal.com/" class="phx-logo">
           <img src="/images/sFractalConsulting.png">
         </a>
