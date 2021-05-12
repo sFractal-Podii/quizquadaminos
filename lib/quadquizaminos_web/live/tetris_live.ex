@@ -3,13 +3,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
   import Phoenix.HTML, only: [raw: 1]
 
   import QuadquizaminosWeb.LiveHelpers
+  import QuadquizaminosWeb.Instructions
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.{
     Bottom,
     Brick,
     Hints,
-    Instructions,
     Points,
     Powers,
     Presets,
@@ -39,7 +39,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     ~L"""
     <%= if live_action == :instructions do %>
     <div class = "phx-modal-content">
-        <%= raw Instructions.game_instruction() %>
+        <%= raw game_instruction() %>
       </div>
       <% else %>
         <div class ="container">
@@ -406,7 +406,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Records.record_player_game(true, game_record(socket))
     {:noreply, socket |> assign(state: :game_over, modal: false)}
   end
-
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
     {:noreply, move(:left, socket)}

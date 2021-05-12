@@ -1,13 +1,9 @@
-defmodule Quadquizaminos.Instructions do
-  use Phoenix.LiveView
-
-  import QuadquizaminosWeb.LiveHelpers
+defmodule QuadquizaminosWeb.Instructions do
+  import Phoenix.HTML
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
-
-
-    def game_instruction() do
-    """
+  def game_instruction do
+    ~E"""
     <h2>1. THE BASICS </h2>
     <p>Predictably patterned blocks will fall from the game's sky. It's your
     job to spin these blocks mid air to achieve a perfect fit on the game's ground level.</p>
@@ -124,12 +120,11 @@ defmodule Quadquizaminos.Instructions do
         </p>
         <p>
         See
-        <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestRules) %> > contest rules </a>
+        <a href="<%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestRules) %>">contest rules </a> 
         and
-        <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestPrizes) %> > contest prizes </a>
+        <a href="<%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestPrizes) %>">contest prizes </a> 
         for more information.
         </p>
     """
-    end
-
+  end
 end
