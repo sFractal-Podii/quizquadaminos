@@ -6,36 +6,34 @@ defmodule QuadquizaminosWeb.PrivacyLive do
         <h1>Privacy Policy</h1>
         <h3>Version 1.0.0 (last updated 6-May-2021)</h3>
 
-        sFractal knows you take you privacy seriously
-        and we do too.
-        We attempt to collect as little information as possible,
-        be transparent,
-        keep the information no longer than necessary,
-        and give you control over what information we collect about you.
+        sFractal takes your privacy as seriously
+        as you do.
+        We want to give you control over the little information we collect from you 
+        and work transparently to keep that information no longer than necessary. 
 
-        This Privacy Policy describes Our policies and procedures on the
-        collection, use and disclosure of Your information
-        when You use the Service and tells You about Your privacy rights
-        and how the law protects You.
+        This Privacy Policy describes the policies and procedures we apply to the
+        use and disclosure of your information we collect
+        when you interact with our game. We also elaborate your privacy rights
+        and how the law protects you.
 
-        We use Your Personal data to provide and improve the Service.
-        By using the Service,
-        You agree to the collection
+        We use your personal data to provide and improve the game.
+        By using the service,
+        you agree to the collection
         and use of information in accordance with this Privacy Policy.
         Parts of this Privacy Policy has been created
         with the help of the Privacy Policy Generator.
 
 
         <h2>What data is collected by QuadBlockQuiz?</h2>
-        We believe we are only collecting publicly accessbile information.
+        We are only collecting publicly accessbile information.
         If you login using our anonymous feature,
         we are collecting/keeping no information at all.
         If you login using OAUTH from GitHub, Google, Twitter, LinkedIn
         then we are only keeping enough information to display your score,
-        and to contact you shoudl you win a prize.
+        and to contact you should you win a prize.
 
         <h2>How is my data used by QuadBlockQuiz?</h2>
-        We use your data to operate, maintain, and improve our services.
+        We use your data to operate, maintain, and improve our game.
         In particular, your identiy (if provided by OAUTH from GitHub,
         Google, Twitter, or LinkedIn) is used to display your score
         on the Leaderboard and on the Context Board.
@@ -53,20 +51,20 @@ defmodule QuadquizaminosWeb.PrivacyLive do
         (4) in conjunction with an investigation of suspected or actual illegal activity
         (5) to protect the rights, property, or safety of sFractal or it's users.
 
-        Information from Third-Party Social Media Services
-        The Company allows You to create an account
-        and log in to use the Service
-        through the following Third-party Social Media Services:
+        <h2>Information from Third-Party Social Media Services</h2>
+        We allow you to create an account
+        and log in to use the game
+        through the following third-party Social Media Services:
         GitHub,
         Google,
         Facebook,
         Twitter,
         LinkedIn.
-        If You decide to register through
-        or otherwise grant us access to a Third-Party Social Media Service,
-        We may collect Personal data that is already associated
-        with Your Third-Party Social Media Service's account,
-        such as Your name, or Your email address,
+        If you decide to register through
+        or otherwise grant us access to a third-party Social Media Service,
+        We may collect personal data that is already associated
+        with your third-party Social Media Service's account,
+        such as your name, or your email address,
         associated with that account.
 
         <h2>What about cookies?</h2>
