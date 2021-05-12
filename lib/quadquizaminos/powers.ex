@@ -4,19 +4,12 @@ defmodule Quadquizaminos.Powers do
     :addblock,
     :moveblock,
     :clearblocks,
-    :nextblock,
     :speedup,
     :slowdown,
-    :forensics,
-    :legal,
-    :cyberinsurance,
-    :sbom,
     :fixvuln,
     :fixlicense,
     :rm_all_vulns,
     :rm_all_lic_issues,
-    :automation,
-    :openchain,
     :superpower
   ]
 

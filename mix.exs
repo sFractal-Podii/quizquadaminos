@@ -4,7 +4,7 @@ defmodule Quadquizaminos.MixProject do
   def project do
     [
       app: :quadquizaminos,
-      version: "0.5.15",
+      version: "0.5.17",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -32,7 +32,14 @@ defmodule Quadquizaminos.MixProject do
   def application do
     [
       mod: {Quadquizaminos.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_github, :ueberauth_google, :ueberauth, :mix]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :ueberauth_github,
+        :ueberauth_google,
+        :ueberauth,
+        :mix
+      ]
     ]
   end
 
