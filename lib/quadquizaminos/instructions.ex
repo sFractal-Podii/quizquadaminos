@@ -70,7 +70,7 @@ defmodule Quadquizaminos.Instructions do
             <li>cyber attacks(rapid changes in operating conditions that take over entire sections
                 of the gameboard and speed the game up uncontrollably)</li>
                 <ul>
-                    <li>ignore enough (5) vulnerabilities in your block array supply chain and you'll be in
+                    <li>ignore enough (5) vulnerabilities in your block supply chain and you'll be in
                         for a nasty surprise</li>
                     <li>the game will accelerate to its fastest speed and an entire line of exploits
                         will magically appear on your screen preventing operations. Hit the space bar!</li>
@@ -78,7 +78,9 @@ defmodule Quadquizaminos.Instructions do
             <li>licensing lawsuits (tiresome procedures that gum up entire sections of the game board
                 and slow the game to a snail's pace)</li>
                 <ul>
-                    <li>not only will the game slow down to a snail's pace, but a fresh coat of pesky brown/grey injunctions
+                <li>ignore enough (5) liscensing issues in your block supply chain and you'll be in
+                    for a nasty surprise</li>
+                <li>not only will the game slow down to a snail's pace, but a fresh coat of pesky brown/grey injunctions
                         will festoon your existing block arrays. Hit the space bar!</li>
                 </ul>
         </ol>
