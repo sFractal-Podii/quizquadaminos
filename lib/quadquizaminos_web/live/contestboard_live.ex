@@ -1,6 +1,8 @@
 defmodule QuadquizaminosWeb.ContestboardLive do
   use Phoenix.LiveView
 
+  import Phoenix.HTML, only: [raw: 1]
+
   alias Quadquizaminos.Util
 
   @initial_hour 23
@@ -17,17 +19,71 @@ defmodule QuadquizaminosWeb.ContestboardLive do
        hours: current_hour(time),
        minutes: current_minute(time),
        seconds: current_second(time),
-       start_date: start_date
+       start_date: start_date,
+       contest_minutes: 0,
+       contest_second: 0,
+       contest_hour: 0,
+       start_timer: false,
+       stop_timer: false
      )}
   end
 
   def render(assigns) do
     ~L"""
-    <div class="container">
-    <section class="phx-hero">
     <%= if Util.date_count(@start_date) < 1 do %>
+
     <h1>Contest Day</h1>
+    <div class="row">
+      <div class="column column-25 column-offset-5">
+        <section class="phx-hero">
+        <h2>Timer</h2>
+    <div class = "row">
+      <div class="column column-25">
+         <h2><%= Util.count_display(@contest_hour)%><sub>h</sub></h2>
+      </div>
+      <div class="column column-25">
+        <h2><%=Util.count_display(@contest_minutes)%><sub>m</sub></h2>
+      </div>
+        <div class="column column-25">
+          <h2><%=Util.count_display(@contest_second)%><sub>s</sub></h2>
+        </div>
+    </div>
+     <%= raw display_timer_button(@start_timer, @stop_timer) %>
+     <button phx-click="reset">Reset</button>
+     </section>
+    </div>
+
+    <div class="column column-50 column-offset-10">
+    <div class="container">
+    <h1>Contest Scoreboard </h1>
+    <table>
+    <tr>
+    <th>Player</th>
+    <th>Score</th>
+    <th>Bricks</th>
+    <th>Questions</th>
+    <th>Start time</th>
+    <th>End time</th>
+    <th>Date</th>
+    </tr>
+
+    <%#= for record <- @top_10_games do %>
+     <tr>
+    <td>player</td>
+    <td>player</td>
+    <td>player</td>
+    <td>player</td>
+    <td>player</td>
+    <td>player</td>
+    <td>player</td>
+    </tr>
+    <%#= end %>
+
+    </table>
+    </div>
     <% else %>
+      <div class="container">
+     <section class="phx-hero">
     <h1>Contest countdown </h1>
     <div class="row">
     <div class="column column-25">
@@ -48,10 +104,60 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     </div>
     </div>
     <h3>Contest coming soon, Time until 18th May 2021(UTC + 0) </h3>
-    <% end %>
+
     </section>
     </div>
+    <% end %>
     """
+  end
+
+  def handle_event("timer", %{"timer" => "start"}, socket) do
+    :timer.send_interval(1000, self(), :timer)
+    {:noreply, socket |> assign(start_timer: true, stop_timer: false)}
+  end
+
+  def handle_event("timer", %{"timer" => "stop"}, socket) do
+    {:noreply, socket |> assign(stop_timer: true, start_timer: false)}
+  end
+
+  def handle_event("timer", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("reset", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(
+       start_timer: false,
+       stop_timer: false,
+       contest_hour: 0,
+       contest_minutes: 0,
+       contest_second: 0
+     )}
+  end
+
+  def handle_info(:timer, %{assigns: %{start_timer: true}} = socket) do
+    contest_second = timer_second(socket.assigns.contest_second)
+    contest_minutes = timer_minutes(socket.assigns.contest_second, socket.assigns.contest_minutes)
+
+    contest_hour =
+      timer_hours(
+        socket.assigns.contest_second,
+        socket.assigns.contest_minutes,
+        socket.assigns.contest_hour
+      )
+
+    {:noreply,
+     socket
+     |> assign(
+       contest_second: contest_second,
+       contest_minutes: contest_minutes,
+       contest_hour: contest_hour
+     )}
+  end
+
+  def handle_info(:timer, socket) do
+    {:noreply, socket}
   end
 
   def handle_info(:count_down, socket) do
@@ -84,6 +190,36 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     seconds - 1
   end
 
+  def timer_second(59 = _seconds), do: 0
+
+  def timer_second(seconds) do
+    seconds + 1
+  end
+
+  def timer_minutes(59 = _seconds, minutes) do
+    timer_minutes(minutes)
+  end
+
+  def timer_minutes(_seconds, minutes), do: minutes
+
+  def timer_minutes(59 = _minutes), do: 0
+
+  def timer_minutes(minutes) do
+    minutes + 1
+  end
+
+  def timer_hours(59 = _seconds, 59 = _minutes, hours) do
+    timer_hours(hours)
+  end
+
+  def timer_hours(_seconds, _minutes, hours), do: hours
+
+  def timer_hours(23 = _hour), do: 0
+
+  def timer_hours(hour) do
+    hour + 1
+  end
+
   defp minute_count(0 = _seconds, minutes) do
     minute_count(minutes)
   end
@@ -103,4 +239,22 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   defp hour_count(0 = _hours), do: @initial_hour
 
   defp hour_count(hours), do: hours - 1
+
+  defp display_timer_button(true = _start_timer, false = _stop_timer) do
+    """
+     <button phx-click="timer" phx-value-timer="stop">Stop</button>
+    """
+  end
+
+  defp display_timer_button(false = _start_timer, true = _stop_timer) do
+    """
+     <button phx-click="timer" phx-value-timer="start">Start</button>
+    """
+  end
+
+  defp display_timer_button(_start_timer, _stop_timer) do
+    """
+     <button phx-click="timer" phx-value-timer="start">Start</button>
+    """
+  end
 end
