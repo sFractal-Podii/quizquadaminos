@@ -32,17 +32,20 @@ defmodule Quadquizaminos.UserFromAuth do
 
   defp basic_info(auth) do
     %{
-      user_id: uid(auth),
+      uid: uid(auth),
       name: name_from_auth(auth),
       avatar: avatar_from_auth(auth),
-      role: auth.uid |> configured_user?() |> role()
+      role: auth.uid |> configured_user?() |> role(),
+      provider: Atom.to_string(auth.provider)
     }
   end
 
   defp uid(auth) do
+    IO.inspect(auth, label: "=====auth====")
         case auth.provider do
+          :linkedin -> auth.uid
           :google -> String.slice(auth.uid, 0, 8)
-                _ -> auth.uid 
+                _ -> Integer.to_string(auth.uid) 
         end
   end
 
@@ -50,7 +53,7 @@ defmodule Quadquizaminos.UserFromAuth do
 
   defp role(_configured_user?), do: "player"
 
-  defp configured_user?(user_id), do: user_id in Application.get_env(:quadquizaminos, :github_ids)
+  defp configured_user?(uid), do: uid in Application.get_env(:quadquizaminos, :github_ids)
 
   defp name_from_auth(auth) do
     if auth.info.name do

@@ -7,14 +7,14 @@ defmodule QuadquizaminosWeb.PageController do
   alias Quadquizaminos.Accounts
 
   def index(conn, _params) do
-    user_id = conn.assigns[:current_user]
-    render(conn, "index.html", current_user: current_user(user_id))
+    uid = conn.assigns[:current_user]
+    render(conn, "index.html", current_user: current_user(uid))
   end
 
   def anonymous(conn, _params) do
     conn
     |> put_flash(:info, "Successfully authenticated.")
-    |> put_session(:user_id, "anonymous")
+    |> put_session(:uid, "anonymous")
     |> configure_session(renew: true)
     |> redirect(to: "/")
   end
@@ -23,7 +23,7 @@ defmodule QuadquizaminosWeb.PageController do
 
   defp current_user("anonymous"), do: "anonymous"
 
-  defp current_user(user_id) do
-    Accounts.get_user(user_id)
+  defp current_user(uid) do
+    Accounts.get_user(uid)
   end
 end
