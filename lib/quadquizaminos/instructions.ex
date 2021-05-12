@@ -46,22 +46,21 @@ defmodule Quadquizaminos.Instructions do
      -- a venue to explore the vulnerabilities that haunt modern cyber security. Accordingly, we've built
      in a few little hiccups along the way to get you thinking about the supply chain of your block arrays.</p>
      <p>During the game, you may notice a few little hiccups that make it nigh on impossible to continue
-     without earning a power up or two. Here are some of the fun little challenges life will throw your way:</p>
-         <ol>
-            <li>vulnerabilities (potential security holes in an otherwise functioning security paradigm)</li>
-                <ul>
-                    <li>any vulnerability in a row will prevent it being cleared.</li>
-                    <li>vulnerabilities make it more likely that you'll be hit with a cyber attack (see below).</li>
-                    <li>a vulnerability's arrival is a function of game time and wrong answers to trivia questions.</li>
-                    <li>you will recognize a vulnerability on sight</li>
-                        <ul>
-                            <li>Known vulnerabilities are yellow/gray blocks that appear either in dropping blocks
-                                or in uncleared blocks at the bottom.</li>
-                            <li>Invisible vulnerabilities (zero days) are white-on-white blocks. If you see one,
-                                you'd better get your power ups in order.</li>
-                        </ul>
-                 <ul>
-            <li>licensing issues (extraneous blocks that gunk up the works)</li>
+     without earning a power up or two. Here are some of the fun little challenges life will throw your way:
+     </p>
+     <ol>
+        <li>vulnerabilities (potential security holes in an otherwise functioning security paradigm)</li>
+          <ul>
+            <li>any vulnerability in a row will prevent it being cleared.</li>
+            <li>vulnerabilities make it more likely that you'll be hit with a cyber attack (see below).</li>
+            <li>a vulnerability's arrival is a function of game time and wrong answers to trivia questions.</li>
+            <li>you will recognize a vulnerability on sight</li>
+              <ul>
+                <li>Known vulnerabilities are yellow/gray blocks that appear either in dropping blocks or in uncleared blocks at the bottom.</li>
+                <li>Invisible vulnerabilities (zero days) are white-on-white blocks. If you see one, you'd better get your power ups in order.</li>
+              </ul>
+            </ul>
+          <li>licensing issues (extraneous blocks that gunk up the works)</li>
                 <ul>
                     <li>licensing issues are brown/grey blocks that also prevent a row from being cleared.</li>
                     <li>the more license issues, the greater the likelihood of a lawsuit (see below).</li>
