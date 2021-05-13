@@ -28,7 +28,7 @@ defmodule QuadquizaminosWeb.PageControllerTest do
     |> assign(:ueberauth_auth, auth)
     |> QuadquizaminosWeb.AuthController.callback(%{})
 
-    %User{role: "admin"} = Quadquizaminos.Repo.get(User, auth.uid)
+    %User{role: "admin"} = Quadquizaminos.Repo.get(User, Integer.to_string(auth.uid))
   end
 
   test "non configured users are given player role when authenticated", %{conn: conn} do
@@ -50,7 +50,7 @@ defmodule QuadquizaminosWeb.PageControllerTest do
     |> assign(:ueberauth_auth, auth)
     |> QuadquizaminosWeb.AuthController.callback(%{})
 
-    %User{role: "player"} = Quadquizaminos.Repo.get(User, auth.uid)
+    %User{role: "player"} = Quadquizaminos.Repo.get(User, Integer.to_string(auth.uid))
   end
 
   test "users get notified if Successfully authenticated via github", %{conn: conn} do
@@ -117,5 +117,38 @@ defmodule QuadquizaminosWeb.PageControllerTest do
     {:ok, _view, html} = live(conn, "/tetris")
 
     assert html =~ "<h1>Welcome to QuadBlocksQuiz!</h1>"
+  end
+
+  describe "login with linkedin" do
+    setup %{conn: conn} do
+      auth = %Ueberauth.Auth{
+        provider: :linkedin,
+        info: %{
+          first_name: "John",
+          last_name: "Doe",
+          email: "john.doe@example.com",
+          image: "https://example.com/image.jpg",
+          name: "John Doe"
+        },
+        uid: "ZFTiodwQ"
+      }
+
+      conn =
+        conn
+        |> bypass_through(QuadquizaminosWeb.Router, [:browser])
+        |> get("/auth/linkedin/callback")
+        |> assign(:ueberauth_auth, auth)
+        |> QuadquizaminosWeb.AuthController.callback(%{})
+
+      [conn: conn, auth: auth]
+    end
+
+    test "users get notified if Successfully authenticated via google", %{conn: conn} do
+      assert get_flash(conn, :info) == "Successfully authenticated."
+    end
+
+    test "user role is saved as player", %{auth: auth} do
+      %User{role: "player"} = Quadquizaminos.Repo.get(User, auth.uid)
+    end
   end
 end
