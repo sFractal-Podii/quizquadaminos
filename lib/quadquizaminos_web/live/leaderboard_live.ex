@@ -2,6 +2,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   use Phoenix.LiveView
 
   alias Quadquizaminos.GameBoard.Records
+  alias Quadquizaminos.Util
 
   def mount(_params, _session, socket) do
     {:ok, socket |> assign(top_10_games: Records.top_10_games())}
@@ -28,25 +29,14 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <td><%= record.score %></td>
     <td><%= record.dropped_bricks %></td>
     <td><%= record.correctly_answered_qna %></td>
-    <td><%= datetime_to_time(record.start_time) %></td>
-    <td><%= datetime_to_time(record.end_time) %></td>
-    <td><%= datetime_to_date(record.start_time) %></td>
+    <td><%= Util.datetime_to_time(record.start_time) %></td>
+    <td><%= Util.datetime_to_time(record.end_time) %></td>
+    <td><%= Util.datetime_to_date(record.start_time) %></td>
     </tr>
     <% end %>
 
     </table>
     </div>
     """
-  end
-
-  defp datetime_to_time(datetime) do
-    datetime
-    |> DateTime.truncate(:second)
-    |> DateTime.to_time()
-  end
-
-  defp datetime_to_date(datetime) do
-    datetime
-    |> DateTime.to_date()
   end
 end

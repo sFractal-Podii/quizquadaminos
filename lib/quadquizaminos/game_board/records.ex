@@ -19,6 +19,20 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> Repo.all()
   end
 
+  def contest_game(start_time, end_time) do
+    start_time
+    |> GameBoard.by_start_and_end_time(end_time)
+    |> GameBoard.preloads([:user])
+    |> Repo.all()
+  end
+
+  def contest_game(start_time) do
+    start_time
+    |> GameBoard.by_time()
+    |> GameBoard.preloads([:user])
+    |> Repo.all()
+  end
+
   def create_record(%{user_id: user_id} = game_records) do
     unless user_id == "anonymous" do
       game_records

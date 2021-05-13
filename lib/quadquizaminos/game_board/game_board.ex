@@ -34,4 +34,22 @@ defmodule Quadquizaminos.GameBoard do
       limit: 10,
       preload: [:user]
   end
+
+  def preloads(query, preloads) when is_list(preloads) do
+    from q in query, preload: ^preloads
+  end
+
+  def by_time(start_time) do
+    from r in __MODULE__,
+      where: r.start_time >= ^start_time,
+      order_by: [desc: r.score]
+  end
+
+  def by_start_and_end_time(start_time, end_time) do
+    from r in __MODULE__,
+      where:
+        r.start_time >= ^start_time and
+          r.end_time <= ^end_time,
+      order_by: [desc: r.score]
+  end
 end

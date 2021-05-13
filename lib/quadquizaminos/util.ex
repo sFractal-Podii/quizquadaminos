@@ -8,4 +8,15 @@ defmodule Quadquizaminos.Util do
     count = digits |> Integer.digits() |> Enum.count()
     if count == 1, do: "#{0}" <> "#{digits}", else: "#{digits}"
   end
+
+  def datetime_to_time(datetime) do
+    datetime
+    |> DateTime.truncate(:second)
+    |> DateTime.to_time()
+  end
+
+  def datetime_to_date(datetime) do
+    datetime
+    |> DateTime.to_date()
+  end
 end

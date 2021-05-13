@@ -27,10 +27,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"user_id" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
+    QuadquizaminosWeb.Endpoint.subscribe("contest_timer")
 
     {:ok,
      socket
-     |> assign(current_user: current_user)
+     |> assign(current_user: current_user, start_timer: false)
      |> init_game
      |> start_game()}
   end
@@ -336,6 +337,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       )
 
     bonus = if fast, do: 2, else: 0
+
     Records.record_player_game(response.game_over, game_record(socket))
 
     socket
@@ -747,6 +749,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
     x = String.to_integer(x)
     y = String.to_integer(y)
     {x, y}
+  end
+
+  def handle_info(%{event: "timer", payload: _payload}, socket) do
+    if socket.assigns.state == :playing do
+      Records.record_player_game(true, game_record(socket))
+    end
+
+    {:noreply, socket}
   end
 
   def handle_info(:tick, socket) do
