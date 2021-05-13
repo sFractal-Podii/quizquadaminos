@@ -20,13 +20,12 @@ defmodule Quadquizaminos.UserFromAuth do
   end
 
   # github does it this way
-  defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}, provider: _provider}), do: image
-  defp avatar_from_auth(%{info: %{image: image}, provider: :google}), do: image
+  defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}, provider: :github}), do: image
+  defp avatar_from_auth(%{info: %{image: image}, provider: _provider}), do: image
 
   # default case if nothing matches
   defp avatar_from_auth(auth) do
     Logger.warn("#{auth.provider} needs to find an avatar URL!")
-    Logger.debug(Jason.encode!(auth))
     nil
   end
 
@@ -41,7 +40,6 @@ defmodule Quadquizaminos.UserFromAuth do
   end
 
   defp uid(auth) do
-    IO.inspect(auth, label: "=====auth====")
         case auth.provider do
           :linkedin -> auth.uid
           :google -> String.slice(auth.uid, 0, 8)

@@ -10,7 +10,7 @@ defmodule Quadquizaminos.GameBoard do
   schema "game_boards" do
     field :start_time, :utc_datetime_usec
     field :end_time, :utc_datetime_usec
-    belongs_to :user, User, foreign_key: :uid, references: :uid
+    belongs_to :user, User, foreign_key: :uid, references: :uid, type: :string
     field :score, :integer
     field :dropped_bricks, :integer
     field :correctly_answered_qna, :integer

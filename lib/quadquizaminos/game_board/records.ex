@@ -21,10 +21,8 @@ defmodule Quadquizaminos.GameBoard.Records do
 
   def create_record(%{uid: uid} = game_records) do
     unless uid == "anonymous" do
-      IO.inspect(game_records, label: "=====game attrs====")
       game_records
       |> change_game_board()
-      |> IO.inspect(label: "=====game changeset====")
       |> Repo.insert()
     end
   end
