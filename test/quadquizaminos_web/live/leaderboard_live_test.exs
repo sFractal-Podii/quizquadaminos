@@ -33,9 +33,6 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
     {:ok, _view, html} = live(conn, "/leaderboard")
     assert row_count(html) == 10
     assert html =~ "<th>Player</th>"
-    assert html =~ "<th>Score</th>"
-    assert html =~ "<th>Dropped Bricks</th>"
-    assert html =~ "<th>Correctly Answered Qna</th>"
     assert html =~ "<th>Start time</th>"
     assert html =~ "<th>End time</th>"
     assert html =~ "<th>Date</th>"

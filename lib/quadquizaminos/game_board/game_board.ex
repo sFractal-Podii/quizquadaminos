@@ -28,9 +28,10 @@ defmodule Quadquizaminos.GameBoard do
     ])
   end
 
-  def game_record_query do
+  def game_record_query(order_by \\ "score") do
     from r in __MODULE__,
-      order_by: [desc: r.score],
+      order_by: [desc: ^(order_by |> String.to_atom())],
+      order_by: [asc: r.end_time - r.start_time],
       limit: 10,
       preload: [:user]
   end

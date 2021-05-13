@@ -14,8 +14,8 @@ defmodule Quadquizaminos.GameBoard.Records do
 
   def record_player_game(_game_over, _game_records), do: nil
 
-  def top_10_games do
-    GameBoard.game_record_query()
+  def top_10_games(sort_by \\ "score") do
+    GameBoard.game_record_query(sort_by)
     |> Repo.all()
   end
 

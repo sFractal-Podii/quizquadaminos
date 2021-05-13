@@ -45,15 +45,14 @@ defmodule Quadquizaminos.GameRecordTest do
       attrs = %{name: "Quiz Block ", uid: Integer.to_string(1), role: "player"}
       {:ok, user} = Accounts.create_user(%User{}, attrs)
 
-
-      Enum.each(1..15, fn num ->
+      Enum.each(15..1, fn _num ->
         game_record = %{
           start_time: ~U[2021-04-20 06:00:53Z],
           end_time: DateTime.utc_now(),
           uid: user.uid,
-          score: 10 * num,
-          dropped_bricks: 10,
-          correctly_answered_qna: 2
+          score: :random.uniform(50),
+          dropped_bricks: :random.uniform(1000),
+          correctly_answered_qna: :random.uniform(45)
         }
 
         Records.record_player_game(true, game_record)
@@ -64,14 +63,62 @@ defmodule Quadquizaminos.GameRecordTest do
       assert Records.top_10_games() |> Enum.count() == 10
     end
 
-    test "records are sorted by scores in descending order" do
-      actual = [150, 140, 130, 120, 110, 100, 90, 80, 70, 60]
-
-      expected =
+    test "records are sorted by scores in descending order by default" do
+      results =
         Records.top_10_games()
         |> Enum.map(& &1.score)
 
-      assert actual == expected
+      sorted = results |> Enum.sort(:desc)
+
+      assert results == sorted
     end
+
+    test "record can be sorted by bricks" do
+      res =
+        Records.top_10_games("dropped_bricks")
+        |> Enum.map(& &1.dropped_bricks)
+
+      ordered_bricks = res |> Enum.sort(:desc)
+
+      assert ordered_bricks == res
+    end
+
+    test "records can be sorted by  questions" do
+      res =
+        Records.top_10_games("correctly_answered_qna")
+        |> Enum.map(& &1.correctly_answered_qna)
+
+      ordered_bricks = res |> Enum.sort(:desc)
+
+      assert ordered_bricks == res
+    end
+  end
+
+  test "sorts by time taken by default" do
+    attrs = %{name: "Quiz Block ", uid: "2", role: "player"}
+    {:ok, user} = Accounts.create_user(%User{}, attrs)
+    now = DateTime.utc_now()
+
+    less_time = %{
+      start_time: DateTime.add(now, 1000),
+      end_time: DateTime.utc_now(),
+      uid: user.uid,
+      score: 50,
+      dropped_bricks: :random.uniform(1000),
+      correctly_answered_qna: :random.uniform(45)
+    }
+
+    more_time = %{
+      start_time: DateTime.add(now, 20000),
+      end_time: DateTime.utc_now(),
+      uid: user.uid,
+      score: 50,
+      dropped_bricks: :random.uniform(1000),
+      correctly_answered_qna: :random.uniform(45)
+    }
+
+    {:ok, less} = Records.record_player_game(true, less_time)
+    {:ok, more} = Records.record_player_game(true, more_time)
+    [less, more] = Records.top_10_games()
   end
 end
