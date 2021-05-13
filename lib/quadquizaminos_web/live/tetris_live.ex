@@ -3,13 +3,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
   import Phoenix.HTML, only: [raw: 1]
 
   import QuadquizaminosWeb.LiveHelpers
+  import QuadquizaminosWeb.Instructions
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.{
     Bottom,
     Brick,
     Hints,
-    Instructions,
     Points,
     Powers,
     Presets,
@@ -39,13 +39,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
     ~L"""
     <%= if live_action == :instructions do %>
     <div class = "phx-modal-content">
-        <%= raw Instructions.game_instruction() %>
+        <%= raw game_instruction() %>
       </div>
       <% else %>
         <div class ="container">
           <div class="row">
               <div class="column column-50 column-offset-25">
-                <h1>Welcome to QuadBlocksQuiz!</h1>
+                <h1>Welcome to QuadBlockQuiz!</h1>
                   <button phx-click="start">Start</button>
               </div>
           </div>
@@ -61,13 +61,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
-            <p>You are bankrupt either
-            due to a cyberattack or a lawsuit.
-            This may be because you let your supply chain get to long.
-            Or may be due to unfixed vulnerabilities which turned into exploits.
-            Or uncleared licensing errors caused you to be sued.
+            <p>You are bankrupt
+            due to a cyberattack,
+            or due to a lawsuit,
+            or maybe because you let your supply chain get to long.
             Or maybe you were too busy answering cybersecurity questions
-            and not paying attention to business.</p>
+            and not paying attention to business.
+            Or maybe you just hit quit :-).
+            </p>
             <hr>
             <%= raw svg_head() %>
             <%= for row <- [Map.values(@bottom)] do %>
@@ -238,8 +239,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(tech_lic_debt: 0)
     |> assign(tech_vuln_debt: 65)
     |> assign(vuln_threshold: 143)
-
- end
+  end
 
   def svg_head() do
     """
@@ -402,6 +402,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(state: :playing, modal: false)}
   end
 
+  def handle_event("endgame", _, socket) do
+    Records.record_player_game(true, game_record(socket))
+    {:noreply, socket |> assign(state: :game_over, modal: false)}
+  end
+
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
     {:noreply, move(:left, socket)}
   end
@@ -505,7 +510,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
         bottom_with_vuln = Bottom.add_vulnerability(socket.assigns.bottom)
-        assign(socket, score: score, bottom: bottom_with_vuln, modal: false, category: nil)
+        assign(socket, score: score, bottom: bottom_with_vuln)
       end
 
     {:noreply, socket}
@@ -574,20 +579,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, assign(socket, powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "slowvulns"}, socket) do
-    ## to do
-    ## does this become badge instead of powerup
-    powers = socket.assigns.powers -- [:slowvulns]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "slowlicense"}, socket) do
-    ## to do
-    ## does this become badge instead of powerup
-    powers = socket.assigns.powers -- [:slowlicense]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
   def handle_event("powerup", %{"powerup" => "legal"}, socket) do
     ## to do
     powers = socket.assigns.powers -- [:legal]
@@ -618,8 +609,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
   end
 
-  def handle_event("powerup", %{"powerup" => "fixallvulns"}, socket) do
-    powers = socket.assigns.powers -- [:rmallvulns]
+  def handle_event("powerup", %{"powerup" => "rm_all_vulns"}, socket) do
+    powers = socket.assigns.powers -- [:rm_all_vulns]
     bottom = Bottom.remove_all_vulnerabilities(socket.assigns.bottom)
 
     {:noreply,
@@ -628,8 +619,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(bottom: bottom)}
   end
 
-  def handle_event("powerup", %{"powerup" => "fixalllicenses"}, socket) do
-    powers = socket.assigns.powers -- [:rmalllicenses]
+  def handle_event("powerup", %{"powerup" => "rm_all_lic_issues"}, socket) do
+    powers = socket.assigns.powers -- [:rm_all_lic_issues]
     bottom = Bottom.remove_all_license_issues(socket.assigns.bottom)
 
     {:noreply,
@@ -647,20 +638,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "openchain"}, socket) do
     ## to do
     powers = socket.assigns.powers -- [:openchain]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "stopattack"}, socket) do
-    ## to do
-    ## do away with?
-    powers = socket.assigns.powers -- [:stopattack]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "winlawsuit"}, socket) do
-    ## to do
-    ## do away with?
-    powers = socket.assigns.powers -- [:winlawsuit]
     {:noreply, assign(socket, powers: powers)}
   end
 

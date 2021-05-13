@@ -38,6 +38,7 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
     assert html =~ "<th>Correctly Answered Qna</th>"
     assert html =~ "<th>Start time</th>"
     assert html =~ "<th>End time</th>"
+    assert html =~ "<th>Date</th>"
   end
 
   defp row_count(html) do

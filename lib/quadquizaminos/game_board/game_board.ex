@@ -30,7 +30,6 @@ defmodule Quadquizaminos.GameBoard do
 
   def game_record_query do
     from r in __MODULE__,
-      distinct: r.uid,
       order_by: [desc: r.score],
       limit: 10,
       preload: [:user]

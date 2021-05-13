@@ -15,10 +15,11 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <tr>
     <th>Player</th>
     <th>Score</th>
-    <th>Dropped Bricks</th>
-    <th>Correctly Answered Qna</th>
+    <th>Bricks</th>
+    <th>Questions</th>
     <th>Start time</th>
     <th>End time</th>
+    <th>Date</th>
     </tr>
 
     <%= for record <- @top_10_games do %>
@@ -29,6 +30,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <td><%= record.correctly_answered_qna %></td>
     <td><%= datetime_to_time(record.start_time) %></td>
     <td><%= datetime_to_time(record.end_time) %></td>
+    <td><%= datetime_to_date(record.start_time) %></td>
     </tr>
     <% end %>
 
@@ -41,5 +43,10 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     datetime
     |> DateTime.truncate(:second)
     |> DateTime.to_time()
+  end
+
+  defp datetime_to_date(datetime) do
+    datetime
+    |> DateTime.to_date()
   end
 end

@@ -5,32 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "QuadBlocksQuiz", suffix: " · SupplyChain Edition" %>
+    <%= live_title_tag assigns[:page_title] || "QuadBlockQuiz: ", suffix: " · SupplyChain Edition" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
     <header>
       <section class="container">
-        <a href="https://sfractal.com/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/Supply Chain Sandbox logo_dark_draft.png") %>" alt="sFractal Logo" />
+        <a href="https://supplychainsandbox.org/" class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/scs-logo.png") %>" alt="supplychainsandbox Logo" />
         </a>
-        <H1>QuadBlocksQuiz</H1>
+        <a class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
+        </a>
+        <H1>QuadBlockQuiz</H1>
         <H3>Supply Chain Edition</H3>
       </section>
       <nav role="navigation">
-    <ul>
-      <%= link "Leaderboard", to: Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive), class: "button" %>
-      <%= if @current_user do %>
-        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button" %>
+        <ul class="nav">
+         <li><a href="/">Home</a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive) %> >Leader board</a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestboardLive) %> >Contest board</a></li>
+         <li><a href= <%= Routes.terms_of_service_path(QuadquizaminosWeb.Endpoint, :terms_of_service) %> > Terms Of Service </a></li>
+         <li><a href= <%= Routes.privacy_path(QuadquizaminosWeb.Endpoint, :privacy) %> > Privacy </a></li>
+        <%= if @current_user do %>
+        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
-         <%= link "Live Dashboard", to: "/dashboard", class: "button" %>
+        <li><a href="/dashboard">Live Dashboard</a></li>
+        <% end %>
+        <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
+        <li><a href="/admin/login_levels">Login levels</a></li>
         <% end %>
       <% end %>
     </ul>
   </nav>
     </header>
     <%= @inner_content %>
+    <%= unless @live_action == :terms_of_service or @live_action == :privacy do %>
   <footer>
   <table>
   <tr>
@@ -62,5 +73,6 @@
 </tr>
 <table>
 </footer>
+<% end %>
   </body>
 </html>

@@ -116,7 +116,7 @@ defmodule QuadquizaminosWeb.PageControllerTest do
 
     {:ok, _view, html} = live(conn, "/tetris")
 
-    assert html =~ "<h1>Welcome to QuadBlocksQuiz!</h1>"
+    assert html =~ "<h1>Welcome to QuadBlockQuiz!</h1>"
   end
 
   describe "login with linkedin" do

@@ -36,6 +36,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 config :quadquizaminos,
   # add github_id of authorized users
   github_ids: [4_000_000],
+  contest_date: ~D[2021-05-18],
 
   # set bottom vulnerability defaulting value
   bottom_vulnerability_value: 77,

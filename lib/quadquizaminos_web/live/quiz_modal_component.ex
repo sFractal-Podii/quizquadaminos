@@ -4,14 +4,16 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
 
   def render(%{category: nil} = assigns) do
     ~L"""
-    <div>
+    <div style="text-align:center;">
 
-    <button phx-click="unpause">Continue</button>
+    <button phx-click="unpause">Continue</button><br>
     <%= for category <- QnA.categories() do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
+    <br>
 
-    <%= show_powers(assigns) %>
+    <%= show_powers(assigns) %><br>
+    <button phx-click="endgame">End Game</button><br>
     </div>
     """
   end
@@ -62,19 +64,15 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
       :speedup -> "fa-fast-forward"
       :slowdown -> "fa-fast-backward"
       :forensics -> "fa-microscope"
-      :slowvulns -> "fa-clipboard-check"
-      :slowlicense -> "fa-certificate"
       :legal -> "fa-gavel"
       :cyberinsurance -> "fa-file-contract"
       :sbom -> "fa-id-card"
       :fixvuln -> "fa-wrench"
       :fixlicense -> "fa-screwdriver"
-      :rmallvulns -> "fa-hammer"
-      :rmalllicenses -> "fa-tape"
+      :rm_all_vulns -> "fa-hammer"
+      :rm_all_lic_issues -> "fa-tape"
       :automation -> "fa-toolbox"
       :openchain -> "fa-tools"
-      :stopattack -> "fa-file-prescription"
-      :winlawsuit -> "fa-balance-scale"
       :superpower -> "fa-superpowers"
     end
   end
