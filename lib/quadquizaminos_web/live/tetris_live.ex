@@ -25,7 +25,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @box_width 20
   @box_height 20
 
-  def mount(_param, %{"user_id" => current_user}, socket) do
+  def mount(_param, %{"uid" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
 
     {:ok,
@@ -318,7 +318,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
-      user_id: socket.assigns.current_user,
+      uid: socket.assigns.current_user,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       correctly_answered_qna: socket.assigns.correct_answers

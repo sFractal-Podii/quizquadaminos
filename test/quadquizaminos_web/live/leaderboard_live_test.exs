@@ -15,13 +15,13 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
 
   test "top 10 games played are displayed", %{conn: conn} do
     Enum.each(1..15, fn num ->
-      attrs = %{name: "Quiz Block ", user_id: num, role: "player"}
+      attrs = %{name: "Quiz Block ", uid: Integer.to_string(num), role: "player"}
       {:ok, user} = Accounts.create_user(%User{}, attrs)
 
       game_record = %{
         start_time: ~U[2021-04-20 06:00:53Z],
         end_time: DateTime.utc_now(),
-        user_id: user.user_id,
+        uid: user.uid,
         score: 10 * num,
         dropped_bricks: 10,
         correctly_answered_qna: 2

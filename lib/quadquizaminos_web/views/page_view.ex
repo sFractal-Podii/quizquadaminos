@@ -35,6 +35,9 @@ defmodule QuadquizaminosWeb.PageView do
     <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "google") %>">
         Sign in with Google
         </a>
+    <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "linkedin") %>">
+        Sign in with LinkedIn
+    </a>
     """
   end
 
@@ -47,6 +50,9 @@ defmodule QuadquizaminosWeb.PageView do
     <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "google") %>">
         Sign in with Google
         </a>
+    <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "linkedin") %>">
+      Sign in with LinkedIn
+    </a>
     <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous )%>" >
           Sign in anonymously
         </a>
