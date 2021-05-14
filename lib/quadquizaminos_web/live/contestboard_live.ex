@@ -86,7 +86,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     <td><%= Util.datetime_to_time(record.end_time) %></td>
     <td><%= Util.datetime_to_date(record.start_time) %></td>
     </tr>
-    <%= end %>
+    <% end %>
 
     </table>
     </div>
