@@ -26,8 +26,8 @@
          <li><a href="/">Home</a></li>
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive) %> >Leader board</a></li>
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestboardLive) %> >Contest board</a></li>
-         <li><a href= <%= Routes.terms_of_service_path(QuadquizaminosWeb.Endpoint, :terms_of_service) %> > Terms Of Service </a></li>
-         <li><a href= <%= Routes.privacy_path(QuadquizaminosWeb.Endpoint, :privacy) %> > Privacy </a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TermsOfServiceLive) %> > Terms Of Service </a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.PrivacyLive) %> > Privacy </a></li>
         <%= if @current_user do %>
         <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
@@ -41,7 +41,6 @@
   </nav>
     </header>
     <%= @inner_content %>
-    <%= unless @live_action == :terms_of_service or @live_action == :privacy do %>
   <footer>
   <table>
   <tr>
@@ -73,6 +72,5 @@
 </tr>
 <table>
 </footer>
-<% end %>
   </body>
 </html>
