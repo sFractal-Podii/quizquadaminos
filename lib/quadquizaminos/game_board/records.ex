@@ -19,6 +19,8 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> Repo.all()
   end
 
+  def contest_game(nil, nil), do: []
+
   def contest_game(start_time, end_time) do
     start_time
     |> GameBoard.by_start_and_end_time(end_time)

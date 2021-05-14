@@ -12,6 +12,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   @initial_second 59
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :count_down)
+    :timer.send_interval(1000, self(), :timer)
     start_date = DateTime.utc_now()
     time = current_time(start_date)
     current_user = Map.get(session, "user_id")
@@ -31,6 +32,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
        start_time: nil,
        end_time: nil,
        contest_record: [],
+       seconds: 29_000,
        current_user: current_user
      )}
   end
@@ -41,26 +43,27 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
     <h1>Contest Day</h1>
     <div class="row">
-    <%= if @current_user in Application.get_env(:quadquizaminos, :github_ids) do %>
+     <%#= if @current_user in Application.get_env(:quadquizaminos, :github_ids) do %>
       <div class="column column-25 column-offset-5">
         <section class="phx-hero">
         <h2>Timer</h2>
+        <% {hours, minutes, seconds} = to_human_time(@seconds) %>
     <div class = "row">
       <div class="column column-25">
-         <h2><%= Util.count_display(@contest_hour)%><sub>h</sub></h2>
+      <h2><%= Util.count_display(hours) %><sub>h</sub></h2>
       </div>
       <div class="column column-25">
-        <h2><%=Util.count_display(@contest_minutes)%><sub>m</sub></h2>
+        <h2><%=Util.count_display(minutes)%><sub>m</sub></h2>
       </div>
         <div class="column column-25">
-          <h2><%=Util.count_display(@contest_second)%><sub>s</sub></h2>
+          <h2><%=Util.count_display(seconds)%><sub>s</sub></h2>
         </div>
     </div>
      <%= raw display_timer_button(@start_timer, @stop_timer) %>
      <button phx-click="reset">Reset</button>
      </section>
     </div>
-    <% end %>
+    <%# end %>
 
     <div class="column column-50 column-offset-10">
     <div class="container">
@@ -120,14 +123,16 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     """
   end
 
-  def handle_event("timer", %{"timer" => "start"}, socket) do
-    :timer.send_interval(1000, self(), :timer)
+  def handle_event("timer", %{"timer" => "start"}, %{assigns: %{seconds: seconds}} = socket)
+      when seconds > 0 do
+    {:noreply, socket |> assign(running: true)}
+  end
 
+  def handle_event("timer", %{"timer" => "start"}, socket) do
     {:noreply,
      socket
      |> assign(
-       start_timer: true,
-       stop_timer: false,
+       running: true,
        start_time: DateTime.utc_now()
      )}
   end
@@ -139,8 +144,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
       {:stop_timer, true}
     )
 
-    {:noreply,
-     socket |> assign(stop_timer: true, start_timer: false, end_time: DateTime.utc_now())}
+    {:noreply, socket |> assign(running: false, end_time: DateTime.utc_now())}
   end
 
   def handle_event("timer", _params, socket) do
@@ -151,37 +155,19 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     {:noreply,
      socket
      |> assign(
-       start_timer: false,
-       stop_timer: false,
-       contest_hour: 0,
-       contest_minutes: 0,
-       contest_second: 0
+       running: false,
+       seconds: 0
      )}
   end
 
-  def handle_info(:timer, %{assigns: %{start_timer: true}} = socket) do
-    contest_second = timer_second(socket.assigns.contest_second)
-    contest_minutes = timer_minutes(socket.assigns.contest_second, socket.assigns.contest_minutes)
-
-    contest_hour =
-      timer_hours(
-        socket.assigns.contest_second,
-        socket.assigns.contest_minutes,
-        socket.assigns.contest_hour
-      )
-
+  def handle_info(:timer, %{assigns: %{running: true, seconds: seconds}} = socket) do
     contest_record =
       socket.assigns.start_time
       |> Records.contest_game()
 
     {:noreply,
      socket
-     |> assign(
-       contest_second: contest_second,
-       contest_minutes: contest_minutes,
-       contest_hour: contest_hour,
-       contest_record: contest_record
-     )}
+     |> assign(contest_record: contest_record, seconds: seconds + 1)}
   end
 
   def handle_info(:timer, socket) do
@@ -198,6 +184,13 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     hours = hour_count(socket.assigns.seconds, socket.assigns.minutes, socket.assigns.hours)
 
     {:noreply, socket |> assign(seconds: seconds, minutes: minutes, hours: hours)}
+  end
+
+  defp to_human_time(seconds) do
+    hours = div(seconds, 3600)
+    minutes = div(seconds - hours * 60, 60)
+    seconds = div(seconds - minutes * 60, 1)
+    {hours, minutes, seconds}
   end
 
   def current_time(start_date) do
