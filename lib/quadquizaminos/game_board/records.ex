@@ -21,12 +21,16 @@ defmodule Quadquizaminos.GameBoard.Records do
 
   def contest_game(nil, nil), do: []
 
-  def contest_game(start_time, end_time) do
+  def contest_game(start_time, end_time) when not is_nil(end_time) and not is_nil(start_time) do
     start_time
     |> GameBoard.by_start_and_end_time(end_time)
     |> GameBoard.preloads([:user])
     |> Repo.all()
   end
+
+  def contest_game(_, _), do: []
+
+  def contest_game(nil), do: []
 
   def contest_game(start_time) do
     start_time
