@@ -28,28 +28,38 @@ defmodule QuadquizaminosWeb.PageView do
 
   defp sign_up_button("oauth_login") do
     ~E"""
-    <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
-         <i class="fas fa-github"></i>
-         Sign in with GitHub
-       </a>
-    <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "google") %>">
-        Sign in with Google
-        </a>
+      <%= oath_sign_in() %>
+    </div>
+    </div>
     """
   end
 
   defp sign_up_button(_login_level) do
     ~E"""
-    <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
-         <i class="fas fa-github"></i>
-         Sign in with GitHub
-       </a>
-    <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "google") %>">
-        Sign in with Google
-        </a>
+    <%= oath_sign_in() %>
     <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous )%>" >
           Sign in anonymously
         </a>
+    </div>
+    </div>
+    """
+  end
+
+  defp oath_sign_in do
+    ~E"""
+    <div class="dropdown">
+    <button class="dropbtn">Sign In</button>
+      <div class="dropdown-content">
+          <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
+          <i class="fas fa-github"></i>
+          Sign in with GitHub
+          </a>
+          <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "google") %>">
+          Sign in with Google
+          </a>
+          <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "linkedin") %>">
+          Sign in with LinkedIn
+          </a>
     """
   end
 

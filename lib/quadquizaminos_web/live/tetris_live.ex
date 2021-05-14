@@ -3,13 +3,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
   import Phoenix.HTML, only: [raw: 1]
 
   import QuadquizaminosWeb.LiveHelpers
+  import QuadquizaminosWeb.Instructions
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.{
     Bottom,
     Brick,
     Hints,
-    Instructions,
     Points,
     Powers,
     Presets,
@@ -25,7 +25,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @box_width 20
   @box_height 20
 
-  def mount(_param, %{"user_id" => current_user}, socket) do
+  def mount(_param, %{"uid" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
     QuadquizaminosWeb.Endpoint.subscribe("contest_timer")
 
@@ -40,13 +40,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
     ~L"""
     <%= if live_action == :instructions do %>
     <div class = "phx-modal-content">
-        <%= raw Instructions.game_instruction() %>
+        <%= raw game_instruction() %>
       </div>
       <% else %>
         <div class ="container">
           <div class="row">
               <div class="column column-50 column-offset-25">
-                <h1>Welcome to QuadBlocksQuiz!</h1>
+                <h1>Welcome to QuadBlockQuiz!</h1>
                   <button phx-click="start">Start</button>
               </div>
           </div>
@@ -62,13 +62,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Bankruptcy!</h1>
             <h2>Your score: <%= @score %></h2>
-            <p>You are bankrupt either
-            due to a cyberattack or a lawsuit.
-            This may be because you let your supply chain get to long.
-            Or may be due to unfixed vulnerabilities which turned into exploits.
-            Or uncleared licensing errors caused you to be sued.
+            <p>You are bankrupt
+            due to a cyberattack,
+            or due to a lawsuit,
+            or maybe because you let your supply chain get to long.
             Or maybe you were too busy answering cybersecurity questions
-            and not paying attention to business.</p>
+            and not paying attention to business.
+            Or maybe you just hit quit :-).
+            </p>
             <hr>
             <%= raw svg_head() %>
             <%= for row <- [Map.values(@bottom)] do %>
@@ -318,7 +319,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
-      user_id: socket.assigns.current_user,
+      uid: socket.assigns.current_user,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       correctly_answered_qna: socket.assigns.correct_answers
@@ -401,6 +402,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("unpause", _, socket) do
     {:noreply, socket |> assign(state: :playing, modal: false)}
+  end
+
+  def handle_event("endgame", _, socket) do
+    Records.record_player_game(true, game_record(socket))
+    {:noreply, socket |> assign(state: :game_over, modal: false)}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do

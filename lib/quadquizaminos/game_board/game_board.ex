@@ -10,7 +10,7 @@ defmodule Quadquizaminos.GameBoard do
   schema "game_boards" do
     field :start_time, :utc_datetime_usec
     field :end_time, :utc_datetime_usec
-    belongs_to :user, User, foreign_key: :user_id, references: :user_id
+    belongs_to :user, User, foreign_key: :uid, references: :uid, type: :string
     field :score, :integer
     field :dropped_bricks, :integer
     field :correctly_answered_qna, :integer
@@ -21,16 +21,17 @@ defmodule Quadquizaminos.GameBoard do
     |> cast(attrs, [
       :start_time,
       :end_time,
-      :user_id,
+      :uid,
       :score,
       :dropped_bricks,
       :correctly_answered_qna
     ])
   end
 
-  def game_record_query do
+  def game_record_query(order_by \\ "score") do
     from r in __MODULE__,
-      order_by: [desc: r.score],
+      order_by: [desc: ^(order_by |> String.to_atom())],
+      order_by: [asc: r.end_time - r.start_time],
       limit: 10,
       preload: [:user]
   end

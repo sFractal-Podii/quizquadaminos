@@ -14,8 +14,8 @@ defmodule Quadquizaminos.GameBoard.Records do
 
   def record_player_game(_game_over, _game_records), do: nil
 
-  def top_10_games do
-    GameBoard.game_record_query()
+  def top_10_games(sort_by \\ "score") do
+    GameBoard.game_record_query(sort_by)
     |> Repo.all()
   end
 
@@ -33,8 +33,8 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> Repo.all()
   end
 
-  def create_record(%{user_id: user_id} = game_records) do
-    unless user_id == "anonymous" do
+  def create_record(%{uid: uid} = game_records) do
+    unless uid == "anonymous" do
       game_records
       |> change_game_board()
       |> Repo.insert()

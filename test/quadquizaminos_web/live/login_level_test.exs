@@ -44,10 +44,10 @@ defmodule QuadquizaminosWeb.LoginLevelTest do
 
     test "if users were logged in via other oauth option other than github, they are displayed with a message to indicate game not available",
          %{conn: conn} do
-      attrs = %{name: "Quiz Block ", user_id: 12_345_678, role: "player"}
+      attrs = %{name: "Quiz Block ", uid: "12345678", role: "player"}
       Accounts.create_user(%User{}, attrs)
 
-      conn = assign(conn, :current_user, 12_345_678)
+      conn = assign(conn, :current_user, "12345678")
       conn = get(conn, "/")
       assert conn.resp_body =~ "<h1>Game not available until RSAC starts</h1>"
     end

@@ -15,9 +15,9 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <table>
     <tr>
     <th>Player</th>
-    <th>Score</th>
-    <th>Bricks</th>
-    <th>Questions</th>
+    <th phx-click="sort" phx-value-param="score">Score</th>
+    <th phx-click="sort" phx-value-param="dropped_bricks">Bricks</th>
+    <th phx-click="sort" phx-value-param="correctly_answered_qna">Questions</th>
     <th>Start time</th>
     <th>End time</th>
     <th>Date</th>
@@ -38,5 +38,21 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     </table>
     </div>
     """
+  end
+
+  def handle_event("sort", %{"param" => param}, socket) do
+    socket = socket |> assign(top_10_games: Records.top_10_games(param))
+    {:noreply, socket}
+  end
+
+  defp datetime_to_time(datetime) do
+    datetime
+    |> DateTime.truncate(:second)
+    |> DateTime.to_time()
+  end
+
+  defp datetime_to_date(datetime) do
+    datetime
+    |> DateTime.to_date()
   end
 end

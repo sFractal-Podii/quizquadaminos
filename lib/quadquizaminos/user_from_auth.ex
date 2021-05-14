@@ -20,29 +20,30 @@ defmodule Quadquizaminos.UserFromAuth do
   end
 
   # github does it this way
-  defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}, provider: _provider}), do: image
-  defp avatar_from_auth(%{info: %{image: image}, provider: :google}), do: image
+  defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}, provider: :github}), do: image
+  defp avatar_from_auth(%{info: %{image: image}, provider: _provider}), do: image
 
   # default case if nothing matches
   defp avatar_from_auth(auth) do
     Logger.warn("#{auth.provider} needs to find an avatar URL!")
-    Logger.debug(Jason.encode!(auth))
     nil
   end
 
   defp basic_info(auth) do
     %{
-      user_id: uid(auth),
+      uid: uid(auth),
       name: name_from_auth(auth),
       avatar: avatar_from_auth(auth),
-      role: auth.uid |> configured_user?() |> role()
+      role: auth.uid |> configured_user?() |> role(),
+      provider: Atom.to_string(auth.provider)
     }
   end
 
   defp uid(auth) do
         case auth.provider do
+          :linkedin -> auth.uid
           :google -> String.slice(auth.uid, 0, 8)
-                _ -> auth.uid 
+                _ -> Integer.to_string(auth.uid) 
         end
   end
 
@@ -50,7 +51,7 @@ defmodule Quadquizaminos.UserFromAuth do
 
   defp role(_configured_user?), do: "player"
 
-  defp configured_user?(user_id), do: user_id in Application.get_env(:quadquizaminos, :github_ids)
+  defp configured_user?(uid), do: uid in Application.get_env(:quadquizaminos, :github_ids)
 
   defp name_from_auth(auth) do
     if auth.info.name do
