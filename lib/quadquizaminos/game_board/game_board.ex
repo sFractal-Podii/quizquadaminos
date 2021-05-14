@@ -13,6 +13,7 @@ defmodule Quadquizaminos.GameBoard do
     belongs_to :user, User, foreign_key: :uid, references: :uid, type: :string
     field :score, :integer
     field :dropped_bricks, :integer
+    field :bottom_blocks, :map
     field :correctly_answered_qna, :integer
   end
 
@@ -23,6 +24,7 @@ defmodule Quadquizaminos.GameBoard do
       :end_time,
       :uid,
       :score,
+      :bottom_blocks,
       :dropped_bricks,
       :correctly_answered_qna
     ])

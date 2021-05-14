@@ -23,6 +23,7 @@ defmodule Quadquizaminos.GameBoard.Records do
     unless uid == "anonymous" do
       game_records
       |> change_game_board()
+      |> IO.inspect()
       |> Repo.insert()
     end
   end

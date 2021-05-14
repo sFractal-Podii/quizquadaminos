@@ -315,14 +315,35 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp color(%{name: :z}), do: :pink
 
   defp game_record(socket) do
+    bottom_block =
+      case socket.assigns.bottom do
+        nil ->
+          nil
+
+        bottom ->
+          Enum.into(bottom, %{}, fn {key, value} ->
+            {tuple_to_string(key), tuple_to_string(value)}
+          end)
+      end
+
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
       uid: socket.assigns.current_user,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
+      bottom_blocks: bottom_block,
       correctly_answered_qna: socket.assigns.correct_answers
     }
+  end
+
+  def tuple_to_string({x, y, c}) do
+    c = c |> to_string()
+    {x, y, c} |> Tuple.to_list() |> to_string()
+  end
+
+  def tuple_to_string(value) do
+    value |> Tuple.to_list() |> to_string()
   end
 
   def drop(:playing, socket, fast) do
