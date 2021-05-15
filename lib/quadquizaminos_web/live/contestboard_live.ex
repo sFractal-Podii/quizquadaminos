@@ -31,7 +31,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
   def render(assigns) do
     ~L"""
-     <%= if @remaining_time == 0  do %>
+     <%= if @remaining_time <= 0  do %>
       <h1>Contest Day</h1>
     <div class="row">
      <%= if @current_user in Application.get_env(:quadquizaminos, :github_ids) do %>
