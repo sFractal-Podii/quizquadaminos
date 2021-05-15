@@ -5,7 +5,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
   alias Quadquizaminos.Util
   alias Quadquizaminos.GameBoard.Records
-  alias Phoenix.PubSub
 
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
 
@@ -120,7 +119,11 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     """
   end
 
-  def handle_event("timer", %{"timer" => "start"}, %{assigns: %{seconds: seconds}} = socket)
+  def handle_event(
+        "timer",
+        %{"timer" => "start"},
+        %{assigns: %{contest_counter: seconds}} = socket
+      )
       when seconds > 0 do
     {:noreply, socket |> assign(running: true)}
   end
@@ -135,11 +138,16 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   end
 
   def handle_event("timer", %{"timer" => "stop"}, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast!(
-      "contest_timer",
-      "timer",
-      {:stop_timer, true}
-    )
+    {_hours, minutes, seconds} = to_human_time(socket.assigns.contest_counter)
+
+    if minutes >= 30 and seconds >= 0 do
+      QuadquizaminosWeb.Endpoint.broadcast!(
+        "contest_timer",
+        "timer",
+        {:stop_timer, true}
+      )
+      |> IO.inspect()
+    end
 
     {:noreply, socket |> assign(running: false, end_time: DateTime.utc_now())}
   end
@@ -161,8 +169,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     contest_record =
       socket.assigns.start_time
       |> Records.contest_game()
-
-    IO.inspect(socket.assigns.start_time, label: "=============================")
 
     {:noreply,
      socket

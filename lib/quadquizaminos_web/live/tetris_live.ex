@@ -762,7 +762,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Records.record_player_game(true, game_record(socket))
     end
 
-    {:noreply, socket}
+    {:noreply, socket |> assign(state: :game_over)}
   end
 
   def handle_info(:tick, socket) do
