@@ -44,15 +44,4 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     socket = socket |> assign(top_10_games: Records.top_10_games(param))
     {:noreply, socket}
   end
-
-  defp datetime_to_time(datetime) do
-    datetime
-    |> DateTime.truncate(:second)
-    |> DateTime.to_time()
-  end
-
-  defp datetime_to_date(datetime) do
-    datetime
-    |> DateTime.to_date()
-  end
 end

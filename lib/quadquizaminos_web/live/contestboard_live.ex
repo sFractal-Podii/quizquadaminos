@@ -31,11 +31,10 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
   def render(assigns) do
     ~L"""
-     <% {days, hours, minutes, seconds} = Util.to_human_time(@remaining_time) %>
-     <%= if days == 0 do %>
+     <%= if @remaining_time == 0  do %>
       <h1>Contest Day</h1>
     <div class="row">
-     <%#= if @current_user in Application.get_env(:quadquizaminos, :github_ids) do %>
+     <%= if @current_user in Application.get_env(:quadquizaminos, :github_ids) do %>
       <div class="column column-25 column-offset-5">
         <section class="phx-hero">
         <h2>Timer</h2>
@@ -55,7 +54,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
      <button phx-click="reset">Reset</button>
      </section>
     </div>
-    <%#= end %>
+    <%= end %>
 
     <div class="column column-50 column-offset-10">
     <div class="container">
@@ -94,6 +93,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     <div class="row">
 
     <div class="column column-25">
+    <% {days, hours, minutes, seconds} = Util.to_human_time(@remaining_time) %>
 
     <h2><%= days |> Util.count_display() %></h2>
     <h2>DAYS</h2>
@@ -204,12 +204,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   end
 
   defp display_timer_button(false = _running) do
-    """
-     <button phx-click="timer" phx-value-timer="start">Start</button>
-    """
-  end
-
-  defp display_timer_button(_start_timer, _stop_timer) do
     """
      <button phx-click="timer" phx-value-timer="start">Start</button>
     """
