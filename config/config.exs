@@ -37,6 +37,16 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: "",
   client_secret: ""
 
+# Linkedin authentication configuration 
+config :ueberauth, Ueberauth,
+  providers: [
+    linkedin: {Ueberauth.Strategy.LinkedIn, [default_scope: "r_liteprofile r_emailaddress"]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
+  client_id: "",
+  client_secret: ""
+
 # Github authentication configuration 
 config :ueberauth, Ueberauth,
   providers: [
@@ -50,7 +60,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 config :quadquizaminos,
   # add github_id of authorized users
   github_ids: [1, 2],
-  contest_date: ~D[2021-05-18],
+  conference_date: ~U[2021-05-18 18:40:00Z],
 
   # set bottom vulnerability defaulting value
   bottom_vulnerability_value: 77,

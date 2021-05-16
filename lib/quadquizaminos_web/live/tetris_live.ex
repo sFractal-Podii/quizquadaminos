@@ -25,12 +25,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @box_width 20
   @box_height 20
 
-  def mount(_param, %{"user_id" => current_user}, socket) do
+  def mount(_param, %{"uid" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
+    QuadquizaminosWeb.Endpoint.subscribe("contest_timer")
 
     {:ok,
      socket
-     |> assign(current_user: current_user)
+     |> assign(current_user: current_user, start_timer: false)
      |> init_game
      |> start_game()}
   end
@@ -318,7 +319,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
-      user_id: socket.assigns.current_user,
+      uid: socket.assigns.current_user,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       correctly_answered_qna: socket.assigns.correct_answers
@@ -337,6 +338,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       )
 
     bonus = if fast, do: 2, else: 0
+
     Records.record_player_game(response.game_over, game_record(socket))
 
     socket
@@ -425,70 +427,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("keydown", %{"key" => " "}, socket) do
     {:noreply, pause_game(socket)}
-  end
-
-  ## until powerups and for debugging - take out eventually
-  def handle_event("keydown", %{"key" => "l"}, socket) do
-    {:noreply, lower_speed(socket)}
-  end
-
-  ## until powerups and for debugging - take out eventually
-  def handle_event("keydown", %{"key" => "r"}, socket) do
-    {:noreply, raise_speed(socket)}
-  end
-
-  ## until powerups and for debugging - take out eventually
-  def handle_event("keydown", %{"key" => "c"}, socket) do
-    {:noreply, clear_blocks(socket)}
-  end
-
-  ## until powerups and for debugging - take out eventually
-  def handle_event("keydown", %{"key" => "p"}, socket) do
-    powers =
-      (socket.assigns.powers ++
-         Powers.all_powers())
-      |> Enum.sort()
-
-    {:noreply, socket |> assign(powers: powers)}
-  end
-
-  ## for debugging - take out eventually
-  def handle_event("keydown", %{"key" => "1"}, socket) do
-    bottom = Presets.five_by_nine()
-    powers = Presets.powers()
-    {speed, tick_count} = Presets.speed()
-    score = 1234
-
-    {:noreply,
-     socket
-     |> assign(bottom: bottom)
-     |> assign(speed: speed)
-     |> assign(tick_count: tick_count)
-     |> assign(brick_count: 30)
-     |> assign(row_count: 5)
-     |> assign(correct_answers: 15)
-     |> assign(powers: powers)
-     |> assign(score: score)}
-  end
-
-  def handle_event("keydown", %{"key" => "2"}, socket) do
-    bottom = Bottom.add_attack(socket.assigns.bottom)
-    {:noreply, socket |> assign(bottom: bottom)}
-  end
-
-  def handle_event("keydown", %{"key" => "3"}, socket) do
-    bottom = Bottom.add_lawsuit(socket.assigns.bottom)
-    {:noreply, socket |> assign(bottom: bottom)}
-  end
-
-  def handle_event("keydown", %{"key" => "4"}, socket) do
-    bottom = Quadquizaminos.Presets.preset_vuln()
-    {:noreply, socket |> assign(bottom: bottom)}
-  end
-
-  def handle_event("keydown", %{"key" => "5"}, socket) do
-    bottom = Quadquizaminos.Presets.preset_lic()
-    {:noreply, socket |> assign(bottom: bottom)}
   end
 
   def handle_event("keydown", _, socket), do: {:noreply, socket}
@@ -753,6 +691,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
     x = String.to_integer(x)
     y = String.to_integer(y)
     {x, y}
+  end
+
+  def handle_info(%{event: "timer", payload: _payload}, socket) do
+    if socket.assigns.state == :playing do
+      Records.record_player_game(true, game_record(socket))
+    end
+
+    {:noreply, socket |> assign(state: :game_over)}
   end
 
   def handle_info(:tick, socket) do

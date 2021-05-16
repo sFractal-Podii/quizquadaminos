@@ -11,6 +11,10 @@ defmodule QuadquizaminosWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :privacy_and_term_of_service do
+    plug :put_root_layout, {QuadquizaminosWeb.LayoutView, "privacy_and_term_of_service.html"}
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -28,14 +32,12 @@ defmodule QuadquizaminosWeb.Router do
   end
 
   scope "/", QuadquizaminosWeb do
-    pipe_through :browser
+    pipe_through [:browser]
 
     get "/", PageController, :index
 
     live "/leaderboard", LeaderboardLive
     live "/contestboard", ContestboardLive
-    live "/termsofservice", TermsOfServiceLive, :terms_of_service
-    live "/privacy", PrivacyLive, :privacy
     live "/contest_rules", ContestRules
     live "/contest_prizes", ContestPrizes
     get "/anonymous", PageController, :anonymous
@@ -46,10 +48,17 @@ defmodule QuadquizaminosWeb.Router do
     live "/tetris/instructions", TetrisLive, :instructions
   end
 
+  scope "/", QuadquizaminosWeb do
+    pipe_through [:browser, :privacy_and_term_of_service]
+
+    live "/termsofservice", TermsOfServiceLive
+    live "/privacy", PrivacyLive
+  end
+
   scope "/admin", QuadquizaminosWeb do
     pipe_through [:browser, :authorize_admin]
 
-    live "/login_levels", AdminLive
+    live "/", AdminLive
   end
 
   scope "/auth", QuadquizaminosWeb do

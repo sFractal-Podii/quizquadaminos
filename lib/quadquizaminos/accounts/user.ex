@@ -7,15 +7,16 @@ defmodule Quadquizaminos.Accounts.User do
 
   @primary_key false
   schema "users" do
-    field :user_id, :integer, primary_key: true
+    field :uid, :string, primary_key: true
     field :name, :string
     field :avatar, :string
     field :role, :string
-    has_many :game_boards, GameBoard, foreign_key: :user_id, references: :user_id
+    field :provider, :string
+    has_many :game_boards, GameBoard, foreign_key: :uid, references: :uid
   end
 
   def changeset(user, attrs \\ %{}) do
     user
-    |> cast(attrs, [:user_id, :name, :avatar, :role])
+    |> cast(attrs, [:uid, :name, :avatar, :role, :provider])
   end
 end
