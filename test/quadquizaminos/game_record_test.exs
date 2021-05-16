@@ -117,8 +117,59 @@ defmodule Quadquizaminos.GameRecordTest do
       correctly_answered_qna: :random.uniform(45)
     }
 
-    {:ok, less} = Records.record_player_game(true, less_time)
-    {:ok, more} = Records.record_player_game(true, more_time)
+    {:ok, %Quadquizaminos.GameBoard{id: less_id}} = Records.record_player_game(true, less_time)
+    {:ok, %Quadquizaminos.GameBoard{id: more_id}} = Records.record_player_game(true, more_time)
+
     [less, more] = Records.top_10_games()
+    assert less.id == less_id
+    assert more.id == more_id
+  end
+
+  describe "contest game" do
+    setup do
+      attrs = %{name: "Quiz Block ", uid: "1", role: "player"}
+      {:ok, user} = Accounts.create_user(%User{}, attrs)
+      start_times = [~U[2021-04-20 06:00:53Z], ~U[2021-04-20 06:05:53Z], ~U[2021-04-20 05:00:53Z]]
+      end_time = DateTime.utc_now()
+
+      Enum.each(start_times, fn start_time ->
+        game_record = %{
+          start_time: start_time,
+          end_time: end_time,
+          uid: user.uid,
+          score: 100,
+          dropped_bricks: 10,
+          correctly_answered_qna: 2
+        }
+
+        Records.record_player_game(true, game_record)
+      end)
+
+      [start_times: start_times, end_time: end_time]
+    end
+
+    test "contest_game/1 returns game record played during start_time or past start time", %{
+      start_times: start_times
+    } do
+      [start_time | _] = start_times
+
+      assert start_time |> Records.contest_game() |> Enum.count() == 2
+
+      start_time = ~U[2021-04-20 07:00:53Z]
+
+      assert start_time |> Records.contest_game() |> Enum.count() == 0
+    end
+
+    test "contest_game/2 returns game record between start_time and end_time", %{
+      end_time: end_time
+    } do
+      start_time = ~U[2021-04-20 05:00:53Z]
+
+      assert start_time |> Records.contest_game(end_time) |> Enum.count() == 3
+
+      start_time = ~U[2021-04-20 07:00:53Z]
+
+      assert start_time |> Records.contest_game(end_time) |> Enum.count() == 0
+    end
   end
 end

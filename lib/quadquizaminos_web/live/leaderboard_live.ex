@@ -5,6 +5,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.GameBoard.Records
+  alias Quadquizaminos.Util
 
   def mount(_params, _session, socket) do
     {:ok, socket |> assign(top_10_games: Records.top_10_games(), view_board: false)}
@@ -35,9 +36,9 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <td><%= record.score %></td>
     <td><%= record.dropped_bricks %></td>
     <td><%= record.correctly_answered_qna %></td>
-    <td><%= datetime_to_time(record.start_time) %></td>
-    <td><%= datetime_to_time(record.end_time) %></td>
-    <td><%= datetime_to_date(record.start_time) %></td>
+    <td><%= Util.datetime_to_time(record.start_time) %></td>
+    <td><%= Util.datetime_to_time(record.end_time) %></td>
+    <td><%= Util.datetime_to_date(record.start_time) %></td>
     <td><a phx-click="view_board">view</a></td>
     <% end %>
     <td>
@@ -65,16 +66,5 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   def handle_event("sort", %{"param" => param}, socket) do
     socket = socket |> assign(top_10_games: Records.top_10_games(param))
     {:noreply, socket}
-  end
-
-  defp datetime_to_time(datetime) do
-    datetime
-    |> DateTime.truncate(:second)
-    |> DateTime.to_time()
-  end
-
-  defp datetime_to_date(datetime) do
-    datetime
-    |> DateTime.to_date()
   end
 end

@@ -147,7 +147,7 @@ defmodule QuadquizaminosWeb.PageControllerTest do
       assert get_flash(conn, :info) == "Successfully authenticated."
     end
 
-    test "check if user logged in with linkedin" , %{auth: auth, conn: conn}do
+    test "check if user logged in with linkedin", %{auth: auth} do
       %User{provider: "linkedin"} = Quadquizaminos.Repo.get(User, auth.uid)
     end
 

@@ -14,13 +14,13 @@ defmodule QuadquizaminosWeb.AdminLiveTest do
   end
 
   test "admins can access admins dashboard", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/admin/login_levels")
+    {:ok, _view, html} = live(conn, "/admin")
 
     assert html =~ "<h1>users level of login</h1>"
   end
 
   test "admins has ability to turn on/off user login level", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/admin/login_levels")
+    {:ok, view, _html} = live(conn, "/admin")
 
     render_change(view, "login_levels", %{"login_levels" => "by_config"})
     %LoginLevel{active: true} = Repo.get_by(LoginLevel, name: "by_config")

@@ -1,0 +1,18 @@
+ <nav role="navigation">
+        <ul class="nav">
+         <li><a href="/">Home</a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive) %> >Leader board</a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestboardLive) %> >Contest board</a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TermsOfServiceLive) %> > Terms Of Service </a></li>
+         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.PrivacyLive) %> > Privacy </a></li>
+        <%= if @current_user do %>
+        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
+        <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
+        <li><a href="/dashboard">Live Dashboard</a></li>
+        <% end %>
+        <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
+        <li><a href="/admin">Admin</a></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </nav>
