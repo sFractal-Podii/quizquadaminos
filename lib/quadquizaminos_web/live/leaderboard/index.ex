@@ -44,11 +44,6 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     """
   end
 
-  def convert(value) do
-    value
-    |> Enum.map(fn k -> Tuple.to_list(k) end)
-  end
-
   def handle_event("sort", %{"param" => param}, socket) do
     socket = socket |> assign(top_10_games: Records.top_10_games(param))
     {:noreply, socket}
