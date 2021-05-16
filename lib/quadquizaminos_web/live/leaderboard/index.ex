@@ -8,7 +8,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   alias Quadquizaminos.Util
 
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(top_10_games: Records.top_10_games(), view_board: false)}
+    {:ok, socket |> assign(top_10_games: Records.top_10_games())}
   end
 
   def render(assigns) do
@@ -16,7 +16,6 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <div class="container">
     <h1>Leaderboard</h1>
     <table>
-    <%= unless @view_board do %>
     <tr>
     <th>Player</th>
     <th phx-click="sort" phx-value-param="score">Score</th>
@@ -27,11 +26,9 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <th>Date</th>
     <th>Tetris board</th>
     </tr>
-    <% end %>
 
     <%= for record <- @top_10_games do %>
      <tr>
-     <%= unless @view_board do %>
     <td><%= record.user.name %></td>
     <td><%= record.score %></td>
     <td><%= record.dropped_bricks %></td>
@@ -39,13 +36,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <td><%= Util.datetime_to_time(record.start_time) %></td>
     <td><%= Util.datetime_to_time(record.end_time) %></td>
     <td><%= Util.datetime_to_date(record.start_time) %></td>
-    <td><a phx-click="view_board">view</a></td>
-    <% end %>
-    <td>
-     <%= if @view_board do %>
-    <%= live_component @socket, QuadquizaminosWeb.TetrisBoardComponent, record: record, bottom_block: record.bottom_blocks, id: record.id %>
-     <% end %>
-     </td>
+    <td><%= live_redirect "view", to: Routes.live_path(@socket, QuadquizaminosWeb.LeaderboardLive.Show, record)%></td>
     </tr>
     <% end %>
     </table>
@@ -56,11 +47,6 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   def convert(value) do
     value
     |> Enum.map(fn k -> Tuple.to_list(k) end)
-  end
-
-  def handle_event("view_board", params, socket) do
-    IO.inspect(params)
-    {:noreply, socket |> assign(view_board: true)}
   end
 
   def handle_event("sort", %{"param" => param}, socket) do

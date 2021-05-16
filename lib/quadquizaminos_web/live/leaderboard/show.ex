@@ -1,5 +1,7 @@
-defmodule QuadquizaminosWeb.TetrisBoardComponent do
-  use QuadquizaminosWeb, :live_component
+defmodule QuadquizaminosWeb.LeaderboardLive.Show do
+  use QuadquizaminosWeb, :live_view
+
+  alias Quadquizaminos.GameBoard.Records
 
   alias QuadquizaminosWeb.SvgBoard
 
@@ -9,7 +11,7 @@ defmodule QuadquizaminosWeb.TetrisBoardComponent do
     <div class="container">
     <div class="row">
     <div class="column column-50">
-    <%= display_bottom(@bottom_block, assigns) %>
+    <%= display_bottom(@record.bottom_blocks, assigns) %>
     </div>
     <div class="column column-50 column-offset-25">
     <p><b>End game status for <%= @record.user.name %></b> </p>
@@ -23,6 +25,10 @@ defmodule QuadquizaminosWeb.TetrisBoardComponent do
     </div>
 
     """
+  end
+
+  def handle_params(%{"board_id" => board_id}, _uri, socket) do
+    {:noreply, socket |> assign(record: Records.get_game!(board_id))}
   end
 
   def display_bottom(nil = _bottom_blocks, assigns) do

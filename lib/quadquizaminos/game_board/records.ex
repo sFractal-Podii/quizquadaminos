@@ -43,9 +43,14 @@ defmodule Quadquizaminos.GameBoard.Records do
     unless uid == "anonymous" do
       game_records
       |> change_game_board()
-      |> IO.inspect()
       |> Repo.insert()
     end
+  end
+
+  def get_game!(board_id) do
+    GameBoard
+    |> Repo.get!(board_id)
+    |> Repo.preload(:user)
   end
 
   def game_available?(uid, login_level) when is_struct(login_level) do
