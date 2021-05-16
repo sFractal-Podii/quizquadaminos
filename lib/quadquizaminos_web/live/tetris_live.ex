@@ -649,7 +649,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
     # switch to superpower modal to select which power to assign
     powers = socket.assigns.powers -- [:superpower]
-    {:noreply, assign(socket, powers: powers, super_modal: true)}
+    {:noreply, assign(socket, powers: powers, super_modal: true, modal: false)}
   end
 
   def handle_event("powerup", _, socket) do
