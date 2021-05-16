@@ -17,7 +17,7 @@ defmodule QuadquizaminosWeb.LoginLevelTest do
     setup do
       # admin logging in
       conn = Auth.login()
-      {:ok, view, _html} = live(conn, "/admin/login_levels")
+      {:ok, view, _html} = live(conn, "/admin")
       render_change(view, "login_levels", %{"login_levels" => "by_config"})
       :ok
     end
@@ -64,7 +64,7 @@ defmodule QuadquizaminosWeb.LoginLevelTest do
     setup do
       # admin logging in
       conn = Auth.login()
-      {:ok, view, _html} = live(conn, "/admin/login_levels")
+      {:ok, view, _html} = live(conn, "/admin")
       render_change(view, "login_levels", %{"login_levels" => "oauth_login"})
       :ok
     end
@@ -100,7 +100,7 @@ defmodule QuadquizaminosWeb.LoginLevelTest do
     setup do
       # admin logging in
       conn = Auth.login()
-      {:ok, view, _html} = live(conn, "/admin/login_levels")
+      {:ok, view, _html} = live(conn, "/admin")
       render_change(view, "login_levels", %{"login_levels" => "anonymous_login"})
       :ok
     end

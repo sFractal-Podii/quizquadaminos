@@ -11,7 +11,7 @@
         <li><a href="/dashboard">Live Dashboard</a></li>
         <% end %>
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
-        <li><a href="/admin/login_levels">Login levels</a></li>
+        <li><a href="/admin">Admin</a></li>
         <% end %>
       <% end %>
     </ul>

@@ -58,7 +58,7 @@ defmodule QuadquizaminosWeb.Router do
   scope "/admin", QuadquizaminosWeb do
     pipe_through [:browser, :authorize_admin]
 
-    live "/login_levels", AdminLive
+    live "/", AdminLive
   end
 
   scope "/auth", QuadquizaminosWeb do
