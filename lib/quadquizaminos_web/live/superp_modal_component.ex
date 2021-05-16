@@ -1,6 +1,5 @@
 defmodule QuadquizaminosWeb.SuperpModalComponent do
   use QuadquizaminosWeb, :live_component
-  alias Quadquizaminos.QnA
 
   def render(assigns) do
     ~L"""
@@ -22,8 +21,8 @@ defmodule QuadquizaminosWeb.SuperpModalComponent do
   defp powers_button(power, icon, descr) do
     """
     <br>
-    <button phx-click="super_to_power" phx-value-power="<%= s_power |> to_string() %>">
-    <i class="fas <%=icon %>" </i>
+    <button phx-click="super_to_power" phx-value-spower="<%= power |> to_string() %>">
+    <i class="fas <%= icon %>" </i>
     <%=descr %>
     </button>
     """
