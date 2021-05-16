@@ -18,84 +18,104 @@ defmodule QuadquizaminosWeb.SuperpModalComponent do
     """
   end
 
-  defp powers_button(power, icon, descr) do
-    ~L"""
+  defp p_deleteblock() do
+    """
     <br>
-    <button phx-click="super_to_power" phx-value-spower="<%= power |> to_string() %>">
-    <i class="fas <%= icon %>" </i>
-    <%=descr %>
+    <button phx-click="super_to_power" phx-value-spower="deleteblock">
+    <i class="fa-minus-square" </i>
+    remove a block
     </button>
     """
   end
 
-  defp p_deleteblock() do
-    power = :deleteblock
-    icon  = "fa-minus-square"
-    descr = "remove a block"
-    powers_button(power, icon, descr)
-  end
-
   defp p_addblock() do
-    power = :addblock
-    icon  = "fa-plus-square"
-    descr = "add a block"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="addblock">
+    <i class="fa-plus-square" </i>
+    add a block
+    </button>
+    """
   end
 
   defp p_moveblock() do
-    power = :moveblock
-    icon  = "fa-arrows-alt"
-    descr = "move a block"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="moveblock">
+    <i class="fa-arrows-alt" </i>
+    move a block
+    </button>
+    """
   end
 
   defp p_clearblocks() do
-    power = :clearblocks
-    icon  = "fa-eraser"
-    descr = "clear gameboard of all blocks"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="clearblocks">
+    <i class="fa-eraser" </i>
+    clear gameboard of all blocks
+    </button>
+    """
   end
 
   defp p_speedup() do
-    power = :speedup
-    icon  = "fa-fast-forward"
-    descr = "make blocks fall faster"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="speedup">
+    <i class="fa-fast-forward" </i>
+    make blocks fall faster
+    </button>
+    """
   end
 
   defp p_slowdown() do
-    power = :slowdown
-    icon  = "fa-fast-backward"
-    descr = "make blocks fall slower"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="slowdown">
+    <i class="fa-fast-backward" </i>
+    make blocks fall slower
+    </button>
+    """
   end
 
   defp p_fixvuln() do
-    power = :fixvuln
-    icon  = "fa-wrench"
-    descr = "fix one vulnerability"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="fixvuln">
+    <i class="fa-wrench" </i>
+    fix one vulnerability
+    </button>
+    """
   end
 
   defp p_fixlicense() do
-    power = :fixlicense
-    icon  = "fa-screwdriver"
-    descr = "fix one licensing issue"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="fixlicense">
+    <i class="fa-screwdriver" </i>
+    fix one licensing issue
+    </button>
+    """
   end
 
   defp p_rm_all_vulns() do
-    power = :rm_all_vulns
-    icon  = "fa-hammer"
-    descr = "remove all vulnerabilities"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="rm_all_vulns">
+    <i class="fa-hammer" </i>
+    remove all vulnerabilities
+    </button>
+    """
   end
 
   defp p_rm_all_lic_issues() do
-    power = :rm_all_lic_issues
-    icon  = "fa-tape"
-    descr = "remove all licensing issues"
-    powers_button(power, icon, descr)
+    """
+    <br>
+    <button phx-click="super_to_power" phx-value-spower="rm_all_lic_issues">
+    <i class="fa-tape" </i>
+    remove all licensing issues
+    </button>
+    """
   end
 
 end
