@@ -32,7 +32,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
      <%= if @remaining_time <= 0  do %>
       <h1>Contest Day</h1>
     <div class="row">
-     <%= if @current_user in Application.get_env(:quadquizaminos, :github_ids) do %>
+     <%= if admin?(@current_user) do %>
       <div class="column column-25 column-offset-5">
         <section class="phx-hero">
         <h2>Timer</h2>
@@ -115,6 +115,12 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     </div>
     <% end %>
     """
+  end
+
+  defp admin?(current_user) do
+    ids = Application.get_env(:quadquizaminos, :github_ids)
+
+    current_user in (ids |> Enum.map(&(&1 |> to_string())))
   end
 
   def handle_event(
