@@ -22,7 +22,7 @@ defmodule QuadquizaminosWeb.SuperpModalComponent do
   defp powers_button(power, icon, descr) do
     """
     <br>
-    <button phx-click="super_to_power" phx-value-power="<%= power |> to_string() %>">
+    <button phx-click="super_to_power" phx-value-power="<%= s_power |> to_string() %>">
     <i class="fas <%=icon %>" </i>
     <%=descr %>
     </button>
