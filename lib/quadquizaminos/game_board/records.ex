@@ -47,21 +47,21 @@ defmodule Quadquizaminos.GameBoard.Records do
     end
   end
 
-  def game_available?(user_id, login_level) when is_struct(login_level) do
-    game_available?(user_id, login_level.name)
+  def game_available?(uid, login_level) when is_struct(login_level) do
+    game_available?(uid, login_level.name)
   end
 
-  def game_available?(nil = _user_id, _login_level), do: true
+  def game_available?(nil = _uid, _login_level), do: true
 
-  def game_available?(user_id, "oauth_login") do
-    Accounts.user_has_role?(user_id, ["admin", "player"])
+  def game_available?(uid, "oauth_login") do
+    Accounts.user_has_role?(uid, ["admin", "player"])
   end
 
-  def game_available?(user_id, "by_config") do
-    Accounts.user_has_role?(user_id, ["admin"])
+  def game_available?(uid, "by_config") do
+    Accounts.user_has_role?(uid, ["admin"])
   end
 
-  def game_available?(_user_id, _login_level), do: true
+  def game_available?(_uid, _login_level), do: true
 
   def change_game_board(attrs) do
     %GameBoard{}

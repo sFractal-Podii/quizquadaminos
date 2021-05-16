@@ -11,8 +11,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :count_down)
     :timer.send_interval(1000, self(), :timer)
-    current_time = DateTime.utc_now()
-    current_user = Map.get(session, "user_id")
 
     remaining_time = DateTime.diff(@conference_date, DateTime.utc_now())
 
@@ -25,7 +23,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
        start_time: nil,
        end_time: nil,
        remaining_time: remaining_time,
-       current_user: current_user
+       current_user: Map.get(session, "uid")
      )}
   end
 
@@ -34,7 +32,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
      <%= if @remaining_time <= 0  do %>
       <h1>Contest Day</h1>
     <div class="row">
-     <%= if @current_user in Application.get_env(:quadquizaminos, :github_ids) do %>
+     <%= if admin?(@current_user) do %>
       <div class="column column-25 column-offset-5">
         <section class="phx-hero">
         <h2>Timer</h2>
@@ -117,6 +115,12 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     </div>
     <% end %>
     """
+  end
+
+  defp admin?(current_user) do
+    ids = Application.get_env(:quadquizaminos, :github_ids)
+
+    current_user in (ids |> Enum.map(&(&1 |> to_string())))
   end
 
   def handle_event(

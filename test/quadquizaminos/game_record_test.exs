@@ -117,14 +117,17 @@ defmodule Quadquizaminos.GameRecordTest do
       correctly_answered_qna: :random.uniform(45)
     }
 
-    {:ok, less} = Records.record_player_game(true, less_time)
-    {:ok, more} = Records.record_player_game(true, more_time)
+    {:ok, %Quadquizaminos.GameBoard{id: less_id}} = Records.record_player_game(true, less_time)
+    {:ok, %Quadquizaminos.GameBoard{id: more_id}} = Records.record_player_game(true, more_time)
+
     [less, more] = Records.top_10_games()
+    assert less.id == less_id
+    assert more.id == more_id
   end
 
   describe "contest game" do
     setup do
-      attrs = %{name: "Quiz Block ", user_id: 1, role: "player"}
+      attrs = %{name: "Quiz Block ", uid: "1", role: "player"}
       {:ok, user} = Accounts.create_user(%User{}, attrs)
       start_times = [~U[2021-04-20 06:00:53Z], ~U[2021-04-20 06:05:53Z], ~U[2021-04-20 05:00:53Z]]
       end_time = DateTime.utc_now()
@@ -133,7 +136,7 @@ defmodule Quadquizaminos.GameRecordTest do
         game_record = %{
           start_time: start_time,
           end_time: end_time,
-          user_id: user.user_id,
+          uid: user.uid,
           score: 100,
           dropped_bricks: 10,
           correctly_answered_qna: 2
