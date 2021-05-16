@@ -11,8 +11,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :count_down)
     :timer.send_interval(1000, self(), :timer)
-    current_time = DateTime.utc_now()
-    current_user = Map.get(session, "user_id")
 
     remaining_time = DateTime.diff(@conference_date, DateTime.utc_now())
 
@@ -25,7 +23,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
        start_time: nil,
        end_time: nil,
        remaining_time: remaining_time,
-       current_user: current_user
+       current_user: Map.get(session, "uid")
      )}
   end
 
