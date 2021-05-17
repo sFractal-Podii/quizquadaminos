@@ -725,6 +725,38 @@ defmodule QuadquizaminosWeb.TetrisLive do
     super_helper(socket, :moveblock)
   end
 
+  def handle_event("super_to_power", %{"spower" => "clearblocks"}, socket) do
+    super_helper(socket, :clearblocks)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "speedup"}, socket) do
+    super_helper(socket, :speedup)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "slowdown"}, socket) do
+    super_helper(socket, :slowdown)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "fixvuln"}, socket) do
+    super_helper(socket, :fixvuln)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "fixlicense"}, socket) do
+    super_helper(socket, :fixlicense)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "rm_all_vulns"}, socket) do
+    super_helper(socket, :rm_all_vulns)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "rm_all_lic_issues"}, socket) do
+    super_helper(socket, :rm_all_lic_issues)
+  end
+
+  def handle_event("super_to_power", _, socket) do
+    {:noreply, socket}
+  end
+
   defp super_helper(socket, power) do
     powers = socket.assigns.powers ++ [power]
 
