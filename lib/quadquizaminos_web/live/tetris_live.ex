@@ -714,23 +714,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("super_to_power", %{"spower" => "addblock"}, socket) do
-    powers = socket.assigns.powers ++ [:addblock]
-
-    {:noreply,
-     socket
-     |> assign(super_modal: false)
-     |> assign(modal: true)
-     |> assign(powers: powers)}
+    super_helper(socket, :addblock)
   end
 
   def handle_event("super_to_power", %{"spower" => "deleteblock"}, socket) do
-    powers = socket.assigns.powers ++ [:deleteblock]
-
-    {:noreply,
-     socket
-     |> assign(super_modal: false)
-     |> assign(modal: true)
-     |> assign(powers: powers)}
+    super_helper(socket, :deleteblock)
   end
 
   def handle_event("super_to_power", %{"spower" => "moveblock"}, socket) do
