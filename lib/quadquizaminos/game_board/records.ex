@@ -64,6 +64,12 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> Repo.update()
   end
 
+  def get_game!(board_id) do
+    GameBoard
+    |> Repo.get!(board_id)
+    |> Repo.preload(:user)
+  end
+
   def game_available?(uid, login_level) when is_struct(login_level) do
     game_available?(uid, login_level.name)
   end

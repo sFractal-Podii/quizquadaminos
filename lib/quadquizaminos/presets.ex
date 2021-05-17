@@ -92,15 +92,6 @@ defmodule Quadquizaminos.Presets do
     }
   end
 
-  def powers() do
-    [ :nextblock, :fixvuln, :fixlicense,
-      :deleteblock, :deleteblock,
-      :addblock, :addblock, :addblock,
-      :moveblock, :moveblock, :moveblock, :moveblock,
-      :speedup, :speedup, :speedup,
-      :slowdown,:slowdown,:slowdown ]
-  end
-
   def speed() do
     {3, Quadquizaminos.Speed.speed_tick_count(3)}
   end
