@@ -733,6 +733,20 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(powers: powers)}
   end
 
+  def handle_event("super_to_power", %{"spower" => "moveblock"}, socket) do
+    super_helper(socket, :moveblock)
+  end
+
+  defp super_helper(socket, power) do
+    powers = socket.assigns.powers ++ [power]
+
+    {:noreply,
+     socket
+     |> assign(super_modal: false)
+     |> assign(modal: true)
+     |> assign(powers: powers)}
+  end
+
   defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
     {x, y} = parse_to_integer(x, y)
     {x1, y1, color} = block_coordinates
