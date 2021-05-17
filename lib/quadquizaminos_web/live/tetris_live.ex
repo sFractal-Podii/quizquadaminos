@@ -119,6 +119,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <%= if @instructions_modal do %>
                  <%= live_modal @socket, QuadquizaminosWeb.InstructionsComponent, id: 2, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris) %>
                 <% end %>
+                <%= if @super_modal do %>
+                <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw svg_head() %>
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
@@ -228,6 +231,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(instructions_modal: false)
     |> assign(lawsuit_threshold: 5)
     |> assign(lic_threshold: 143)
+    |> assign(modal: false)
     |> assign(moving_block: false)
     |> assign(powers: [])
     |> assign(qna: %{})
@@ -236,6 +240,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(speed: 2)
     |> assign(start_time: DateTime.utc_now())
     |> assign(state: :playing)
+    |> assign(super_modal: false)
     |> assign(tick_count: 5)
     |> assign(tech_lic_debt: 0)
     |> assign(tech_vuln_debt: 65)
@@ -580,9 +585,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
-    ## to do
+    # switch to superpower modal to select which power to assign
     powers = socket.assigns.powers -- [:superpower]
-    {:noreply, assign(socket, powers: powers)}
+    {:noreply, assign(socket, powers: powers, super_modal: true, modal: false)}
   end
 
   def handle_event("powerup", _, socket) do
@@ -644,6 +649,60 @@ defmodule QuadquizaminosWeb.TetrisLive do
        socket.assigns.adding_block,
        socket.assigns.moving_block
      )}
+  end
+
+  def handle_event("super_to_power", %{"spower" => "addblock"}, socket) do
+    super_helper(socket, :addblock)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "deleteblock"}, socket) do
+    super_helper(socket, :deleteblock)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "moveblock"}, socket) do
+    super_helper(socket, :moveblock)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "clearblocks"}, socket) do
+    super_helper(socket, :clearblocks)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "speedup"}, socket) do
+    super_helper(socket, :speedup)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "slowdown"}, socket) do
+    super_helper(socket, :slowdown)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "fixvuln"}, socket) do
+    super_helper(socket, :fixvuln)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "fixlicense"}, socket) do
+    super_helper(socket, :fixlicense)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "rm_all_vulns"}, socket) do
+    super_helper(socket, :rm_all_vulns)
+  end
+
+  def handle_event("super_to_power", %{"spower" => "rm_all_lic_issues"}, socket) do
+    super_helper(socket, :rm_all_lic_issues)
+  end
+
+  def handle_event("super_to_power", _, socket) do
+    {:noreply, socket}
+  end
+
+  defp super_helper(socket, power) do
+    powers = socket.assigns.powers ++ [power]
+
+    {:noreply,
+     socket
+     |> assign(super_modal: false)
+     |> assign(modal: true)
+     |> assign(powers: powers)}
   end
 
   defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
