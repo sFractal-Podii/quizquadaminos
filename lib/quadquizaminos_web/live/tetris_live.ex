@@ -510,36 +510,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(powers: powers)}
   end
 
-  def handle_event("powerup", %{"powerup" => "nextblock"}, socket) do
-    ## to do
-    powers = socket.assigns.powers -- [:nextblock]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "forensics"}, socket) do
-    ## to do
-    powers = socket.assigns.powers -- [:forensics]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "legal"}, socket) do
-    ## to do
-    powers = socket.assigns.powers -- [:legal]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "cyberinsurance"}, socket) do
-    ## to do
-    powers = socket.assigns.powers -- [:cyberinsurance]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "sbom"}, socket) do
-    ## to do
-    powers = socket.assigns.powers -- [:sbom]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
   def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
     ## more to do?
     powers = socket.assigns.powers -- [:fixvuln]
@@ -570,18 +540,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
      socket
      |> assign(powers: powers)
      |> assign(bottom: bottom)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "automation"}, socket) do
-    ## to do
-    powers = socket.assigns.powers -- [:automation]
-    {:noreply, assign(socket, powers: powers)}
-  end
-
-  def handle_event("powerup", %{"powerup" => "openchain"}, socket) do
-    ## to do
-    powers = socket.assigns.powers -- [:openchain]
-    {:noreply, assign(socket, powers: powers)}
   end
 
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
