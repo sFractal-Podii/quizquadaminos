@@ -9,21 +9,18 @@ defmodule QuadquizaminosWeb.SuperpModalComponent do
     remove a block
     </button>
 
-    <br>
+    <br><i class="fas fa-plus-square" </i>
     <button phx-click="super_to_power" phx-value-spower="addblock">
-    <i class="fas fa-plus-square" </i>
     add a block
     </button>
 
-    <br>
+    <br><i class="fas fa-arrows-alt" </i>
     <button phx-click="super_to_power" phx-value-spower="moveblock">
-    <i class="fas fa-arrows-alt" </i>
     move a block
     </button>
 
-    <br>
+    <br><i class="fas fa-eraser" </i>
     <button phx-click="super_to_power" phx-value-spower="clearblocks">
-    <i class="fas fa-eraser" </i>
     clear gameboard of all blocks
     </button>
 
