@@ -50,6 +50,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
         </div>
     </div>
      <%= raw display_timer_button(@running) %>
+      <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
      <button phx-click="reset">Reset</button>
      <button phx-click="final-score">Final Results</button>
      </section>
@@ -143,35 +144,43 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   def handle_event(
         "timer",
         %{"timer" => "start"},
-        %{assigns: %{contest_counter: seconds}} = socket
+        %{assigns: %{contest_counter: seconds, end_time: nil}} = socket
       )
       when seconds > 0 do
     {:noreply, socket |> assign(running: true)}
   end
 
   def handle_event("timer", %{"timer" => "start"}, socket) do
+    start_time = DateTime.utc_now()
+    Records.create_contest(%{start_time: start_time})
+
     {:noreply,
      socket
      |> assign(
        running: true,
-       start_time: DateTime.utc_now()
+       start_time: start_time
      )}
+  end
+
+  def handle_event("timer", %{"timer" => "pause"}, socket) do
+    {:noreply, socket |> assign(running: false)}
   end
 
   def handle_event("timer", %{"timer" => "stop"}, socket) do
     {_hours, minutes, seconds} = to_human_time(socket.assigns.contest_counter)
+    end_time = DateTime.utc_now()
 
-    if minutes >= 30 and seconds >= 0 do
-      QuadquizaminosWeb.Endpoint.broadcast!(
-        "contest_timer",
-        "timer",
-        {:stop_timer, true}
-      )
-    end
+    Records.latest_contest() |> Records.update_contest(%{end_time: end_time})
+
+    QuadquizaminosWeb.Endpoint.broadcast!(
+      "contest_timer",
+      "timer",
+      {:stop_timer, true}
+    )
 
     {:noreply,
      socket
-     |> assign(running: false, end_time: DateTime.utc_now())}
+     |> assign(running: false, end_time: end_time)}
   end
 
   def handle_event("timer", _params, socket) do
@@ -179,9 +188,11 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   end
 
   def handle_event("final-score", _, socket) do
+    latest_contest = Records.latest_contest()
+
     contest_record =
-      socket.assigns.start_time
-      |> Records.contest_game(socket.assigns.end_time)
+      latest_contest.start_time
+      |> Records.contest_game(latest_contest.end_time)
 
     {:noreply, socket |> assign(contest_record: contest_record)}
   end
@@ -238,7 +249,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
   defp display_timer_button(true = _running) do
     """
-     <button phx-click="timer" phx-value-timer="stop">Stop</button>
+     <button phx-click="timer" phx-value-timer="pause">Pause</button>
     """
   end
 
