@@ -4,6 +4,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   import QuadquizaminosWeb.LiveHelpers
   import QuadquizaminosWeb.Instructions
+  alias QuadquizaminosWeb.SvgBoard
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.{
@@ -71,15 +72,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
             Or maybe you just hit quit :-).
             </p>
             <hr>
-            <%= raw svg_head() %>
+            <%= raw SvgBoard.svg_head() %>
             <%= for row <- [Map.values(@bottom)] do %>
               <%= for {x, y, color} <- row do %>
-              <svg phx-click="transform_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
-               <%= raw box({x, y}, color)%>
+              <svg>
+               <%= raw SvgBoard.box({x, y}, color)%>
                </svg>
                 <% end %>
             <% end %>
-            <%= raw svg_foot() %>
+            <%= raw SvgBoard.svg_foot() %>
             <hr>
               <button phx-click="start">Play again?</button>
         </div>
@@ -123,9 +124,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown" class="grid">
-                    <%= raw svg_head() %>
+                    <%= raw SvgBoard.svg_head() %>
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
-                    <% {x, y} = to_pixels( {x1, y1}, @box_width, @box_height ) %>
+                    <% {x, y} = SvgBoard.to_pixels( {x1, y1}, @box_width, @box_height ) %>
                     <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
                     x="<%= x + 1 %>" y="<%= y + 1 %>"
                     class="position-block <%= if @adding_block, do: "hover-block" %>"
@@ -135,14 +136,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
                       <%= for {x, y, color} <- row do %>
                       <svg phx-click="transform_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
-                       <%= raw box({x, y}, color)%>
+                       <%= raw SvgBoard.box({x, y}, color)%>
                           <%= raw deleting_title({x, y}, @deleting_block, block_in_bottom?(x, y, @bottom)) %>
                            <%= raw moving_title(@moving_block, block_in_bottom?(x, y, @bottom))  %>
                        </svg>
                         <% end %>
                     <% end %>
 
-                    <%= raw svg_foot() %>
+                    <%= raw SvgBoard.svg_foot() %>
                   </div>
                 </div>
               </div>
@@ -211,7 +212,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       brick
       |> Brick.prepare()
       |> Points.move_to_location(brick.location)
-      |> Points.with_color(color(brick), socket.assigns.brick_count)
+      |> Points.with_color(SvgBoard.color(brick), socket.assigns.brick_count)
 
     assign(socket, tetromino: points)
   end
@@ -247,88 +248,36 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(vuln_threshold: 143)
   end
 
-  def svg_head() do
-    """
-    <svg
-    version="1.0"
-    style="background-color: #F8F8F8"
-    id="Layer_1"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    width="200" height="400"
-    viewBox="0 0 200 400"
-    xml:space="preserve"
-    aria-labelledby="title">
-    """
-  end
-
-  def svg_foot(), do: "</svg>"
-
-  def boxes(points_with_colors) do
-    points_with_colors
-    |> Enum.map(fn {x, y, color} ->
-      box({x, y}, color)
-    end)
-    |> Enum.join("\n")
-  end
-
-  def box({_x, _y} = point, color) do
-    """
-    #{square(point, shades(color).light)}
-    #{triangle(point, shades(color).dark)}
-    """
-  end
-
-  def square(point, shade) do
-    {x, y} = to_pixels(point, 20, 20)
-
-    """
-    <rect
-      x="#{x + 1}" y="#{y + 1}"
-      style="fill:##{shade};"
-      width="#{@box_width - 2}" height="#{@box_height - 1}"/>
-    """
-  end
-
-  def triangle(point, shade) do
-    {x, y} = to_pixels(point, 20, 20)
-    {w, h} = {@box_width, @box_height}
-
-    """
-    <polyline
-        style="fill:##{shade}"
-        points="#{x + 1},#{y + 1} #{x + w},#{y + 1} #{x + w},#{y + h}" />
-    """
-  end
-
-  defp to_pixels({x, y}, bw, bh), do: {(x - 1) * bw, (y - 1) * bh}
-
-  defp shades(:red), do: %{light: "f8070a", dark: "FA383B"}
-  defp shades(:blue), do: %{light: "00BFFF", dark: "1E90FF"}
-  defp shades(:green), do: %{light: "00ff00", dark: "00c300"}
-  defp shades(:orange), do: %{light: "FFA500", dark: "FF8C00"}
-  defp shades(:pink), do: %{light: "FF69B4", dark: "FF1493"}
-  defp shades(:purple), do: %{light: "ff00ff", dark: "800080"}
-  defp shades(:vuln_grey_yellow), do: %{light: "A1A09E", dark: "ffff00"}
-  defp shades(:license_grey_brown), do: %{light: "A1A09E", dark: "8B4513"}
-  defp shades(:attack_yellow_gold), do: %{light: "ffff00", dark: "DAA520"}
-  defp shades(:lawsuit_brown_gold), do: %{light: "8B4513", dark: "DAA520"}
-
-  defp color(%{name: :t}), do: :red
-  defp color(%{name: :i}), do: :blue
-  defp color(%{name: :l}), do: :green
-  defp color(%{name: :o}), do: :orange
-  defp color(%{name: :z}), do: :pink
-
   defp game_record(socket) do
+    bottom_block =
+      case socket.assigns.bottom do
+        nil ->
+          nil
+
+        bottom ->
+          Enum.into(bottom, %{}, fn {key, value} ->
+            {tuple_to_string(key), tuple_to_string(value)}
+          end)
+      end
+
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
       uid: socket.assigns.current_user,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
+      bottom_blocks: bottom_block,
       correctly_answered_qna: socket.assigns.correct_answers
     }
+  end
+
+  def tuple_to_string({x, y, c}) do
+    c = c |> to_string()
+    {x, y, c} |> Tuple.to_list() |> to_string()
+  end
+
+  def tuple_to_string(value) do
+    value |> Tuple.to_list() |> to_string()
   end
 
   def drop(:playing, socket, fast) do
@@ -338,7 +287,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Tetris.drop(
         old_brick,
         socket.assigns.bottom,
-        color(old_brick),
+        SvgBoard.color(old_brick),
         socket.assigns.brick_count
       )
 
