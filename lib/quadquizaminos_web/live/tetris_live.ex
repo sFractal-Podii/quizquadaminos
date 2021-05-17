@@ -27,6 +27,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"uid" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
+    :timer.send_interval(10_000, self(), :broadcast_score)
     QuadquizaminosWeb.Endpoint.subscribe("contest_timer")
 
     {:ok,
@@ -757,6 +758,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {x, y}
   end
 
+  def handle_info(:broadcast_score, socket) do
+    QuadquizaminosWeb.Endpoint.broadcast(
+      "scores",
+      "current_score",
+      game_record(socket) |> Map.delete(:end_time)
+    )
+
+    {:noreply, socket}
+  end
+
   def handle_info(%{event: "timer", payload: _payload}, socket) do
     if socket.assigns.state == :playing do
       Records.record_player_game(true, game_record(socket))
@@ -767,6 +778,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_info(:tick, socket) do
     {:noreply, on_tick(socket.assigns.state, socket)}
+  end
+
+  defp on_tick(:game_over, socket) do
+    QuadquizaminosWeb.Endpoint.broadcast(
+      "scores",
+      "current_score",
+      game_record(socket)
+    )
+
+    socket
   end
 
   defp on_tick(:playing, socket) do
