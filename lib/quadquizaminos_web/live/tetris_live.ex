@@ -718,6 +718,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(super_modal: false)
+     |> assign(modal: true)
      |> assign(powers: powers)}
   end
 
