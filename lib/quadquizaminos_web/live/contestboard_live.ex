@@ -112,7 +112,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     <h2>SECONDS</h2>
     </div>
     </div>
-    <h3>Contest coming soon, Time until 18th May 2021(UTC + 0) </h3>
+    <h3>Contest coming soon, Contest starts: 11:40 PDT on 18th May 2021 </h3>
 
     </section>
     </div>
