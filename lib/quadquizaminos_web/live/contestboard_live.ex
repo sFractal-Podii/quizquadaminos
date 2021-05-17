@@ -11,6 +11,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :count_down)
     :timer.send_interval(1000, self(), :timer)
+    QuadquizaminosWeb.Endpoint.subscribe("scores")
 
     remaining_time = DateTime.diff(@conference_date, DateTime.utc_now())
 
@@ -49,7 +50,9 @@ defmodule QuadquizaminosWeb.ContestboardLive do
         </div>
     </div>
      <%= raw display_timer_button(@running) %>
+      <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
      <button phx-click="reset">Reset</button>
+     <button phx-click="final-score">Final Results</button>
      </section>
     </div>
     <%= end %>
@@ -70,12 +73,12 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
     <%= for record <- @contest_record do %>
      <tr>
-    <td><%= record.user.name %></td>
+     <td> <%= user_name(record) %></td>
     <td><%= record.score %></td>
     <td><%= record.dropped_bricks %></td>
     <td><%= record.correctly_answered_qna %></td>
     <td><%= Util.datetime_to_time(record.start_time) %></td>
-    <td><%= Util.datetime_to_time(record.end_time) %></td>
+    <td><%= Util.datetime_to_time(Map.get(record,:end_time)) %></td>
     <td><%= Util.datetime_to_date(record.start_time) %></td>
     </tr>
     <% end %>
@@ -123,41 +126,75 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     current_user in (ids |> Enum.map(&(&1 |> to_string())))
   end
 
+  defp user_name(record) do
+    case record do
+      %Quadquizaminos.GameBoard{} ->
+        record.user.name
+
+      _ ->
+        case Quadquizaminos.Accounts.get_user(record.uid) do
+          nil -> "Anonymous"
+          user -> user.name
+        end
+    end
+  end
+
+  defp user_name(%Quadquizaminos.Accounts.User{} = user, _uid), do: user.name
+
   def handle_event(
         "timer",
         %{"timer" => "start"},
-        %{assigns: %{contest_counter: seconds}} = socket
+        %{assigns: %{contest_counter: seconds, end_time: nil}} = socket
       )
       when seconds > 0 do
     {:noreply, socket |> assign(running: true)}
   end
 
   def handle_event("timer", %{"timer" => "start"}, socket) do
+    start_time = DateTime.utc_now()
+    Records.create_contest(%{start_time: start_time})
+
     {:noreply,
      socket
      |> assign(
        running: true,
-       start_time: DateTime.utc_now()
+       start_time: start_time
      )}
+  end
+
+  def handle_event("timer", %{"timer" => "pause"}, socket) do
+    {:noreply, socket |> assign(running: false)}
   end
 
   def handle_event("timer", %{"timer" => "stop"}, socket) do
     {_hours, minutes, seconds} = to_human_time(socket.assigns.contest_counter)
+    end_time = DateTime.utc_now()
 
-    if minutes >= 30 and seconds >= 0 do
-      QuadquizaminosWeb.Endpoint.broadcast!(
-        "contest_timer",
-        "timer",
-        {:stop_timer, true}
-      )
-      |> IO.inspect()
-    end
+    Records.latest_contest() |> Records.update_contest(%{end_time: end_time})
 
-    {:noreply, socket |> assign(running: false, end_time: DateTime.utc_now())}
+    QuadquizaminosWeb.Endpoint.broadcast!(
+      "contest_timer",
+      "timer",
+      {:stop_timer, true}
+    )
+
+    {:noreply,
+     socket
+     |> assign(running: false, end_time: end_time)}
   end
 
   def handle_event("timer", _params, socket) do
     {:noreply, socket}
+  end
+
+  def handle_event("final-score", _, socket) do
+    latest_contest = Records.latest_contest()
+
+    contest_record =
+      latest_contest.start_time
+      |> Records.contest_game(latest_contest.end_time)
+
+    {:noreply, socket |> assign(contest_record: contest_record)}
   end
 
   def handle_event("reset", _params, socket) do
@@ -169,22 +206,31 @@ defmodule QuadquizaminosWeb.ContestboardLive do
      )}
   end
 
-  def handle_info(:timer, %{assigns: %{running: true, contest_counter: seconds}} = socket) do
-    contest_record =
-      socket.assigns.start_time
-      |> Records.contest_game()
+  def handle_info(
+        %{event: "current_score", payload: payload},
+        %{assigns: %{running: true}} = socket
+      ) do
+    contest_record = socket.assigns.contest_record
 
-    {:noreply,
-     socket
-     |> assign(contest_record: contest_record, contest_counter: seconds + 1)}
+    contest_record =
+      (contest_record ++ [payload])
+      |> Enum.sort_by(& &1.score, :desc)
+      |> Enum.uniq_by(& &1.uid)
+      |> Enum.take(10)
+
+    {:noreply, socket |> assign(contest_record: contest_record)}
+  end
+
+  def handle_info(%{event: "current_score", payload: _payload}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_info(:timer, %{assigns: %{running: true, contest_counter: seconds}} = socket) do
+    {:noreply, socket |> assign(contest_counter: seconds + 1)}
   end
 
   def handle_info(:timer, socket) do
-    contest_record =
-      socket.assigns.start_time
-      |> Records.contest_game(socket.assigns.end_time)
-
-    {:noreply, socket |> assign(contest_record: contest_record)}
+    {:noreply, socket}
   end
 
   def handle_info(:count_down, socket) do
@@ -203,7 +249,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
 
   defp display_timer_button(true = _running) do
     """
-     <button phx-click="timer" phx-value-timer="stop">Stop</button>
+     <button phx-click="timer" phx-value-timer="pause">Pause</button>
     """
   end
 

@@ -4,6 +4,7 @@ defmodule Quadquizaminos.GameBoard.Records do
   """
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.GameBoard
+  alias Quadquizaminos.Contest
   alias Quadquizaminos.Repo
 
   @spec record_player_game(boolean(), map()) ::
@@ -45,6 +46,22 @@ defmodule Quadquizaminos.GameBoard.Records do
       |> change_game_board()
       |> Repo.insert()
     end
+  end
+
+  def create_contest(attrs) do
+    %Contest{}
+    |> Contest.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def latest_contest do
+    Contest |> Repo.all() |> Enum.max_by(fn contest -> contest.id end)
+  end
+
+  def update_contest(contest, attrs) do
+    contest
+    |> Contest.changeset(attrs)
+    |> Repo.update()
   end
 
   def get_game!(board_id) do
