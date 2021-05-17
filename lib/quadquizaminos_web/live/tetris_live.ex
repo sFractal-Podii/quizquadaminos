@@ -713,7 +713,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      )}
   end
 
-  def handle_event("super_to_power", %{"s_power" => "addblock"}, socket) do
+  def handle_event("super_to_power", %{"spower" => "addblock"}, socket) do
     powers = socket.assigns.powers ++ [:addblock]
 
     {:noreply,
