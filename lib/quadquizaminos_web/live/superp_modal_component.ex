@@ -14,12 +14,12 @@ defmodule QuadquizaminosWeb.SuperpModalComponent do
     add a block
     </button>
 
-    <br><i class="fas fa-arrows-alt" </i>
+    <br>
     <button phx-click="super_to_power" phx-value-spower="moveblock">
     move a block
     </button>
 
-    <br><i class="fas fa-eraser" </i>
+    <br>
     <button phx-click="super_to_power" phx-value-spower="clearblocks">
     clear gameboard of all blocks
     </button>
