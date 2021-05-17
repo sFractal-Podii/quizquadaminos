@@ -1,6 +1,9 @@
 defmodule QuadquizaminosWeb.LeaderboardLive do
   use Phoenix.LiveView
 
+  import QuadquizaminosWeb.LiveHelpers
+  alias QuadquizaminosWeb.Router.Helpers, as: Routes
+
   alias Quadquizaminos.GameBoard.Records
   alias Quadquizaminos.Util
 
@@ -21,6 +24,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <th>Start time</th>
     <th>End time</th>
     <th>Date</th>
+    <th>Tetris board</th>
     </tr>
 
     <%= for record <- @top_10_games do %>
@@ -32,9 +36,9 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <td><%= Util.datetime_to_time(record.start_time) %></td>
     <td><%= Util.datetime_to_time(record.end_time) %></td>
     <td><%= Util.datetime_to_date(record.start_time) %></td>
+    <td><%= live_redirect "view", to: Routes.live_path(@socket, QuadquizaminosWeb.LeaderboardLive.Show, record)%></td>
     </tr>
     <% end %>
-
     </table>
     </div>
     """

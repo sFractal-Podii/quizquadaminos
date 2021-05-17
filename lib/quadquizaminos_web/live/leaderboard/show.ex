@@ -1,0 +1,72 @@
+defmodule QuadquizaminosWeb.LeaderboardLive.Show do
+  use QuadquizaminosWeb, :live_view
+
+  alias Quadquizaminos.GameBoard.Records
+
+  alias QuadquizaminosWeb.SvgBoard
+
+  @impl true
+  def render(assigns) do
+    ~L"""
+    <div class="container">
+    <div class="row">
+    <div class="column column-50">
+    <%= display_bottom(@record.bottom_blocks, assigns) %>
+    </div>
+    <div class="column column-50 column-offset-25">
+    <p><b>End game status for <%= @record.user.name %></b> </p>
+    <ul>
+    <li><b>Score:</b><%= @record.score  %></li>
+    <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
+    </ul>
+    <%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadquizaminosWeb.LeaderboardLive) %>
+    </div>
+    </div>
+    </div>
+
+    """
+  end
+
+  def handle_params(%{"board_id" => board_id}, _uri, socket) do
+    {:noreply, socket |> assign(record: Records.get_game!(board_id))}
+  end
+
+  def display_bottom(nil = _bottom_blocks, assigns) do
+    ""
+  end
+
+  def display_bottom(bottom_blocks, assigns) do
+    ~L"""
+    <%= raw SvgBoard.svg_head() %>
+      <%= for row <- [bottom_values(bottom_blocks)] do %>
+        <%= for {x, y, color} <- row do %>
+         <svg>
+          <%= raw SvgBoard.box({x, y}, color)%>
+            </svg>
+        <% end %>
+      <% end %>
+        <%= raw SvgBoard.svg_foot() %>
+    """
+  end
+
+  defp bottom_values(bottom_block) do
+    bottom_block
+    |> Enum.into(%{}, fn {key, value} ->
+      {binary_to_tuple(key), _value(key, value)}
+    end)
+    |> Map.values()
+  end
+
+  defp binary_to_tuple(value) do
+    value
+    |> :binary.bin_to_list()
+    |> List.to_tuple()
+  end
+
+  defp _value(key, value) do
+    {x, y} = binary_to_tuple(key)
+    value = :binary.bin_to_list(value)
+    color = (value -- [x, y]) |> :binary.list_to_bin() |> String.to_atom()
+    {x, y, color}
+  end
+end

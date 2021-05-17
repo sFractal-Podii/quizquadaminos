@@ -38,6 +38,32 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
     assert html =~ "<th>Date</th>"
   end
 
+  test "user can be redicted to view player bottom blocks ", %{conn: conn} do
+    bottom = %{
+      <<1, 20>> => <<1, 20, 112, 105, 110, 107>>,
+      <<1, 19>> => <<1, 19, 112, 105, 110, 107>>,
+      <<1, 18>> => <<1, 18, 112, 105, 110, 107>>,
+      <<1, 17>> => <<1, 17, 112, 105, 110, 107>>
+    }
+
+    attrs = %{name: "Quiz Block ", uid: "100", role: "player"}
+    {:ok, user} = Accounts.create_user(%User{}, attrs)
+
+    game_record = %{
+      start_time: ~U[2021-04-20 06:00:53Z],
+      end_time: DateTime.utc_now(),
+      uid: user.uid,
+      score: 100,
+      dropped_bricks: 10,
+      correctly_answered_qna: 2,
+      bottom_blocks: bottom
+    }
+
+    {:ok, record} = Records.record_player_game(true, game_record)
+    {:ok, _view, html} = live(conn, "/leaderboard/#{record.id}")
+    assert html =~ "<p><b>End game status for Quiz Block </b>"
+  end
+
   defp row_count(html) do
     row =
       ~r/<tr>/

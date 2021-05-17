@@ -4,6 +4,8 @@ defmodule Quadquizaminos.Util do
     if count == 1, do: "#{0}" <> "#{digits}", else: "#{digits}"
   end
 
+  def datetime_to_time(nil), do: "playing"
+
   def datetime_to_time(datetime) do
     datetime
     |> DateTime.truncate(:second)
