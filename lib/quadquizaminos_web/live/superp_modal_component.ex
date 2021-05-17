@@ -4,12 +4,12 @@ defmodule QuadquizaminosWeb.SuperpModalComponent do
   def render(assigns) do
     ~L"""
     <div style="text-align:center;">
-    <br><i class="fas fa-minus-square" </i>
+    <br>
     <button phx-click="super_to_power" phx-value-spower="deleteblock">
     remove a block
     </button>
 
-    <br><i class="fas fa-plus-square" </i>
+    <br>
     <button phx-click="super_to_power" phx-value-spower="addblock">
     add a block
     </button>
