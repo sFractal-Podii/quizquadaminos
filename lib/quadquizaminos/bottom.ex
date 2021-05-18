@@ -144,16 +144,36 @@ defmodule Quadquizaminos.Bottom do
     )
   end
 
+  def remove_all_vulnerabilities(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
+  end
+
   def remove_all_vulnerabilities(bottom) do
     remove_a_color(bottom, :vuln_grey_yellow)
+  end
+
+  def remove_all_license_issues(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
   end
 
   def remove_all_license_issues(bottom) do
     remove_a_color(bottom, :license_grey_brown)
   end
 
+  def remove_attacks(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
+  end
+
   def remove_attacks(bottom) do
     remove_a_color(bottom, :attack_yellow_gold)
+  end
+
+  def remove_lawsuits(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
   end
 
   def remove_lawsuits(bottom) do
