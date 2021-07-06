@@ -39,6 +39,7 @@ defmodule Quadquizaminos.MixProject do
         :ueberauth_github,
         :ueberauth_google,
         :ueberauth_linkedin,
+        :ueberauth_facebook,
         :ueberauth,
         :mix
       ]
@@ -74,6 +75,7 @@ defmodule Quadquizaminos.MixProject do
       {:ueberauth_github, "~> 0.7"},
       {:ueberauth_linkedin, git: "https://github.com/fajarmf/ueberauth_linkedin"},
       {:ueberauth_google, "~>0.10"},
+      {:ueberauth_facebook, "~> 0.8"},
       {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
       {:earmark, "~> 1.4"}
     ]

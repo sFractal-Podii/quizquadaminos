@@ -34,8 +34,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: "",
-  client_secret: ""
+  client_id: "34361115589-0qbjmuh1orf3a59ushvvpahj2a7e3nqu.apps.googleusercontent.com",
+  client_secret: "9reIErXRW4a0sMvfkxi8yhWM"
 
 # Linkedin authentication configuration 
 config :ueberauth, Ueberauth,
@@ -44,6 +44,16 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
+  client_id: "77oypqbpa236ch",
+  client_secret: "uj3PCnO7U9RGYadT"
+
+# Facebook Uberauth configuration
+config :ueberauth, Ueberauth,
+  providers: [
+    facebook: {Ueberauth.Strategy.Facebook, []}
+  ]
+#facebook (provider) configuration 
+config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
   client_id: "",
   client_secret: ""
 
@@ -54,12 +64,12 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: "",
-  client_secret: ""
+  client_id: "4a4208b91287caaa3c9f",
+  client_secret: "f9a66591504ae801955cb2282204fc5f4c0d9621"
 
 config :quadquizaminos,
   # add github_id of authorized users
-  github_ids: [1, 2],
+  github_ids: [32_665_021],
   conference_date: ~U[2021-05-18 18:40:00Z],
 
   # set bottom vulnerability defaulting value
