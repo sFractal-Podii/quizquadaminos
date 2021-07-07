@@ -1,11 +1,6 @@
-    <div class="container">
+    <div class="container"> 
         <h1>Contests</h1>
-
-
-      <%= f =  form_for :contest, "#", phx_submit: :add_block %>
-      <%= text_input f, :name %>
-        </form>
-
+         <input type="text" phx-keydown="save"  phx-key="Enter">
         <table>
             <tr>
                 <th>Name</th>
@@ -20,8 +15,10 @@
                 <td>
                 </td>
             <tr>
+                <%= for contest <- @all_contests do%>
             <tr>
-                <td> Contest 1 </td>
+                
+                <td><%= contest.name%></td>
                 <td>
                     <button phx-click="timer" phx-value-timer="start">Start</button>
                 </td>
@@ -35,5 +32,6 @@
                     <button phx-click="final-score">Final Results</button>
                 </td>
             </tr>
+            <% end %>
         </table>
     </div>
