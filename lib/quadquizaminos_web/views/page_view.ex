@@ -60,6 +60,9 @@ defmodule QuadquizaminosWeb.PageView do
           <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "linkedin") %>">
           Sign in with LinkedIn
           </a>
+          <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "facebook") %>">
+          Sign in with Facebook
+          </a>
     """
   end
 
