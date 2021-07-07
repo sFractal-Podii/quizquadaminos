@@ -1,0 +1,39 @@
+    <div class="container">
+        <h1>Contests</h1>
+
+
+      <%= f =  form_for :contest, "#", phx_submit: :add_block %>
+      <%= text_input f, :name %>
+        </form>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Start time</th>
+                <th>End time</th>
+            </tr>
+            <tr>
+                <td>
+                </td>
+            <tr>
+            <tr>
+                <td> Contest 1 </td>
+                <td>
+                    <button phx-click="timer" phx-value-timer="start">Start</button>
+                </td>
+                <td>
+                    <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
+                </td>
+                <td>
+                    <button phx-click="reset">Reset</button>
+                </td>
+                <td>
+                    <button phx-click="final-score">Final Results</button>
+                </td>
+            </tr>
+        </table>
+    </div>
