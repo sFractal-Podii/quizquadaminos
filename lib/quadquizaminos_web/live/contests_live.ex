@@ -8,7 +8,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   def mount(_params, session, socket) do
-    {:ok, socket |> assign(all_contests: all_contests())}
+    {:ok, socket |> assign(contests: contests())}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
@@ -16,13 +16,16 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   defp _create_contest(socket, contest_name) do
+    contests = socket.assigns.contests
+
     case %Contest{} |> Contest.changeset(%{name: contest_name}) |> Repo.insert() do
-      {:ok, contest} -> assign(socket, all_contest: all_contests() ++ [contest])
+      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
       _ -> socket
     end
+    |> IO.inspect(label: "===============================")
   end
 
-  defp all_contests do
+  defp contests do
     Repo.all(Contest)
   end
 end
