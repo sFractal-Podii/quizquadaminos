@@ -1,6 +1,7 @@
 defmodule QuadquizaminosWeb.ContestsLive do
   use Phoenix.LiveView
   import Phoenix.HTML.Form
+  import Phoenix.LiveView.Helpers
 
   alias Quadquizaminos.Repo
 
@@ -9,6 +10,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   def mount(_params, session, socket) do
+    QuadquizaminosWeb.Endpoint.subscribe("timer")
     {:ok, socket |> assign(contest_counter: 0, contests: Contests.list_contests())}
   end
 
@@ -18,6 +20,15 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def handle_event("start", %{"contest" => name}, socket) do
     {:noreply, _update_contest(socket, name)}
+  end
+
+  def handle_info(%{event: "timer", payload: payload}, socket) do
+    send_update(QuadquizaminosWeb.ContestComponent,
+      payload: payload
+    )
+
+    IO.inspect(event, label: "=======================")
+    {:noreply, socket}
   end
 
   defp _create_contest(socket, contest_name) do
@@ -42,14 +53,5 @@ defmodule QuadquizaminosWeb.ContestsLive do
       _ ->
         socket
     end
-  end
-
-  defp to_human_time(seconds) do
-    hours = div(seconds, 3600)
-    rem = rem(seconds, 3600)
-    minutes = div(rem, 60)
-    rem = rem(rem, 60)
-    seconds = div(rem, 1)
-    {hours, minutes, seconds}
   end
 end
