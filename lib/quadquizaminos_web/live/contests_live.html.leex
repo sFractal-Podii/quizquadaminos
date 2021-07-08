@@ -20,7 +20,7 @@
                 
                 <td><%= contest.name%></td>
                 <td>
-                    <button phx-click="timer" phx-value-timer="start">Start</button>
+                    <button phx-click="start" phx-value-contest='<%= contest.name %>'>Start</button>
                 </td>
                 <td>
                     <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
@@ -29,8 +29,12 @@
                     <button phx-click="reset">Reset</button>
                 </td>
                 <td>
-                    <button phx-click="final-score">Final Results</button>
+                    <% {hours, minutes, seconds} = to_human_time(@contest_counter) %>
+                   <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+                  
+                   <%#  <button phx-click="final-score">Final Results</button> %>
                 </td>
+                <td><%= contest.start_time %></td>
             </tr>
             <% end %>
         </table>
