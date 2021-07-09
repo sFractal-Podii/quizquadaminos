@@ -23,11 +23,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(%{event: "timer", payload: payload}, socket) do
+    contest = Contests.get_contest(payload[:contest_name])
+
+    {:noreply, socket |> assign(payload: payload, started_contest: contest)}
+  end
+
+  def handle_info(:timer, %{assigns: %{payload: %{contest_name: name, running: true}}} = socket) do
+    contest_counter = socket.assigns.contest_counter + 1
+
     send_update(QuadquizaminosWeb.ContestComponent,
-      payload: payload
+      id: name,
+      contest: socket.assigns.started_contest,
+      contest_counter: contest_counter
     )
 
-    IO.inspect(event, label: "=======================")
+    {:noreply, socket |> assign(contest_counter: contest_counter)}
+  end
+
+  def handle_info(:timer, socket) do
     {:noreply, socket}
   end
 

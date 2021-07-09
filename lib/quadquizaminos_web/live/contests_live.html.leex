@@ -16,7 +16,7 @@
             
                 <%= for contest <- @contests do %>
                   <tr>
-         <%= live_component(@socket, QuadquizaminosWeb.ContestComponent, id: contest.id, contest: contest) %>
+         <%= live_component(@socket, QuadquizaminosWeb.ContestComponent, id: contest.name, contest: contest) %>
           </tr>
           <% end %>
                  
