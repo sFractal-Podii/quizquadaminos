@@ -2,6 +2,8 @@ defmodule QuadquizaminosWeb.ContestComponent do
   use QuadquizaminosWeb, :live_component
   alias Quadquizaminos.Util
 
+  alias Quadquizaminos.Contests
+
   def mount(socket) do
     {:ok, assign(socket, contest_counter: 0)}
   end
@@ -28,10 +30,14 @@ defmodule QuadquizaminosWeb.ContestComponent do
     """
   end
 
+  def update(%{running: true} = assigns, socket) do
+    {:ok,
+     socket
+     |> assign(contest_counter: socket.assigns.contest_counter + 1)}
+  end
+
   def update(assigns, socket) do
-    :timer.send_interval(1000, self(), :timer)
-    IO.inspect(assigns, label: "+++++++++++++update++++++++++++++++++++++")
-    {:ok, socket |> assign(contest: assigns.contest)}
+    {:ok, assign(socket, contest: assigns.contest)}
   end
 
   defp to_human_time(seconds) do

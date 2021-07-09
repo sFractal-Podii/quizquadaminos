@@ -10,8 +10,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   def mount(_params, session, socket) do
+    :timer.send_interval(1000, self(), :timer)
     QuadquizaminosWeb.Endpoint.subscribe("timer")
-    {:ok, socket |> assign(contest_counter: 0, contests: Contests.list_contests())}
+    {:ok, socket |> assign(contests: Contests.list_contests())}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
@@ -29,15 +30,13 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:timer, %{assigns: %{payload: %{contest_name: name, running: true}}} = socket) do
-    contest_counter = socket.assigns.contest_counter + 1
-
     send_update(QuadquizaminosWeb.ContestComponent,
       id: name,
       contest: socket.assigns.started_contest,
-      contest_counter: contest_counter
+      running: true
     )
 
-    {:noreply, socket |> assign(contest_counter: contest_counter)}
+    {:noreply, socket}
   end
 
   def handle_info(:timer, socket) do
