@@ -12,7 +12,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :timer)
     QuadquizaminosWeb.Endpoint.subscribe("timer")
-    {:ok, socket |> assign(contests: Contests.list_contests())}
+
+    {:ok,
+     socket |> assign(payloads: [], started_contests: [], contests: Contests.list_contests())}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
@@ -26,21 +28,32 @@ defmodule QuadquizaminosWeb.ContestsLive do
   def handle_info(%{event: "timer", payload: payload}, socket) do
     contest = Contests.get_contest(payload[:contest_name])
 
-    {:noreply, socket |> assign(payload: payload, started_contest: contest)}
+    {:noreply,
+     socket
+     |> assign(
+       payloads: socket.assigns.payloads ++ [payload],
+       started_contests: socket.assigns.started_contests ++ [contest]
+     )}
   end
 
-  def handle_info(:timer, %{assigns: %{payload: %{contest_name: name, running: true}}} = socket) do
-    send_update(QuadquizaminosWeb.ContestComponent,
-      id: name,
-      contest: socket.assigns.started_contest,
-      running: true
-    )
+  def handle_info(:timer, %{assigns: %{payloads: [%{running: true} | _] = payloads}} = socket) do
+    Enum.each(payloads, fn payload ->
+      send_update(QuadquizaminosWeb.ContestComponent,
+        id: payload[:contest_name],
+        contest: contest(payload[:contest_name], socket.assigns.started_contests),
+        running: true
+      )
+    end)
 
     {:noreply, socket}
   end
 
   def handle_info(:timer, socket) do
     {:noreply, socket}
+  end
+
+  defp contest(name, started_contests) do
+    Enum.find(started_contests, fn contest -> contest.name == name end)
   end
 
   defp _create_contest(socket, contest_name) do

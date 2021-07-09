@@ -17,6 +17,5 @@ defmodule Quadquizaminos.Contest.ContestAgent do
       "timer",
       message
     )
-    |> IO.inspect(label: "+++++++++++++++++")
   end
 end
