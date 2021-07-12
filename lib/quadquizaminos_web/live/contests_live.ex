@@ -58,21 +58,20 @@ defmodule QuadquizaminosWeb.ContestsLive do
      )}
   end
 
-  def handle_info(:timer, %{assigns: %{payloads: [%{running: true} | _] = payloads}} = socket) do
+  def handle_info(:timer, %{assigns: %{payloads: payloads}} = socket) do
     Enum.each(payloads, fn payload ->
+      if payload[:running] do
       send_update(QuadquizaminosWeb.ContestComponent,
         id: payload[:contest_name],
         contest: contest(payload[:contest_name], socket.assigns.started_contests),
         running: true
       )
+      end
     end)
 
     {:noreply, socket}
   end
 
-  def handle_info(:timer, socket) do
-    {:noreply, socket}
-  end
 
   defp contest(name, started_contests) do
     Enum.find(started_contests, fn contest -> contest.name == name end)
