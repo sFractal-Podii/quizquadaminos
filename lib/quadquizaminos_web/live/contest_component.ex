@@ -11,8 +11,8 @@ defmodule QuadquizaminosWeb.ContestComponent do
   def render(assigns) do
     ~L"""
     <td><%= @contest.name%></td>
-                 <td>
-                     <button phx-click="start" phx-value-contest='<%= @contest.name %>'>Start</button>
+                 <td> 
+                 <%= start_or_pause_button(assigns, @running) %>
                  </td>
                  <td>
                      <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
@@ -33,12 +33,25 @@ defmodule QuadquizaminosWeb.ContestComponent do
   def update(%{running: true} = assigns, socket) do
     {:ok,
      socket
-     |> assign(contest_counter: socket.assigns.contest_counter + 1)}
+     |> assign(contest_counter: socket.assigns.contest_counter + 1, running: true)}
   end
 
   def update(assigns, socket) do
-    {:ok, assign(socket, contest: assigns.contest)}
+    {:ok, assign(socket, contest: assigns.contest, running: false)}
   end
+
+  defp start_or_pause_button(assigns, true=_running) do
+    ~L"""
+    <button phx-click="pause" phx-value-contest='<%= @contest.name %>'>Pause</button>
+    """
+  end
+
+  defp start_or_pause_button(assigns, _) do
+    ~L"""
+    <button phx-click="start" phx-value-contest='<%= @contest.name %>'>Start</button>
+    """
+  end
+
 
   defp to_human_time(seconds) do
     hours = div(seconds, 3600)
