@@ -25,6 +25,28 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _update_contest(socket, name)}
   end
 
+  def handle_event("pause",  %{"contest" => contest}, socket) do
+    send_update(QuadquizaminosWeb.ContestComponent,
+    id: contest,
+    contest: contest(contest, socket.assigns.started_contests),
+    running: false
+  )
+    {:noreply, assign(socket, payloads: update_payload(socket.assigns.payloads, contest))}
+
+  end
+
+  defp update_payload(%{contest_name: contest_name} = payload, contest) when contest==contest_name do
+    Map.put(payload, :running, false)
+  end
+
+  defp update_payload([_h | _t]= payloads, contest) do
+    Enum.map(payloads, fn payload -> update_payload(payload, contest) end)
+  end
+
+  defp update_payload(payload, _contest) do
+    payload
+  end
+
   def handle_info(%{event: "timer", payload: payload}, socket) do
     contest = Contests.get_contest(payload[:contest_name])
 
