@@ -29,6 +29,7 @@
     "webpack-cli": "^3.3.2",
     "is-svg": ">=4.2.2",
     "ssri": ">=8.0.1",
-    "postcss": ">=8.2.10"
+    "postcss": ">=8.2.10",
+    "glob-parent": ">=5.1.2"
   }
 }
