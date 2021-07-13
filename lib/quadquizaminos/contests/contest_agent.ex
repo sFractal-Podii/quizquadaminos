@@ -4,7 +4,7 @@ defmodule Quadquizaminos.Contest.ContestAgent do
 
   def start_link(contest_name) do
     {:ok, pid} = Agent.start_link(fn -> contest_name end, name: String.to_atom(contest_name))
-    broadcast_state(pid)
+    broadcast_state(pid)                  
   end
 
   def broadcast_state(pid) do
