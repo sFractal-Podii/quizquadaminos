@@ -3,6 +3,7 @@ defmodule Quadquizaminos.Contests do
   alias Quadquizaminos.Repo
 
   alias Quadquizaminos.Contest.ContestAgent
+  import Ecto.Query, only: [from: 2]
 
   def create_contest(attrs) do
     %Contest{}
@@ -18,22 +19,38 @@ defmodule Quadquizaminos.Contests do
     Repo.all(Contest)
   end
 
+  @doc """
+  Gives us the names of all contests that are either running or paused
+  """
+  def active_contests_names do
+    q = from c in Contest, where: not is_nil(c.start_time) and is_nil(c.end_time), select: c.name
+    Repo.all(q)
+  end
+
+  @doc """
+  Restarts the timer of the contest
+  """
+  def reset_contest(name) do
+    ContestAgent.reset_timer(name)
+  end
+
+  def time_elapsed(name) do
+    ContestAgent.time_elapsed(name)
+  end
+
   def start_contest(name) do
     Repo.transaction(fn ->
-      ContestAgent.start_link(name)
+      ContestAgent.start_contest(name)
 
       name
       |> get_contest()
       |> update_contest(%{start_time: DateTime.utc_now()})
     end)
-
-    # start the agent
-    # update start time
   end
 
-  def end_contest(id) do
+  def end_contest(name) do
     # update end_time
-    # stop the agent
+    ContestAgent.end_contest(name)
   end
 
   def update_contest(contest, attrs) do

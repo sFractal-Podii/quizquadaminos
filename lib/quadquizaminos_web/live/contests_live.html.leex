@@ -1,4 +1,4 @@
-    <div class="container"> 
+    <div class="container">
         <h1>Contests</h1>
          <input type="text" phx-keydown="save"  phx-key="Enter">
           <table>
@@ -12,17 +12,10 @@
                  <th>End time</th>
              </tr>
              <tr>
-    
-            
                 <%= for contest <- @contests do %>
                   <tr>
          <%= live_component(@socket, QuadquizaminosWeb.ContestComponent, id: contest.name, contest: contest) %>
           </tr>
           <% end %>
-                 
-            
-            
          </table>
-         
-        
     </div>

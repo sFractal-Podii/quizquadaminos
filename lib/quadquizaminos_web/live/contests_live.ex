@@ -5,7 +5,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   alias Quadquizaminos.Repo
 
-  alias Quadquizaminos.{Contests,Contest}
+  alias Quadquizaminos.{Contests, Contest}
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
@@ -35,24 +35,21 @@ defmodule QuadquizaminosWeb.ContestsLive do
   # end
 
   def handle_event("start", %{"contest" => name}, socket) do
-    IO.inspect(socket.assigns, label: "+++++++++++++++++")
-    contests.start_contest(name)
-    {:noreply, _update_contest(socket, name)}
+    Contests.start_contest(name)
+    {:noreply, socket}
   end
 
-  def handle_event("pause",  %{"contest" => contest}, socket) do
+  def handle_event("pause", %{"contest" => contest}, socket) do
     send_update(QuadquizaminosWeb.ContestComponent,
-    id: contest,
-    contest: contest(contest, socket.assigns.started_contests),
-    running: false
-  )
-    {:noreply, assign(socket, payloads: update_payload(socket.assigns.payloads, contest))}
+      id: contest,
+      contest: contest(contest, socket.assigns.started_contests),
+      running: false
+    )
 
+    {:noreply, assign(socket, payloads: update_payload(socket.assigns.payloads, contest))}
   end
 
-
-
-  def handle_info(%{event: "timer", payload: payload}, socket) do
+  def handle_info(%{event: "started", payload: payload}, socket) do
     contest = Contests.get_contest(payload[:contest_name])
 
     {:noreply,
@@ -64,19 +61,26 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:timer, %{assigns: %{payloads: payloads}} = socket) do
+    # get the running contests contests
+    # update contest time_elapsed
+    Contests.active_contests_names()
+    |> Enum.map(fn name ->
+      time = Contests.time_elapsed(name)
+      contest = Enum.find(socket.assigns.contests, fn contest -> contest.name == name end)
+    end)
+
     Enum.each(payloads, fn payload ->
       if payload[:running] do
-      send_update(QuadquizaminosWeb.ContestComponent,
-        id: payload[:contest_name],
-        contest: contest(payload[:contest_name], socket.assigns.started_contests),
-        running: true
-      )
+        send_update(QuadquizaminosWeb.ContestComponent,
+          id: payload[:contest_name],
+          contest: contest(payload[:contest_name], socket.assigns.started_contests),
+          running: true
+        )
       end
     end)
 
     {:noreply, socket}
   end
-
 
   defp contest(name, started_contests) do
     Enum.find(started_contests, fn contest -> contest.name == name end)
@@ -105,11 +109,13 @@ defmodule QuadquizaminosWeb.ContestsLive do
         socket
     end
   end
-  defp update_payload(%{contest_name: contest_name} = payload, contest) when contest==contest_name do
+
+  defp update_payload(%{contest_name: contest_name} = payload, contest)
+       when contest == contest_name do
     Map.put(payload, :running, false)
   end
 
-  defp update_payload([_h | _t]= payloads, contest) do
+  defp update_payload([_h | _t] = payloads, contest) do
     Enum.map(payloads, fn payload -> update_payload(payload, contest) end)
   end
 
@@ -117,14 +123,17 @@ defmodule QuadquizaminosWeb.ContestsLive do
     payload
   end
 
-  defp is_contest_paused?(payloads,started_contests,contest_name) do
+  defp is_contest_paused?(payloads, started_contests, contest_name) do
     payloads
     |> Enum.find(fn payload -> payload.contest_name == contest_name end)
     |> is_contest_paused?(started_contests)
   end
 
-  defp is_contest_paused?(%{contest_name: contest_name, running: false},started_contests) do
-    Enum.any?(started_contests, fn contest -> contest.name == contest_name && is_nil(contest.end_time) end )
+  defp is_contest_paused?(%{contest_name: contest_name, running: false}, started_contests) do
+    Enum.any?(started_contests, fn contest ->
+      contest.name == contest_name && is_nil(contest.end_time)
+    end)
   end
+
   defp is_contest_paused?(nil, _started_contests), do: false
 end

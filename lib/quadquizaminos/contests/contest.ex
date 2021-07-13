@@ -5,6 +5,7 @@ defmodule Quadquizaminos.Contest do
   schema "contests" do
     field :start_time, :utc_datetime_usec
     field :end_time, :utc_datetime_usec
+    field :time_elapsed, :integer, virtual: true, default: 0
     field :name, :string
   end
 
