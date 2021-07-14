@@ -21,7 +21,7 @@ defmodule QuadquizaminosWeb.ContestComponent do
                      <button phx-click="reset">Reset</button>
                  </td>
                  <td>
-                  <% {hours, minutes, seconds} = @contest.name |> Contests.time_elapsed |> to_human_time() %>
+                  <% {hours, minutes, seconds} = @contest.time_elapsed |> to_human_time() %>
                     <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
                     <%#  <button phx-click="final-score">Final Results</button> %>
                  </td>

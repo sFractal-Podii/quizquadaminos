@@ -35,7 +35,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
   # end
 
   def handle_event("start", %{"contest" => name}, socket) do
+    # DynamicSupervisor.start_link(Quadquizaminos.DynamicSupervisor, Quadquizaminos.Contest.ContestAgent)
     Contests.start_contest(name)
+
     {:noreply, socket}
   end
 
@@ -63,23 +65,21 @@ defmodule QuadquizaminosWeb.ContestsLive do
   def handle_info(:timer, %{assigns: %{payloads: payloads}} = socket) do
     # get the running contests contests
     # update contest time_elapsed
-    Contests.active_contests_names()
-    |> Enum.map(fn name ->
-      time = Contests.time_elapsed(name)
-      contest = Enum.find(socket.assigns.contests, fn contest -> contest.name == name end)
-    end)
 
-    Enum.each(payloads, fn payload ->
-      if payload[:running] do
-        send_update(QuadquizaminosWeb.ContestComponent,
-          id: payload[:contest_name],
-          contest: contest(payload[:contest_name], socket.assigns.started_contests),
-          running: true
-        )
-      end
-    end)
+    contests =
+      Contests.active_contests_names()
+      |> Enum.map(fn name ->
+        time = Contests.time_elapsed(name)
 
-    {:noreply, socket}
+        contest =
+          Enum.find(socket.assigns.contests, fn contest ->
+            contest.name == name
+          end)
+
+        %{contest | time_elapsed: time}
+      end)
+
+    {:noreply, assign(socket, contests: contests)}
   end
 
   defp contest(name, started_contests) do

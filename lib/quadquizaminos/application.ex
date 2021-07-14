@@ -7,6 +7,8 @@ defmodule Quadquizaminos.Application do
 
   def start(_type, _args) do
     children = [
+      {DynamicSupervisor, strategy: :one_for_one, name: Quadquizaminos.DynamicSupervisor},
+
       # Start the Ecto repository
       Quadquizaminos.Repo,
       # Start the Telemetry supervisor
