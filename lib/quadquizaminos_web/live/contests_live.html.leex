@@ -22,7 +22,7 @@
                      <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
                  </td>
                  <td>
-                     <button phx-click="reset">Reset</button>
+                     <button phx-click="reset" phx-value-contest='<%= contest.name %>'>Reset</button>
                  </td>
                  <td>
                   <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>

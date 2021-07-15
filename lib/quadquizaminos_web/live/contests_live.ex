@@ -38,6 +38,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket}
   end
 
+  def handle_event("reset", %{"contest" => name}, socket) do
+    Contests.reset_contest(name)
+    {:noreply, socket}
+  end
+
   def handle_info(:timer, socket) do
     inactive_contest =
       Enum.reject(socket.assigns.contests, fn contest ->
