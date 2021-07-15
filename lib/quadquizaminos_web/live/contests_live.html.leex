@@ -19,7 +19,7 @@
                  <%= start_or_pause_button(assigns,contest) %>
                  </td>
                  <td>
-                     <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
+                     <button class="red" phx-click="stop" phx-value-contest= '<%= contest.name %>' >Stop</button>
                  </td>
                  <td>
                      <button phx-click="reset" phx-value-contest='<%= contest.name %>'>Reset</button>
@@ -30,6 +30,7 @@
                     <%#  <button phx-click="final-score">Final Results</button> %>
                  </td>
                  <td><%= contest.start_time %></td>
+                 <td><%= contest.end_time %></td>
           </tr>
           <% end %>
          </table>

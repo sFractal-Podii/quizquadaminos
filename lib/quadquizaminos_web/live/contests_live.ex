@@ -43,6 +43,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket}
   end
 
+  def handle_event("stop", %{"contest" => name}, socket) do
+    {:noreply, _end_contest(socket, name)}
+  end
+
   def handle_info(:timer, socket) do
     inactive_contest =
       Enum.reject(socket.assigns.contests, fn contest ->
@@ -80,13 +84,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   defp _start_contest(socket, name) do
-    contest = Contests.get_contest(name)
-    contests = socket.assigns.contests -- [contest]
+    contests = Enum.reject(socket.assigns.contests, fn contest -> contest.name == name end)
 
     case Contests.start_contest(name) do
       {:ok, {:ok, contest}} ->
         socket
-        |> assign(contests: contest)
+        |> assign(contests: contests ++ [contest])
+
+      _ ->
+        socket
+    end
+  end
+
+  defp _end_contest(socket, name) do
+    contests = Enum.reject(socket.assigns.contests, fn contest -> contest.name == name end)
+
+    case Contests.end_contest(name) do
+      {:ok, {:ok, contest}} ->
+        socket
         |> assign(contests: contests ++ [contest])
 
       _ ->

@@ -65,7 +65,13 @@ defmodule Quadquizaminos.Contests do
 
   def end_contest(name) do
     # update end_time
-    ContestAgent.end_contest(name)
+    Repo.transaction(fn ->
+      ContestAgent.end_contest(name)
+
+      name
+      |> get_contest()
+      |> update_contest(%{end_time: DateTime.utc_now()})
+    end)
   end
 
   def update_contest(contest, attrs) do
