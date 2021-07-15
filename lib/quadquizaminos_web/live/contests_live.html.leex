@@ -14,7 +14,22 @@
              <tr>
                 <%= for contest <- @contests do %>
                   <tr>
-         <%= live_component(@socket, QuadquizaminosWeb.ContestComponent, id: contest.name, contest: contest) %>
+         <td><%= contest.name%></td>
+                 <td>
+                 <%= start_or_pause_button(assigns,contest) %>
+                 </td>
+                 <td>
+                     <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
+                 </td>
+                 <td>
+                     <button phx-click="reset">Reset</button>
+                 </td>
+                 <td>
+                  <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>
+                    <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+                    <%#  <button phx-click="final-score">Final Results</button> %>
+                 </td>
+                 <td><%= contest.start_time %></td>
           </tr>
           <% end %>
          </table>

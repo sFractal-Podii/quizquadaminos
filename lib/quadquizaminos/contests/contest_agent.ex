@@ -38,6 +38,8 @@ defmodule Quadquizaminos.Contest.ContestAgent do
   def contest_status(name) do
     name = String.to_atom(name)
 
+    IO.inspect(GenServer.whereis(name), label: "++++++++++++staaaaaaaaaaaaaaaaa++++")
+
     if GenServer.whereis(name) do
       name |> Agent.get(fn state -> state.status end)
     else
@@ -53,8 +55,12 @@ defmodule Quadquizaminos.Contest.ContestAgent do
 
   def update_timer(name) do
     name
-    |> Agent.get_and_update(fn %{time_elapsed: time} = state ->
-      {state, %{state | time_elapsed: time + 1}}
+    |> Agent.get_and_update(fn
+      %{time_elapsed: time, status: :running} = state ->
+        {state, %{state | time_elapsed: time + 1}}
+
+      state ->
+        {state, state}
     end)
   end
 

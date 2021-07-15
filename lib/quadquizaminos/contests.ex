@@ -34,6 +34,10 @@ defmodule Quadquizaminos.Contests do
     ContestAgent.reset_timer(name)
   end
 
+  def pause_contest(name) do
+    ContestAgent.pause_contest(name)
+  end
+
   def contest_status(name) do
     ContestAgent.contest_status(name)
   end

@@ -25,14 +25,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _update_contest(socket, name)}
   end
 
-  def handle_event("pause", %{"contest" => contest}, socket) do
-    send_update(QuadquizaminosWeb.ContestComponent,
-      id: contest,
-      contest: contest(contest, socket.assigns.started_contests),
-      running: false
-    )
-
-    {:noreply, assign(socket, payloads: update_payload(socket.assigns.payloads, contest))}
+  def handle_event("pause", %{"contest" => name}, socket) do
+    Contests.pause_contest(name)
+    {:noreply, socket}
   end
 
   def handle_info(%{event: "started", payload: payload}, socket) do
@@ -66,7 +61,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
         %{contest | time_elapsed: time, status: to_string(status)}
       end)
 
-    IO.inspect(inactive_contest, label: "+++++++++++++++++++++++++")
+    # IO.inspect(contests: contests ++ inactive_contest, label: "+++++++++++++++++++++++++")
 
     {:noreply, assign(socket, contests: contests ++ inactive_contest)}
   end
@@ -125,4 +120,25 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   defp is_contest_paused?(nil, _started_contests), do: false
+
+  defp start_or_pause_button(assigns, contest) do
+    if contest.status == "running" do
+      ~L"""
+      <button phx-click="pause" phx-value-contest='<%= contest.name %>'>Pause</button>
+      """
+    else
+      ~L"""
+      <button phx-click="start" phx-value-contest='<%= contest.name %>'>Start</button>
+      """
+    end
+  end
+
+  defp to_human_time(seconds) do
+    hours = div(seconds, 3600)
+    rem = rem(seconds, 3600)
+    minutes = div(rem, 60)
+    rem = rem(rem, 60)
+    seconds = div(rem, 1)
+    {hours, minutes, seconds}
+  end
 end
