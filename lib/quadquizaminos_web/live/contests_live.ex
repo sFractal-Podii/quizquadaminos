@@ -46,7 +46,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
      )}
   end
 
-  def handle_info(:timer, %{assigns: %{payloads: payloads}} = socket) do
+  def handle_info(:timer, socket) do
     inactive_contest =
       Enum.reject(socket.assigns.contests, fn contest ->
         contest.name in Contests.active_contests_names()
@@ -56,14 +56,17 @@ defmodule QuadquizaminosWeb.ContestsLive do
       Contests.active_contests_names()
       |> Enum.map(fn name ->
         time = Contests.time_elapsed(name)
+        status = Contests.contest_status(name)
 
         contest =
           Enum.find(socket.assigns.contests, fn contest ->
             contest.name == name
           end)
 
-        %{contest | time_elapsed: time}
+        %{contest | time_elapsed: time, status: to_string(status)}
       end)
+
+    IO.inspect(inactive_contest, label: "+++++++++++++++++++++++++")
 
     {:noreply, assign(socket, contests: contests ++ inactive_contest)}
   end

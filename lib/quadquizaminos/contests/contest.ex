@@ -6,6 +6,7 @@ defmodule Quadquizaminos.Contest do
     field :start_time, :utc_datetime_usec
     field :end_time, :utc_datetime_usec
     field :time_elapsed, :integer, virtual: true, default: 0
+    field :status, :string, virtual: true
     field :name, :string
   end
 

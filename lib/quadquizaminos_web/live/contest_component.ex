@@ -5,14 +5,14 @@ defmodule QuadquizaminosWeb.ContestComponent do
   alias Quadquizaminos.Contests
 
   def mount(socket) do
-    {:ok, assign(socket, contest_counter: 0)}
+    {:ok, socket}
   end
 
   def render(assigns) do
     ~L"""
     <td><%= @contest.name%></td>
                  <td>
-                 <%= start_or_pause_button(assigns, @running) %>
+                 <%= start_or_pause_button(assigns, @contest.status) %>
                  </td>
                  <td>
                      <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
@@ -29,17 +29,7 @@ defmodule QuadquizaminosWeb.ContestComponent do
     """
   end
 
-  def update(%{running: true} = assigns, socket) do
-    {:ok,
-     socket
-     |> assign(contest_counter: socket.assigns.contest_counter + 1, running: true)}
-  end
-
-  def update(assigns, socket) do
-    {:ok, assign(socket, contest: assigns.contest, running: false)}
-  end
-
-  defp start_or_pause_button(assigns, true = _running) do
+  defp start_or_pause_button(assigns, "running") do
     ~L"""
     <button phx-click="pause" phx-value-contest='<%= @contest.name %>'>Pause</button>
     """

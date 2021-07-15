@@ -35,6 +35,16 @@ defmodule Quadquizaminos.Contest.ContestAgent do
     end
   end
 
+  def contest_status(name) do
+    name = String.to_atom(name)
+
+    if GenServer.whereis(name) do
+      name |> Agent.get(fn state -> state.status end)
+    else
+      :stopped
+    end
+  end
+
   def reset_timer(name) do
     name
     |> String.to_atom()
