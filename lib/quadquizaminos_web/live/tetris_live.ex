@@ -513,7 +513,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
         %{"x" => x, "y" => y, "color" => color},
         %{assigns: %{moving_block: true}} = socket
       ) do
-    IO.puts("====wanjiku is lovely====")
     {x, y} = parse_to_integer(x, y)
     color = String.to_atom(color)
     {:noreply, socket |> assign(block_coordinates: {x, y, color}, adding_block: true)}
