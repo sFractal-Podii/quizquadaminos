@@ -35,8 +35,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
   # end
 
   def handle_event("start", %{"contest" => name}, socket) do
-    # DynamicSupervisor.start_link(Quadquizaminos.DynamicSupervisor, Quadquizaminos.Contest.ContestAgent)
-    Contests.start_contest(name)
+    DynamicSupervisor.start_child(
+      Quadquizaminos.ContestAgentSupervisor,
+      {Quadquizaminos.Contest.ContestAgent, [name: String.to_atom(name)]}
+    )
 
     {:noreply, socket}
   end

@@ -13,12 +13,12 @@ defmodule Quadquizaminos.Contest.ContestAgent do
   alias Quadquizaminos.Contests
   use Agent
 
-  def start_contest(name) do
-    state = %{contest_name: name, time_elapsed: 0, status: :running}
-    {:ok, pid} = Agent.start_link(fn -> state end, name: String.to_atom(name))
+  def start_link(opts) do
+    state = %{contest_name: opts[:name], time_elapsed: 0, status: :running}
+    {:ok, pid} = Agent.start_link(fn -> state end, opts)
 
     broadcast_state(pid, state)
-    :timer.apply_interval(1000, __MODULE__, :update_timer, [name])
+    :timer.apply_interval(1000, __MODULE__, :update_timer, [opts[:name]])
     state
   end
 
@@ -43,7 +43,6 @@ defmodule Quadquizaminos.Contest.ContestAgent do
 
   def update_timer(name) do
     name
-    |> String.to_atom()
     |> Agent.get_and_update(fn %{time_elapsed: time} = state ->
       {state, %{state | time_elapsed: time + 1}}
     end)
