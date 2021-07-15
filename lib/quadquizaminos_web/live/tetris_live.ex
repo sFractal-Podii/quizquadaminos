@@ -631,13 +631,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
     if y in ycoordinate do
       {x, y} = parse_to_integer(x, y)
       {x1, y1, color} = block_coordinates
-      powers = socket.assigns.powers -- [:moveblock]
 
       bottom =
         socket.assigns.bottom
         |> Map.delete({x1, y1})
         |> Map.merge(%{{x, y} => {x, y, color}})
 
+      powers = socket.assigns.powers -- [:moveblock]
+      
       assign(socket,
         bottom: bottom,
         powers: powers,
