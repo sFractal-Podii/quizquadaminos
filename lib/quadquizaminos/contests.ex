@@ -40,7 +40,10 @@ defmodule Quadquizaminos.Contests do
 
   def start_contest(name) do
     Repo.transaction(fn ->
-      ContestAgent.start_contest(name)
+      DynamicSupervisor.start_child(
+        Quadquizaminos.ContestAgentSupervisor,
+        {Quadquizaminos.Contest.ContestAgent, [name: String.to_atom(name)]}
+      )
 
       name
       |> get_contest()

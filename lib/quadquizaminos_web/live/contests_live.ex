@@ -21,26 +21,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket |> _create_contest(contest_name)}
   end
 
-  # def handle_event("start", %{"contest" => contest}, %{assigns: %{payloads: [h | t] = payloads, started_contests: [%Contest{}|_] = started_contests}} = socket) do
-  #   if is_contest_paused?(payloads, started_contests,contest) do
-  #     send_update(QuadquizaminosWeb.ContestComponent,
-  #     id: contest,
-  #     contest: contest(contest, socket.assigns.started_contests),
-  #     running: true
-  #   )
-  #   end
-
-  #   IO.puts("--------------------------")
-  #   {:noreply, socket}
-  # end
-
   def handle_event("start", %{"contest" => name}, socket) do
-    DynamicSupervisor.start_child(
-      Quadquizaminos.ContestAgentSupervisor,
-      {Quadquizaminos.Contest.ContestAgent, [name: String.to_atom(name)]}
-    )
-
-    {:noreply, socket}
+    {:noreply, _update_contest(socket, name)}
   end
 
   def handle_event("pause", %{"contest" => contest}, socket) do
@@ -65,8 +47,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:timer, %{assigns: %{payloads: payloads}} = socket) do
-    # get the running contests contests
-    # update contest time_elapsed
+    inactive_contest =
+      Enum.reject(socket.assigns.contests, fn contest ->
+        contest.name in Contests.active_contests_names()
+      end)
 
     contests =
       Contests.active_contests_names()
@@ -81,7 +65,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
         %{contest | time_elapsed: time}
       end)
 
-    {:noreply, assign(socket, contests: contests)}
+    {:noreply, assign(socket, contests: contests ++ inactive_contest)}
   end
 
   defp contest(name, started_contests) do
