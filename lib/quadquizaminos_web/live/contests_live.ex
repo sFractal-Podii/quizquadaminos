@@ -22,23 +22,20 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("start", %{"contest" => name}, socket) do
-    {:noreply, _update_contest(socket, name)}
+    socket =
+      if name in Contests.active_contests_names() do
+        Contests.resume_contest(name)
+        socket
+      else
+        _start_contest(socket, name)
+      end
+
+    {:noreply, socket}
   end
 
   def handle_event("pause", %{"contest" => name}, socket) do
     Contests.pause_contest(name)
     {:noreply, socket}
-  end
-
-  def handle_info(%{event: "started", payload: payload}, socket) do
-    contest = Contests.get_contest(payload[:contest_name])
-
-    {:noreply,
-     socket
-     |> assign(
-       payloads: socket.assigns.payloads ++ [payload],
-       started_contests: socket.assigns.started_contests ++ [contest]
-     )}
   end
 
   def handle_info(:timer, socket) do
@@ -61,8 +58,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
         %{contest | time_elapsed: time, status: to_string(status)}
       end)
 
-    # IO.inspect(contests: contests ++ inactive_contest, label: "+++++++++++++++++++++++++")
-
     {:noreply, assign(socket, contests: contests ++ inactive_contest)}
   end
 
@@ -79,7 +74,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
     end
   end
 
-  defp _update_contest(socket, name) do
+  defp _start_contest(socket, name) do
     contest = Contests.get_contest(name)
     contests = socket.assigns.contests -- [contest]
 
@@ -93,33 +88,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
         socket
     end
   end
-
-  defp update_payload(%{contest_name: contest_name} = payload, contest)
-       when contest == contest_name do
-    Map.put(payload, :running, false)
-  end
-
-  defp update_payload([_h | _t] = payloads, contest) do
-    Enum.map(payloads, fn payload -> update_payload(payload, contest) end)
-  end
-
-  defp update_payload(payload, _contest) do
-    payload
-  end
-
-  defp is_contest_paused?(payloads, started_contests, contest_name) do
-    payloads
-    |> Enum.find(fn payload -> payload.contest_name == contest_name end)
-    |> is_contest_paused?(started_contests)
-  end
-
-  defp is_contest_paused?(%{contest_name: contest_name, running: false}, started_contests) do
-    Enum.any?(started_contests, fn contest ->
-      contest.name == contest_name && is_nil(contest.end_time)
-    end)
-  end
-
-  defp is_contest_paused?(nil, _started_contests), do: false
 
   defp start_or_pause_button(assigns, contest) do
     if contest.status == "running" do

@@ -38,6 +38,10 @@ defmodule Quadquizaminos.Contests do
     ContestAgent.pause_contest(name)
   end
 
+  def resume_contest(name) do
+    ContestAgent.resume_contest(name)
+  end
+
   def contest_status(name) do
     ContestAgent.contest_status(name)
   end

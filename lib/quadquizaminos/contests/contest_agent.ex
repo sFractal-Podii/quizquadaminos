@@ -17,14 +17,8 @@ defmodule Quadquizaminos.Contest.ContestAgent do
     state = %{contest_name: opts[:name], time_elapsed: 0, status: :running}
     {:ok, pid} = Agent.start_link(fn -> state end, opts)
 
-    broadcast_state(pid, state)
     :timer.apply_interval(1000, __MODULE__, :update_timer, [opts[:name]])
     state
-  end
-
-  def broadcast_state(pid, state) do
-    # Agent.cast(pid, broadcast!(state))
-    :ok
   end
 
   def time_elapsed(name) do
@@ -37,8 +31,6 @@ defmodule Quadquizaminos.Contest.ContestAgent do
 
   def contest_status(name) do
     name = String.to_atom(name)
-
-    IO.inspect(GenServer.whereis(name), label: "++++++++++++staaaaaaaaaaaaaaaaa++++")
 
     if GenServer.whereis(name) do
       name |> Agent.get(fn state -> state.status end)
@@ -80,13 +72,5 @@ defmodule Quadquizaminos.Contest.ContestAgent do
     name
     |> String.to_atom()
     |> Agent.stop()
-  end
-
-  defp broadcast!(message) do
-    QuadquizaminosWeb.Endpoint.broadcast!(
-      "contest",
-      "started",
-      message
-    )
   end
 end
