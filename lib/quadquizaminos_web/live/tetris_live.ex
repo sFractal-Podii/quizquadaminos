@@ -495,6 +495,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
     # switch to superpower modal to select which power to assign
     powers = socket.assigns.powers -- [:superpower]
+
     {:noreply,
      socket
      |> assign(state: :paused)
@@ -770,7 +771,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
-  defp correct_answer?(_qna, _guess), do: false
+
+  defp correct_answer?(%{correct: correct}, guess) do
+    guess = String.trim(guess)
+    correct == guess
+  end
 
   defp wrong_points(socket) do
     %{"Wrong" => points} = socket.assigns.qna.score
