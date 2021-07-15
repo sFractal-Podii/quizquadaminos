@@ -495,6 +495,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "superpower"}, socket) do
     # switch to superpower modal to select which power to assign
     powers = socket.assigns.powers -- [:superpower]
+
     {:noreply,
      socket
      |> assign(state: :paused)
@@ -512,6 +513,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         %{"x" => x, "y" => y, "color" => color},
         %{assigns: %{moving_block: true}} = socket
       ) do
+    IO.puts("====wanjiku is lovely====")
     {x, y} = parse_to_integer(x, y)
     color = String.to_atom(color)
     {:noreply, socket |> assign(block_coordinates: {x, y, color}, adding_block: true)}
@@ -619,19 +621,35 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
-    {x, y} = parse_to_integer(x, y)
-    {x1, y1, color} = block_coordinates
-    powers = socket.assigns.powers -- [:moveblock]
+    # check if the coordinates are part of bottom, if they're not return the socket, if they're apply transformation
+    # and return socket
+    ycoordinate =
+      socket.assigns.bottom
+      |> Map.keys()
+      |> Enum.map(fn value -> elem(value, 1) end)
+      |> Enum.map(fn c -> Integer.to_string(c) end)
 
-    bottom =
-      socket.assigns.bottom |> Map.delete({x1, y1}) |> Map.merge(%{{x, y} => {x, y, color}})
+    if y in ycoordinate do
+      {x, y} = parse_to_integer(x, y)
+      {x1, y1, color} = block_coordinates
+      powers = socket.assigns.powers -- [:moveblock]
 
-    assign(socket,
-      bottom: bottom,
-      powers: powers,
-      adding_block: false,
-      moving_block: false
-    )
+      bottom =
+        socket.assigns.bottom
+        |> Map.delete({x1, y1})
+        |> Map.merge(%{{x, y} => {x, y, color}})
+        |> IO.inspect()
+
+      assign(socket,
+        bottom: bottom,
+        powers: powers,
+        adding_block: false,
+        moving_block: false
+      )
+    else
+      powers = socket.assigns.powers -- [:moveblock]
+      assign(socket, powers: powers, moving_block: false, adding_block: false)
+    end
   end
 
   defp move_block(socket, _x, _y, _block_coordinates, _adding_block, _moving_block) do
