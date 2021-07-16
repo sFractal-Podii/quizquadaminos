@@ -31,7 +31,9 @@ defmodule Quadquizaminos.QnA do
     categories() |> Enum.random() |> build()
   end
 
-  defp build(category, position \\ 0) do
+  defp build(cat, position \\ 0)
+
+  defp build(category, position) do
     {:ok, content} = category |> choose_file(position) |> File.read()
 
     [question, answers] = content |> String.split(~r/## answers/i)
@@ -39,7 +41,7 @@ defmodule Quadquizaminos.QnA do
     %{
       question: question_as_html(question),
       answers: answers(content, answers),
-      correct: correct_answer(answers),
+      correct: correct_answer(answers, category),
       powerup: powerup(content),
       score: score(content)
     }
@@ -120,7 +122,16 @@ defmodule Quadquizaminos.QnA do
 
   defp file_position(position, _index, _count), do: position
 
-  defp correct_answer(answers) do
+  defp correct_answer(answers, "freeform") do
+    regex = ~r/\n\*(.+?)\n/
+
+    [[_, clue] | _t] = Regex.scan(regex, answers)
+    clue = String.trim(clue)
+
+    Application.get_env(:quadquizaminos, :freeform_answers)[String.to_atom(clue)]
+  end
+
+  defp correct_answer(answers, _category) do
     regex = ~r/(\n-|\n\*)/
 
     {_, correct} =

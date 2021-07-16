@@ -24,7 +24,9 @@ Hooks.DisableArrow = {
     window.addEventListener(
       "keydown",
       function (evt) {
-        evt.preventDefault();
+        if (evt.code == "ArrowDown") {
+          evt.preventDefault();
+        }
       },
       false
     );

@@ -25,15 +25,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
          <br/>
          <h2><%= raw @qna.question %></h2>
          <h2> Answer </h2>
-        <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
-        <%= for {answer, index}<- @qna.answers do %>
-        <%= label do %>
-          <%= radio_button f, :guess, answer, value: index %>
-          <%= answer %>
-         <% end %> <!-- end label -->
-        <% end %>
-       <%= submit  "Continue" %>
-       </form>
+         <%= answers(assigns, @category) %>
        <br/>
        <%= unless Enum.empty?(@qna.score) do %>
        <h2>Scores</h2>
@@ -51,6 +43,29 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
      <%= for power <- @powers do %>
      <i class="<%= prefix(power)%> <%=power_icon(power)%>" title="<%= power |> to_string() %>" phx-click="powerup" phx-value-powerup="<%= power %>"></i>
      <% end %>
+    """
+  end
+
+  defp answers(assigns, "freeform") do
+    ~L"""
+    <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
+    <%= text_input f, :guess %>
+    <%= submit  "Continue" %>
+    </form>
+    """
+  end
+
+  defp answers(assigns, _category) do
+    ~L"""
+    <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
+    <%= for {answer, index}<- @qna.answers do %>
+      <%= label do %>
+        <%= radio_button f, :guess, answer, value: index %>
+        <%= answer %>
+        <% end %> <!-- end label -->
+    <% end %>
+    <%= submit  "Continue" %>
+    </form>
     """
   end
 
