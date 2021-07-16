@@ -2,6 +2,10 @@ defmodule QuadquizaminosWeb.PageView do
   use QuadquizaminosWeb, :view
   alias Quadquizaminos.Accounts
 
+  def render("instructions.html", _params) do
+    QuadquizaminosWeb.Instructions.game_instruction()
+  end
+
   def display_name_and_avatar("anonymous" = _current_user), do: ""
 
   def display_name_and_avatar(current_user) do

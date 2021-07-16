@@ -10,6 +10,7 @@
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
+    <div id="content">
     <header>
       <section class="container">
         <a href="https://supplychainsandbox.org/" class="phx-logo">
@@ -24,6 +25,7 @@
       <%= render(QuadquizaminosWeb.LayoutView, "navbar.html", assigns) %>
     </header>
     <%= @inner_content %>
+    </div>
   <footer>
   <table>
   <tr>
