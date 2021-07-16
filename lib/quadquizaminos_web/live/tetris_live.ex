@@ -100,7 +100,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def render(assigns) do
     ~L"""
-      <div class="container" >
+      <div class="container" id="gamearea" phx-hook="DisableArrow">
         <div class="row">
           <div class="column column-75">
               <div class="row">
