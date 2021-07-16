@@ -13,6 +13,7 @@ defmodule Quadquizaminos.Contest.ContestAgent do
   alias Quadquizaminos.Contests
   use Agent
 
+
   def start_link(opts) do
     state = %{contest_name: opts[:name], time_elapsed: 0, status: :running}
     {:ok, pid} = Agent.start_link(fn -> state end, opts)

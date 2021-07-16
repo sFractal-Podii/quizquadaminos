@@ -1,9 +1,21 @@
 defmodule Quadquizaminos.Contests do
+
+
+  @moduledoc """
+  Inserts and gets data from the database that would be used in different functions.
+  -list of all contests
+  -timer
+  -active contests
+  """
+
   alias Quadquizaminos.Contest
   alias Quadquizaminos.Repo
 
   alias Quadquizaminos.Contest.ContestAgent
+Updated upstream
   import Ecto.Query, only: [from: 2]
+
+
 
   def create_contest(attrs) do
     %Contest{}
