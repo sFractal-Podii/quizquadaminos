@@ -1,0 +1,37 @@
+    <div class="container">
+        <h1>Contests</h1>
+         <input type="text" phx-keydown="save"  phx-key="Enter">
+          <table>
+             <tr>
+                 <th>Name</th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th>Start time</th>
+                 <th>End time</th>
+             </tr>
+             <tr>
+                <%= for contest <- @contests do %>
+                  <tr>
+         <td><%= contest.name%></td>
+                 <td>
+                 <%= start_or_pause_button(assigns,contest) %>
+                 </td>
+                 <td>
+                     <button class="red" phx-click="stop" phx-value-contest= '<%= contest.name %>' >Stop</button>
+                 </td>
+                 <td>
+                     <button phx-click="reset" phx-value-contest='<%= contest.name %>'>Reset</button>
+                 </td>
+                 <td>
+                  <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>
+                    <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+                    <%#  <button phx-click="final-score">Final Results</button> %>
+                 </td>
+                 <td><%= contest.start_time %></td>
+                 <td><%= contest.end_time %></td>
+          </tr>
+          <% end %>
+         </table>
+    </div>
