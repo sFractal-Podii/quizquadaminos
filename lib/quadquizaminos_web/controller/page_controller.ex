@@ -17,6 +17,10 @@ defmodule QuadquizaminosWeb.PageController do
     )
   end
 
+  def instructions(conn, _params) do
+    render(conn, "instructions.html")
+  end
+
   def anonymous(conn, _params) do
     conn
     |> put_flash(:info, "Successfully authenticated.")
