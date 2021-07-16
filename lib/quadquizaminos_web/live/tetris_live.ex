@@ -638,7 +638,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         |> Map.merge(%{{x, y} => {x, y, color}})
 
       powers = socket.assigns.powers -- [:moveblock]
-      
+
       assign(socket,
         bottom: bottom,
         powers: powers,
@@ -646,7 +646,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         moving_block: false
       )
     else
-      assign(socket, powers: powers, moving_block: false, adding_block: false)
+      assign(socket, moving_block: false, adding_block: false)
     end
   end
 
