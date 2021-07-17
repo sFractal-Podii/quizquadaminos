@@ -70,10 +70,17 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, assign(socket, contests: contests ++ inactive_contest)}
   end
 
+
+  @doc """
+  Finds the already started contests
+  """
   defp contest(name, started_contests) do
     Enum.find(started_contests, fn contest -> contest.name == name end)
   end
 
+  @doc """
+  Add the created contest to the socket
+  """
   defp _create_contest(socket, contest_name) do
     contests = socket.assigns.contests
 
@@ -82,7 +89,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
       _ -> socket
     end
   end
-
+  @doc """
+  Add the created contest to the contest list
+  """
   defp _start_contest(socket, name) do
     contests = Enum.reject(socket.assigns.contests, fn contest -> contest.name == name end)
 
@@ -95,7 +104,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
         socket
     end
   end
-
+  @doc """
+  Ensures that the ended contest does not appear twice in the contest list
+  """
   defp _end_contest(socket, name) do
     contests = Enum.reject(socket.assigns.contests, fn contest -> contest.name == name end)
 
@@ -120,7 +131,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
       """
     end
   end
-
+   @doc """
+   Calculates the counter timer
+   """
   defp to_human_time(seconds) do
     hours = div(seconds, 3600)
     rem = rem(seconds, 3600)
