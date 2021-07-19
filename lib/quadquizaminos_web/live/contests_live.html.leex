@@ -29,8 +29,8 @@
                     <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
                     <%#  <button phx-click="final-score">Final Results</button> %>
                  </td>
-                 <td><%= contest.start_time %></td>
-                 <td><%= contest.end_time %></td>
+                 <td><%= truncate_date(contest.start_time) %></td>
+                 <td><%= truncate_date(contest.end_time) %></td>
           </tr>
           <% end %>
          </table>

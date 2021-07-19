@@ -7,7 +7,10 @@ defmodule Quadquizaminos.Contest.ContestAgent do
    - running
    - paused
 
-  The agent is responsible for receiving events that will start or stop it
+  The agent is responsible for receiving events that will start or stop it.
+  The Genserver looksup different processes and monitors them.
+  The time elapse of each contest is updated depending on different state.
+  The agent is stopped to end the process.
   """
 
   alias Quadquizaminos.Contests

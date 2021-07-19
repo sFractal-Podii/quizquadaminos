@@ -80,6 +80,3 @@ defmodule Quadquizaminos.Contests do
     |> Repo.update()
   end
 end
-
-# display timer
-# initial contest_counter -> 0
