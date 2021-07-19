@@ -12,7 +12,6 @@ defmodule Quadquizaminos.Contests do
   alias Quadquizaminos.Repo
 
   alias Quadquizaminos.Contest.ContestAgent
-Updated upstream
   import Ecto.Query, only: [from: 2]
 
 
@@ -92,6 +91,3 @@ Updated upstream
     |> Repo.update()
   end
 end
-
-# display timer
-# initial contest_counter -> 0
