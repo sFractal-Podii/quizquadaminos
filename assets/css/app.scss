@@ -54,6 +54,9 @@
   text-decoration: none;
   cursor: pointer;
 }
+.not_allowed:hover{
+  cursor: not-allowed;
+}
 
 
 /* Alerts and form errors */
