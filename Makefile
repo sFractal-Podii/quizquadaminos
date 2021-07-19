@@ -60,10 +60,15 @@ test: ## Run the test suite
 format: mix format ## Run formatting tools on the code
 
 
-.PHONY: sbom
+.PHONY: sbom sbom_fast
 sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
-	cd assets/  && npm install && npm install -g @cyclonedx/bom && cyclonedx-bom -o ../bom.xml -a ../elixir_bom.xml && cd ..
+	cd assets/  && npm install && npm install -g @cyclonedx/bom@2.0.2 && cyclonedx-bom -o ../bom.xml -a ../elixir_bom.xml && cd ..
+	./cyclonedx-cli convert --input-file bom.xml --output-file bom.json
+
+sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
+	mix sbom.cyclonedx -o elixir_bom.xml
+	cd assets/ && cyclonedx-bom -o ../bom.xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file bom.xml --output-file bom.json
 
 
@@ -90,7 +95,7 @@ push-image-gcp: ## push image to gcp
 
 	gcloud container images delete gcr.io/twinklymaha/quadquiz:$(APP_VERSION) --force-delete-tags  || echo "no image to delete on the remote"
 	docker push gcr.io/twinklymaha/quadquiz:$(APP_VERSION)
-		
+
 push-and-serve-gcp: push-image-gcp deploy-existing-image ## creates docker image then push to gcp and launches an instance with the image
 
 .PHONY: deploy-existing-image

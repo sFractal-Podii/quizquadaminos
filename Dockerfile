@@ -31,10 +31,11 @@ COPY priv ./priv
 COPY qna ./qna
 COPY Makefile ./Makefile
 
-RUN make sbom
+RUN npm ci --prefix ./assets
+RUN npm install -g @cyclonedx/bom@2.0.2
+RUN make sbom_fast
 RUN cp bom* ./assets/static
-RUN npm install --prefix ./assets && \
-    npm run deploy --prefix ./assets
+RUN npm run deploy --prefix ./assets
 
 
 # Final build step: digest static assets and generate the release
