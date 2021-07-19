@@ -25,9 +25,8 @@
                      <button phx-click="reset" phx-value-contest='<%= contest.name %>'>Reset</button>
                  </td>
                  <td>
-                  <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>
-                    <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
-                    <%#  <button phx-click="final-score">Final Results</button> %>
+
+                    <%= timer_or_final_result(assigns, contest) %>
                  </td>
                  <td><%= truncate_date(contest.start_time) %></td>
                  <td><%= truncate_date(contest.end_time) %></td>

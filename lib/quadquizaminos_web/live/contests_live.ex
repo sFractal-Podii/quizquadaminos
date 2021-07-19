@@ -121,6 +121,22 @@ defmodule QuadquizaminosWeb.ContestsLive do
     end
   end
 
+  defp timer_or_final_result(assigns, contest) do
+    if contest.end_time do
+      ~L"""
+       <button phx-click="final-score">Final Results</button>
+      """
+    else
+      ~L"""
+
+      <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>
+      <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+
+      """
+    end
+
+  end
+
   defp to_human_time(seconds) do
     hours = div(seconds, 3600)
     rem = rem(seconds, 3600)
