@@ -48,6 +48,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:timer, socket) do
+    {:noreply, _update_contests_timer(socket)}
+  end
+
+  defp _update_contests_timer(socket) do
     inactive_contest =
       Enum.reject(socket.assigns.contests, fn contest ->
         contest.name in Contests.active_contests_names()
@@ -67,11 +71,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
         %{contest | time_elapsed: time, status: to_string(status)}
       end)
 
-    {:noreply, assign(socket, contests: contests ++ inactive_contest)}
-  end
-
-  defp contest(name, started_contests) do
-    Enum.find(started_contests, fn contest -> contest.name == name end)
+    assign(socket, contests: contests ++ inactive_contest)
   end
 
   defp _create_contest(socket, contest_name) do
@@ -84,29 +84,33 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   defp _start_contest(socket, name) do
-    contests = Enum.reject(socket.assigns.contests, fn contest -> contest.name == name end)
+    contests =
+      Enum.map(socket.assigns.contests, fn
+        %Contest{name: name} ->
+          {:ok, {:ok, contest}} = Contests.start_contest(name)
 
-    case Contests.start_contest(name) do
-      {:ok, {:ok, contest}} ->
-        socket
-        |> assign(contests: contests ++ [contest])
+          contest
 
-      _ ->
-        socket
-    end
+        contest ->
+          contest
+      end)
+
+    assign(socket, contests: contests)
   end
 
   defp _end_contest(socket, name) do
-    contests = Enum.reject(socket.assigns.contests, fn contest -> contest.name == name end)
+    contests =
+      Enum.map(socket.assigns.contests, fn
+        %Contest{name: name} ->
+          {:ok, {:ok, contest}} = Contests.end_contest(name)
 
-    case Contests.end_contest(name) do
-      {:ok, {:ok, contest}} ->
-        socket
-        |> assign(contests: contests ++ [contest])
+          contest
 
-      _ ->
-        socket
-    end
+        contest ->
+          contest
+      end)
+
+    assign(socket, contests: contests)
   end
 
   defp start_or_pause_button(assigns, contest) do
@@ -134,7 +138,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
       """
     end
-
   end
 
   defp to_human_time(seconds) do
@@ -145,9 +148,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
     seconds = div(rem, 1)
     {hours, minutes, seconds}
   end
+
   def truncate_date(nil) do
     nil
   end
+
   def truncate_date(date) do
     DateTime.truncate(date, :second)
   end
