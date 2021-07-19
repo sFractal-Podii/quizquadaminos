@@ -786,7 +786,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
-  defp correct_answer?(_qna, _guess), do: false
+
+  defp correct_answer?(%{correct: correct}, guess) do
+    guess = String.trim(guess)
+    correct == guess
+  end
 
   defp wrong_points(socket) do
     %{"Wrong" => points} = socket.assigns.qna.score
