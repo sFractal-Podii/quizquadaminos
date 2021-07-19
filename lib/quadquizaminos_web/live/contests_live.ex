@@ -129,4 +129,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
     seconds = div(rem, 1)
     {hours, minutes, seconds}
   end
+  def truncate_date(nil) do
+    nil
+  end
+  def truncate_date(date) do
+    DateTime.truncate(date, :second)
+  end
 end
