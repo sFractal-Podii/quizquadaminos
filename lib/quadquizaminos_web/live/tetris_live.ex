@@ -3,7 +3,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   import Phoenix.HTML, only: [raw: 1]
 
   import QuadquizaminosWeb.LiveHelpers
-  import QuadquizaminosWeb.Instructions
   alias QuadquizaminosWeb.SvgBoard
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
@@ -40,20 +39,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def render(%{state: :starting, live_action: live_action} = assigns) do
     ~L"""
-    <%= if live_action == :instructions do %>
-    <div class = "phx-modal-content">
-        <%= raw game_instruction() %>
-      </div>
-      <% else %>
-        <div class ="container">
-          <div class="row">
-              <div class="column column-50 column-offset-25">
-                <h1>Welcome to QuadBlockQuiz!</h1>
-                  <button phx-click="start">Start</button>
-              </div>
-          </div>
+      <div class ="container">
+        <div class="row">
+            <div class="column column-50 column-offset-25">
+              <h1>Welcome to QuadBlockQuiz!</h1>
+                <button phx-click="start">Start</button>
+            </div>
         </div>
-    <% end %>
+      </div>
     """
   end
 
@@ -118,9 +111,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <%= if @modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
-                <%= if @instructions_modal do %>
-                 <%= live_modal @socket, QuadquizaminosWeb.InstructionsComponent, id: 2, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris) %>
-                <% end %>
                 <%= if @super_modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
@@ -150,7 +140,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
               </div>
             </div>
             <div class="column column-50">
-            <a class="button" phx-click="instructions">  How to play </a>
             <%= raw Hints.tldr(@hint) %>
             </div>
           <br/>
@@ -230,7 +219,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(deleting_block: false)
     |> assign(fix_vuln_or_license: false)
     |> assign(hint: :intro)
-    |> assign(instructions_modal: false)
     |> assign(lawsuit_threshold: 5)
     |> assign(lic_threshold: 143)
     |> assign(modal: false)
@@ -410,14 +398,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
-
-  def handle_event("instructions", _params, socket) do
-    {:noreply, socket |> assign(instructions_modal: true, state: :paused)}
-  end
-
-  def handle_event("close_instructions", _param, socket) do
-    {:noreply, socket |> assign(instructions_modal: false, state: :playing)}
-  end
 
   def handle_event("powerup", %{"powerup" => "moveblock"}, socket) do
     {:noreply, socket |> assign(modal: false, moving_block: true)}
@@ -786,7 +766,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
-  defp correct_answer?(_qna, _guess), do: false
+
+  defp correct_answer?(%{correct: correct}, guess) do
+    guess = String.trim(guess)
+    correct == guess
+  end
 
   defp wrong_points(socket) do
     %{"Wrong" => points} = socket.assigns.qna.score

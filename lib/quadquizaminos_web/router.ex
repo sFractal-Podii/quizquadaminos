@@ -44,6 +44,7 @@ defmodule QuadquizaminosWeb.Router do
     live "/contest_prizes", ContestPrizes
     get "/anonymous", PageController, :anonymous
     post "/anonymous", PageController, :anonymous
+    get "/instructions", PageController, :instructions
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
