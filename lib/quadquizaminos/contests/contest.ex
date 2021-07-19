@@ -1,6 +1,7 @@
 defmodule Quadquizaminos.Contest do
   use Ecto.Schema
   import Ecto.Changeset
+  @type t :: %__MODULE__{}
 
   schema "contests" do
     field :start_time, :utc_datetime_usec

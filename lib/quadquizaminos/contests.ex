@@ -14,8 +14,10 @@ defmodule Quadquizaminos.Contests do
   alias Quadquizaminos.Contest.ContestAgent
   import Ecto.Query, only: [from: 2]
 
-
-
+  @doc """
+  Inserts the created contest in the database
+  """
+  @spec create_contest(map()) :: {:ok, Ecto.Schema.t()}| {:error, Ecto.Changeset.t()}
   def create_contest(attrs) do
     %Contest{}
     |> Contest.changeset(attrs)
@@ -33,6 +35,7 @@ defmodule Quadquizaminos.Contests do
   @doc """
   Gives us the names of all contests that are either running or paused
   """
+  @spec active_contests_names() :: []
   def active_contests_names do
     q = from c in Contest, where: not is_nil(c.start_time) and is_nil(c.end_time), select: c.name
     Repo.all(q)
@@ -61,6 +64,10 @@ defmodule Quadquizaminos.Contests do
     ContestAgent.time_elapsed(name)
   end
 
+  @doc """
+      Start the given contest name and updates the start time
+  """
+  @spec start_contest(String.t()) :: {:ok, Ecto.Schema.t()}| {:error, Ecto.Changeset.t()}
   def start_contest(name) do
     Repo.transaction(fn ->
       DynamicSupervisor.start_child(
@@ -74,8 +81,11 @@ defmodule Quadquizaminos.Contests do
     end)
   end
 
+  @doc """
+    Ends the given contest name and updates the end time
+  """
+  @spec end_contest(String.t()) :: {:ok, Ecto.Schema.t()}| {:error, Ecto.Changeset.t()}
   def end_contest(name) do
-    # update end_time
     Repo.transaction(fn ->
       ContestAgent.end_contest(name)
 
@@ -85,6 +95,10 @@ defmodule Quadquizaminos.Contests do
     end)
   end
 
+  @doc """
+  Updates the existing contest with the given attributes
+  """
+  @spec update_contest(Contest.t(), map()) :: {:ok, Contest.t()}| {:error, Ecto.Changeset.t()}
   def update_contest(contest, attrs) do
     contest
     |> Contest.changeset(attrs)
