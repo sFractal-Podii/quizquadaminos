@@ -75,8 +75,6 @@ sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclo
 	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
 
-sbom_convert:
-
 
 release: ## Build a release of the application with MIX_ENV=prod
 	MIX_ENV=prod mix deps.get --only prod
