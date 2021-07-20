@@ -21,15 +21,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("start", %{"contest" => name}, socket) do
-    socket =
-      if name in Contests.active_contests_names() do
-        Contests.resume_contest(name)
-        socket
-      else
-        _start_contest(socket, name)
-      end
-
-    {:noreply, socket}
+    {:noreply, start_or_resume_contest(socket, name)}
   end
 
   def handle_event("pause", %{"contest" => name}, socket) do
@@ -136,6 +128,15 @@ defmodule QuadquizaminosWeb.ContestsLive do
       <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
 
       """
+    end
+  end
+
+  defp start_or_resume_contest(socket, name) do
+    if name in Contests.active_contests_names() && GenServer.whereis(name |> String.to_atom()) do
+      Contests.resume_contest(name)
+      socket
+    else
+      _start_contest(socket, name)
     end
   end
 
