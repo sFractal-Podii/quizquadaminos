@@ -129,8 +129,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
                     <% {x, y} = SvgBoard.to_pixels( {x1, y1}, @box_width, @box_height ) %>
                     <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
-                    x="<%= x + 1 %>" y="<%= y + 1 %>"
-                    class="position-block <%= if @adding_block, do: "hover-block" %>"
+                    x="<%= x + 1 %>" y="<%= y + 1 %>" 
+                    class="position-block <%= if @adding_block and check_in_bottom(@bottom, y1), do: "hover-block" %>"
                     width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
                     <% end %>
 
@@ -646,6 +646,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         moving_block: false
       )
     else
+      socket.assigns |> IO.inspect(label: "socket")
       assign(socket, moving_block: false, adding_block: false)
     end
   end
@@ -853,4 +854,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp moving_title(_moving_block, _block_in_bottom), do: ""
+
+  defp check_in_bottom(bottom, y) do
+    IO.inspect(y, label: "y")
+    # IO.inspect(bottom, label: "bottom")
+    # ycoordinate =
+    #   bottom
+    #   |> Map.keys()
+    #   |> Enum.map(fn value -> elem(value, 1) end)
+    #   |> Enum.map(fn c -> Integer.to_string(c) end)
+    # if y in ycoordinate do
+    #   true
+    # else 
+    #   false
+    # end    
+  end
 end
