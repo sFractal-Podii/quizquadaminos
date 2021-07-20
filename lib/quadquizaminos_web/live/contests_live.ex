@@ -13,8 +13,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
     :timer.send_interval(1000, self(), :timer)
     QuadquizaminosWeb.Endpoint.subscribe("timer")
 
-    {:ok,
-     socket |> assign(payloads: [], started_contests: [], contests: Contests.list_contests())}
+    {:ok, socket |> assign(contests: Contests.list_contests())}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
@@ -86,13 +85,13 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp _start_contest(socket, name) do
     contests =
       Enum.map(socket.assigns.contests, fn
-        %Contest{name: name} ->
-          {:ok, {:ok, contest}} = Contests.start_contest(name)
-
-          contest
-
         contest ->
-          contest
+          if contest.name == name do
+            {:ok, {:ok, started_contest}} = Contests.start_contest(name)
+            started_contest
+          else
+            contest
+          end
       end)
 
     assign(socket, contests: contests)
@@ -101,13 +100,13 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp _end_contest(socket, name) do
     contests =
       Enum.map(socket.assigns.contests, fn
-        %Contest{name: name} ->
-          {:ok, {:ok, contest}} = Contests.end_contest(name)
-
-          contest
-
         contest ->
-          contest
+          if contest.name == name do
+            {:ok, {:ok, ended_contest}} = Contests.end_contest(name)
+            ended_contest
+          else
+            contest
+          end
       end)
 
     assign(socket, contests: contests)
