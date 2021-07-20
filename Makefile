@@ -1,10 +1,11 @@
 # Configuration
 	# -------------
 
-APP_NAME ?= `grep 'app:' mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g'`
+APP_NAME := $(shell grep 'app:' mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g')
 APP_VERSION := $(shell git fetch && git describe --tags `git rev-list --tags --max-count=1`)
 DOCKER_IMAGE_TAG ?= $(APP_VERSION)
 GIT_REVISION ?= `git rev-parse HEAD`
+SBOM_FILE_NAME_CY ?= $(APP_NAME).$(APP_VERSION).cyclonedx-sbom.1.0.0
 
 # Introspection targets
 # ---------------------
@@ -27,6 +28,9 @@ header:
 	@echo ""
 	@printf "\033[33m%-23s\033[0m" "DOCKER_IMAGE_TAG"
 	@printf "\033[35m%s\033[0m" $(DOCKER_IMAGE_TAG)
+	@echo "\n"
+	@printf "\033[33m%-23s\033[0m" "FILENMAE"
+	@printf "\033[35m%s\033[0m" $(SBOM_FILE_NAME_CY)
 	@echo "\n"
 
 .PHONY: targets
@@ -60,11 +64,16 @@ test: ## Run the test suite
 format: mix format ## Run formatting tools on the code
 
 
-.PHONY: sbom
+.PHONY: sbom sbom_fast
 sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
-	cd assets/  && npm install && npm install -g @cyclonedx/bom && cyclonedx-bom -o ../bom.xml -a ../elixir_bom.xml && cd ..
-	./cyclonedx-cli convert --input-file bom.xml --output-file bom.json
+	cd assets/  && npm install && npm install -g @cyclonedx/bom@2.0.2 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+
+sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
+	mix sbom.cyclonedx -o elixir_bom.xml
+	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
 
 
 release: ## Build a release of the application with MIX_ENV=prod
@@ -90,7 +99,7 @@ push-image-gcp: ## push image to gcp
 
 	gcloud container images delete gcr.io/twinklymaha/quadquiz:$(APP_VERSION) --force-delete-tags  || echo "no image to delete on the remote"
 	docker push gcr.io/twinklymaha/quadquiz:$(APP_VERSION)
-		
+
 push-and-serve-gcp: push-image-gcp deploy-existing-image ## creates docker image then push to gcp and launches an instance with the image
 
 .PHONY: deploy-existing-image
