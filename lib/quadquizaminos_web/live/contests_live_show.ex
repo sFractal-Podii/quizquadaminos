@@ -2,7 +2,6 @@ defmodule QuadquizaminosWeb.ContestsLive.Show do
   use QuadquizaminosWeb, :live_view
 
   alias Quadquizaminos.Contests
-  alias Quadquizaminos.GameBoard.Records
 
   def render(assigns) do
     ~L"""
@@ -11,9 +10,9 @@ defmodule QuadquizaminosWeb.ContestsLive.Show do
      <table>
      <tr>
      <th>Player</th>
-     <th phx-click="sort" phx-value-param="score">Score</th>
-     <th phx-click="sort" phx-value-param="dropped_bricks">Bricks</th>
-     <th phx-click="sort" phx-value-param="correctly_answered_qna">Questions</th>
+     <th>Score</th>
+     <th>Bricks</th>
+     <th>Questions</th>
      <th>Start time</th>
      <th>End time</th>
      </tr>
@@ -44,14 +43,7 @@ defmodule QuadquizaminosWeb.ContestsLive.Show do
         []
 
       contest ->
-        contest_record =
-          contest.start_time
-          |> Records.contest_game(contest.end_time, contest_id)
+        Contests.contest_game_records(contest)
     end
   end
-
-  # def handle_event("sort", %{"param" => param}, socket) do
-  #   socket = socket |> assign(contest_record: Records.top_10_games(param))
-  #   {:noreply, socket}
-  # end
 end
