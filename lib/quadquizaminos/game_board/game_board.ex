@@ -50,6 +50,11 @@ defmodule Quadquizaminos.GameBoard do
       order_by: [desc: r.score]
   end
 
+  def by_contest(query, contest_id) do
+    from q in query,
+      where: q.contest_id == ^contest_id
+  end
+
   def by_start_and_end_time(start_time, end_time) do
     from r in __MODULE__,
       where:

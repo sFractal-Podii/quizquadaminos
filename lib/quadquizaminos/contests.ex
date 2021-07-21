@@ -11,6 +11,10 @@ defmodule Quadquizaminos.Contests do
     |> Repo.insert()
   end
 
+  def get_contest(id) when is_integer(id) do
+    Repo.get(Contest, id)
+  end
+
   def get_contest(name) do
     Repo.get_by(Contest, name: name)
   end

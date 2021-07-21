@@ -119,7 +119,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
-       <button phx-click="final-score">Final Results</button>
+      <%= live_redirect "Final Results", class: "button",  to: Routes.live_path(@socket, QuadquizaminosWeb.ContestsLive.Show, contest)%>
+
       """
     else
       ~L"""

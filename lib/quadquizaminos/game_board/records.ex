@@ -20,16 +20,20 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> Repo.all()
   end
 
-  def contest_game(nil, nil), do: []
-
-  def contest_game(start_time, end_time) when not is_nil(end_time) and not is_nil(start_time) do
+  @doc """
+  Fetches the game records of a given contest that took place during the time of the contest
+  """
+  @spec contest_game(%DateTime{}, %DateTime{}, integer()) :: [%GameBoard{}, ...]
+  def contest_game(start_time, end_time, contest_id)
+      when not is_nil(end_time) and not is_nil(start_time) do
     start_time
     |> GameBoard.by_start_and_end_time(end_time)
+    |> GameBoard.by_contest(contest_id)
     |> GameBoard.preloads([:user])
     |> Repo.all()
   end
 
-  def contest_game(_, _), do: []
+  def contest_game(_start_time, _end_time, _contest_id), do: []
 
   def contest_game(nil), do: []
 
