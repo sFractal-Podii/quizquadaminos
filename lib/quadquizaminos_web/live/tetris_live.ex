@@ -622,8 +622,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
     # check if the coordinates are part of bottom, if they're not return the socket, if they're apply transformation
     # and return socket
-    IO.inspect(socket.assigns)
-
+    
     ycoordinate =
       socket.assigns.bottom
       |> Map.keys()
@@ -664,8 +663,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp block_in_bottom?(x, y, bottom) do
-    IO.inspect({x, y}, label: "block in bottom")
-
     Map.has_key?(bottom, {x, y})
   end
 
