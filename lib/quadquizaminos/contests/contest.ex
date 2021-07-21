@@ -8,6 +8,7 @@ defmodule Quadquizaminos.Contest do
     field :time_elapsed, :integer, virtual: true, default: 0
     field :status, :string, virtual: true
     field :name, :string
+    has_many :game_records, Quadquizaminos.GameBoard
   end
 
   def changeset(contest, attrs \\ %{}) do

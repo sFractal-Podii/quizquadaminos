@@ -15,12 +15,14 @@ defmodule Quadquizaminos.GameBoard do
     field :dropped_bricks, :integer
     field :bottom_blocks, :map
     field :correctly_answered_qna, :integer
+    belongs_to :contest, Quadquizaminos.Contest
   end
 
   def changeset(board, attrs \\ %{}) do
     board
     |> cast(attrs, [
       :start_time,
+      :contest_id,
       :end_time,
       :uid,
       :score,
