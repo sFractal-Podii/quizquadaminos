@@ -130,7 +130,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <% {x, y} = SvgBoard.to_pixels( {x1, y1}, @box_width, @box_height ) %>
                     <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
                     x="<%= x + 1 %>" y="<%= y + 1 %>" 
-                    class="position-block <%= if @adding_block and check_in_bottom(@bottom, y1), do: "hover-block" %>"
+                    class="position-block <%= if @adding_block and block_in_bottom?(@block_coordinates, @bottom), do: "hover-block" %>"
                     width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
                     <% end %>
 
@@ -622,6 +622,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
     # check if the coordinates are part of bottom, if they're not return the socket, if they're apply transformation
     # and return socket
+    IO.inspect(socket.assigns)
+
     ycoordinate =
       socket.assigns.bottom
       |> Map.keys()
@@ -662,6 +664,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp block_in_bottom?(x, y, bottom) do
+    IO.inspect({x, y}, label: "block in bottom")
+
     Map.has_key?(bottom, {x, y})
   end
 
@@ -855,18 +859,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp moving_title(_moving_block, _block_in_bottom), do: ""
 
-  defp check_in_bottom(bottom, y) do
-    IO.inspect(y, label: "y")
-    # IO.inspect(bottom, label: "bottom")
-    # ycoordinate =
-    #   bottom
-    #   |> Map.keys()
-    #   |> Enum.map(fn value -> elem(value, 1) end)
-    #   |> Enum.map(fn c -> Integer.to_string(c) end)
-    # if y in ycoordinate do
-    #   true
-    # else 
-    #   false
-    # end    
-  end
+  defp block_in_bottom?({x, y, _color} = _coordinates, bottom) do
+    block_in_bottom?(x, y, bottom)
+   end
 end
