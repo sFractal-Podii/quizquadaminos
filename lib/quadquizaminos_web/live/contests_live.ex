@@ -80,11 +80,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, assign(socket, contests: contests ++ inactive_contest)}
   end
 
-  defp contest(name, started_contests) do
-    Enum.find(started_contests, fn contest -> contest.name == name end)
-  end
-
-
   defp _create_contest(socket, contest_name) do
     contests = socket.assigns.contests
 

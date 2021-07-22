@@ -17,7 +17,7 @@ defmodule Quadquizaminos.Contests do
   @doc """
   Inserts the created contest in the database
   """
-  @spec create_contest(map()) :: {:ok, Ecto.Schema.t()}| {:error, Ecto.Changeset.t()}
+  @spec create_contest(map()) :: {:ok, %Contest{}} | {:error, Ecto.Changeset.t()}
   def create_contest(attrs) do
     %Contest{}
     |> Contest.changeset(attrs)
