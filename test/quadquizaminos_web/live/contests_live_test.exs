@@ -32,22 +32,30 @@ test "admin can stop a contest", %{conn: conn} do
 
   assert html =~ "Final Results"
   assert html =~ "<td>#{DateTime.truncate(contest.end_time, :second)}</td>"
-
-
-
 end
 
 test "admin can create a contest", %{conn: conn} do
   {:ok, view, _html} = live(conn, "/contests")
 
   html = render_keydown(view, :save, %{"key" => "Enter", "value" => "ContestD"})
+  assert row_count(html) == 2
+  assert html =~ "<td>ContestD</td>"
 
-  assert html =~ "<td>ContestD</td>" && "<td>ContestC</td>"
+
 end
 
 test "admin can see the timer", %{conn: conn}do
   conn = get(conn, "/contests")
-  assert html_response(conn, 200) =~ "<p>00:00:00</p>"
+  assert html_response(conn, 200) =~ "<td>\n\n\n<p>00:00:00</p>\n\n\n"
+end
+
+defp row_count(html) do
+  row =
+    ~r/<tr>/
+    |> Regex.scan(html)
+    |> Enum.count()
+  # row is deducted by 2 due to the <tr> for table head and also <tr> for footer
+  row - 2
 end
 
 end
