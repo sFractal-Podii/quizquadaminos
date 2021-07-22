@@ -111,7 +111,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
       """
     else
       ~L"""
-      <button class= "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="start" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %> >Start</button>
+      <i class="fas fa-play-circle fa-lg" "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="start" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: class="fas fa-play-circle disabled fa-lg" %>></i>
       """
     end
   end

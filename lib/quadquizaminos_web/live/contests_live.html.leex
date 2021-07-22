@@ -19,7 +19,7 @@
                  <%= start_or_pause_button(assigns,contest) %>
                  </td>
                  <td>
-                     <button class= "<%= if contest.end_time, do: 'not_allowed' %> red" phx-click="stop" phx-value-contest= '<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>>Stop</button>
+                     <i class="fas fa-stop-circle fa-lg" "<%= if contest.end_time, do: 'not_allowed' %> red" phx-click="stop" phx-value-contest= '<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>></i>
                  </td>
                  <td>
                      <button class= "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="reset" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>>Reset</button>
