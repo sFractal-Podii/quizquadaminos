@@ -119,8 +119,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
                     <% {x, y} = SvgBoard.to_pixels( {x1, y1}, @box_width, @box_height ) %>
                     <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
-                    x="<%= x + 1 %>" y="<%= y + 1 %>"
-                    class="position-block <%= if @adding_block, do: "hover-block" %>"
+                    x="<%= x + 1 %>" y="<%= y + 1 %>" 
+                    class="position-block <%= if @adding_block and block_in_bottom?(@block_coordinates, @bottom), do: "hover-block" %>"
                     width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
                     <% end %>
 
@@ -602,6 +602,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp move_block(socket, x, y, block_coordinates, true = _adding_block, true = _moving_block) do
     # check if the coordinates are part of bottom, if they're not return the socket, if they're apply transformation
     # and return socket
+
     ycoordinate =
       socket.assigns.bottom
       |> Map.keys()
@@ -837,4 +838,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp moving_title(_moving_block, _block_in_bottom), do: ""
+
+  defp block_in_bottom?({x, y, _color} = _coordinates, bottom) do
+    block_in_bottom?(x, y, bottom)
+  end
 end
