@@ -1,9 +1,7 @@
     <div class="container">
         <h1>Contests</h1>
-        <%= if admin?(@current_user) do %>
-         <input type="text" phx-keydown="save"  phx-key="Enter">
-         <% end %>
-          <table>
+        <%= raw display_text_input(admin?(@current_user)) %>
+             <table>
              <tr>
                  <th>Name</th>
                  <%= if admin?(@current_user) do %>
