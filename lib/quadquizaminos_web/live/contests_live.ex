@@ -1,19 +1,20 @@
 defmodule QuadquizaminosWeb.ContestsLive do
   use Phoenix.LiveView
-  import Phoenix.HTML.Form
   import Phoenix.LiveView.Helpers
 
-  alias Quadquizaminos.Repo
-
-  alias Quadquizaminos.{Contests, Contest}
+  alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :timer)
     QuadquizaminosWeb.Endpoint.subscribe("timer")
 
-    {:ok, socket |> assign(contests: Contests.list_contests())}
+    {:ok,
+     socket
+     |> assign(
+       current_user: Map.get(session, "uid"),
+       contests: Contests.list_contests()
+     )}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
@@ -138,6 +139,12 @@ defmodule QuadquizaminosWeb.ContestsLive do
     else
       _start_contest(socket, name)
     end
+  end
+
+  defp admin?(current_user) do
+    ids = Application.get_env(:quadquizaminos, :github_ids)
+
+    current_user in (ids |> Enum.map(&(&1 |> to_string())))
   end
 
   defp to_human_time(seconds) do

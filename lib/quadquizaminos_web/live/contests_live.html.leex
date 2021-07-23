@@ -1,12 +1,16 @@
     <div class="container">
         <h1>Contests</h1>
+        <%= if admin?(@current_user) do %>
          <input type="text" phx-keydown="save"  phx-key="Enter">
+         <% end %>
           <table>
              <tr>
                  <th>Name</th>
+                 <%= if admin?(@current_user) do %>
                  <th></th>
                  <th></th>
                  <th></th>
+                 <% end %>
                  <th></th>
                  <th>Start time</th>
                  <th>End time</th>
@@ -14,7 +18,8 @@
              <tr>
                 <%= for contest <- @contests do %>
                   <tr>
-         <td><%= contest.name%></td>
+                  <td><%= contest.name%></td>
+                  <%= if admin?(@current_user) do %>
                  <td>
                  <%= start_or_pause_button(assigns,contest) %>
                  </td>
@@ -25,6 +30,7 @@
                      <button class= "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="reset" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>>Reset</button>
 
                  </td>
+                 <% end %>
                  <td>
 
                     <%= timer_or_final_result(assigns, contest) %>
