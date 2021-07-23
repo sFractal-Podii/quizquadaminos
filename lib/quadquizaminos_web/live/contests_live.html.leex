@@ -1,4 +1,7 @@
     <div class="container">
+        <%= if @live_action == :show do %>
+     <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records %>
+     <% else %>
         <h1>Contests</h1>
          <input type="text" phx-keydown="save"  phx-key="Enter">
           <table>
@@ -34,4 +37,6 @@
           </tr>
           <% end %>
          </table>
+         <% end %>
     </div>
+

@@ -42,6 +42,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _update_contests_timer(socket)}
   end
 
+  def handle_params(%{"contest_id" => contest_id}, _uri, socket) do
+    {:noreply, assign(socket, contest_records: contest_records(contest_id))}
+  end
+
+  def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
+  end
+
+  defp contest_records(contest_id) do
+    case String.to_integer(contest_id) |> Contests.get_contest() do
+      nil ->
+        []
+
+      contest ->
+        Contests.contest_game_records(contest)
+    end
+  end
+
   defp _update_contests_timer(socket) do
     inactive_contest =
       Enum.reject(socket.assigns.contests, fn contest ->
@@ -119,7 +137,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
-      <%= live_redirect "Final Results", class: "button",  to: Routes.live_path(@socket, QuadquizaminosWeb.ContestsLive.Show, contest)%>
+      <%= live_redirect "Final Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
 
       """
     else
