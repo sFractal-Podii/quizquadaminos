@@ -54,10 +54,15 @@
   text-decoration: none;
   cursor: pointer;
 }
-.not_allowed:hover{
+
+
+.disabled:hover{
   cursor: not-allowed;
 }
 
+.not_allowed:hover{
+  cursor: not-allowed;
+}
 
 /* Alerts and form errors */
 .alert {
@@ -151,4 +156,8 @@
 
 #content {
   min-height: 87vh;
+}
+.icon-button {
+  padding: 0 1rem;
+  line-height: 0;
 }
