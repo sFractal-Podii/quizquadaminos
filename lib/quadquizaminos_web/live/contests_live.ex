@@ -125,11 +125,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp start_or_pause_button(assigns, contest) do
     if contest.status == "running" do
       ~L"""
-      <button class= "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="pause" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> >Pause</button>
+      <button class= "<%= if contest.end_time, do: 'disabled' %>" phx-click="pause" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> >Pause</button>
       """
     else
       ~L"""
-      <button class= "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="start" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %> >Start</button>
+      <button class= "<%= if contest.end_time, do: 'disabled' %>  icon-button" phx-click="start" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>><i class="fas fa-play-circle fa-2x"></i></button>
       """
     end
   end
@@ -174,5 +174,15 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def truncate_date(date) do
     DateTime.truncate(date, :second)
+  end
+
+  def contest_running?(contest) do
+    contest.status == "running"
+  end
+
+  def maybe_disable_button(contest) do
+    if contest.end_time || not contest_running?(contest) do
+      "disabled"
+    end
   end
 end
