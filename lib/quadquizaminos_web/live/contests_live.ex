@@ -42,8 +42,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _update_contests_timer(socket)}
   end
 
-  def handle_params(%{"contest_id" => contest_id}, _uri, socket) do
-    {:noreply, assign(socket, contest_records: contest_records(contest_id))}
+  def handle_params(%{"id" => id}, _uri, socket) do
+    {:noreply, assign(socket, contest_records: contest_records(id))}
   end
 
   def handle_params(_params, _uri, socket) do
