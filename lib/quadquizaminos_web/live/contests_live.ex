@@ -24,7 +24,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, start_or_resume_contest(socket, name)}
   end
 
-  def handle_event("pause", %{"contest" => name}, socket) do
+  def handle_event("restart", %{"contest" => name}, socket) do
     Contests.pause_contest(name)
     {:noreply, socket}
   end
@@ -107,7 +107,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp start_or_pause_button(assigns, contest) do
     if contest.status == "running" do
       ~L"""
-      <button class= "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="pause" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> >Pause</button>
+      <button class= "<%= if contest.end_time, do: 'not_allowed' %>" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-step-backward fa-2x"></i></button>
       """
     else
       ~L"""
