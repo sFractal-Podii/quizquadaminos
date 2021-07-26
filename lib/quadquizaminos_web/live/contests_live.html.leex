@@ -1,4 +1,7 @@
     <div class="container">
+     <%= if @live_action == :show do %>
+     <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records %>
+     <% else %>
         <h1>Contests</h1>
         <input type="text" phx-keydown="save" phx-key="Enter">
         <table>
@@ -11,9 +14,7 @@
                 <th>Start time</th>
                 <th>End time</th>
             </tr>
-            <tr>
                 <%= for contest <- @contests do %>
-                  <%= inspect(contest.status) %>
             <tr>
                 <td><%= contest.name%></td>
                 <td>
@@ -24,15 +25,15 @@
                 </td>
                 <td>
                   <button class="<%= maybe_disable_button(contest) %>" phx-click="reset" phx-value-contest='<%= contest.name %>' <%=  maybe_disable_button(contest) %> >Reset</button>
-
                 </td>
                 <td>
-
-                    <%= timer_or_final_result(assigns, contest) %>
+                <%= timer_or_final_result(assigns, contest) %>
                 </td>
                 <td><%= truncate_date(contest.start_time) %></td>
                 <td><%= truncate_date(contest.end_time) %></td>
             </tr>
-            <% end %>
+          <% end %>
         </table>
+    <% end %>
     </div>
+
