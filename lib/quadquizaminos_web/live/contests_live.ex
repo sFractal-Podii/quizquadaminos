@@ -4,6 +4,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   import Phoenix.HTML, only: [raw: 1]
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
+  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :timer)
@@ -41,6 +42,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def handle_info(:timer, socket) do
     {:noreply, _update_contests_timer(socket)}
+  end
+
+  def handle_params(%{"id" => id}, _uri, socket) do
+    {:noreply, assign(socket, contest_records: contest_records(id))}
+  end
+
+  def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
+  end
+
+  defp contest_records(contest_id) do
+    case String.to_integer(contest_id) |> Contests.get_contest() do
+      nil ->
+        []
+
+      contest ->
+        Contests.contest_game_records(contest)
+    end
   end
 
   defp _update_contests_timer(socket) do
@@ -120,7 +139,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
-       <button phx-click="final-score">Final Results</button>
+      <%= live_redirect "Final Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
+
       """
     else
       ~L"""

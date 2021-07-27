@@ -1,4 +1,7 @@
     <div class="container">
+     <%= if @live_action == :show do %>
+     <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records %>
+     <% else %>
         <h1>Contests</h1>
         <%= raw display_text_input(admin?(@current_user)) %>
              <table>
@@ -34,6 +37,8 @@
                 <td><%= truncate_date(contest.start_time) %></td>
                 <td><%= truncate_date(contest.end_time) %></td>
             </tr>
-            <% end %>
+          <% end %>
         </table>
+    <% end %>
     </div>
+

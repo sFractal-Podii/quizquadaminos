@@ -15,12 +15,14 @@ defmodule Quadquizaminos.GameBoard do
     field :dropped_bricks, :integer
     field :bottom_blocks, :map
     field :correctly_answered_qna, :integer
+    belongs_to :contest, Quadquizaminos.Contest
   end
 
   def changeset(board, attrs \\ %{}) do
     board
     |> cast(attrs, [
       :start_time,
+      :contest_id,
       :end_time,
       :uid,
       :score,
@@ -46,6 +48,11 @@ defmodule Quadquizaminos.GameBoard do
     from r in __MODULE__,
       where: r.start_time >= ^start_time,
       order_by: [desc: r.score]
+  end
+
+  def by_contest(query, contest_id) do
+    from q in query,
+      where: q.contest_id == ^contest_id
   end
 
   def by_start_and_end_time(start_time, end_time) do
