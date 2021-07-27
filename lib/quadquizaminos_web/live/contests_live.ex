@@ -25,7 +25,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("restart", %{"contest" => name}, socket) do
-    Contests.pause_contest(name)
+    IO.puts("===got here====")
+    Contests.restart_contest(name)
     {:noreply, socket}
   end
 
