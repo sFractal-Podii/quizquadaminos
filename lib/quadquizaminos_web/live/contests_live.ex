@@ -125,7 +125,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp start_or_pause_button(assigns, contest) do
     if contest.status == "running" do
       ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %>" phx-click="pause" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> >Pause</button>
+      <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo"></i></button>
       """
     else
       ~L"""
