@@ -8,13 +8,16 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :timer)
-    QuadquizaminosWeb.Endpoint.subscribe("timer")
+    # QuadquizaminosWeb.Endpoint.subscribe("timer")
+    QuadquizaminosWeb.Endpoint.subscribe("scores")
 
     {:ok,
      socket
      |> assign(
        current_user: Map.get(session, "uid"),
-       contests: Contests.list_contests()
+       contests: Contests.list_contests(),
+       contest_records: [],
+       contest_id: nil
      )}
   end
 
@@ -37,6 +40,12 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("stop", %{"contest" => name}, socket) do
+    QuadquizaminosWeb.Endpoint.broadcast(
+      "contest_record",
+      "record_contest_scores",
+      name
+    )
+
     {:noreply, _end_contest(socket, name)}
   end
 
@@ -44,12 +53,35 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _update_contests_timer(socket)}
   end
 
+  def handle_info(%{event: "current_score", payload: payload}, socket) do
+    contest_records = socket.assigns.contest_records
+
+    contest_records =
+      (contest_records ++ payload)
+      |> Enum.sort_by(& &1.score, :desc)
+      |> IO.inspect(label: "=}}}}}}}}}}}}}}}}}}}}]]")
+      |> Enum.uniq_by(& &1.uid)
+      |> Enum.take(10)
+
+    contest_records =
+      case socket.assigns.contest_id do
+        nil -> contest_records
+        contest_id -> contest_live_records(contest_records, contest_id)
+      end
+
+    {:noreply, socket |> assign(contest_records: contest_records)}
+  end
+
   def handle_params(%{"id" => id}, _uri, socket) do
-    {:noreply, assign(socket, contest_records: contest_records(id))}
+    {:noreply, assign(socket, id: id, contest_records: contest_records(id))}
   end
 
   def handle_params(_params, _uri, socket) do
     {:noreply, socket}
+  end
+
+  defp contest_live_records(records, contest_id) do
+    Enum.filter(records, fn record -> record.contest_id == contest_id end)
   end
 
   defp contest_records(contest_id) do
@@ -149,6 +181,17 @@ defmodule QuadquizaminosWeb.ContestsLive do
       <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
 
       """
+    end
+  end
+
+  defp live_result_button(assigns, contest) do
+    if contest.name in Contests.active_contests_names() do
+      ~L"""
+      <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
+
+      """
+    else
+      ""
     end
   end
 

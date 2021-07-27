@@ -27,8 +27,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"uid" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
-    :timer.send_interval(10_000, self(), :broadcast_score)
-    QuadquizaminosWeb.Endpoint.subscribe("contest_timer")
+    :timer.send_interval(1000, self(), :broadcast_score)
+    QuadquizaminosWeb.Endpoint.subscribe("contest_record")
 
     {:ok,
      socket
@@ -256,7 +256,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
-      correctly_answered_qna: socket.assigns.correct_answers
+      correctly_answered_qna: socket.assigns.correct_answers,
+      state: socket.assigns.state
     }
   end
 
@@ -663,13 +664,40 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_info(:broadcast_score, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "scores",
-      "current_score",
-      game_record(socket) |> Map.delete(:end_time)
-    )
+    if socket.assigns.state == :playing do
+      active_contests = Quadquizaminos.Contests.active_contests_names()
+
+      records =
+        Enum.map(active_contests, fn name ->
+          contest = Quadquizaminos.Contests.get_contest(name)
+
+          %{game_record(socket) | end_time: nil}
+          |> Map.put(:contest_id, contest.id)
+        end)
+
+      QuadquizaminosWeb.Endpoint.broadcast(
+        "scores",
+        "current_score",
+        records
+      )
+    end
 
     {:noreply, socket}
+  end
+
+  def handle_info(%{event: "record_contest_scores", payload: contest_name}, socket) do
+    contest = Quadquizaminos.Contests.get_contest(contest_name)
+
+    record =
+      socket
+      |> game_record()
+      |> Map.put(:contest_id, contest.id)
+
+    if socket.assigns.state == :playing do
+      Records.record_player_game(true, record)
+    end
+
+    {:noreply, socket |> assign(state: :game_over)}
   end
 
   def handle_info(%{event: "timer", payload: _payload}, socket) do
