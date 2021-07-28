@@ -50,12 +50,13 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
     <%= text_input f, :guess %>
+    <button class="button-outline" phx-click="skip-question" phx-value-category="freeform">Skip Question</button><br>
     <%= submit  "Continue" %>
     </form>
     """
   end
 
-  defp answers(assigns, _category) do
+  defp answers(assigns, category) do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
     <%= for {answer, index}<- @qna.answers do %>
@@ -64,6 +65,8 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
         <%= answer %>
         <% end %> <!-- end label -->
     <% end %>
+    <br>
+    <button class="button-outline" phx-click="skip-question" phx-value-category="<%= category %>" >Skip Question</button>
     <%= submit  "Continue" %>
     </form>
     """
