@@ -24,10 +24,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, start_or_resume_contest(socket, name)}
   end
 
-  def handle_event("restart", %{"contest" => name}, socket) do
-    IO.puts("===got here====")
-    Contests.restart_contest(name)
-    {:noreply, socket}
+  def handle_event("restart", %{"contest" => name}, socket) do    
+    {:noreply, _restart_contest(socket, name)}
   end
 
   def handle_event("reset", %{"contest" => name}, socket) do
@@ -108,6 +106,20 @@ defmodule QuadquizaminosWeb.ContestsLive do
     assign(socket, contests: contests)
   end
 
+  defp _restart_contest(socket, name) do
+    contests =
+        Enum.map(socket.assigns.contests, fn 
+          contest ->
+            if contest.name == name do
+              {:ok, restarted_contest} = Contests.restart_contest(name)
+              restarted_contest
+            else
+              contest
+            end
+          end)
+      assign(socket, contests: contests)
+  end 
+
   defp _end_contest(socket, name) do
     contests =
       Enum.map(socket.assigns.contests, fn
@@ -126,7 +138,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp start_or_pause_button(assigns, contest) do
     if contest.status == "running" do
       ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo"></i></button>
+      <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo fa-2x"></i></button>
       """
     else
       ~L"""
