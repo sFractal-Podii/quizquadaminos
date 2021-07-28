@@ -50,17 +50,6 @@ test "admin can see the timer", %{conn: conn}do
   assert html_response(conn, 200) =~ "<td>\n\n\n<p>00:00:00</p>\n\n\n"
 end
 
-test "admin can see the count up timer increase", %{conn: conn}do
-  {:ok, view, _html} = live(conn, "/contests")
-  assert ContestAgent.time_elapsed("ContestC") == 0
-  render_click(view, :start, %{"contest" => "ContestC"})
-  assert render(view) =~ "00:00:00"
-  Process.sleep(1000)
-  send(view.pid, :timer)
-  assert ContestAgent.time_elapsed("ContestC") == 1
-  assert render(view) =~ "00:00:01"
-end
-
 defp row_count(html) do
   row =
     ~r/<tr>/
