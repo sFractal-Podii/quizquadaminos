@@ -5,7 +5,7 @@ APP_NAME := $(shell grep 'app:' mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app
 APP_VERSION := $(shell git fetch && git describe --tags `git rev-list --tags --max-count=1`)
 DOCKER_IMAGE_TAG ?= $(APP_VERSION)
 GIT_REVISION ?= `git rev-parse HEAD`
-SBOM_FILE_NAME_CY ?= $(APP_NAME).$(APP_VERSION).cyclonedx-sbom.1.0.0
+SBOM_FILE_NAME_CY ?= $(APP_NAME).$(APP_VERSION)-cyclonedx-sbom.1.0.0
 
 # Introspection targets
 # ---------------------
@@ -29,7 +29,7 @@ header:
 	@printf "\033[33m%-23s\033[0m" "DOCKER_IMAGE_TAG"
 	@printf "\033[35m%s\033[0m" $(DOCKER_IMAGE_TAG)
 	@echo "\n"
-	@printf "\033[33m%-23s\033[0m" "FILENMAE"
+	@printf "\033[33m%-23s\033[0m" "FILENAME"
 	@printf "\033[35m%s\033[0m" $(SBOM_FILE_NAME_CY)
 	@echo "\n"
 

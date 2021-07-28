@@ -34,7 +34,7 @@ config :quadquizaminos,
   qna_directory: Path.join(Path.dirname(__DIR__), "qna")
 
 config :quadquizaminos,
-  freeform_answers: [
+  bonus_answers: [
     "001": "test",
     "002": "two words"
   ]

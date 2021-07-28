@@ -122,13 +122,13 @@ defmodule Quadquizaminos.QnA do
 
   defp file_position(position, _index, _count), do: position
 
-  defp correct_answer(answers, "freeform") do
+  defp correct_answer(answers, "bonus") do
     regex = ~r/\n\*(.+?)\n/
 
     [[_, clue] | _t] = Regex.scan(regex, answers)
     clue = String.trim(clue)
 
-    Application.get_env(:quadquizaminos, :freeform_answers)[String.to_atom(clue)]
+    Application.get_env(:quadquizaminos, :bonus_answers)[String.to_atom(clue)]
   end
 
   defp correct_answer(answers, _category) do
