@@ -8,8 +8,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :timer)
-    # QuadquizaminosWeb.Endpoint.subscribe("timer")
-    QuadquizaminosWeb.Endpoint.subscribe("scores")
+    QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
 
     {:ok,
      socket
@@ -47,13 +46,12 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _update_contests_timer(socket)}
   end
 
-  def handle_info(%{event: "current_score", payload: payload}, socket) do
+  def handle_info(%{event: "current_scores", payload: payload}, socket) do
     contest_records = socket.assigns.contest_records
 
     contest_records =
       (contest_records ++ payload)
       |> Enum.sort_by(& &1.score, :desc)
-      |> IO.inspect(label: "=}}}}}}}}}}}}}}}}}}}}]]")
       |> Enum.uniq_by(& &1.uid)
       |> Enum.take(10)
 

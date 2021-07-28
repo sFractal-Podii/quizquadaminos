@@ -1,7 +1,7 @@
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
-
+  alias Quadquizaminos.Contests
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.SvgBoard
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
@@ -256,8 +256,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
-      correctly_answered_qna: socket.assigns.correct_answers,
-      state: socket.assigns.state
+      correctly_answered_qna: socket.assigns.correct_answers
     }
   end
 
@@ -283,7 +282,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    Records.record_player_game(response.game_over, game_record(socket))
+    game_records =
+      Contests.active_contests_names()
+      |> contest_game_records(game_record(socket))
+
+    Records.record_player_game(response.game_over, game_records)
 
     socket
     |> assign(brick: response.brick)
@@ -677,24 +680,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_info(:broadcast_score, socket) do
-    if socket.assigns.state == :playing do
-      active_contests = Quadquizaminos.Contests.active_contests_names()
-
-      records =
-        Enum.map(active_contests, fn name ->
-          contest = Quadquizaminos.Contests.get_contest(name)
-
-          %{game_record(socket) | end_time: nil}
-          |> Map.put(:contest_id, contest.id)
-        end)
-
-      QuadquizaminosWeb.Endpoint.broadcast(
-        "scores",
-        "current_score",
-        records
-      )
-    end
-
+    socket |> game_record() |> broadcast_score()
     {:noreply, socket}
   end
 
@@ -710,15 +696,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Records.record_player_game(true, record)
     end
 
-    {:noreply, socket |> assign(state: :game_over)}
-  end
-
-  def handle_info(%{event: "timer", payload: _payload}, socket) do
-    if socket.assigns.state == :playing do
-      Records.record_player_game(true, game_record(socket))
-    end
-
-    {:noreply, socket |> assign(state: :game_over)}
+    {:noreply,
+     socket
+     |> assign(
+       state:
+         if(Enum.empty?(Contests.active_contests_names()),
+           do: :game_over,
+           else: socket.assigns.state
+         )
+     )}
   end
 
   def handle_info(:tick, socket) do
@@ -882,5 +868,36 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp block_in_bottom?({x, y, _color} = _coordinates, bottom) do
     block_in_bottom?(x, y, bottom)
+  end
+
+  defp broadcast_score(records) do
+    active_contests = Contests.active_contests_names()
+
+    records =
+      Enum.map(active_contests, fn name ->
+        contest = Contests.get_contest(name)
+
+        %{records | end_time: nil}
+        |> Map.put(:contest_id, contest.id)
+      end)
+
+    QuadquizaminosWeb.Endpoint.broadcast(
+      "contest_scores",
+      "current_scores",
+      records
+    )
+  end
+
+  defp contest_game_records(active_contests, records) do
+    if Enum.empty?(active_contests) do
+      records
+    else
+      Enum.map(active_contests, fn name ->
+        contest = Quadquizaminos.Contests.get_contest(name)
+
+        records
+        |> Map.put(:contest_id, contest.id)
+      end)
+    end
   end
 end
