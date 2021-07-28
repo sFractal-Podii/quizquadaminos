@@ -30,10 +30,20 @@ defmodule Quadquizaminos.Contests do
     |> Repo.insert()
   end
 
+  @doc """
+  Gets the given contest by name
+  """
   def get_contest(name) do
     Repo.get_by(Contest, name: name)
   end
 
+ @doc """
+  Displays all the contests
+  ## Example
+  iex> list_contests
+         ["contestA", "contestB", ...]
+  """
+  @spec list_contests() :: []
   def list_contests do
     Repo.all(Contest)
   end
@@ -65,10 +75,16 @@ defmodule Quadquizaminos.Contests do
     ContestAgent.resume_contest(name)
   end
 
+  @doc """
+  Checks on the status of the contest
+  """
   def contest_status(name) do
     ContestAgent.contest_status(name)
   end
 
+  @doc """
+  Gets the state of time elapsed
+  """
   def time_elapsed(name) do
     ContestAgent.time_elapsed(name)
   end

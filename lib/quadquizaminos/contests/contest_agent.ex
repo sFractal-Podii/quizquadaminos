@@ -1,13 +1,15 @@
 defmodule Quadquizaminos.Contest.ContestAgent do
-  @moduledoc """
-  Each contest spins up a new agent which contains the following information about the contest
+   @moduledoc """
+  Each contest spins up a dynamically supervised agent which contains the following information about the contest
     - time elapsed
     - status of the contest
+    - contest name
   The agent can have the following statuses
    - running
    - paused
+   - stopped
 
-  The agent is responsible for receiving events that will start or stop it
+  The agent is responsible for receiving events that will start, reset or stop it
   """
 
   alias Quadquizaminos.Contests
