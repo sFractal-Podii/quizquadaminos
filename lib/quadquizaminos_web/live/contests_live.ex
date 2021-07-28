@@ -24,13 +24,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, start_or_resume_contest(socket, name)}
   end
 
-  def handle_event("restart", %{"contest" => name}, socket) do    
+  def handle_event("restart", %{"contest" => name}, socket) do
     {:noreply, _restart_contest(socket, name)}
-  end
-
-  def handle_event("reset", %{"contest" => name}, socket) do
-    Contests.reset_contest(name)
-    {:noreply, socket}
   end
 
   def handle_event("stop", %{"contest" => name}, socket) do
@@ -108,17 +103,18 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   defp _restart_contest(socket, name) do
     contests =
-        Enum.map(socket.assigns.contests, fn 
-          contest ->
-            if contest.name == name do
-              {:ok, restarted_contest} = Contests.restart_contest(name)
-              restarted_contest
-            else
-              contest
-            end
-          end)
-      assign(socket, contests: contests)
-  end 
+      Enum.map(socket.assigns.contests, fn
+        contest ->
+          if contest.name == name do
+            {:ok, restarted_contest} = Contests.restart_contest(name)
+            restarted_contest
+          else
+            contest
+          end
+      end)
+
+    assign(socket, contests: contests)
+  end
 
   defp _end_contest(socket, name) do
     contests =
