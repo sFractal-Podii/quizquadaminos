@@ -119,7 +119,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
                     <% {x, y} = SvgBoard.to_pixels( {x1, y1}, @box_width, @box_height ) %>
                     <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
-                    x="<%= x + 1 %>" y="<%= y + 1 %>" 
+                    x="<%= x + 1 %>" y="<%= y + 1 %>"
                     class="position-block <%= if @adding_block and block_in_bottom?(@block_coordinates, @bottom), do: "hover-block" %>"
                     width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
                     <% end %>
@@ -340,6 +340,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
        category: category,
        categories: categories,
        qna: QnA.question(category, question_position)
+     )}
+  end
+
+  def handle_event("skip-question", %{"category" => category}, socket) do
+    categories = socket.assigns.categories
+    question_position = categories[category]
+    categories = increment_position(categories, category, question_position)
+
+    {:noreply,
+     socket
+     |> assign(
+       category: nil,
+       categories: categories
      )}
   end
 
