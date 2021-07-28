@@ -15,7 +15,13 @@ defmodule Quadquizaminos.Contests do
   import Ecto.Query, only: [from: 2]
 
   @doc """
-  Inserts the created contest in the database
+    creates a contest with the given params
+     ## Example
+     iex> create_contest(%{name: "ContestB"})
+          {:ok,  %Contest{}}
+          
+      iex> create_contest(%{name: "C"})
+            {:error,  changeset}
   """
   @spec create_contest(map()) :: {:ok, %Contest{}} | {:error, Ecto.Changeset.t()}
   def create_contest(attrs) do
@@ -34,6 +40,9 @@ defmodule Quadquizaminos.Contests do
 
   @doc """
   Gives us the names of all contests that are either running or paused
+  ## Example
+  iex> active_contests_name
+         ["contestA", "contestB", ...]
   """
   @spec active_contests_names() :: []
   def active_contests_names do
