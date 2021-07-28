@@ -13,12 +13,11 @@ defmodule Quadquizaminos.Contest.ContestAgent do
   The agent is stopped to end the process.
   """
 
-  alias Quadquizaminos.Contests
   use Agent
 
   def start_link(opts) do
     state = %{contest_name: opts[:name], time_elapsed: 0, status: :running}
-    {:ok, pid} = Agent.start_link(fn -> state end, opts)
+    {:ok, _pid} = Agent.start_link(fn -> state end, opts)
 
     :timer.apply_interval(1000, __MODULE__, :update_timer, [opts[:name]])
     state

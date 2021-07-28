@@ -1,7 +1,6 @@
 defmodule QuadquizaminosWeb.LeaderboardLive do
   use Phoenix.LiveView
 
-  import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.GameBoard.Records

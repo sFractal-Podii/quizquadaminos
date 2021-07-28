@@ -31,7 +31,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive.Show do
     {:noreply, socket |> assign(record: Records.get_game!(board_id))}
   end
 
-  def display_bottom(nil = _bottom_blocks, assigns) do
+  def display_bottom(nil = _bottom_blocks, _assigns) do
     ""
   end
 

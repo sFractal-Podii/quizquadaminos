@@ -49,13 +49,13 @@ defmodule QuadquizaminosWeb.ContestboardLive do
           <h2><%=Util.count_display(seconds)%><sub>s</sub></h2>
         </div>
     </div>
-     <%= raw display_timer_button(@running) %>
+     <%= raw display_timer_button(@rnuning) %>
       <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
      <button phx-click="reset">Reset</button>
      <button phx-click="final-score">Final Results</button>
      </section>
     </div>
-    <%= end %>
+    <% end %>
 
     <div class="column column-50 column-offset-10">
     <div class="container">
@@ -139,8 +139,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     end
   end
 
-  defp user_name(%Quadquizaminos.Accounts.User{} = user, _uid), do: user.name
-
   def handle_event(
         "timer",
         %{"timer" => "start"},
@@ -167,7 +165,7 @@ defmodule QuadquizaminosWeb.ContestboardLive do
   end
 
   def handle_event("timer", %{"timer" => "stop"}, socket) do
-    {_hours, minutes, seconds} = to_human_time(socket.assigns.contest_counter)
+    {_hours, _minutes, _seconds} = to_human_time(socket.assigns.contest_counter)
     end_time = DateTime.utc_now()
 
     Records.latest_contest() |> Records.update_contest(%{end_time: end_time})

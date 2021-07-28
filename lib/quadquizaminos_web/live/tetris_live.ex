@@ -11,8 +11,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Brick,
     Hints,
     Points,
-    Powers,
-    Presets,
     QnA,
     Speed,
     Tetris,
@@ -37,7 +35,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> start_game()}
   end
 
-  def render(%{state: :starting, live_action: live_action} = assigns) do
+  def render(%{state: :starting, live_action: _live_action} = assigns) do
     ~L"""
       <div class ="container">
         <div class="row">
@@ -168,25 +166,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> init_game
     |> new_block
     |> show
-  end
-
-  ## raise_speed gets removed once dev cheat gets removed
-  defp raise_speed(socket) do
-    speed = Speed.increase_speed(socket.assigns.speed)
-    tick_count = Speed.speed_tick_count(speed)
-    assign(socket, speed: speed, tick_count: tick_count)
-  end
-
-  ## lower_speed gets removed once dev cheat gets removed
-  defp lower_speed(socket) do
-    speed = Speed.decrease_speed(socket.assigns.speed)
-    tick_count = Speed.speed_tick_count(speed)
-    assign(socket, speed: speed, tick_count: tick_count)
-  end
-
-  ## clear_blocks gets removed once dev cheat gets removed
-  defp clear_blocks(socket) do
-    assign(socket, bottom: %{})
   end
 
   def new_block(socket) do
