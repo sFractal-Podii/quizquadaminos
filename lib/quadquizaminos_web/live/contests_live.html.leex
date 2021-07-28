@@ -10,7 +10,6 @@
                  <%= if admin?(@current_user) do %>
                  <th></th>
                  <th></th>
-                 <th></th>
                  <% end %>
                  <th></th>
                  <th>Start time</th>
@@ -27,9 +26,6 @@
                  <td>
                      <button class="<%= maybe_disable_button(contest) %> <%= if contest_running?(contest), do: "red" %> icon-button" phx-click="stop" phx-value-contest='<%= contest.name %>' <%= maybe_disable_button(contest) %>><i class="fas fa-stop-circle fa-2x"></i></button>
                  </td>
-                 <td>
-                      <button class="<%= maybe_disable_button(contest) %>" phx-click="reset" phx-value-contest='<%= contest.name %>' <%=  maybe_disable_button(contest) %> >Reset</button>
-                 </td>
                  <% end %>
                  <td>
                 <%= timer_or_final_result(assigns, contest) %>
@@ -41,4 +37,3 @@
         </table>
     <% end %>
     </div>
-
