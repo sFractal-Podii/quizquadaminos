@@ -34,17 +34,11 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
-  Restarts the timer of the contest
-  """
-  def reset_contest(name) do
-    ContestAgent.reset_timer(name)
-  end
-
-  @doc """
   Restarts the game, i.e new start time and timer restarted
   """
   def restart_contest(name) do
     ContestAgent.reset_timer(name)
+
     name
     |> get_contest()
     |> update_contest(%{start_time: DateTime.utc_now()})
