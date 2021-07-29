@@ -15,17 +15,16 @@ defmodule QuadquizaminosWeb.ContestPrizes do
 
         <h1>Contest Prizes for "1-hour" Contest</h1>
 
-        <h2>Absinthe Tutorial from an Award-Winning Mixologist</h2>
+        <h2>Custom Cocktail Instruction from a Superlative Mixologist</h2>
         <p>
-        One lucky person will win a private Absinthe tutorial with
+        One lucky person will win a private Cocktail Session via Zoom with
         Mixologist/Sommelier Chantal Tseng.
-        You and your unlimited number of guests will schedule a time on Zoom
-        where Chantal will teach a condensed class covering
-        the history and myths of Absinthe, proper service and its usage in cocktails.
-        Guests are encouraged to pick up a bottle beforehand
-        and will be given a list of recommendations.
-        Class will run 45 minutes to an hour long.
-        Note: the prize includes the recipes and the instruction but <em>participants
+        This will include an in depth demo of three recipes catered to your favorite novel
+        or other source of inspiration. Chantal will provide advance recipes
+        and a tool list for your unlimited number of guests
+        who are then encouraged to make the drinks alongside and ask questions along the way.
+        Class runs usually one to one and half hours long.
+        Note: the prize includes the recipes and the instruction, but <em>participants
         must purchase their own alcohol and ingredients</em>.
         </p>
         <a href="https://cocktailsforendtimes.com/" class="phx-logo">
@@ -62,16 +61,17 @@ defmodule QuadquizaminosWeb.ContestPrizes do
 
         <h1>Contest Prizes for "24-hour" Contest</h1>
 
-        <h2>Custom Cocktail Instruction from a Superlative Mixologist</h2>
+        <h2>Absinthe Tutorial from an Award-Winning Mixologist</h2>
         <p>
-        One lucky person will win a private Cocktail Session via Zoom with
+        One lucky person will win a private Absinthe tutorial with
         Mixologist/Sommelier Chantal Tseng.
-        This will include an in depth demo of three recipes catered to your favorite novel
-        or other source of inspiration. Chantal will provide advance recipes
-        and a tool list for your unlimited number of guests
-        who are then encouraged to make the drinks alongside and ask questions along the way.
-        Class runs usually one to one and half hours long.
-        Note: the prize includes the recipes and the instruction, but <em>participants
+        You and your unlimited number of guests will schedule a time on Zoom
+        where Chantal will teach a condensed class covering
+        the history and myths of Absinthe, proper service and its usage in cocktails.
+        Guests are encouraged to pick up a bottle beforehand
+        and will be given a list of recommendations.
+        Class will run 45 minutes to an hour long.
+        Note: the prize includes the recipes and the instruction but <em>participants
         must purchase their own alcohol and ingredients</em>.
         </p>
         <a href="https://cocktailsforendtimes.com/" class="phx-logo">
