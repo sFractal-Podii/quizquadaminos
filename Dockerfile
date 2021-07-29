@@ -34,7 +34,7 @@ COPY Makefile ./Makefile
 RUN npm ci --prefix ./assets
 RUN npm install -g @cyclonedx/bom@2.0.2
 RUN make sbom_fast
-RUN cp *bom* ./assets/static
+RUN cp *bom* ./assets/static/.well-known/sbom/
 RUN npm run deploy --prefix ./assets
 
 
