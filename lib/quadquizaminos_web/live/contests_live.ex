@@ -6,15 +6,20 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
+  @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
+
   def mount(_params, session, socket) do
+    :timer.send_interval(1000, self(), :count_down)
     :timer.send_interval(1000, self(), :timer)
     QuadquizaminosWeb.Endpoint.subscribe("timer")
+    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
 
     {:ok,
      socket
      |> assign(
        current_user: Map.get(session, "uid"),
-       contests: Contests.list_contests()
+       contests: Contests.list_contests(),
+       countdown_interval: countdown_interval
      )}
   end
 
@@ -36,6 +41,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def handle_info(:timer, socket) do
     {:noreply, _update_contests_timer(socket)}
+  end
+
+  def handle_info(:count_down, socket) do
+    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
+    {:noreply, socket |> assign(countdown_interval: countdown_interval)}
   end
 
   def handle_params(%{"id" => id}, _uri, socket) do
