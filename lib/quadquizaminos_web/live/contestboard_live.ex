@@ -51,7 +51,6 @@ defmodule QuadquizaminosWeb.ContestboardLive do
     </div>
      <%= raw display_timer_button(@running) %>
       <button class="red" phx-click="timer" phx-value-timer="stop">Stop</button>
-     <button phx-click="reset">Reset</button>
      <button phx-click="final-score">Final Results</button>
      </section>
     </div>
