@@ -109,7 +109,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, categories: @categories, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                 <%= if @super_modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
@@ -830,8 +830,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> Enum.into(%{}, fn elem -> {elem, 0} end)
   end
 
+  defp increment_position(categories, _category, nil), do: categories
+
   defp increment_position(categories, category, current_position) do
-    %{categories | category => current_position + 1}
+    position =
+      if QnA.maximum_category_position(category) == current_position do
+        current_position
+      else
+        current_position + 1
+      end
+
+    %{categories | category => position}
   end
 
   defp assign_score(socket) do
