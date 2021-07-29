@@ -696,15 +696,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
       Records.record_player_game(true, record)
     end
 
-    {:noreply,
-     socket
-     |> assign(
-       state:
-         if(Enum.empty?(Contests.active_contests_names()),
-           do: :game_over,
-           else: socket.assigns.state
-         )
-     )}
+    state =
+      if Enum.empty?(Contests.active_contests_names()),
+        do: :game_over,
+        else: socket.assigns.state
+
+    {:noreply, socket |> assign(state: state)}
   end
 
   def handle_info(:tick, socket) do
