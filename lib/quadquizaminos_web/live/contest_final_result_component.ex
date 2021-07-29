@@ -1,15 +1,17 @@
 defmodule QuadquizaminosWeb.ContestFinalResultComponent do
   use QuadquizaminosWeb, :live_component
 
+  alias Quadquizaminos.Contests
+
   def render(assigns) do
     ~L"""
     <h1>Contestboard</h1>
       <table>
       <tr>
       <th>Player</th>
-      <th>Score</th>
-      <th>Bricks</th>
-      <th>Questions</th>
+      <th phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">Score</th>
+      <th phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
+      <th phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
       <th>Start time</th>
       <th>End time</th>
       </tr>
@@ -27,5 +29,16 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       <% end %>
       </table>
     """
+  end
+
+  def handle_event("sort", %{"param" => param}, socket) do
+    [record | _] = socket.assigns.contest_records
+
+    contest_records =
+      record.contest_id
+      |> Contests.get_contest()
+      |> Contests.contest_game_records(param)
+
+    {:noreply, assign(socket, contest_records: contest_records)}
   end
 end
