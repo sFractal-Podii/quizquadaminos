@@ -24,6 +24,11 @@ defmodule QuadquizaminosWeb.ContestRules do
     </p>
     <p>
     Contestants must be BSidesLV attendess who are at least 21 years of age or older to win prizes.
+    Contestants must be on
+    <a href="https://discord.com/invite/YcCWqMW5">
+    BSidesLV Discord
+    </a>
+    to communicate with contest organizer about reciving their prize.
     </p>
     <p>
     For the "1-hour" contest,
@@ -82,7 +87,7 @@ defmodule QuadquizaminosWeb.ContestRules do
     The "Custom Cocktail Instruction" prize will be awarded to the eligible
     "1-hour" contest contestant with the highest points,
     who will then be ineligible for more "1-hour" Contest prizes,
-    and also ineligible for the "Absinthe Tutorial" prize.
+    and also ineligible for the "24-hour" Contest "Absinthe Tutorial" prize.
     </p>
     <p>
     The "Risk Book & Custom Cocktail Recipe" prize will be awarded to the eligible
@@ -90,7 +95,7 @@ defmodule QuadquizaminosWeb.ContestRules do
     who will then be ineligible either of the next prize.
     </p>
     <p>
-    The "Custom Cocktail Recipe" prize will be awarded to the eligible
+    The "Tee-shirt & Custom Cocktail Recipe" prize will be awarded to the eligible
     "1-hour" contest contestant with the most bricks.
     </p>
 
@@ -107,7 +112,7 @@ defmodule QuadquizaminosWeb.ContestRules do
     <p>
     The "Custom Cocktail Recipe" prize will be awarded to the eligible
     "24-hour" contest contestant with the most bricks.
-    </p>    
+    </p>
     <p>
     A person is only elegible to receive one prize per contest,
     (e.g first on points and first on bricks would only receive one prize)
