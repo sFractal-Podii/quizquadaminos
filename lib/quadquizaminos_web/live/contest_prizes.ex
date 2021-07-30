@@ -40,21 +40,19 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         plus their very own custom cocktail recipe
         designed by Mixologist/Sommelier
         Chantal Tseng based on your home bar inventory and literary tastes.
-        Simply head over to www.cocktailsforendtimes.com to fill out the form
-        and she'll email you your recipe complete with user friendly instruction
-        and explanation when it is finished.
         Recipes are as simple or as intricate as your home bar will allow.
         The more details, the better!
         </p>
 
-        <h2>Custom Cocktail Recipe</h2>
+        <h2>BSidesLV Tee & Custom Cocktail Recipe</h2>
         <p>
-        One lucky person will win their very own custom cocktail recipe
+        One lucky person will win two prizes:
+        <a href="https://www.customink.com/fundraising/bsideslv-21-t">
+        BSidesLV tee
+        </a>
+        plus their very own custom cocktail recipe
         designed by Mixologist/Sommelier
         Chantal Tseng based on your home bar inventory and literary tastes.
-        Simply head over to www.cocktailsforendtimes.com to fill out the form
-        and she'll email you your recipe complete with user friendly instruction
-        and explanation when it is finished.
         Recipes are as simple or as intricate as your home bar will allow.
         The more details, the better!
         </p>
