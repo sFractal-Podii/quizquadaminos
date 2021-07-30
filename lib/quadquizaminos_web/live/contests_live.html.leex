@@ -1,8 +1,8 @@
-<div class="container">
-<%= if @live_action == :show  do %>
-        <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records %>
-    <% else %>
-    <%= if @countdown_interval <= 0  do %>
+    <div class="container">
+     <%= if @live_action == :show do %>
+     <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
+     <% else %>
+ <%= if @countdown_interval <= 0 || admin?(@current_user) do %>
         <h1>Contests</h1>
         <%= raw display_text_input(admin?(@current_user)) %>
              <table>
@@ -33,36 +33,12 @@
                 </td>
                 <td><%= truncate_date(contest.start_time) %></td>
                 <td><%= truncate_date(contest.end_time) %></td>
+                 <td><%= live_result_button(assigns, contest) %></td>
             </tr>
           <% end %>
         </table>
     <% else %>
-        <div class="container">
-            <section class="phx-hero">
-                <h1>Contest countdown </h1>
-                <div class="row">
-                    <div class="column column-25">
-                        <% {days, hours, minutes, seconds} = Util.to_human_time(@countdown_interval) %>
-
-                        <h2><%= days |> Util.count_display() %></h2>
-                        <h2>DAYS</h2>
-                    </div>
-                    <div class="column column-25">
-                        <h2><%= Util.count_display(hours)%></h2>
-                        <h2>HOURS</h2>
-                    </div>
-                    <div class="column column-25">
-                        <h2><%=Util.count_display(minutes)%></h2>
-                        <h2>MINUTES</h2>
-                    </div>
-                    <div class="column column-25">
-                        <h2><%=Util.count_display(seconds)%></h2>
-                        <h2>SECONDS</h2>
-                    </div>
-                </div>
-                <h3>Contest coming soon</h3>
-            </section>
-        </div>
+        <%= countdown_timer(assigns, admin?(@current_user)) %>
      <% end %>
         
 <% end %>
