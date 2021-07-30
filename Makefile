@@ -69,6 +69,7 @@ sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/  && npm install && npm install -g @cyclonedx/bom@2.0.2 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	mkdir -p assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
@@ -76,6 +77,7 @@ sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclo
 	mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	mkdir -p assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
