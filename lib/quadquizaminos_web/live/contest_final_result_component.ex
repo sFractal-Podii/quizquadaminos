@@ -18,12 +18,12 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
 
       <%= for record <- @contest_records do %>
        <tr>
-      <td><%= record.user.name %></td>
+      <td><%= user_name(record) %></td>
       <td><%= record.score %></td>
       <td><%= record.dropped_bricks %></td>
       <td><%= record.correctly_answered_qna %></td>
-      <td><%= DateTime.truncate(record.start_time, :second) %></td>
-      <td><%= DateTime.truncate(record.end_time, :second) %></td>
+      <td><%= truncate_date(record.start_time) %></td>
+      <td><%= truncate_date(record.end_time) %></td>
 
       </tr>
       <% end %>
@@ -41,4 +41,27 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
 
     {:noreply, assign(socket, contest_records: contest_records)}
   end
+
+  def truncate_date(nil) do
+    nil
+  end
+
+  def truncate_date(date) do
+    DateTime.truncate(date, :second)
+  end
+
+  defp user_name(record) do
+    case record do
+      %Quadquizaminos.GameBoard{} ->
+        record.user.name
+
+      _ ->
+        case Quadquizaminos.Accounts.get_user(record.uid) do
+          nil -> "Anonymous"
+          user -> user.name
+        end
+    end
+  end
+
+  defp user_name(%Quadquizaminos.Accounts.User{} = user, _uid), do: user.name
 end

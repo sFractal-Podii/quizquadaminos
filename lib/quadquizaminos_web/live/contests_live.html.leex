@@ -32,6 +32,7 @@
                 </td>
                 <td><%= truncate_date(contest.start_time) %></td>
                 <td><%= truncate_date(contest.end_time) %></td>
+                 <td><%= live_result_button(assigns, contest) %></td>
             </tr>
           <% end %>
         </table>
