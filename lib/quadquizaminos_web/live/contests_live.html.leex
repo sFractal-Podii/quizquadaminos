@@ -1,6 +1,6 @@
     <div class="container">
      <%= if @live_action == :show do %>
-     <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records %>
+     <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
      <% else %>
         <h1>Contests</h1>
         <%= raw display_text_input(admin?(@current_user)) %>
