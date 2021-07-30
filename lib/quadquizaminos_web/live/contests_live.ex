@@ -6,8 +6,12 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
+  @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
+
   def mount(_params, session, socket) do
+    :timer.send_interval(1000, self(), :count_down)
     :timer.send_interval(1000, self(), :timer)
+    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
 
     {:ok,
@@ -15,6 +19,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
      |> assign(
        current_user: Map.get(session, "uid"),
        contests: Contests.list_contests(),
+       countdown_interval: countdown_interval,
        contest_records: [],
        contest_id: nil
      )}
@@ -44,6 +49,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def handle_info(:timer, socket) do
     {:noreply, _update_contests_timer(socket)}
+  end
+
+  def handle_info(:count_down, socket) do
+    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
+    {:noreply, socket |> assign(countdown_interval: countdown_interval)}
   end
 
   def handle_info(%{event: "current_scores", payload: payload}, socket) do
@@ -250,5 +260,38 @@ defmodule QuadquizaminosWeb.ContestsLive do
     if contest.end_time || not contest_running?(contest) do
       "disabled"
     end
+  end
+
+  def countdown_timer(_assigns, true = _admin?), do: ""
+
+  def countdown_timer(assigns, _) do
+    ~L"""
+    <div class="container">
+            <section class="phx-hero">
+                <h1>Contest countdown </h1>
+                <div class="row">
+                    <div class="column column-25">
+                        <% {days, hours, minutes, seconds} = Util.to_human_time(@countdown_interval) %>
+
+                        <h2><%= days |> Util.count_display() %></h2>
+                        <h2>DAYS</h2>
+                    </div>
+                    <div class="column column-25">
+                        <h2><%= Util.count_display(hours)%></h2>
+                        <h2>HOURS</h2>
+                    </div>
+                    <div class="column column-25">
+                        <h2><%=Util.count_display(minutes)%></h2>
+                        <h2>MINUTES</h2>
+                    </div>
+                    <div class="column column-25">
+                        <h2><%=Util.count_display(seconds)%></h2>
+                        <h2>SECONDS</h2>
+                    </div>
+                </div>
+                <h3>Contest coming soon</h3>
+            </section>
+        </div>
+    """
   end
 end
