@@ -143,6 +143,34 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
     end
   end
 
+  describe "skip question" do
+    test "player can skip question", %{conn: conn} do
+      {view, _html} = pause_game(conn)
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      html = render_click(view, "skip-question", %{})
+
+      assert html =~ "Continue</button>"
+      assert html =~ "End Game</button>"
+      assert html =~ "Bonus</button>"
+    end
+
+    test "category disappears if questions are exhausted", %{conn: conn} do
+      {view, _html} = pause_game(conn)
+
+      # bonus questions are 3, skip all
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      render_click(view, "skip-question", %{})
+
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      render_click(view, "skip-question", %{})
+
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      html = render_click(view, "skip-question", %{})
+
+      refute html =~ "Bonus</button>"
+    end
+  end
+
   defp pause_game(conn) do
     {:ok, view, _html} = live(conn, "/tetris")
 

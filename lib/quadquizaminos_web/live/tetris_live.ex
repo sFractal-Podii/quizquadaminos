@@ -347,17 +347,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
      )}
   end
 
-  def handle_event("skip-question", %{"category" => category}, socket) do
-    categories = socket.assigns.categories
-    question_position = categories[category]
-    categories = increment_position(categories, category, question_position)
-
-    {:noreply,
-     socket
-     |> assign(
-       category: nil,
-       categories: categories
-     )}
+  def handle_event("skip-question", _, socket) do
+    {:noreply, assign(socket, category: nil)}
   end
 
   def handle_event("unpause", _, socket) do

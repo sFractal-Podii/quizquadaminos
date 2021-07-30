@@ -50,7 +50,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
     <%= text_input f, :guess %>
-    <button class="button-outline" phx-click="skip-question" phx-value-category="bonus">Skip Question</button><br>
+    <button class="button-outline" phx-click="skip-question">Skip Question</button><br>
     <%= submit  "Continue" %>
     </form>
     """
