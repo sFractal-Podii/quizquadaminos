@@ -56,6 +56,14 @@
 }
 
 
+.disabled:hover{
+  cursor: not-allowed;
+}
+
+.not_allowed:hover{
+  cursor: not-allowed;
+}
+
 /* Alerts and form errors */
 .alert {
   padding: 15px;
@@ -144,4 +152,12 @@
 .red {
   background-color: red;
   border: none;
+}
+
+#content {
+  min-height: 87vh;
+}
+.icon-button {
+  padding: 0 1rem;
+  line-height: 0;
 }

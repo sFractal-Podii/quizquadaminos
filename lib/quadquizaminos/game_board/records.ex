@@ -22,7 +22,8 @@ defmodule Quadquizaminos.GameBoard.Records do
 
   def contest_game(nil, nil), do: []
 
-  def contest_game(start_time, end_time) when not is_nil(end_time) and not is_nil(start_time) do
+  def contest_game(start_time, end_time)
+      when not is_nil(end_time) and not is_nil(start_time) do
     start_time
     |> GameBoard.by_start_and_end_time(end_time)
     |> GameBoard.preloads([:user])
@@ -38,6 +39,10 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> GameBoard.by_time()
     |> GameBoard.preloads([:user])
     |> Repo.all()
+  end
+
+  def create_record(game_records) when is_list(game_records) do
+    Enum.map(game_records, fn record -> create_record(record) end)
   end
 
   def create_record(%{uid: uid} = game_records) do

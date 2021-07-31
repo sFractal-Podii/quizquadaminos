@@ -10,10 +10,11 @@
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
+    <div id="content">
     <header>
       <section class="container">
-        <a href="https://supplychainsandbox.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/scs-logo.png") %>" alt="supplychainsandbox Logo" />
+        <a href="https://www.bsideslv.org/" class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/BSidesLV.png") %>" alt="BsidesLV Logo" />
         </a>
         <a class="phx-logo">
           <img src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
@@ -24,6 +25,7 @@
       <%= render(QuadquizaminosWeb.LayoutView, "navbar.html", assigns) %>
     </header>
     <%= @inner_content %>
+    </div>
   <footer>
   <table>
   <tr>
@@ -45,11 +47,6 @@
     <td>
       <a href="https://grox.io/" class="phx-logo">
         <img src="<%= Routes.static_path(@conn, "/images/groxio.png") %>" alt="Grox.io Logo" />
-      </a>
-    </td>
-    <td>
-      <a href="https://www.oasis-open.org/" class="phx-logo">
-        <img src="<%= Routes.static_path(@conn, "/images/OASIS-Secondary-Logo-Full-Colour.png") %>" alt="OASIS Logo" />
       </a>
     </td>
     <td>

@@ -7,10 +7,14 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         ~L"""
         <h1>Contest Prizes</h1>
         <p>
+        There will two contests: "1-hour" and "24-hour".
         See
         <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestRules) %> > Contest Rules </a>
-        for more information on which order the prizes will be offered. 
+        for more information on contest rules.
         </p>
+
+        <h1>Contest Prizes for "1-hour" Contest</h1>
+
         <h2>Custom Cocktail Instruction from a Superlative Mixologist</h2>
         <p>
         One lucky person will win a private Cocktail Session via Zoom with
@@ -26,6 +30,35 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         <a href="https://cocktailsforendtimes.com/" class="phx-logo">
           <img src="/images/Cocktail3.png" alt="Cocktails For Endtimes Logo">
         </a>
+
+        <h2>Risk Book & Custom Cocktail Recipe</h2>
+        <p>
+        One lucky person will win two prizes:
+        <a href="https://www.barnesandnoble.com/w/how-to-measure-anything-in-cybersecurity-risk-douglas-w-hubbard/1122610668">
+        "How to Measure Anything in Cybersecurity Risk" ebook
+        </a>
+        plus their very own custom cocktail recipe
+        designed by Mixologist/Sommelier
+        Chantal Tseng based on your home bar inventory and literary tastes.
+        Recipes are as simple or as intricate as your home bar will allow.
+        The more details, the better!
+        </p>
+
+        <h2>BSidesLV Tee & Custom Cocktail Recipe</h2>
+        <p>
+        One lucky person will win two prizes:
+        <a href="https://www.customink.com/fundraising/bsideslv-21-t">
+        BSidesLV tee
+        </a>
+        plus their very own custom cocktail recipe
+        designed by Mixologist/Sommelier
+        Chantal Tseng based on your home bar inventory and literary tastes.
+        Recipes are as simple or as intricate as your home bar will allow.
+        The more details, the better!
+        </p>
+
+        <h1>Contest Prizes for "24-hour" Contest</h1>
+
         <h2>Absinthe Tutorial from an Award-Winning Mixologist</h2>
         <p>
         One lucky person will win a private Absinthe tutorial with
@@ -39,9 +72,17 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         Note: the prize includes the recipes and the instruction but <em>participants
         must purchase their own alcohol and ingredients</em>.
         </p>
-        <h2>Custom Cocktail Recipe</h2>
+        <a href="https://cocktailsforendtimes.com/" class="phx-logo">
+          <img src="/images/Cocktail3.png" alt="Cocktails For Endtimes Logo">
+        </a>
+
+        <h2>Risk Book & Custom Cocktail Recipe</h2>
         <p>
-        Five lucky people will win their very own custom cocktail recipe
+        One lucky person will win two prizes:
+        <a href="https://www.barnesandnoble.com/w/how-to-measure-anything-in-cybersecurity-risk-douglas-w-hubbard/1122610668">
+        "How to Measure Anything in Cybersecurity Risk" ebook
+        </a>
+        plus their very own custom cocktail recipe
         designed by Mixologist/Sommelier
         Chantal Tseng based on your home bar inventory and literary tastes.
         Simply head over to www.cocktailsforendtimes.com to fill out the form
@@ -50,29 +91,17 @@ defmodule QuadquizaminosWeb.ContestPrizes do
         Recipes are as simple or as intricate as your home bar will allow.
         The more details, the better!
         </p>
-        <h2>Briar Cutter Writing</h2>
+
+        <h2>Custom Cocktail Recipe</h2>
         <p>
-        One lucky person will will 5 hours of consultation
-        from Briar Cutter marketing/writing consultants.
-        <a href="https://briarcutter.com/" class="phx-logo">
-          <img src="/images/Briar Cutter Final PNG@2x.png">
-        </a>
-        </p>
-        <h2>Podii Software Development</h2>
-        <p>
-        One lucky person will win 5 hours of consultation
-        from Podii, a software consulting company.
-        <a href="https://podiihq.com/" class="phx-logo">
-          <img src="/images/podiilogo.png">
-        </a>
-        </p>
-        <h2>sFractal Cybersecurity</h2>
-        <p>
-        One lucky person will will 5 hours of consultation
-        from sFractal Consulting, a boutique cybersecurity and software development company.
-        <a href="https://sfractal.com/" class="phx-logo">
-          <img src="/images/sFractalConsulting.png">
-        </a>
+        One lucky person will win their very own custom cocktail recipe
+        designed by Mixologist/Sommelier
+        Chantal Tseng based on your home bar inventory and literary tastes.
+        Simply head over to www.cocktailsforendtimes.com to fill out the form
+        and she'll email you your recipe complete with user friendly instruction
+        and explanation when it is finished.
+        Recipes are as simple or as intricate as your home bar will allow.
+        The more details, the better!
         </p>
         """
       end
