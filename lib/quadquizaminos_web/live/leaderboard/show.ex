@@ -18,6 +18,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive.Show do
     <ul>
     <li><b>Score:</b><%= @record.score  %></li>
     <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
+    <li><b>Questions:</b><%= @record.correctly_answered_qna %></li>
     </ul>
     <%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadquizaminosWeb.LeaderboardLive) %>
     </div>
