@@ -33,6 +33,10 @@ defmodule QuadquizaminosWeb.PageController do
     render(conn, "sbom.html")
   end
 
+  def wellknown(conn, _params) do
+    render(conn, "wellknown.html")
+  end
+
   defp current_user(nil), do: nil
 
   defp current_user("anonymous"), do: "anonymous"
