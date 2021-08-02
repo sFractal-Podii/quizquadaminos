@@ -104,7 +104,7 @@ defmodule Quadquizaminos.QnA do
     question |> String.replace("#", "")
   end
 
-  defp choose_file(category, position \\ 0) do
+  defp choose_file(category, position) do
     path = "#{@qna_directory}/#{category}"
     {:ok, files} = File.ls(path)
     files = Enum.sort(files)

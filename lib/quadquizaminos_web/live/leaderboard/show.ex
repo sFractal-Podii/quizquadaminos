@@ -27,6 +27,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive.Show do
     """
   end
 
+  @impl true
   def handle_params(%{"board_id" => board_id}, _uri, socket) do
     {:noreply, socket |> assign(record: Records.get_game!(board_id))}
   end

@@ -35,7 +35,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> start_game()}
   end
 
-  def render(%{state: :starting, live_action: _live_action} = assigns) do
+  def render(%{state: :starting} = assigns) do
     ~L"""
       <div class ="container">
         <div class="row">
