@@ -18,8 +18,8 @@ defmodule QuadquizaminosWeb.ContestsLiveShowTest do
     conn = Auth.login()
     {:ok, _view, html} = live(conn, "/contests")
 
-    assert html =~ "Start</button"
-    assert html =~ "Stop</button>"
+    assert html =~ "<button class=\"  icon-button\" phx-click=\"start\""
+    assert html =~ "<button class=\"disabled  icon-button\" phx-click=\"stop\""
   end
 
   test "only admin can see option to create contest" do

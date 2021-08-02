@@ -855,4 +855,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp block_in_bottom?({x, y, _color} = _coordinates, bottom) do
     block_in_bottom?(x, y, bottom)
   end
+
+  defp block_in_bottom?(nil, _bottom) do
+  end
 end

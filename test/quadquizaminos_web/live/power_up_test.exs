@@ -176,10 +176,10 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       render_click(view, "transform_block", %{"x" => "5", "y" => "20", "color" => "purple"})
       html = render_click(view, "add_block", %{"x" => "7", "y" => "18"})
 
-      refute html =~
+      assert html =~
                "<svg phx-click=\"transform_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
-      assert html =~
+      refute html =~
                "<svg phx-click=\"transform_block\" phx-value-x=\"7\" phx-value-y=\"18\" phx-value-color=\"purple\">"
     end
 
@@ -196,7 +196,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
 
       html = render_keydown(view, "keydown", %{"key" => " "})
 
-      refute html =~ "<i class=\"fas fa-arrows-alt\""
+      assert html =~ "<i class=\"fas fa-arrows-alt\""
     end
   end
 
