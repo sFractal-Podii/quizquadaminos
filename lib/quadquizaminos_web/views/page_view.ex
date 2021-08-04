@@ -1,27 +1,20 @@
 defmodule QuadquizaminosWeb.PageView do
   use QuadquizaminosWeb, :view
   alias Quadquizaminos.Accounts
-  @bom_dir Application.app_dir(:quadquizaminos, "priv/static/.well-known")
 
   def render("instructions.html", _params) do
     QuadquizaminosWeb.Instructions.game_instruction()
   end
 
   def render("sbom.html", _params) do
-    dir_files =
-      for dir <- @bom_dir |> File.ls!(),
-          !File.regular?(dir),
-          dir_path = Path.join(@bom_dir, dir),
-          files = File.ls!(dir_path) do
-        {dir, files}
-      end
+    sbom_files =
+      :quadquizaminos
+      |> Application.app_dir("/priv/static/.well-known/sbom")
+      |> File.ls!()
 
     ~E"""
-    <%= for {dir, files} <- dir_files do %>
-    <h2> <%= dir %> </h2>
-      <%= for file <- files do %>
-      <li> <%= link file,  to: [".well-known/",  dir, "/",file] %> </li>
-      <% end %>
+    <%= for file <- sbom_files do %>
+    <li> <%= link file,  to: [".well-known/sbom/",file] %> </li>
     <% end %>
     """
   end

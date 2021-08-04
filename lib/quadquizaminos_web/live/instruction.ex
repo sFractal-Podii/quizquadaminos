@@ -110,8 +110,10 @@ defmodule QuadquizaminosWeb.Instructions do
                  <p>Just a little wisdom for thought for those with the ears to hear it.</p>
     <h2>6. Contest</h2>
         <p>
-        There will be a 30-min contest on Tuesday 19-May at 11:40 PDT as part of
-        https://www.rsaconference.com/usa/agenda/session/supply-chain-activity-lounge
+        There will be two contests at BSidesLV.
+        Both start when the talk on the game starts - 4PM PDT on Sunday 1-Aug.
+        One contest is for the duration of the talk/Q&A with prizes awarded at Q&A.
+        The other contest lasts 24 hours.
         </p>
         <p>
         Save the tetrominoes world from supply chain vulnerabilities
@@ -120,9 +122,9 @@ defmodule QuadquizaminosWeb.Instructions do
         </p>
         <p>
         See
-        <a href="<%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestRules) %>">contest rules </a> 
+        <a href="<%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestRules) %>">contest rules </a>
         and
-        <a href="<%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestPrizes) %>">contest prizes </a> 
+        <a href="<%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestPrizes) %>">contest prizes </a>
         for more information.
         </p>
     """
