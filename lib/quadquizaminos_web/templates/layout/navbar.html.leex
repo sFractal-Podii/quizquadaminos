@@ -17,6 +17,9 @@
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
         <li><a href="/admin">Admin</a></li>
         <% end %>
+        <% else %>
+         <%= hide_or_show_sign_up_button() %>
+
       <% end %>
     </ul>
   </nav>
