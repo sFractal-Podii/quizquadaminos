@@ -856,6 +856,5 @@ defmodule QuadquizaminosWeb.TetrisLive do
     block_in_bottom?(x, y, bottom)
   end
 
-  defp block_in_bottom?(nil, _bottom) do
-  end
+  defp block_in_bottom?(nil, _bottom), do: false
 end
