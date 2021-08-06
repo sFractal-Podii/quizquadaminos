@@ -1,7 +1,7 @@
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
-
+  alias Quadquizaminos.Contests
   import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.SvgBoard
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
@@ -27,8 +27,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"uid" => current_user}, socket) do
     :timer.send_interval(50, self(), :tick)
-    :timer.send_interval(10_000, self(), :broadcast_score)
-    QuadquizaminosWeb.Endpoint.subscribe("contest_timer")
+    :timer.send_interval(1000, self(), :broadcast_score)
+    QuadquizaminosWeb.Endpoint.subscribe("contest_record")
 
     {:ok,
      socket
@@ -109,7 +109,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, categories: @categories, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                 <%= if @super_modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
@@ -282,7 +282,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    Records.record_player_game(response.game_over, game_record(socket))
+    game_records =
+      Contests.active_contests_names()
+      |> contest_game_records(game_record(socket))
+
+    Records.record_player_game(response.game_over, game_records)
 
     socket
     |> assign(brick: response.brick)
@@ -343,17 +347,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
      )}
   end
 
-  def handle_event("skip-question", %{"category" => category}, socket) do
-    categories = socket.assigns.categories
-    question_position = categories[category]
-    categories = increment_position(categories, category, question_position)
-
-    {:noreply,
-     socket
-     |> assign(
-       category: nil,
-       categories: categories
-     )}
+  def handle_event("skip-question", _, socket) do
+    {:noreply, assign(socket, category: nil)}
   end
 
   def handle_event("unpause", _, socket) do
@@ -676,21 +671,28 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_info(:broadcast_score, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "scores",
-      "current_score",
-      game_record(socket) |> Map.delete(:end_time)
-    )
-
+    socket |> game_record() |> broadcast_score()
     {:noreply, socket}
   end
 
-  def handle_info(%{event: "timer", payload: _payload}, socket) do
+  def handle_info(%{event: "record_contest_scores", payload: contest_name}, socket) do
+    contest = Quadquizaminos.Contests.get_contest(contest_name)
+
+    record =
+      socket
+      |> game_record()
+      |> Map.put(:contest_id, contest.id)
+
     if socket.assigns.state == :playing do
-      Records.record_player_game(true, game_record(socket))
+      Records.record_player_game(true, record)
     end
 
-    {:noreply, socket |> assign(state: :game_over)}
+    state =
+      if Enum.empty?(Contests.active_contests_names()),
+        do: :game_over,
+        else: socket.assigns.state
+
+    {:noreply, socket |> assign(state: state)}
   end
 
   def handle_info(:tick, socket) do
@@ -816,8 +818,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> Enum.into(%{}, fn elem -> {elem, 0} end)
   end
 
+  defp increment_position(categories, _category, nil), do: categories
+
   defp increment_position(categories, category, current_position) do
-    %{categories | category => current_position + 1}
+    position =
+      if QnA.maximum_category_position(category) == current_position do
+        current_position
+      else
+        current_position + 1
+      end
+
+    %{categories | category => position}
   end
 
   defp assign_score(socket) do
@@ -857,4 +868,35 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp block_in_bottom?(nil, _bottom), do: false
+
+  defp broadcast_score(records) do
+    active_contests = Contests.active_contests_names()
+
+    records =
+      Enum.map(active_contests, fn name ->
+        contest = Contests.get_contest(name)
+
+        %{records | end_time: nil}
+        |> Map.put(:contest_id, contest.id)
+      end)
+
+    QuadquizaminosWeb.Endpoint.broadcast(
+      "contest_scores",
+      "current_scores",
+      records
+    )
+  end
+
+  defp contest_game_records(active_contests, records) do
+    if Enum.empty?(active_contests) do
+      records
+    else
+      Enum.map(active_contests, fn name ->
+        contest = Quadquizaminos.Contests.get_contest(name)
+
+        records
+        |> Map.put(:contest_id, contest.id)
+      end)
+    end
+  end
 end

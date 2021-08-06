@@ -41,6 +41,10 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> Repo.all()
   end
 
+  def create_record(game_records) when is_list(game_records) do
+    Enum.map(game_records, fn record -> create_record(record) end)
+  end
+
   def create_record(%{uid: uid} = game_records) do
     unless uid == "anonymous" do
       game_records

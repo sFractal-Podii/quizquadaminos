@@ -55,11 +55,18 @@ defmodule Quadquizaminos.GameBoard do
       where: q.contest_id == ^contest_id
   end
 
+  def sort_by(query, sorter \\ "score") do
+    from r in query,
+      order_by: [desc: ^(sorter |> String.to_atom())],
+      order_by: [asc: r.end_time - r.start_time]
+  end
+
   def by_start_and_end_time(start_time, end_time) do
     from r in __MODULE__,
       where:
         r.start_time >= ^start_time and
-          r.end_time <= ^end_time,
-      order_by: [desc: r.score]
+          r.end_time <= ^end_time
+
+    # order_by: [desc: r.score]
   end
 end

@@ -27,6 +27,22 @@ defmodule Quadquizaminos.QnA do
     end)
   end
 
+  @doc """
+  Removes categories that are already answered
+  """
+  def remove_used_categories(categories) do
+    categories
+    |> Enum.reject(fn {k, v} -> maximum_category_position(k) == v end)
+    |> Enum.into(%{})
+    |> Map.keys()
+  end
+
+  def maximum_category_position(category) do
+    path = "#{@qna_directory}/#{category}"
+    {:ok, files} = File.ls(path)
+    Enum.count(files)
+  end
+
   defp build do
     categories() |> Enum.random() |> build()
   end
