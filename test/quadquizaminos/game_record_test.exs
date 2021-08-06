@@ -50,9 +50,9 @@ defmodule Quadquizaminos.GameRecordTest do
           start_time: ~U[2021-04-20 06:00:53Z],
           end_time: DateTime.utc_now(),
           uid: user.uid,
-          score: :random.uniform(50),
-          dropped_bricks: :random.uniform(1000),
-          correctly_answered_qna: :random.uniform(45)
+          score: :rand.uniform(50),
+          dropped_bricks: :rand.uniform(1000),
+          correctly_answered_qna: :rand.uniform(45)
         }
 
         Records.record_player_game(true, game_record)
@@ -104,8 +104,8 @@ defmodule Quadquizaminos.GameRecordTest do
       end_time: DateTime.utc_now(),
       uid: user.uid,
       score: 50,
-      dropped_bricks: :random.uniform(1000),
-      correctly_answered_qna: :random.uniform(45)
+      dropped_bricks: :rand.uniform(1000),
+      correctly_answered_qna: :rand.uniform(45)
     }
 
     more_time = %{
@@ -113,14 +113,14 @@ defmodule Quadquizaminos.GameRecordTest do
       end_time: DateTime.utc_now(),
       uid: user.uid,
       score: 50,
-      dropped_bricks: :random.uniform(1000),
-      correctly_answered_qna: :random.uniform(45)
+      dropped_bricks: :rand.uniform(1000),
+      correctly_answered_qna: :rand.uniform(45)
     }
 
     {:ok, %Quadquizaminos.GameBoard{id: less_id}} = Records.record_player_game(true, less_time)
     {:ok, %Quadquizaminos.GameBoard{id: more_id}} = Records.record_player_game(true, more_time)
 
-    [less, more] = Records.top_10_games()
+    [more, less] = Records.top_10_games()
     assert less.id == less_id
     assert more.id == more_id
   end

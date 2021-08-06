@@ -649,10 +649,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     socket |> assign(bottom: bottom, deleting_block: false, powers: powers)
   end
 
-  defp block_in_bottom?(x, y, bottom) do
-    Map.has_key?(bottom, {x, y})
-  end
-
   defp add_block(socket, x, y, true = _adding_block) do
     {x, y} = parse_to_integer(x, y)
     powers = socket.assigns.powers -- [:addblock]
@@ -863,8 +859,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp moving_title(_moving_block, _block_in_bottom), do: ""
 
+  defp block_in_bottom?(nil, _bottom), do: false
+
   defp block_in_bottom?({x, y, _color} = _coordinates, bottom) do
     block_in_bottom?(x, y, bottom)
+  end
+
+  defp block_in_bottom?(x, y, bottom) do
+    Map.has_key?(bottom, {x, y})
   end
 
   defp broadcast_score(records) do
