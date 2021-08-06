@@ -35,7 +35,7 @@ defmodule Quadquizaminos.ContestsTest do
 
     test "Fetches the game records of a given contest", %{contest: contest} do
       game_records = contest |> Contests.contest_game_records()
-      assert game_records |> Enum.count() == 5
+      assert game_records |> Enum.count() == 3
 
       assert Enum.all?(game_records, fn record ->
                record.start_time >= contest.start_time and record.end_time <= contest.end_time
