@@ -50,14 +50,14 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
     end
 
     test "choosing correct answer asks player to choose another category", %{conn: conn} do
-      [category | _] = Quadquizaminos.QnA.categories()
+      [category | categories] = Quadquizaminos.QnA.categories()
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => category})
       right_answer = Quadquizaminos.QnA.question(category).correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
       assert html =~ "Continue"
-      assert html =~ category |> Macro.camelize()
+      assert html =~ "#{categories |> Enum.random() |> Macro.camelize()}"
     end
   end
 
