@@ -27,6 +27,22 @@ defmodule Quadquizaminos.QnA do
     end)
   end
 
+  @doc """
+  Removes categories that are already answered
+  """
+  def remove_used_categories(categories) do
+    categories
+    |> Enum.reject(fn {k, v} -> maximum_category_position(k) == v end)
+    |> Enum.into(%{})
+    |> Map.keys()
+  end
+
+  def maximum_category_position(category) do
+    path = "#{@qna_directory}/#{category}"
+    {:ok, files} = File.ls(path)
+    Enum.count(files)
+  end
+
   defp build do
     categories() |> Enum.random() |> build()
   end
@@ -104,7 +120,7 @@ defmodule Quadquizaminos.QnA do
     question |> String.replace("#", "")
   end
 
-  defp choose_file(category, position \\ 0) do
+  defp choose_file(category, position) do
     path = "#{@qna_directory}/#{category}"
     {:ok, files} = File.ls(path)
     files = Enum.sort(files)
@@ -122,13 +138,13 @@ defmodule Quadquizaminos.QnA do
 
   defp file_position(position, _index, _count), do: position
 
-  defp correct_answer(answers, "freeform") do
+  defp correct_answer(answers, "bonus") do
     regex = ~r/\n\*(.+?)\n/
 
     [[_, clue] | _t] = Regex.scan(regex, answers)
     clue = String.trim(clue)
 
-    Application.get_env(:quadquizaminos, :freeform_answers)[String.to_atom(clue)]
+    Application.get_env(:quadquizaminos, :bonus_answers)[String.to_atom(clue)]
   end
 
   defp correct_answer(answers, _category) do

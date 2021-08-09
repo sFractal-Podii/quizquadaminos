@@ -35,11 +35,14 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through [:browser]
 
     get "/", PageController, :index
+    get "/sbom", PageController, :sbom
+    get "/.well-known", PageController, :wellknown
 
     live "/leaderboard", LeaderboardLive
     live "/leaderboard/:board_id", LeaderboardLive.Show
     live "/contestboard", ContestboardLive
-    live "/contests", ContestsLive
+    live "/contests", ContestsLive, :index
+    live "/contests/:id", ContestsLive, :show
     live "/contest_rules", ContestRules
     live "/contest_prizes", ContestPrizes
     get "/anonymous", PageController, :anonymous

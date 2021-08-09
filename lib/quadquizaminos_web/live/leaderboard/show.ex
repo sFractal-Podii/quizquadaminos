@@ -18,6 +18,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive.Show do
     <ul>
     <li><b>Score:</b><%= @record.score  %></li>
     <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
+    <li><b>Questions:</b><%= @record.correctly_answered_qna %></li>
     </ul>
     <%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadquizaminosWeb.LeaderboardLive) %>
     </div>
@@ -27,11 +28,12 @@ defmodule QuadquizaminosWeb.LeaderboardLive.Show do
     """
   end
 
+  @impl true
   def handle_params(%{"board_id" => board_id}, _uri, socket) do
     {:noreply, socket |> assign(record: Records.get_game!(board_id))}
   end
 
-  def display_bottom(nil = _bottom_blocks, assigns) do
+  def display_bottom(nil = _bottom_blocks, _assigns) do
     ""
   end
 

@@ -139,11 +139,11 @@ defmodule Quadquizaminos.Brick do
 
   def x_center(), do: @x_center
 
-  def render(block) do
+  def render(block, brick_count) do
     block
     |> prepare
     |> Points.move_to_location(block.location)
-    |> Points.with_color(color(block))
+    |> Points.with_color(brick_count, color(block))
   end
 
   defimpl Inspect, for: Quadquizaminos.Brick do

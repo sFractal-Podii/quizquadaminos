@@ -29,6 +29,14 @@ defmodule QuadquizaminosWeb.PageController do
     |> redirect(to: "/")
   end
 
+  def sbom(conn, _params) do
+    render(conn, "sbom.html")
+  end
+
+  def wellknown(conn, _params) do
+    render(conn, "wellknown.html")
+  end
+
   defp current_user(nil), do: nil
 
   defp current_user("anonymous"), do: "anonymous"
