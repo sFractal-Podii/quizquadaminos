@@ -50,14 +50,14 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
     end
 
     test "choosing correct answer asks player to choose another category", %{conn: conn} do
-      [category | _] = Quadquizaminos.QnA.categories()
+      [category | categories] = Quadquizaminos.QnA.categories()
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => category})
       right_answer = Quadquizaminos.QnA.question(category).correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
       assert html =~ "Continue"
-      assert html =~ category |> Macro.camelize()
+      assert html =~ "#{categories |> Enum.random() |> Macro.camelize()}"
     end
   end
 
@@ -140,6 +140,34 @@ defmodule QuadquizaminosWeb.TetrisLiveTest do
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
       assert html =~ "<h1>\nQuestion:"
       assert html =~ "<h2> Answer </h2>"
+    end
+  end
+
+  describe "skip question" do
+    test "player can skip question", %{conn: conn} do
+      {view, _html} = pause_game(conn)
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      html = render_click(view, "skip-question", %{})
+
+      assert html =~ "Continue</button>"
+      assert html =~ "End Game</button>"
+      assert html =~ "Bonus</button>"
+    end
+
+    test "category disappears if questions are exhausted", %{conn: conn} do
+      {view, _html} = pause_game(conn)
+
+      # bonus questions are 3, skip all
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      render_click(view, "skip-question", %{})
+
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      render_click(view, "skip-question", %{})
+
+      render_click(view, "choose_category", %{"category" => "bonus"})
+      html = render_click(view, "skip-question", %{})
+
+      refute html =~ "Bonus</button>"
     end
   end
 

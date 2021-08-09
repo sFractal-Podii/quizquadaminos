@@ -34,10 +34,14 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
-  Restarts the timer of the contest
+  Restarts the game, i.e new start time and timer restarted
   """
-  def reset_contest(name) do
+  def restart_contest(name) do
     ContestAgent.reset_timer(name)
+
+    name
+    |> get_contest()
+    |> update_contest(%{start_time: DateTime.utc_now()})
   end
 
   def pause_contest(name) do
@@ -102,19 +106,20 @@ defmodule Quadquizaminos.Contests do
   """
 
   @spec contest_game_records(%Contest{}) :: [%GameBoard{}, ...]
-  def contest_game_records(contest) do
+  def contest_game_records(contest, sorter \\ "score") do
     contest.id
     |> ended_contest?()
-    |> contest_game_records(contest)
+    |> contest_game_records(contest, sorter)
   end
 
-  defp contest_game_records(true = _ended_contest, contest) do
+  defp contest_game_records(true = _ended_contest, contest, sorter) do
     contest.start_time
     |> GameBoard.by_start_and_end_time(contest.end_time)
     |> GameBoard.by_contest(contest.id)
+    |> GameBoard.sort_by(sorter)
     |> GameBoard.preloads([:user])
     |> Repo.all()
   end
 
-  defp contest_game_records(_ended_contest, _contest), do: []
+  defp contest_game_records(_ended_contest, _contest, _sorter), do: []
 end

@@ -35,6 +35,8 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through [:browser]
 
     get "/", PageController, :index
+    get "/sbom", PageController, :sbom
+    get "/.well-known", PageController, :wellknown
 
     live "/leaderboard", LeaderboardLive
     live "/leaderboard/:board_id", LeaderboardLive.Show

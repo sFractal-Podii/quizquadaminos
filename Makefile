@@ -69,11 +69,17 @@ sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/  && npm install && npm install -g @cyclonedx/bom@2.0.2 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	mkdir -p assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
 sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
 	mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	mkdir -p assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
 
 release: ## Build a release of the application with MIX_ENV=prod
@@ -91,21 +97,21 @@ docker-image: #builds docker image
 
 .PHONY: push-image-gcp push-and-serve deploy-existing-image
 push-image-gcp: ## push image to gcp
-	@if [[ "$(docker images -q gcr.io/twinklymaha/quadquiz:$(APP_VERSION)> /dev/null)" != "" ]]; then \
+	@if [[ "$(docker images -q gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION)> /dev/null)" != "" ]]; then \
   @echo "Removing previous image $(APP_VERSION) from your machine..."; \
-	docker rmi gcr.io/twinklymaha/quadquiz:$(APP_VERSION);\
+	docker rmi gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION);\
 	fi
-	docker build . -t gcr.io/twinklymaha/quadquiz:$(APP_VERSION) --no-cache
+	docker build . -t gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION) --no-cache
 
-	gcloud container images delete gcr.io/twinklymaha/quadquiz:$(APP_VERSION) --force-delete-tags  || echo "no image to delete on the remote"
-	docker push gcr.io/twinklymaha/quadquiz:$(APP_VERSION)
+	gcloud container images delete gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION) --force-delete-tags  || echo "no image to delete on the remote"
+	docker push gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION)
 
 push-and-serve-gcp: push-image-gcp deploy-existing-image ## creates docker image then push to gcp and launches an instance with the image
 
 .PHONY: deploy-existing-image
 deploy-existing-image: ## creates an instance using existing gcp docker image
 	gcloud compute instances create-with-container $(instance-name) \
-		--container-image=gcr.io/twinklymaha/quadquiz:$(DOCKER_IMAGE_TAG) \
+		--container-image=gcr.io/duncan-openc2-plugfest/quadquiz:$(DOCKER_IMAGE_TAG) \
 		--machine-type=e2-micro \
 		--subnet=default \
 		--network-tier=PREMIUM \
@@ -115,4 +121,4 @@ deploy-existing-image: ## creates an instance using existing gcp docker image
 
 .PHONY: update-instance
 update-instance: ## updates image of a running instance
-	gcloud compute instances update-container $(instance-name) --container-image gcr.io/twinklymaha/quadquiz:$(image-tag)
+	gcloud compute instances update-container $(instance-name) --container-image gcr.io/duncan-openc2-plugfest/quadquiz:$(image-tag)

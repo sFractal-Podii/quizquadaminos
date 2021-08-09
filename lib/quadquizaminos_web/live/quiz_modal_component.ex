@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     <div style="text-align:center;">
 
     <button phx-click="unpause">Continue</button><br>
-    <%= for category <- QnA.categories() do %>
+    <%= for category <- QnA.remove_used_categories(@categories) do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
     <br>
@@ -50,7 +50,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
     <%= text_input f, :guess %>
-    <button class="button-outline" phx-click="skip-question" phx-value-category="bonus">Skip Question</button><br>
+    <button class="button-outline" phx-click="skip-question">Skip Question</button><br>
     <%= submit  "Continue" %>
     </form>
     """
@@ -85,6 +85,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
       :rm_all_vulns -> "fa-hammer"
       :rm_all_lic_issues -> "fa-tape"
       :superpower -> "fa-superpowers"
+      :cyberinsurance -> "fa-file-contract"
     end
   end
 
