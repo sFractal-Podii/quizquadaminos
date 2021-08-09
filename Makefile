@@ -6,6 +6,7 @@ APP_VERSION := $(shell git fetch && git describe --tags `git rev-list --tags --m
 DOCKER_IMAGE_TAG ?= $(APP_VERSION)
 GIT_REVISION ?= `git rev-parse HEAD`
 SBOM_FILE_NAME_CY ?= $(APP_NAME).$(APP_VERSION)-cyclonedx-sbom.1.0.0
+SBOM_FILE_NAME_SPDX ?= $(APP_NAME).$(APP_VERSION)-spdx-sbom.1.0.0
 
 # Introspection targets
 # ---------------------
@@ -29,8 +30,11 @@ header:
 	@printf "\033[33m%-23s\033[0m" "DOCKER_IMAGE_TAG"
 	@printf "\033[35m%s\033[0m" $(DOCKER_IMAGE_TAG)
 	@echo "\n"
-	@printf "\033[33m%-23s\033[0m" "FILENAME"
+	@printf "\033[33m%-23s\033[0m" "CYCLONEDX FILENAME"
 	@printf "\033[35m%s\033[0m" $(SBOM_FILE_NAME_CY)
+	@echo "\n"
+	@printf "\033[33m%-23s\033[0m" "SPDX FILENAME"
+	@printf "\033[35m%s\033[0m" $(SBOM_FILE_NAME_SPDX)
 	@echo "\n"
 
 .PHONY: targets
@@ -69,16 +73,20 @@ sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/  && npm install && npm install -g @cyclonedx/bom@2.0.2 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	mkdir -p assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
 sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
 	mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	mkdir -p assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
 
