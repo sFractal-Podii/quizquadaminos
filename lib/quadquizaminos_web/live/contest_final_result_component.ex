@@ -62,6 +62,4 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
         end
     end
   end
-
-  defp user_name(%Quadquizaminos.Accounts.User{} = user, _uid), do: user.name
 end

@@ -90,5 +90,5 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
   end
 
   defp prefix(:superpower), do: "fab"
-  defp prefix(power), do: "fas"
+  defp prefix(_power), do: "fas"
 end
