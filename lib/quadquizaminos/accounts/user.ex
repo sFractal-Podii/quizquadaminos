@@ -12,11 +12,12 @@ defmodule Quadquizaminos.Accounts.User do
     field :avatar, :string
     field :role, :string
     field :provider, :string
+    field :email, :string
     has_many :game_boards, GameBoard, foreign_key: :uid, references: :uid
   end
 
   def changeset(user, attrs \\ %{}) do
     user
-    |> cast(attrs, [:uid, :name, :avatar, :role, :provider])
+    |> cast(attrs, [:uid, :name, :avatar, :role, :provider, :email])
   end
 end
