@@ -2,6 +2,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   use Phoenix.LiveView
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
+  import Phoenix.HTML.{Form, Tag}
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
@@ -23,6 +24,21 @@ defmodule QuadquizaminosWeb.ContestsLive do
        contest_records: [],
        contest_id: nil
      )}
+  end
+
+  def handle_event("add_contest_date", %{"contest" => name}, socket) do
+    IO.inspect(name, label: "=====================")
+
+    contests =
+      Enum.map(socket.assigns.contests, fn contest ->
+        if contest.name == name do
+          %{contest | add_contest_date: true}
+        else
+          contest
+        end
+      end)
+
+    {:noreply, assign(socket, contests: contests)}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
@@ -293,5 +309,13 @@ defmodule QuadquizaminosWeb.ContestsLive do
             </section>
         </div>
     """
+  end
+
+  def countdown_timer(nil) do
+    nil
+  end
+
+  def countdown_timer(date) do
+    DateTime.diff(date, DateTime.utc_now())
   end
 end
