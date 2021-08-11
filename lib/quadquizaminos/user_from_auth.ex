@@ -10,7 +10,6 @@ defmodule Quadquizaminos.UserFromAuth do
   alias Quadquizaminos.Accounts.User
 
   def find_or_create(%Auth{} = auth) do
-    IO.inspect(auth, label: "auth print")
     case Accounts.get_user(uid(auth)) do
       nil ->
         Accounts.create_user(%User{}, basic_info(auth))
@@ -31,7 +30,6 @@ defmodule Quadquizaminos.UserFromAuth do
   end
 
   defp basic_info(auth) do
-    IO.inspect(auth.info.email, label: "email")
     %{
       uid: uid(auth),
       name: name_from_auth(auth),
