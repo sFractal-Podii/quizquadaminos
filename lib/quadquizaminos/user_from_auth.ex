@@ -35,7 +35,8 @@ defmodule Quadquizaminos.UserFromAuth do
       name: name_from_auth(auth),
       avatar: avatar_from_auth(auth),
       role: auth.uid |> configured_user?() |> role(),
-      provider: Atom.to_string(auth.provider)
+      provider: Atom.to_string(auth.provider),
+      email: auth.info.email
     }
   end
 
