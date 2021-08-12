@@ -26,8 +26,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
      )}
   end
 
-  def handle_event("add_date", %{"contest_date" => date}, socket) do
-    {:ok, date, 0} = DateTime.from_iso8601(date)
+  def handle_event("save_date", %{"contest_date" => date}, socket) do
+    {:ok, date, 0} = DateTime.from_iso8601(date <> ":00Z")
 
     contests =
       Enum.map(
@@ -59,8 +59,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("edit_contest_date", %{"contest" => name}, socket) do
-    IO.puts("==============================")
-
     contests =
       Enum.map(socket.assigns.contests, fn contest ->
         if contest.name == name do
@@ -69,7 +67,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
           contest
         end
       end)
-      |> IO.inspect(label: "++++++++++++++++++++++")
 
     {:noreply, assign(socket, contests: contests)}
   end
@@ -344,11 +341,25 @@ defmodule QuadquizaminosWeb.ContestsLive do
     """
   end
 
-  def countdown_timer(nil) do
-    nil
-  end
-
-  def countdown_timer(date) do
-    DateTime.diff(date, DateTime.utc_now())
+  def contest_date(assigns, contest) do
+    ~L"""
+    <%= unless contest.add_contest_date || contest.contest_date do %>
+    <td><button phx-click="add_contest_date" phx-value-contest='<%= contest.name%>'>Add</button></td>
+    <% else %>
+    <%= if contest.add_contest_date || contest.edit_contest_date do %>
+      <td>
+    <%= f = form_for :count, "#", [phx_submit: :save_date] %>
+    <input type="datetime-local" id="contest_date"
+       name="contest_date">
+      <button><i class="fas fa-edit fa-2x"></i></button>
+    </form>
+    </td>   
+    <% else %>
+    <td><%= truncate_date(contest.contest_date) %></td>
+    <td><button phx-click="edit_contest_date" phx-value-contest='<%= contest.name%>'><i class="fas fa-edit fa-2x"></i></button></td>
+                 
+    <% end %>
+    <% end %> 
+    """
   end
 end
