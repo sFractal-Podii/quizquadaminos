@@ -26,9 +26,26 @@ defmodule QuadquizaminosWeb.ContestsLive do
      )}
   end
 
-  def handle_event("add_contest_date", %{"contest" => name}, socket) do
-    IO.inspect(name, label: "=====================")
+  def handle_event("add_date", %{"contest_date" => date}, socket) do
+    {:ok, date, 0} = DateTime.from_iso8601(date)
 
+    contests =
+      Enum.map(
+        socket.assigns.contests,
+        fn contest ->
+          if contest.add_contest_date do
+            {:ok, contest} = Contests.update_contest(contest, %{contest_date: date})
+            contest
+          else
+            contest
+          end
+        end
+      )
+
+    {:noreply, assign(socket, contests: contests)}
+  end
+
+  def handle_event("add_contest_date", %{"contest" => name}, socket) do
     contests =
       Enum.map(socket.assigns.contests, fn contest ->
         if contest.name == name do
@@ -37,6 +54,22 @@ defmodule QuadquizaminosWeb.ContestsLive do
           contest
         end
       end)
+
+    {:noreply, assign(socket, contests: contests)}
+  end
+
+  def handle_event("edit_contest_date", %{"contest" => name}, socket) do
+    IO.puts("==============================")
+
+    contests =
+      Enum.map(socket.assigns.contests, fn contest ->
+        if contest.name == name do
+          %{contest | edit_contest_date: true}
+        else
+          contest
+        end
+      end)
+      |> IO.inspect(label: "++++++++++++++++++++++")
 
     {:noreply, assign(socket, contests: contests)}
   end
