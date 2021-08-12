@@ -33,9 +33,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
       Enum.map(
         socket.assigns.contests,
         fn contest ->
-          if contest.add_contest_date do
+          if contest.add_contest_date or contest.edit_contest_date do
             {:ok, contest} = Contests.update_contest(contest, %{contest_date: date})
-            contest
+            %{contest | add_contest_date: false, edit_contest_date: false}
           else
             contest
           end

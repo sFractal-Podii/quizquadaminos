@@ -41,17 +41,11 @@
                  <%= if contest.add_contest_date || contest.edit_contest_date do %>
                   <td>
                  <%= f = form_for :count, "#", [phx_submit: :add_date] %>
-                
-       
-         <input type="datetime-local" id="meeting-time"
-       name="contest_date" value="2018-06-12T19:30:00Z">
-        
-         
-                 
+                 <input type="datetime-local" id="meeting-time"
+                 name="contest_date" value="2018-06-12T20:40:00Z">
                  <button><i class="fas fa-edit fa-2x"></i></button>
                  </form>
-                 </td>
-                 
+                 </td>   
                  <% else %>
                  <td><%= truncate_date(contest.contest_date) %></td>
                  <td><button phx-click="edit_contest_date" phx-value-contest='<%= contest.name%>'><i class="fas fa-edit fa-2x"></i></button></td>
