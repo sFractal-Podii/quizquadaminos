@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   alias Quadquizaminos.Util
 
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(top_10_games: Records.top_10_games())}
+    {:ok, socket |> assign(top_10_games: Records.fetch_records(1), page: 1)}
   end
 
   def render(assigns) do
@@ -39,12 +39,24 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     </tr>
     <% end %>
     </table>
+    <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
+    <%= live_patch i, to: Routes.live_path(@socket,__MODULE__,page: i)%>
+    <% end %>
     </div>
     """
   end
 
   def handle_event("sort", %{"param" => param}, socket) do
     socket = socket |> assign(top_10_games: Records.top_10_games(param))
+    {:noreply, socket}
+  end
+
+  def handle_params(%{"page" => page}, _url, socket) do
+    page = String.to_integer(page)
+    {:noreply, socket |> assign(page: page, top_10_games: Records.fetch_records(page))}
+  end
+  
+  def handle_params(_params, _url, socket) do
     {:noreply, socket}
   end
 end

@@ -2,6 +2,7 @@ defmodule Quadquizaminos.GameBoard.Records do
   @moduledoc """
   This module is responsible for manipulating player game records.
   """
+  import Ecto.Query
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Contest
@@ -94,5 +95,10 @@ defmodule Quadquizaminos.GameBoard.Records do
   def change_game_board(attrs) do
     %GameBoard{}
     |> GameBoard.changeset(attrs)
+  end
+
+  def fetch_records(page)do
+   query = from q in GameBoard, offset: (^page-1) * 5, limit: 5, preload: [:user]
+   Repo.all(query)
   end
 end
