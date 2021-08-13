@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   alias Quadquizaminos.Util
 
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(top_10_games: Records.fetch_records(1), page: 1)}
+    {:ok, socket |> assign(paginate_records: Records.fetch_records(1), page: 1)}
   end
 
   def render(assigns) do
@@ -26,7 +26,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <th>Tetris board</th>
     </tr>
 
-    <%= for record <- @top_10_games do %>
+    <%= for record <- @paginate_records do %>
      <tr>
     <td><%= record.user.name %></td>
     <td><%= record.score %></td>
@@ -46,16 +46,17 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     """
   end
 
-  def handle_event("sort", %{"param" => param}, socket) do
-    socket = socket |> assign(top_10_games: Records.top_10_games(param))
+  def handle_event("sort", %{"param" => sort_by}, socket) do
+    IO.inspect(sort_by)
+    socket = socket |> assign(paginate_records: Records.sort_games(sort_by))
     {:noreply, socket}
   end
 
   def handle_params(%{"page" => page}, _url, socket) do
     page = String.to_integer(page)
-    {:noreply, socket |> assign(page: page, top_10_games: Records.fetch_records(page))}
+    {:noreply, socket |> assign(page: page, paginate_records: Records.fetch_records(page))}
   end
-  
+
   def handle_params(_params, _url, socket) do
     {:noreply, socket}
   end

@@ -16,7 +16,7 @@ defmodule Quadquizaminos.GameBoard.Records do
 
   def record_player_game(_game_over, _game_records), do: nil
 
-  def top_10_games(sort_by \\ "score") do
+  def sort_games(sort_by \\ "score") do
     GameBoard.game_record_query(sort_by)
     |> Repo.all()
   end
@@ -97,8 +97,14 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> GameBoard.changeset(attrs)
   end
 
-  def fetch_records(page)do
-   query = from q in GameBoard, offset: (^page-1) * 5, limit: 5, preload: [:user]
-   Repo.all(query)
+  def fetch_records(page) do
+    query =
+      from q in GameBoard,
+        offset: (^page - 1) * 5,
+        order_by: [desc: q.score],
+        limit: 25,
+        preload: [:user]
+
+    Repo.all(query)
   end
 end

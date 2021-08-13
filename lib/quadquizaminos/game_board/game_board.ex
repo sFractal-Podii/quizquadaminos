@@ -36,7 +36,7 @@ defmodule Quadquizaminos.GameBoard do
     from r in __MODULE__,
       order_by: [desc: ^(order_by |> String.to_atom())],
       order_by: [asc: r.end_time - r.start_time],
-      limit: 10,
+      limit: 25,
       preload: [:user]
   end
 
