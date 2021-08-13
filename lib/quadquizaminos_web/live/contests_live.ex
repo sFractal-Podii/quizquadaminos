@@ -10,7 +10,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :count_down)
-    :timer.send_interval(1000, self(), :timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
 
@@ -23,32 +22,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
        contest_records: [],
        contest_id: nil
      )}
-  end
-
-  def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
-    {:noreply, socket |> _create_contest(contest_name)}
-  end
-
-  def handle_event("start", %{"contest" => name}, socket) do
-    {:noreply, start_or_resume_contest(socket, name)}
-  end
-
-  def handle_event("restart", %{"contest" => name}, socket) do
-    {:noreply, _restart_contest(socket, name)}
-  end
-
-  def handle_event("stop", %{"contest" => name}, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "contest_record",
-      "record_contest_scores",
-      name
-    )
-
-    {:noreply, _end_contest(socket, name)}
-  end
-
-  def handle_info(:timer, socket) do
-    {:noreply, _update_contests_timer(socket)}
   end
 
   def handle_info(:count_down, socket) do
@@ -96,95 +69,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     end
   end
 
-  defp _update_contests_timer(socket) do
-    inactive_contest =
-      Enum.reject(socket.assigns.contests, fn contest ->
-        contest.name in Contests.active_contests_names()
-      end)
-
-    contests =
-      Contests.active_contests_names()
-      |> Enum.map(fn name ->
-        time = Contests.time_elapsed(name)
-        status = Contests.contest_status(name)
-
-        contest =
-          Enum.find(socket.assigns.contests, fn contest ->
-            contest.name == name
-          end)
-
-        %{contest | time_elapsed: time, status: to_string(status)}
-      end)
-
-    assign(socket, contests: contests ++ inactive_contest)
-  end
-
-  defp _create_contest(socket, contest_name) do
-    contests = socket.assigns.contests
-
-    case Contests.create_contest(%{name: contest_name}) do
-      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
-      _ -> socket
-    end
-  end
-
-  defp _start_contest(socket, name) do
-    contests =
-      Enum.map(socket.assigns.contests, fn
-        contest ->
-          if contest.name == name do
-            {:ok, {:ok, started_contest}} = Contests.start_contest(name)
-            started_contest
-          else
-            contest
-          end
-      end)
-
-    assign(socket, contests: contests)
-  end
-
-  defp _restart_contest(socket, name) do
-    contests =
-      Enum.map(socket.assigns.contests, fn
-        contest ->
-          if contest.name == name do
-            {:ok, restarted_contest} = Contests.restart_contest(name)
-            restarted_contest
-          else
-            contest
-          end
-      end)
-
-    assign(socket, contests: contests)
-  end
-
-  defp _end_contest(socket, name) do
-    contests =
-      Enum.map(socket.assigns.contests, fn
-        contest ->
-          if contest.name == name do
-            {:ok, {:ok, ended_contest}} = Contests.end_contest(name)
-            ended_contest
-          else
-            contest
-          end
-      end)
-
-    assign(socket, contests: contests)
-  end
-
-  defp start_or_pause_button(assigns, contest) do
-    if contest.status == "running" do
-      ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo fa-2x"></i></button>
-      """
-    else
-      ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %>  icon-button" phx-click="start" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>><i class="fas fa-play-circle fa-2x"></i></button>
-      """
-    end
-  end
-
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
@@ -212,29 +96,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     end
   end
 
-  defp display_text_input(true = _admin?) do
-    """
-    <input type="text" phx-keydown="save"  phx-key="Enter">
-    """
-  end
-
-  defp display_text_input(_), do: ""
-
-  defp start_or_resume_contest(socket, name) do
-    if name in Contests.active_contests_names() && GenServer.whereis(name |> String.to_atom()) do
-      Contests.resume_contest(name)
-      socket
-    else
-      _start_contest(socket, name)
-    end
-  end
-
-  defp admin?(current_user) do
-    ids = Application.get_env(:quadquizaminos, :github_ids)
-
-    current_user in (ids |> Enum.map(&(&1 |> to_string())))
-  end
-
   defp to_human_time(seconds) do
     hours = div(seconds, 3600)
     rem = rem(seconds, 3600)
@@ -252,19 +113,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
     DateTime.truncate(date, :second)
   end
 
-  def contest_running?(contest) do
-    contest.status == "running"
-  end
-
-  def maybe_disable_button(contest) do
-    if contest.end_time || not contest_running?(contest) do
-      "disabled"
-    end
-  end
-
-  def countdown_timer(_assigns, true = _admin?), do: ""
-
-  def countdown_timer(assigns, _) do
+  def countdown_timer(assigns) do
     ~L"""
     <div class="container">
             <section class="phx-hero">
