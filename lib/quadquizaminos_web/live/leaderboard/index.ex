@@ -47,7 +47,6 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   end
 
   def handle_event("sort", %{"param" => sort_by}, socket) do
-    IO.inspect(sort_by)
     socket = socket |> assign(paginate_records: Records.sort_games(sort_by))
     {:noreply, socket}
   end
