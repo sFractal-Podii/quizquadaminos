@@ -4,7 +4,10 @@ defmodule QuadquizaminosWeb.LayoutView do
   defp admin_dropdown do
     ~E"""
     <div class="dropdown">
-    <a href="/admin" class="dropbtn">Admin</a>
+    <a href="/admin" class="dropbtn">
+    Admin
+    <i class="fa fa-caret-down"></i>
+    </a>
      <div class="dropdown-content">
      <a class="button" href="<%= Routes.contests_path(QuadquizaminosWeb.Endpoint, :index) %>">
      Contest
