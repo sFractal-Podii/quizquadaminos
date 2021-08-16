@@ -64,6 +64,11 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
     assert html =~ "<p><b>End game status for Quiz Block </b>"
   end
 
+  test "page records", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/leaderboard")
+    IO.inspect(view)
+  end
+
   defp row_count(html) do
     row =
       ~r/<tr>/
