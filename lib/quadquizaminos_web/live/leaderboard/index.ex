@@ -17,9 +17,9 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <table>
     <tr>
     <th>Player</th>
-    <th phx-click="sort" phx-value-param="score">Score</th>
-    <th phx-click="sort" phx-value-param="dropped_bricks">Bricks</th>
-    <th phx-click="sort" phx-value-param="correctly_answered_qna">Questions</th>
+    <th class="pointer" phx-click="sort" phx-value-param="score">Score</th>
+    <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks">Bricks</th>
+    <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna">Questions</th>
     <th>Start time</th>
     <th>End time</th>
     <th>Date</th>
@@ -29,7 +29,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <%= for record <- @paginate_records do %>
      <tr>
     <td><%= record.user.name %></td>
-    <td><%= record.score %></td>
+    <td class="score"><%= record.score %></td>
     <td><%= record.dropped_bricks %></td>
     <td><%= record.correctly_answered_qna %></td>
     <td><%= Util.datetime_to_time(record.start_time) %></td>
@@ -40,7 +40,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <% end %>
     </table>
     <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
-    <%= live_patch i, to: Routes.live_path(@socket,__MODULE__,page: i)%>
+    <%= live_patch i, to: Routes.live_path(@socket,__MODULE__,page: i), id: "goto-#{i}" %>
     <% end %>
     </div>
     """

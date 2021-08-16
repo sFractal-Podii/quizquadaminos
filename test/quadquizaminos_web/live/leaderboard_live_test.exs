@@ -64,6 +64,59 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
     assert html =~ "<p><b>End game status for Quiz Block </b>"
   end
 
+  describe "pagination" do
+    setup do
+      1..97
+      |> Enum.each(fn num ->
+        bottom = %{
+          <<1, 20>> => <<1, 20, 112, 105, 110, 107>>,
+          <<1, 19>> => <<1, 19, 112, 105, 110, 107>>,
+          <<1, 18>> => <<1, 18, 112, 105, 110, 107>>,
+          <<1, 17>> => <<1, 17, 112, 105, 110, 107>>
+        }
+
+        attrs = %{name: "Quiz Block ", uid: "#{num}", role: "player"}
+        {:ok, user} = Accounts.create_user(%User{}, attrs)
+
+        game_record = %{
+          start_time: ~U[2021-04-20 06:00:53Z],
+          end_time: DateTime.utc_now(),
+          uid: user.uid,
+          score: num,
+          dropped_bricks: 10,
+          correctly_answered_qna: 2,
+          bottom_blocks: bottom
+        }
+
+        {:ok, _record} = Records.record_player_game(true, game_record)
+      end)
+    end
+
+    test "renders 25 records at a time", %{conn: conn} do
+      Enum.each(1..3, fn page ->
+        {:ok, _view, html} = live(conn, "/leaderboard?page=#{page}")
+
+        assert 25 == row_count(html)
+      end)
+    end
+
+    test "last page contains less records (22)", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/leaderboard?page=4")
+
+      assert 22 == row_count(html)
+    end
+
+    test "can navigate to next page", %{conn: conn} do
+      {:ok, view, html} = live(conn, "/leaderboard")
+      assert html =~ "<td class=\"score\">97</td>"
+
+      html = view |> element("a[href='/leaderboard?page=2']") |> render_click()
+      refute html =~ "<td class=\"score\">97</td>"
+    end
+
+    test "maintains sort order"
+  end
+
   defp row_count(html) do
     row =
       ~r/<tr>/
