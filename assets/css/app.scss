@@ -147,7 +147,13 @@
   display: block;
 }
 .dropdown:hover .dropdown-content {
-  display: block;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown:hover .dropdown-content a{
+  display: flex;
+  align-items: center;
 }
 
 .red {

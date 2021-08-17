@@ -1,6 +1,5 @@
 defmodule QuadquizaminosWeb.ContestRules do
   use Phoenix.LiveView
-  import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   def render(assigns) do

@@ -85,9 +85,10 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
       :rm_all_vulns -> "fa-hammer"
       :rm_all_lic_issues -> "fa-tape"
       :superpower -> "fa-superpowers"
+      :cyberinsurance -> "fa-file-contract"
     end
   end
 
   defp prefix(:superpower), do: "fab"
-  defp prefix(power), do: "fas"
+  defp prefix(_power), do: "fas"
 end

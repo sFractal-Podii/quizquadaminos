@@ -3,7 +3,6 @@
     <h1>QuadBlockQuiz</h1>
     <h3>Supply Chain Edition</h3>
     <h4>Version <%= Quadquizaminos.Meta.version() %></h4>
-    <h4><a href="bom.json" target="_blank">SBOM available here</a></h4>
 
     <h2>Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game</h2>
     <p>We proudly present the SupplyChainSandbox edition of QuadBlockQuiz -
