@@ -680,14 +680,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
       |> game_record()
       |> Map.put(:contest_id, socket.assigns.contest_id)
 
-    if socket.assigns.state == :playing and contest.id == socket.assigns.contest_id do
+    same_contest? = contest.id == socket.assigns.contest_id
+
+    if socket.assigns.state == :playing and same_contest? do
       Records.record_player_game(true, record)
     end
 
-    state =
-      if Enum.empty?(Contests.active_contests_names()),
-        do: :game_over,
-        else: socket.assigns.state
+    state = if same_contest?, do: :game_over, else: socket.assigns.state
 
     {:noreply, socket |> assign(state: state)}
   end
