@@ -30,7 +30,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     {:ok,
      socket
-     |> assign(current_user: current_user, start_timer: false)
+     |> assign(
+       current_user: current_user,
+       start_timer: false,
+       active_contests: Contests.active_contests(),
+       contest_id: nil,
+       choosing_contest: false
+     )
      |> init_game
      |> start_game()}
   end
@@ -41,7 +47,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="row">
             <div class="column column-50 column-offset-25">
               <h1>Welcome to QuadBlockQuiz!</h1>
-                <button phx-click="start">Start</button>
+              <%= if not @choosing_contest do %>
+                  <button phx-click="choose_contest">Start</button>
+                <% else %>
+                  <br />
+                  <h2> Join a contest? </h2>
+                  <%= for contest <- @active_contests do %>
+                    <button phx-click="start" phx-value-contest="<%= contest.id %>" ><%= contest.name %></button>
+                  <% end %>
+                  <button phx-click="start" phx-value-contest="" class="button button-outline">Just playing</button>
+              <% end %>
             </div>
         </div>
       </div>
@@ -75,7 +90,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             <%= raw SvgBoard.svg_foot() %>
             <hr>
               <button phx-click="start">Play again?</button>
-        </div>
+              </div>
         <div class="column column-25 column-offset-25">
         <p><%= @brick_count %> QuadBlocks dropped</p>
         <p><%= @row_count %> rows cleard</p>
@@ -261,11 +276,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    game_records =
-      Contests.active_contests_names()
-      |> contest_game_records(game_record(socket))
-
-    Records.record_player_game(response.game_over, game_records)
+    if response.game_over, do: save_game(game_record(socket), socket)
 
     socket
     |> assign(brick: response.brick)
@@ -335,7 +346,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    Records.record_player_game(true, game_record(socket))
+    socket |> game_record() |> save_game(socket)
+
     {:noreply, socket |> assign(state: :game_over, modal: false)}
   end
 
@@ -361,8 +373,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("keydown", _, socket), do: {:noreply, socket}
 
-  def handle_event("start", _, socket) do
-    {:noreply, new_game(socket)}
+  def handle_event("choose_contest", _, socket) do
+    {:noreply, socket |> assign(choosing_contest: true)}
+  end
+
+  def handle_event("start", %{"contest" => contest_id}, socket) do
+    contest_id =
+      case Integer.parse(contest_id) do
+        {id, _} -> id
+        :error -> nil
+      end
+
+    {:noreply, socket |> new_game() |> assign(contest_id: contest_id)}
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
@@ -656,9 +678,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
     record =
       socket
       |> game_record()
-      |> Map.put(:contest_id, contest.id)
+      |> Map.put(:contest_id, socket.assigns.contest_id)
 
-    if socket.assigns.state == :playing do
+    if socket.assigns.state == :playing and contest.id == socket.assigns.contest_id do
       Records.record_player_game(true, record)
     end
 
@@ -752,8 +774,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp on_tick(_state, socket) do
-    ## if not in playing state, don't do anything on tick
-    socket
+    socket |> assign(active_contests: Contests.active_contests())
   end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
@@ -864,6 +885,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
       "current_scores",
       records
     )
+  end
+
+  defp save_game(record, %{assigns: %{contest_id: contest_id}} = _socket) do
+    record = record |> Map.put(:contest_id, contest_id)
+    Records.record_player_game(true, record)
   end
 
   defp contest_game_records(active_contests, records) do

@@ -257,7 +257,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
   defp pause_game(conn) do
     {:ok, view, _html} = live(conn, "/tetris")
 
-    render_click(view, "start")
+    render_click(view, "start", %{contest: ""})
     html = render_keydown(view, "keydown", %{"key" => " "})
     {view, html}
   end
