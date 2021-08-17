@@ -19,5 +19,14 @@ defmodule Quadquizaminos.Accounts.User do
   def changeset(user, attrs \\ %{}) do
     user
     |> cast(attrs, [:uid, :name, :avatar, :role, :provider, :email])
+    |> validate_format(
+      :email,
+      ~r/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+    )
+  end
+
+  def email_changeset(user, attrs \\ %{}) do
+    user
+    |> cast(attrs, [:email])
   end
 end
