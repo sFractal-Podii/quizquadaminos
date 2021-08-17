@@ -97,14 +97,9 @@ defmodule Quadquizaminos.GameBoard.Records do
     |> GameBoard.changeset(attrs)
   end
 
-  def fetch_records(page) do
-    query =
-      from q in GameBoard,
-        offset: (^page - 1) * 5,
-        order_by: [desc: q.score],
-        limit: 25,
-        preload: [:user]
-
+  def fetch_records(page \\ 1, sorter \\ "score") do
+    query = GameBoard |> GameBoard.sort_by(sorter) |> GameBoard.paginate_query(page, 5) |> GameBoard.preloads([:user])
+    
     Repo.all(query)
   end
 end
