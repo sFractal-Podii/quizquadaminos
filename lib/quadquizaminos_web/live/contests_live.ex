@@ -2,6 +2,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   use Phoenix.LiveView
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
+  import Phoenix.HTML.{Form, Tag}
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
@@ -22,6 +23,77 @@ defmodule QuadquizaminosWeb.ContestsLive do
        contest_records: [],
        contest_id: nil
      )}
+  end
+
+  def handle_event("save_date", %{"contest_date" => date}, socket) do
+    {:ok, date, 0} = DateTime.from_iso8601(date <> ":00Z")
+
+    contests =
+      Enum.map(
+        socket.assigns.contests,
+        fn contest ->
+          if contest.add_contest_date or contest.edit_contest_date do
+            {:ok, contest} = Contests.update_contest(contest, %{contest_date: date})
+            %{contest | add_contest_date: false, edit_contest_date: false}
+          else
+            contest
+          end
+        end
+      )
+
+    {:noreply, assign(socket, contests: contests)}
+  end
+
+  def handle_event("add_contest_date", %{"contest" => name}, socket) do
+    contests =
+      Enum.map(socket.assigns.contests, fn contest ->
+        if contest.name == name do
+          %{contest | add_contest_date: true}
+        else
+          contest
+        end
+      end)
+
+    {:noreply, assign(socket, contests: contests)}
+  end
+
+  def handle_event("edit_contest_date", %{"contest" => name}, socket) do
+    contests =
+      Enum.map(socket.assigns.contests, fn contest ->
+        if contest.name == name do
+          %{contest | edit_contest_date: true}
+        else
+          contest
+        end
+      end)
+
+    {:noreply, assign(socket, contests: contests)}
+  end
+
+  def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
+    {:noreply, socket |> _create_contest(contest_name)}
+  end
+
+  def handle_event("start", %{"contest" => name}, socket) do
+    {:noreply, start_or_resume_contest(socket, name)}
+  end
+
+  def handle_event("restart", %{"contest" => name}, socket) do
+    {:noreply, _restart_contest(socket, name)}
+  end
+
+  def handle_event("stop", %{"contest" => name}, socket) do
+    QuadquizaminosWeb.Endpoint.broadcast(
+      "contest_record",
+      "record_contest_scores",
+      name
+    )
+
+    {:noreply, _end_contest(socket, name)}
+  end
+
+  def handle_info(:timer, socket) do
+    {:noreply, _update_contests_timer(socket)}
   end
 
   def handle_info(:count_down, socket) do
@@ -141,6 +213,29 @@ defmodule QuadquizaminosWeb.ContestsLive do
                 <h3>Contest coming soon</h3>
             </section>
         </div>
+    """
+  end
+
+  def contest_date(assigns, contest) do
+    ~L"""
+    <%= if admin?(@current_user) do %>
+      <%= unless contest.add_contest_date || contest.contest_date do %>
+        <td><button phx-click="add_contest_date" phx-value-contest='<%= contest.name%>'>Add</button></td>
+        <% else %>
+        <%= if contest.add_contest_date || contest.edit_contest_date do %>
+          <td>
+        <%= f = form_for :count, "#", [phx_submit: :save_date] %>
+        <input type="datetime-local" id="contest_date"
+          name="contest_date">
+          <button>Save</button>
+        </form>
+        </td>
+        <% else %>
+        <td><%= truncate_date(contest.contest_date) %></td>
+        <td><button class="button-clear" phx-click="edit_contest_date" phx-value-contest='<%= contest.name%>'><i class="fas fa-edit fa-2x"></i></button></td>
+        <% end %>
+      <% end %>
+    <% end %>
     """
   end
 end

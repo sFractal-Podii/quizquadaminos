@@ -10,6 +10,9 @@
                  <th></th>
                  <th>Start time</th>
                  <th>End time</th>
+                 <%= if admin?(@current_user) do %>
+                 <th colspan="2">contest date</th>
+                 <% end %>
              </tr>
              <tr>
                 <%= for contest <- @contests do %>
@@ -20,13 +23,14 @@
                 </td>
                 <td><%= truncate_date(contest.start_time) %></td>
                 <td><%= truncate_date(contest.end_time) %></td>
-                 <td><%= live_result_button(assigns, contest) %></td>
+                <%= contest_date(assigns, contest)%>
+                  <td><%= live_result_button(assigns, contest) %></td>
             </tr>
-          <% end %>
+           <% end %>
         </table>
     <% else %>
         <%= countdown_timer(assigns) %>
      <% end %>
-        
+
 <% end %>
 </div>
