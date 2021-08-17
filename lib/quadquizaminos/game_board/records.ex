@@ -2,7 +2,6 @@ defmodule Quadquizaminos.GameBoard.Records do
   @moduledoc """
   This module is responsible for manipulating player game records.
   """
-  import Ecto.Query
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Contest
