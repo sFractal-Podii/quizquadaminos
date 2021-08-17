@@ -97,7 +97,7 @@ defmodule Quadquizaminos.GameBoard.Records do
   end
 
   def fetch_records(page \\ 1, sorter \\ "score") do
-    query = GameBoard |> GameBoard.sort_by(sorter) |> GameBoard.paginate_query(page, 5) |> GameBoard.preloads([:user])
+    query = GameBoard |> GameBoard.sort_by(sorter) |> GameBoard.paginate_query(page, 25) |> GameBoard.preloads([:user])
     
     Repo.all(query)
   end
