@@ -43,13 +43,6 @@
     <%= if @current_user  do %>
     <%= display_name_and_avatar(@current_user) %>
     <%= link "Play Game", to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris), class: "button" %>
-    <% else %>
-
-    <ul style="list-style: none">
-        <li>
-            <%= hide_or_show_sign_up_button() %>
-        </li>
-    </ul>
     <% end %>
     <% else %>
     <h1>Game not available until RSAC starts</h1>
