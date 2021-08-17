@@ -343,23 +343,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def contest_date(assigns, contest) do
     ~L"""
-    <%= unless contest.add_contest_date || contest.contest_date do %>
-    <td><button phx-click="add_contest_date" phx-value-contest='<%= contest.name%>'>Add</button></td>
-    <% else %>
-    <%= if contest.add_contest_date || contest.edit_contest_date do %>
-      <td>
-    <%= f = form_for :count, "#", [phx_submit: :save_date] %>
-    <input type="datetime-local" id="contest_date"
-       name="contest_date">
-      <button><i class="fas fa-edit fa-2x"></i></button>
-    </form>
-    </td>   
-    <% else %>
-    <td><%= truncate_date(contest.contest_date) %></td>
-    <td><button phx-click="edit_contest_date" phx-value-contest='<%= contest.name%>'><i class="fas fa-edit fa-2x"></i></button></td>
-                 
+    <%= if admin?(@current_user) do %>
+      <%= unless contest.add_contest_date || contest.contest_date do %>
+        <td><button phx-click="add_contest_date" phx-value-contest='<%= contest.name%>'>Add</button></td>
+        <% else %>
+        <%= if contest.add_contest_date || contest.edit_contest_date do %>
+          <td>
+        <%= f = form_for :count, "#", [phx_submit: :save_date] %>
+        <input type="datetime-local" id="contest_date"
+          name="contest_date">
+          <button>Save</button>
+        </form>
+        </td>
+        <% else %>
+        <td><%= truncate_date(contest.contest_date) %></td>
+        <td><button class="button-clear" phx-click="edit_contest_date" phx-value-contest='<%= contest.name%>'><i class="fas fa-edit fa-2x"></i></button></td>
+        <% end %>
+      <% end %>
     <% end %>
-    <% end %> 
     """
   end
 end
