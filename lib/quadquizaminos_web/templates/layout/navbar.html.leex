@@ -10,13 +10,14 @@
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.PrivacyLive) %> > Privacy </a></li>
          <li><a href= <%= Routes.page_path(@conn, :sbom) %> >SBOM</a></li>
         <%= if @current_user do %>
-        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
+        
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
         <li><a href="/dashboard">Live Dashboard</a></li>
         <% end %>
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
           <li><%= admin_dropdown() %></li>
         <% end %>
+        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
         <% else %>
          <%= hide_or_show_sign_up_button() %>
 
