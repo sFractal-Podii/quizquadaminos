@@ -8,7 +8,10 @@ defmodule Quadquizaminos.Contest do
     field :end_time, :utc_datetime_usec
     field :time_elapsed, :integer, virtual: true, default: 0
     field :status, :string, virtual: true
+    field :add_contest_date, :boolean, virtual: true, default: false
+    field :edit_contest_date, :boolean, virtual: true, default: false
     field :name, :string
+    field :contest_date, :utc_datetime_usec
     has_many :game_records, Quadquizaminos.GameBoard
   end
 
@@ -17,7 +20,8 @@ defmodule Quadquizaminos.Contest do
     |> cast(attrs, [
       :start_time,
       :end_time,
-      :name
+      :name,
+      :contest_date
     ])
     |> validate_required([:name])
     |> validate_length(:name, min: 3)
