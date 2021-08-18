@@ -1,8 +1,11 @@
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
+  import Phoenix.HTML.Form
+  import QuadquizaminosWeb.ErrorHelpers
   import Phoenix.HTML, only: [raw: 1]
   alias Quadquizaminos.Contests
   import QuadquizaminosWeb.LiveHelpers
+  alias Quadquizaminos.Accounts
   alias QuadquizaminosWeb.SvgBoard
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
@@ -23,14 +26,30 @@ defmodule QuadquizaminosWeb.TetrisLive do
   @box_width 20
   @box_height 20
 
-  def mount(_param, %{"uid" => current_user}, socket) do
+  def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
     :timer.send_interval(1000, self(), :broadcast_score)
     QuadquizaminosWeb.Endpoint.subscribe("contest_record")
+    current_user = user_id |> Accounts.get_user()
+
+    has_email? =
+      if(current_user && current_user.email) do
+        true
+      else
+        false
+      end
 
     {:ok,
      socket
-     |> assign(current_user: current_user, start_timer: false)
+     |> assign(
+       start_timer: false,
+       current_user: current_user,
+       active_contests: Contests.active_contests(),
+       contest_id: nil,
+       choosing_contest: false,
+       has_email?: has_email?,
+       user_changeset: Accounts.change_user(current_user)
+     )
      |> init_game
      |> start_game()}
   end
@@ -41,7 +60,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
         <div class="row">
             <div class="column column-50 column-offset-25">
               <h1>Welcome to QuadBlockQuiz!</h1>
-                <button phx-click="start">Start</button>
+              <%= if @has_email? do %>
+              <%= join_contest(assigns) %>
+              <% else %>
+              <%= ask_for_email(assigns) %>
+              <% end %>
             </div>
         </div>
       </div>
@@ -75,7 +98,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             <%= raw SvgBoard.svg_foot() %>
             <hr>
               <button phx-click="start">Play again?</button>
-        </div>
+              </div>
         <div class="column column-25 column-offset-25">
         <p><%= @brick_count %> QuadBlocks dropped</p>
         <p><%= @row_count %> rows cleard</p>
@@ -144,6 +167,46 @@ defmodule QuadquizaminosWeb.TetrisLive do
         </div>
     </div>
     <%= debug(assigns) %>
+    """
+  end
+
+  defp ask_for_email(assigns) do
+    ~L"""
+    <%= unless @current_user == nil ||  @current_user.email do %>
+    <h3> What's your email address? </h3>
+    <%= f = form_for @user_changeset, "#", [phx_change: :validate, phx_submit: :update_email] %>
+    <%= label f, :email %>
+    <%= text_input f, :email, type: :email %>
+    <%= error_tag f, :email %>
+    <%= text_input f, :uid, type: :hidden %>
+    <button> Update Email </button>
+    </form>
+    <% end %>
+    """
+  end
+
+  defp join_contest(%{active_contests: []} = assigns) do
+    ~L"""
+    <button phx-click="start" phx-value-contest="" >Start</button>
+    """
+  end
+
+  defp join_contest(assigns) do
+    ~L"""
+    <%= if not @choosing_contest do %>
+       <button phx-click="choose_contest">Start</button>
+    <% else %>
+     <br />
+       <h2> Join a contest? </h2>
+       <p> Click on the contest below to join </p>
+       <%= for contest <- @active_contests do %>
+         <button phx-click="start" phx-value-contest="<%= contest.id %>" ><%= contest.name %></button>
+       <% end %>
+       <br />
+       <br />
+       <p> Not joining a contest? </p>
+       <button phx-click="start" phx-value-contest="" class="button button-outline">Yes, I am Just playing</button>
+    <% end %>
     """
   end
 
@@ -228,13 +291,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
           end)
       end
 
+    uid = if socket.assigns.current_user, do: socket.assigns.current_user.uid, else: "anonymous"
+
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
-      uid: socket.assigns.current_user,
+      uid: socket.assigns.current_user.uid,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
+      uid: uid,
       correctly_answered_qna: socket.assigns.correct_answers
     }
   end
@@ -261,11 +327,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    game_records =
-      Contests.active_contests_names()
-      |> contest_game_records(game_record(socket))
-
-    Records.record_player_game(response.game_over, game_records)
+    if response.game_over, do: save_game(game_record(socket), socket)
 
     socket
     |> assign(brick: response.brick)
@@ -312,6 +374,22 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
+  def handle_event("validate", %{"user" => params}, socket) do
+    changeset =
+      %Accounts.User{}
+      |> Accounts.change_user(params)
+      |> Map.put(:action, :insert)
+
+    {:noreply, socket |> assign(user_changeset: changeset)}
+  end
+
+  def handle_event("update_email", %{"user" => params}, socket) do
+    case Accounts.update_email(params) do
+      {:ok, user} -> {:noreply, socket |> assign(current_user: user, has_email?: true)}
+      {:error, changeset} -> {:noreply, socket |> assign(user_changeset: changeset)}
+    end
+  end
+
   def handle_event("choose_category", %{"category" => category}, socket) do
     categories = socket.assigns.categories
     question_position = categories[category]
@@ -335,7 +413,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    Records.record_player_game(true, game_record(socket))
+    socket |> game_record() |> save_game(socket)
+
     {:noreply, socket |> assign(state: :game_over, modal: false)}
   end
 
@@ -361,8 +440,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_event("keydown", _, socket), do: {:noreply, socket}
 
-  def handle_event("start", _, socket) do
-    {:noreply, new_game(socket)}
+  def handle_event("choose_contest", _, socket) do
+    {:noreply, socket |> assign(choosing_contest: true)}
+  end
+
+  def handle_event("start", %{"contest" => contest_id}, socket) do
+    contest_id =
+      case Integer.parse(contest_id) do
+        {id, _} -> id
+        :error -> nil
+      end
+
+    {:noreply, socket |> new_game() |> assign(contest_id: contest_id)}
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
@@ -646,7 +735,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_info(:broadcast_score, socket) do
-    socket |> game_record() |> broadcast_score()
+    socket |> game_record() |> broadcast_score(socket)
     {:noreply, socket}
   end
 
@@ -656,16 +745,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
     record =
       socket
       |> game_record()
-      |> Map.put(:contest_id, contest.id)
+      |> Map.put(:contest_id, socket.assigns.contest_id)
 
-    if socket.assigns.state == :playing do
+    same_contest? = contest.id == socket.assigns.contest_id
+
+    if socket.assigns.state == :playing and same_contest? do
       Records.record_player_game(true, record)
     end
 
-    state =
-      if Enum.empty?(Contests.active_contests_names()),
-        do: :game_over,
-        else: socket.assigns.state
+    state = if same_contest?, do: :game_over, else: socket.assigns.state
 
     {:noreply, socket |> assign(state: state)}
   end
@@ -752,7 +840,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp on_tick(_state, socket) do
-    ## if not in playing state, don't do anything on tick
     socket
   end
 
@@ -848,22 +935,22 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Map.has_key?(bottom, {x, y})
   end
 
-  defp broadcast_score(records) do
-    active_contests = Contests.active_contests_names()
-
-    records =
-      Enum.map(active_contests, fn name ->
-        contest = Contests.get_contest(name)
-
-        %{records | end_time: nil}
-        |> Map.put(:contest_id, contest.id)
-      end)
+  defp broadcast_score(records, %{assigns: %{contest_id: contest_id}} = _socket) do
+    records = [
+      %{records | end_time: nil}
+      |> Map.put(:contest_id, contest_id)
+    ]
 
     QuadquizaminosWeb.Endpoint.broadcast(
       "contest_scores",
       "current_scores",
       records
     )
+  end
+
+  defp save_game(record, %{assigns: %{contest_id: contest_id}} = _socket) do
+    record = record |> Map.put(:contest_id, contest_id)
+    Records.record_player_game(true, record)
   end
 
   defp contest_game_records(active_contests, records) do
