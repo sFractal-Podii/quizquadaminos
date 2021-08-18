@@ -3,6 +3,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
   import Phoenix.HTML.{Form, Tag}
+  alias QuadquizaminosWeb.AdminContestsLive
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
@@ -71,15 +72,15 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
-    {:noreply, socket |> _create_contest(contest_name)}
+    {:noreply, socket |> AdminContestsLive._create_contest(contest_name)}
   end
 
   def handle_event("start", %{"contest" => name}, socket) do
-    {:noreply, start_or_resume_contest(socket, name)}
+    {:noreply, AdminContestsLive.start_or_resume_contest(socket, name)}
   end
 
   def handle_event("restart", %{"contest" => name}, socket) do
-    {:noreply, _restart_contest(socket, name)}
+    {:noreply, AdminContestsLive._restart_contest(socket, name)}
   end
 
   def handle_event("stop", %{"contest" => name}, socket) do
@@ -89,11 +90,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
       name
     )
 
-    {:noreply, _end_contest(socket, name)}
+    {:noreply, AdminContestLive._end_contest(socket, name)}
   end
 
   def handle_info(:timer, socket) do
-    {:noreply, _update_contests_timer(socket)}
+    {:noreply, AdminContestLive._update_contests_timer(socket)}
   end
 
   def handle_info(:count_down, socket) do
@@ -237,5 +238,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
       <% end %>
     <% end %>
     """
+  end
+
+  defp admin?(current_user) do
+    ids = Application.get_env(:quadquizaminos, :github_ids)
+
+    current_user in (ids |> Enum.map(&(&1 |> to_string())))
   end
 end
