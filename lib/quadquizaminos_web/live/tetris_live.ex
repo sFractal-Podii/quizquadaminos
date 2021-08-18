@@ -61,7 +61,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             <div class="column column-50 column-offset-25">
               <h1>Welcome to QuadBlockQuiz!</h1>
               <%= if @has_email? do %>
-              <%= start_contest(assigns) %>
+              <%= join_contest(assigns) %>
               <% else %>
               <%= ask_for_email(assigns) %>
               <% end %>
@@ -185,17 +185,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
     """
   end
 
-  defp start_contest(assigns) do
+  defp join_contest(%{active_contests: []} = assigns) do
+    ~L"""
+    <button phx-click="start" phx-value-contest="" >Start</button>
+    """
+  end
+
+  defp join_contest(assigns) do
     ~L"""
     <%= if not @choosing_contest do %>
        <button phx-click="choose_contest">Start</button>
     <% else %>
      <br />
        <h2> Join a contest? </h2>
+       <p> Click on the contest below to join </p>
        <%= for contest <- @active_contests do %>
          <button phx-click="start" phx-value-contest="<%= contest.id %>" ><%= contest.name %></button>
        <% end %>
-       <button phx-click="start" phx-value-contest="" class="button button-outline">Just playing</button>
+       <br />
+       <br />
+       <p> Not joining a contest? </p>
+       <button phx-click="start" phx-value-contest="" class="button button-outline">Yes, I am Just playing</button>
     <% end %>
     """
   end
@@ -725,7 +735,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_info(:broadcast_score, socket) do
-    socket |> game_record() |> broadcast_score()
+    socket |> game_record() |> broadcast_score(socket)
     {:noreply, socket}
   end
 
@@ -830,7 +840,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp on_tick(_state, socket) do
-    socket |> assign(active_contests: Contests.active_contests())
+    socket
   end
 
   defp correct_answer?(%{correct: guess}, guess), do: true
@@ -925,16 +935,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Map.has_key?(bottom, {x, y})
   end
 
-  defp broadcast_score(records) do
-    active_contests = Contests.active_contests_names()
-
-    records =
-      Enum.map(active_contests, fn name ->
-        contest = Contests.get_contest(name)
-
-        %{records | end_time: nil}
-        |> Map.put(:contest_id, contest.id)
-      end)
+  defp broadcast_score(records, %{assigns: %{contest_id: contest_id}} = _socket) do
+    records = [
+      %{records | end_time: nil}
+      |> Map.put(:contest_id, contest_id)
+    ]
 
     QuadquizaminosWeb.Endpoint.broadcast(
       "contest_scores",
