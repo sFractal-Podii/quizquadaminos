@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     <div style="text-align:center;">
 
     <button phx-click="unpause">Continue</button><br>
-    <%= for category <- QnA.categories() do %>
+    <%= for category <- QnA.remove_used_categories(@categories) do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
     <br>
@@ -25,15 +25,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
          <br/>
          <h2><%= raw @qna.question %></h2>
          <h2> Answer </h2>
-        <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
-        <%= for {answer, index}<- @qna.answers do %>
-        <%= label do %>
-          <%= radio_button f, :guess, answer, value: index %>
-          <%= answer %>
-         <% end %> <!-- end label -->
-        <% end %>
-       <%= submit  "Continue" %>
-       </form>
+         <%= answers(assigns, @category) %>
        <br/>
        <%= unless Enum.empty?(@qna.score) do %>
        <h2>Scores</h2>
@@ -54,6 +46,32 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     """
   end
 
+  defp answers(assigns, "bonus") do
+    ~L"""
+    <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
+    <%= text_input f, :guess %>
+    <button class="button-outline" phx-click="skip-question">Skip Question</button><br>
+    <%= submit  "Continue" %>
+    </form>
+    """
+  end
+
+  defp answers(assigns, category) do
+    ~L"""
+    <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
+    <%= for {answer, index}<- @qna.answers do %>
+      <%= label do %>
+        <%= radio_button f, :guess, answer, value: index %>
+        <%= answer %>
+        <% end %> <!-- end label -->
+    <% end %>
+    <br>
+    <button class="button-outline" phx-click="skip-question" phx-value-category="<%= category %>" >Skip Question</button>
+    <%= submit  "Continue" %>
+    </form>
+    """
+  end
+
   defp power_icon(power) do
     case power do
       :deleteblock -> "fa-minus-square"
@@ -67,9 +85,10 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
       :rm_all_vulns -> "fa-hammer"
       :rm_all_lic_issues -> "fa-tape"
       :superpower -> "fa-superpowers"
+      :cyberinsurance -> "fa-file-contract"
     end
   end
 
   defp prefix(:superpower), do: "fab"
-  defp prefix(power), do: "fas"
+  defp prefix(_power), do: "fas"
 end

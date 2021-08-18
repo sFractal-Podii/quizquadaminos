@@ -17,12 +17,24 @@ defmodule QuadquizaminosWeb.PageController do
     )
   end
 
+  def instructions(conn, _params) do
+    render(conn, "instructions.html")
+  end
+
   def anonymous(conn, _params) do
     conn
     |> put_flash(:info, "Successfully authenticated.")
     |> put_session(:uid, "anonymous")
     |> configure_session(renew: true)
     |> redirect(to: "/")
+  end
+
+  def sbom(conn, _params) do
+    render(conn, "sbom.html")
+  end
+
+  def wellknown(conn, _params) do
+    render(conn, "wellknown.html")
   end
 
   defp current_user(nil), do: nil

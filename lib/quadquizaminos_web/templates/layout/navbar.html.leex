@@ -1,20 +1,26 @@
  <nav role="navigation">
         <ul class="nav">
          <li><a href="/">Home</a></li>
+         <li><a href= <%= Routes.page_path(@conn, :instructions) %> >How to Play</a></li>
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.LeaderboardLive) %> >Leader board</a></li>
-         <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestsLive) %> >Contests</a></li>
+         <li><a href= <%= Routes.contests_path(QuadquizaminosWeb.Endpoint, :index) %> >Contests</a></li>
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestPrizes) %> >Contest prizes</a></li>
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestRules) %> >Contest rules</a></li>
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.TermsOfServiceLive) %> > Terms Of Service </a></li>
          <li><a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.PrivacyLive) %> > Privacy </a></li>
+         <li><a href= <%= Routes.page_path(@conn, :sbom) %> >SBOM</a></li>
         <%= if @current_user do %>
-        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
+
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
         <li><a href="/dashboard">Live Dashboard</a></li>
         <% end %>
         <%= if Quadquizaminos.Accounts.user_has_role?(@current_user, ["admin"]) do %>
-        <li><a href="/admin">Admin</a></li>
+          <li><%= admin_dropdown() %></li>
         <% end %>
+        <%= link "Logout", to: Routes.auth_path(QuadquizaminosWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
+        <% else %>
+         <%= hide_or_show_sign_up_button() %>
+
       <% end %>
     </ul>
   </nav>

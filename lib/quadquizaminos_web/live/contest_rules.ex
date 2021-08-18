@@ -1,21 +1,20 @@
 defmodule QuadquizaminosWeb.ContestRules do
   use Phoenix.LiveView
-  import QuadquizaminosWeb.LiveHelpers
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   def render(assigns) do
     ~L"""
     <h1>Contest Rules</h1>
     <p>
-    This contest is organized and sponsored by sFractal Consulting
-    to celebrate and augment the Supply Chain Sandbox
-    at RSAC.
+    There will two contests: "1-hour" and "24-hour".
+    These contests are organized and sponsored by sFractal Consulting
+    to increase awarenessa and adoption of supply chain cybersecurity.
     </p>
     <p>
-    This contest is governed by these official rules.
-    By participating in this contest,
+    Both of these contests are governed by these official rules.
+    By participating in a contest,
     each entrant agrees to abide by these rules,
-    including all eligiibility requirements,
+    including all eligibility requirements,
     and understands the results of the contest,
     as determined by the Sponsor,
     are final in all respects.
@@ -23,19 +22,43 @@ defmodule QuadquizaminosWeb.ContestRules do
     and regulations and is void where prohibited by law.
     </p>
     <p>
-    Contestants must be RSAC registered attendess who are at least 21 years of age or older to win prizes.
+    Contestants must be BSidesLV attendess who are at least 21 years of age or older to win prizes.
+    Contestants must be on
+    <a href="https://discord.com/invite/YcCWqMW5">
+    BSidesLV Discord
+    </a>
+    to communicate with contest organizer about reciving their prize.
     </p>
     <p>
-    Contestants must be participating in https://www.rsaconference.com/usa/agenda/session/supply-chain-activity-lounge
-    during contest to be elible to win.
+    For the "1-hour" contest,
+    contestants must be participating live in the
+    <a href="https://www.bsideslv.org/talks#1045530">
+    "QuadBlockQuiz - Supply Chain Sandbox Edition"
+    </a>
+    session to be elible to win.
+    Prizes for the "1-hour" contest will be announced during the Q&A session after the talk.
     </p>
     <p>
     Contestants must be logged in to QuadBlockQuiz with an identifiable id (i.e. not 'anonymous') to be able to win.
     </p>
     <p>
-    To be eligible for prizes, a game must start after the contest start time (18-May 11:40 PDT)
-    and must end cleanly before the contest end time (18-May 12:10 PDT).
-    Time will be kept by game - don't start until AFTER the contest countdown reaches zero and the Contest Scoreboard activates.
+    To be eligible for prizes, a game must start after the contest start time
+    and must end cleanly before the contest end time.
+    Both contests will start
+    1-Aug 16:00 PDT when the
+    <a href="https://www.bsideslv.org/talks#1045530">
+    "QuadBlockQuiz - Supply Chain Sandbox Edition"
+    </a>
+    talk starts.
+    The "1-hour" contest will be less than one hour and will be stopped
+    at a random time announced
+    by the speaker during the Q&A session for
+    <a href="https://www.bsideslv.org/talks#1045530">
+    "QuadBlockQuiz - Supply Chain Sandbox Edition"
+    </a>
+    The "24-hour" contest will run until 2-Aug 16:00 PDT.
+    </p>
+    <p>Time will be kept by game - don't start until AFTER the talk has started and the Contest Scoreboard activates.
     Make sure to finish your game cleanly so that you have seen the endgame screen with your score.
     </p>
     <p>
@@ -43,29 +66,73 @@ defmodule QuadquizaminosWeb.ContestRules do
     </p>
     <p>
     Winners will be chosen based on their positions on the Contest Scoreboards.
-    Note the Contest Scoreboard is different than the Leaderboard.
-    The Leaderboard shows scores based on the the entire time of RSAC and does not result in prizes.
+    Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
     The Contest Scoreboard only shows games that started after the  contest start time and finished prior to the contest endtime.
     </p>
     <p>
-    Contestants must participate in the awards ceremony during https://www.rsaconference.com/usa/agenda/session/sipping-bill-of-materials
-    to be able to select their prize and win. Those unavailable to participate in the awards ceremony must make previous arrangements with conference organizer during contest.
+    For the "1-hour" Contest, contestants must participate in the awards ceremony during Q&A for
+    <a href="https://www.bsideslv.org/talks#1045530">
+    "QuadBlockQuiz - Supply Chain Sandbox Edition"
+    </a>
+    to win. Winners for the "24-hour" Contest will be contacted based on contact information
+    associated with their logon credentials.
+    They want to contact the contest organizer directly to make sure.
     </p>
     <p>
-    Winners will select <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestPrizes) %> >prizes</a>
-    based on the order the winners appear on the Contest Scoreboards which include respective best scores for points, bricks, and questions.
+    Prizes are described at
+    <a href= <%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.ContestPrizes) %> >prizes</a>.
     </p>
     <p>
-    A person is only elegible to receive one prize, even if they appear on multiple contest Scoreboards
-    (e.g first on points and third on bricks) or with multiple ID's.
+    The "Custom Cocktail Instruction" prize will be awarded to the eligible
+    "1-hour" contest contestant with the highest points,
+    who will then be ineligible for more "1-hour" Contest prizes,
+    and also ineligible for the "24-hour" Contest "Absinthe Tutorial" prize.
     </p>
     <p>
-    There are three contest scoreboards (points, bricks, questions).
+    The "Risk Book & Custom Cocktail Recipe" prize will be awarded to the eligible
+    "1-hour" contest contestant with the most answered questions,
+    who will then be ineligible either of the next prize.
+    </p>
+    <p>
+    The "Tee-shirt & Custom Cocktail Recipe" prize will be awarded to the eligible
+    "1-hour" contest contestant with the most bricks.
+    </p>
+
+    <p>
+    The "Absinthe Tutorial" prize will be awarded to the eligible
+    "24-hour" contest contestant with the highest points,
+    who will then be ineligible for more "24-hour" Contest prizes.
+    </p>
+    <p>
+    The "Risk Book & Custom Cocktail Recipe" prize will be awarded to the eligible
+    "24-hour" contest contestant with the most answered questions,
+    who will then be ineligible for more "24-hour" Contest prizes.
+    </p>
+    <p>
+    The "Custom Cocktail Recipe" prize will be awarded to the eligible
+    "24-hour" contest contestant with the most bricks.
+    </p>
+    <p>
+    A person is only elegible to receive one prize per contest,
+    (e.g first on points and first on bricks would only receive one prize)
+    or with multiple ID's.
+    </p>
+    <p>
     The first person to pick a prize will be the eligible contestant with the highest point score.
     The second person to pick a prize will be the next eligible contestant with the most dropped bricks.
     The third person to pick a prize will be the next eligible contestant with the most answered questions.
     The fourth person to pick a prize will be the next eligible contestant with the next highest point score.
     Selection will continue until we run out of prizes or people.
+    </p>
+    <p>
+    Previous winners of the "Custom Cocktail Instruction" prize at RSAC (ie Oddie)
+    are not elibible to win that prize again, but are eligible for all other prizes.
+    Previous winners of the "Absinthe Tutorial" prize at RSAC (ie Rick)
+    are not elibible to win that prize again, but are eligible for all other prizes.
+    All other RSAC prize winners are eligible for all prizes at BSidesLV.
+    The winner of the BSidesLV "Custom Cocktail Instruction" prize
+    in the "1-hour" contest
+    is not eligible for the "Absinthe Tutorial" prize in the "24-hour" contest.
     </p>
     <p>
     The organizers retain the right to adjust or shutdown the contest

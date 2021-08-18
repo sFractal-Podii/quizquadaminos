@@ -190,6 +190,7 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_vuln_and_license(bottom, {x, y, _color} = value) do
+    if Map.has_key?(bottom, {x,y}) do
     value =
       case value do
         {x, y, :vuln_grey_yellow} -> {x, y, :purple}
@@ -198,6 +199,9 @@ defmodule Quadquizaminos.Bottom do
       end
 
     Map.merge(bottom, %{{x, y} => value})
+    else
+      bottom
+    end
   end
 
   def attacked?(bottom, attack_threshold) do

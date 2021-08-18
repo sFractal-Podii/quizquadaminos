@@ -20,6 +20,7 @@ defmodule Quadquizaminos.Contest.ContestAgent do
     state = %{contest_name: opts[:name], time_elapsed: 0, status: :running}
     {:ok, pid} = Agent.start_link(fn -> state end, opts)
 
+
     :timer.apply_interval(1000, __MODULE__, :update_timer, [opts[:name]])
     state
   end

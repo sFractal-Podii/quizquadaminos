@@ -33,6 +33,12 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
 config :quadquizaminos,
   qna_directory: Path.join(Path.dirname(__DIR__), "qna")
 
+config :quadquizaminos,
+  bonus_answers: [
+    "001": "test",
+    "002": "two words"
+  ]
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
