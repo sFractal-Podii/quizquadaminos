@@ -130,7 +130,7 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
       assert html =~ "<td class=\"score\">97</td>"
 
       html = view |> element("a[href='/leaderboard?page=2&sort_by=score']") |> render_click()
-      assert html =~ "<td class=\"score\">72</td>"
+      assert html =~ "<td class=\"score\">72</td><td>72</td>"
       html = render_click(view, "sort", %{param: "dropped_bricks"})
       assert html =~ "<td class=\"score\">97</td><td>97</td>"
     end
