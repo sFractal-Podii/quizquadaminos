@@ -26,6 +26,22 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
+  Returns all contests that begin in the future
+  """
+  def future_contests do
+    q = from c in Contest, where: c.contest_date > ^DateTime.utc_now()
+    Repo.all(q)
+  end
+
+  @doc """
+  Get all past contests
+  """
+  def past_contests do
+    q = from c in Contest, where: not is_nil(c.end_time)
+    Repo.all(q)
+  end
+
+  @doc """
   Gives us the names of all contests that are either running or paused
   """
   def active_contests_names do
