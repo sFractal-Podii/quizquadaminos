@@ -36,7 +36,6 @@ defmodule Quadquizaminos.GameBoard do
     from r in __MODULE__,
       order_by: [desc: ^(order_by |> String.to_atom())],
       order_by: [asc: r.end_time - r.start_time],
-      limit: 10,
       preload: [:user]
   end
 
@@ -68,5 +67,11 @@ defmodule Quadquizaminos.GameBoard do
           r.end_time <= ^end_time
 
     # order_by: [desc: r.score]
+  end
+
+  def paginate_query(query, page, per_page) do
+     from q in query,
+        offset: (^page - 1) * ^per_page,
+        limit: ^per_page
   end
 end

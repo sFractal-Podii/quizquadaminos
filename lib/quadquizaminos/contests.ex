@@ -72,6 +72,15 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
+  Returns all the active contests
+  """
+
+  def active_contests do
+    q = from c in Contest, where: not is_nil(c.start_time) and is_nil(c.end_time)
+    Repo.all(q)
+  end
+
+  @doc """
   Restarts the game, i.e new start time and timer restarted
   """
   def restart_contest(name) do
