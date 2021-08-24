@@ -1,4 +1,12 @@
 defmodule Quadquizaminos.Contests.Contest do
+  @moduledoc """
+  Schema for contest
+
+  ### status
+  Shows the current status of the contest, it can be any of the following:
+  - running : the contest is currently active
+  - future : the contest will happen in the future
+  """
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
