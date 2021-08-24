@@ -55,8 +55,28 @@ defmodule Quadquizaminos.Contests do
          ["contestA", "contestB", ...]
   """
   @spec list_contests() :: []
+  @doc """
+  gets all the contests in the database, by default sorts them by the contest date in descending order
+  """
   def list_contests do
-    Repo.all(Contest)
+    q = from c in Contest, order_by: [desc: c.contest_date]
+    Repo.all(q)
+  end
+
+  @doc """
+  Returns all contests that begin in the future
+  """
+  def future_contests do
+    q = from c in Contest, where: c.contest_date > ^DateTime.utc_now()
+    Repo.all(q)
+  end
+
+  @doc """
+  Get all past contests
+  """
+  def past_contests do
+    q = from c in Contest, where: not is_nil(c.end_time)
+    Repo.all(q)
   end
 
   @doc """
