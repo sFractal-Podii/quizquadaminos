@@ -21,8 +21,12 @@ defmodule Quadquizaminos.Contests do
     Repo.get_by(Contest, name: name)
   end
 
+  @doc """
+  gets all the contests in the database, by default sorts them by the contest date in descending order
+  """
   def list_contests do
-    Repo.all(Contest)
+    q = from c in Contest, order_by: [desc: c.contest_date]
+    Repo.all(q)
   end
 
   @doc """

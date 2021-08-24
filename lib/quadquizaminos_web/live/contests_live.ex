@@ -244,6 +244,5 @@ defmodule QuadquizaminosWeb.ContestsLive do
       nil -> %User{uid: "anonymous", name: "anonymous"}
       %User{} = user -> %{user | admin?: admin?(uid)}
     end
-    |> IO.inspect()
   end
 end
