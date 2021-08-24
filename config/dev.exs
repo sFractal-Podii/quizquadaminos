@@ -34,6 +34,9 @@ config :quadquizaminos,
   qna_directory: Path.join(Path.dirname(__DIR__), "qna")
 
 config :quadquizaminos,
+  courses_directory: Path.join(Path.dirname(__DIR__), "courses")
+
+config :quadquizaminos,
   bonus_answers: [
     "001": "test",
     "002": "two words"
