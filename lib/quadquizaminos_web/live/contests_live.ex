@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.ContestsLive.ContestComponent
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.Contest
+  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes

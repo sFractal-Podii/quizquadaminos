@@ -1,8 +1,10 @@
 defmodule Quadquizaminos.Contests do
-  alias Quadquizaminos.Contest
+  alias Quadquizaminos.Contests.Contest
+  alias Quadquizaminos.Accounts.User
 
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Repo
+  alias Quadquizaminos.Contests.RSVP
 
   alias Quadquizaminos.Contest.ContestAgent
   import Ecto.Query, only: [from: 2]
@@ -151,4 +153,9 @@ defmodule Quadquizaminos.Contests do
   end
 
   defp contest_game_records(_ended_contest, _contest, _sorter), do: []
+
+  @spec create_rsvp(map(), User.t()) :: {:ok, RSVP.t()} | {:error, Changeset.t()}
+  def create_rsvp(attrs, %User{} = current_user) do
+    %RSVP{} |> RSVP.changeset(attrs, current_user) |> Repo.insert()
+  end
 end

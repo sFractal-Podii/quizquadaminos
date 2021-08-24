@@ -1,4 +1,4 @@
-defmodule Quadquizaminos.Contest do
+defmodule Quadquizaminos.Contests.Contest do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query

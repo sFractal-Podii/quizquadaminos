@@ -2,10 +2,10 @@
         <%= if @live_action == :show do %>
         <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
         <% else %>
-        <%= if @countdown_interval <= 0 || admin?(@current_user) do %>
+          <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
 
-        <%= raw display_text_input(admin?(@current_user)) %>
+        <%= raw display_text_input(@current_user.admin?) %>
 
         <table>
             <tr>

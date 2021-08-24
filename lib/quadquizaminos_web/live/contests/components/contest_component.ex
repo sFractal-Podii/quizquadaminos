@@ -5,7 +5,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   use Phoenix.LiveComponent
   import Phoenix.HTML.Form
 
-  alias Quadquizaminos.Contest
+  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.Util
