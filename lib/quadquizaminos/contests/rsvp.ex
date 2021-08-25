@@ -4,6 +4,7 @@ defmodule Quadquizaminos.Contests.RSVP do
   """
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query, only: [from: 2]
 
   @type t :: %__MODULE__{}
 
@@ -28,5 +29,9 @@ defmodule Quadquizaminos.Contests.RSVP do
     else
       changeset
     end
+  end
+
+  def user_contest_rsvp_query(%User{uid: uid}, %Contest{id: cid}) do
+    from r in "rsvps", where: r.user_id == ^uid and r.contest_id == ^cid, select: r
   end
 end

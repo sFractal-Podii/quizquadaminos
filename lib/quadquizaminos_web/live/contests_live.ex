@@ -79,7 +79,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _end_contest(socket, name)}
   end
 
-  def handle_info({:update_timer, contest_id: contest_id}, socket) do
+  def handle_info({:update_component, contest_id: contest_id}, socket) do
     send_update(ContestComponent, id: contest_id, current_user: socket.assigns.current_user)
     {:noreply, socket}
   end

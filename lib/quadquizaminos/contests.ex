@@ -154,8 +154,25 @@ defmodule Quadquizaminos.Contests do
 
   defp contest_game_records(_ended_contest, _contest, _sorter), do: []
 
+  @doc """
+  creates a new RSVP on the database
+  """
   @spec create_rsvp(map(), User.t()) :: {:ok, RSVP.t()} | {:error, Changeset.t()}
   def create_rsvp(attrs, %User{} = current_user) do
     %RSVP{} |> RSVP.changeset(attrs, current_user) |> Repo.insert()
+  end
+
+  @doc """
+  Creates an RSVP changeset
+  """
+  @spec change_rsvp(RSVP.t(), map()) :: Ecto.Changeset.t()
+  def change_rsvp(rsvp \\ %RSVP{}, attrs \\ %{}) do
+    RSVP.changeset(rsvp, attrs, %User{})
+  end
+
+  def user_rsvped?(%User{} = user, %Contest{} = contest) do
+    user
+    |> RSVP.user_contest_rsvp_query(contest)
+    |> Repo.exists?()
   end
 end

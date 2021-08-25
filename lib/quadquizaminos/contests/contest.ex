@@ -5,6 +5,7 @@ defmodule Quadquizaminos.Contests.Contest do
   ### status
   Shows the current status of the contest, it can be any of the following:
   - running : the contest is currently active
+  - stopped : the contest was has been stopped
   - future : the contest will happen in the future
   """
   use Ecto.Schema
