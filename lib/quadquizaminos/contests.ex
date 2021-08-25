@@ -24,6 +24,41 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
+  Populates relevant the contest virtual fields
+  """
+  @spec load_contest_vitual_fields(Contest.t()) :: Contest.t()
+  def load_contest_vitual_fields(%Contest{} = contest) do
+    status =
+      case contest_status(contest.name) do
+        :stopped ->
+          if future_contest?(contest) do
+            :future
+          else
+            :stopped
+          end
+
+        status ->
+          status
+      end
+
+    %{contest | status: status, time_elapsed: time_elapsed(contest.name)}
+  end
+
+  @doc """
+  Returns a boolean indicating whether the contest will occur in the future.
+  If its exact match then false if returned
+  """
+  @spec future_contest?(Contest.t()) :: boolean()
+  def future_contest?(%Contest{contest_date: nil}), do: true
+
+  def future_contest?(%Contest{contest_date: date}) do
+    case DateTime.compare(date, DateTime.utc_now()) do
+      :gt -> true
+      _ -> false
+    end
+  end
+
+  @doc """
   gets all the contests in the database, by default sorts them by the contest date in descending order
   """
   def list_contests do

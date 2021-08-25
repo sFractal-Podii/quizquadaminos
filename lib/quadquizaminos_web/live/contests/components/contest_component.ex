@@ -38,9 +38,10 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   def preload(list_of_assigns) do
     list_of_assigns
     |> Enum.map(fn assigns ->
-      contest = Contests.get_contest(assigns.id)
-      status = contest.name |> Contests.contest_status() |> to_string()
-      contest = %{contest | status: status}
+      contest =
+        Contests.get_contest(assigns.id)
+        |> Contests.load_contest_vitual_fields()
+
       Map.put(assigns, :contest, contest)
     end)
   end
@@ -49,26 +50,20 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   def update(assigns, socket) do
     contest = assigns.contest
 
-    time_elapsed =
-      case contest.status do
-        "running" -> Contests.time_elapsed(contest.name)
-        _ -> 0
-      end
-
     Process.send_after(self(), {:update_component, contest_id: contest.id}, 1000)
 
     rsvped? = Contests.user_rsvped?(assigns.current_user, contest)
 
     {:ok,
      assign(socket,
-       contest: %{contest | time_elapsed: time_elapsed},
+       contest: contest,
        current_user: assigns.current_user,
        rsvped?: rsvped?
      )}
   end
 
   defp start_or_pause_button(assigns, contest) do
-    if contest.status == "running" do
+    if contest.status == :running do
       ~L"""
       <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo fa-2x"></i></button>
       """
@@ -80,7 +75,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   end
 
   def contest_running?(contest) do
-    contest.status == "running"
+    contest.status == :running
   end
 
   def maybe_disable_button(contest) do
@@ -113,7 +108,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: true} = assigns, _contest) do
     ~L"""
-      <%= f = form_for :count, "#", [phx_submit: :save_date, phx_target: @myself] %>
+      <%= form_for :count, "#", [phx_submit: :save_date, phx_target: @myself] %>
         <input type="datetime-local" id="contest_date" name="contest_date">
         <button>Save</button>
       </form>
@@ -133,13 +128,13 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     """
   end
 
-  defp rsvp_or_results_button(assigns, %Contest{status: "running"} = contest) do
+  defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
     ~L"""
     <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
     """
   end
 
-  defp rsvp_or_results_button(assigns, %Contest{status: "future"} = contest) do
+  defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
     ~L"""
     <%= if @rsvped? do %>
       <button disabled> RSVPED </button>
@@ -150,17 +145,8 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   end
 
   defp rsvp_or_results_button(assigns, %Contest{}) do
-    ""
-  end
-
-  defp live_result_button(assigns, contest) do
-    if contest.name in Contests.active_contests_names() do
-      ~L"""
-      <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
-      """
-    else
-      ""
-    end
+    ~L"""
+    """
   end
 
   def truncate_date(nil) do
