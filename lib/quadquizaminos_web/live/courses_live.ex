@@ -9,13 +9,19 @@ defmodule QuadquizaminosWeb.CourseLive do
     {
       :ok, assign(
       socket,
-      course: []
+      course: [],
+      chapter: []
       )}
   end
-  def render(assigns) do
+
+
+
+    def render(assigns) do
       ~L"""
       <div class="container">
-      <%= if @live_action == :show do %>      <h1> Chapter </h1>
+      <%= if @live_action == :show do %>
+
+      <h1> Chapter </h1>
       <table>
       <tr>
       <th>Name </th>
@@ -23,7 +29,9 @@ defmodule QuadquizaminosWeb.CourseLive do
         <%= for chapter <- Courses.chapter_list(assigns.course) do%>
         <tr>
         <td>
-        <%= chapter %>
+
+        <div phx-click="chapter" phx-value-chapter= <%= chapter %> >
+        <%= link  chapter, to: ["#{assigns.course}/", chapter] %>
         </td>
         </tr>
         <% end %>
@@ -45,16 +53,38 @@ defmodule QuadquizaminosWeb.CourseLive do
      </div>
       """
     end
-
-    def handle_event("course", %{course: course}, socket) do
-      {:noreply, socket |> assign(course: course ) }
-    end    
     
+    def render(%{chapter: chapter } = assigns) do
+      assigns.chapter |> IO.inspect(label: "(((((((())))))))))))")
+     ~L"""
+     <h1> Questions </h1>
+     """
+   end
+
+
+
+
+
+    # def handle_event("course", %{course: course}, socket) do
+    #   {:noreply, socket |> assign(course: course)}
+    # end
+   def handle_event("chapter", %{"chapter" => chapter}, socket) do
+    {:noreply, socket |> assign(chapter: chapter) |> IO.inspect(label: "((((chapter))))))))")}
+   end
+
     def handle_params(%{"course" => course}, _url, socket) do
       {:noreply, socket |> assign(course: course)}
-    end    
-    
+    end
+
+    def handle_params(%{"chapter" => chapter}, _uri, socket) do
+      {:noreply, socket |> assign(chapter: chapter)}
+    end
+
     def handle_params(_params, _url, socket) do
       {:noreply, socket}
     end
-  end
+
+
+
+
+end

@@ -18,8 +18,14 @@ defmodule Quadquizaminos.Courses do
       File.dir?("#{@courses_directory}/#{course}/#{folder}") and
         not (File.ls!("#{@courses_directory}/#{course}/#{folder}") |> Enum.empty?())
     end)
-end
+  end
 
-
-
+  def questions(chapter,course) do
+    path = "#{@courses_directory}/#{course}/#{chapter}"
+    files = File.ls!(path)
+    for file <- files do
+      path = "#{@courses_directory}/#{course}/#{chapter}/#{file}"
+      |> File.read()
+    end
+  end
 end

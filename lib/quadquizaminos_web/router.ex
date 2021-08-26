@@ -47,6 +47,7 @@ defmodule QuadquizaminosWeb.Router do
     live "/contest_prizes", ContestPrizes
     live "/courses", CourseLive
     live "/courses/:course", CourseLive, :show
+    live "/courses/:course/:chapter", CourseLive, :questions
     get "/anonymous", PageController, :anonymous
     post "/anonymous", PageController, :anonymous
     get "/instructions", PageController, :instructions
