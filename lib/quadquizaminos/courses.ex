@@ -25,7 +25,8 @@ defmodule Quadquizaminos.Courses do
     files = File.ls!(path)
     for file <- files do
       path = "#{@courses_directory}/#{course}/#{chapter}/#{file}"
-      |> File.read()
+      {:ok, question} = File.read(path)
+      question
     end
   end
 end
