@@ -84,15 +84,28 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     end
   end
 
+  defp timer_or_final_result(assigns, %Contest{status: :running}) do
+    ~L"""
+    <% {hours, minutes, seconds} = @contest.time_elapsed |> to_human_time() %>
+    <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+    """
+  end
+
+  defp timer_or_final_result(assigns, %Contest{status: :future}) do
+    ~L"""
+    <%= if @contest.time_remaining do %>
+    <% {days, hours, minutes, seconds} = @contest.time_remaining |> Util.to_human_time() %>
+    <p><%= Util.count_display(days) %> days <%= Util.count_display(hours) %>h <%= Util.count_display(minutes) %>m <%= Util.count_display(seconds) %>s</p>
+    <% else %>
+    <p> Date not yet set </p>
+    <% end %>
+    """
+  end
+
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
       <%= live_redirect "Final Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
-      """
-    else
-      ~L"""
-      <% {days, hours, minutes, seconds} = contest.time_remaining |> Util.to_human_time() %>
-      <p><%= Util.count_display(days) %>:<%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
       """
     end
   end
