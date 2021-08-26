@@ -41,7 +41,18 @@ defmodule Quadquizaminos.Contests do
           status
       end
 
-    %{contest | status: status, time_elapsed: time_elapsed(contest.name)}
+    time_remaining =
+      case contest.contest_date do
+        nil -> nil
+        date -> DateTime.diff(date, DateTime.utc_now())
+      end
+
+    %{
+      contest
+      | status: status,
+        time_elapsed: time_elapsed(contest.name),
+        time_remaining: time_remaining
+    }
   end
 
   @doc """

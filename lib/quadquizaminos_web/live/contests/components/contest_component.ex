@@ -91,8 +91,8 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
       """
     else
       ~L"""
-      <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>
-      <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+      <% {days, hours, minutes, seconds} = contest.time_remaining |> Util.to_human_time() %>
+      <p><%= Util.count_display(days) %>:<%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
       """
     end
   end
