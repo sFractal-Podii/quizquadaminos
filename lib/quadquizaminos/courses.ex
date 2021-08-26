@@ -11,6 +11,15 @@ defmodule Quadquizaminos.Courses do
 
   end
 
+  def chapter_list(course) do
+    ("#{@courses_directory}/#{course}")
+    |> File.ls!()
+    |> Enum.filter(fn folder ->
+      File.dir?("#{@courses_directory}/#{course}/#{folder}") and
+        not (File.ls!("#{@courses_directory}/#{course}/#{folder}") |> Enum.empty?())
+    end)
+end
+
 
 
 end
