@@ -26,7 +26,7 @@ defmodule Quadquizaminos.Contests do
   @doc """
   Populates relevant the contest virtual fields
   """
-  @spec load_contest_vitual_fields(Contest.t()) :: Contest.t()
+  @spec load_contest_vitual_fields(Contest.t() | [Contest.t()]) :: Contest.t()
   def load_contest_vitual_fields(%Contest{} = contest) do
     status =
       case contest_status(contest.name) do
@@ -41,18 +41,20 @@ defmodule Quadquizaminos.Contests do
           status
       end
 
-    time_remaining =
-      case contest.contest_date do
-        nil -> nil
-        date -> DateTime.diff(date, DateTime.utc_now())
-      end
+    %{contest | status: status, time_elapsed: time_elapsed(contest.name)}
+  end
 
-    %{
-      contest
-      | status: status,
-        time_elapsed: time_elapsed(contest.name),
-        time_remaining: time_remaining
-    }
+  def load_contest_vitual_fields(contests) when is_list(contests) do
+    Enum.map(contests, &load_contest_vitual_fields/1)
+  end
+
+  def load_contest_vitual_fields(%Contest{} = contest, %User{} = user) do
+    %{contest | rsvped?: user_rsvped?(user, contest)}
+    |> load_contest_vitual_fields()
+  end
+
+  def load_contest_vitual_fields(contests, %User{} = user) when is_list(contests) do
+    Enum.map(contests, fn contest -> load_contest_vitual_fields(contest, user) end)
   end
 
   @doc """
@@ -60,6 +62,11 @@ defmodule Quadquizaminos.Contests do
   If its exact match then false if returned
   """
   @spec future_contest?(Contest.t()) :: boolean()
+  def future_contest?(name) when is_binary(name) do
+    Repo.get_by(Contest, name: name)
+    |> future_contest?()
+  end
+
   def future_contest?(%Contest{contest_date: nil}), do: true
 
   def future_contest?(%Contest{contest_date: date}) do
@@ -74,6 +81,15 @@ defmodule Quadquizaminos.Contests do
   """
   def list_contests do
     q = from c in Contest, order_by: [desc: c.contest_date]
+    Repo.all(q)
+  end
+
+  @doc """
+  Get ids of all the current contests
+  """
+
+  def list_contest_ids do
+    q = from c in Contest, order_by: [desc: c.contest_date], select: c.id
     Repo.all(q)
   end
 
@@ -130,8 +146,20 @@ defmodule Quadquizaminos.Contests do
   end
 
   def contest_status(name) do
-    ContestAgent.contest_status(name)
+    case ContestAgent.contest_status(name) do
+      :stopped ->
+        if future_contest?(name) do
+          :future
+        else
+          :stopped
+        end
+
+      status ->
+        status
+    end
   end
+
+  def time_elapsed(%Contest{name: name}), do: time_elapsed(name)
 
   def time_elapsed(name) do
     ContestAgent.time_elapsed(name)

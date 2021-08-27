@@ -50,15 +50,14 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   def update(assigns, socket) do
     contest = assigns.contest
 
-    Process.send_after(self(), {:update_component, contest_id: contest.id}, 1000)
-
     rsvped? = Contests.user_rsvped?(assigns.current_user, contest)
 
     {:ok,
      assign(socket,
        contest: contest,
        current_user: assigns.current_user,
-       rsvped?: rsvped?
+       rsvped?: rsvped?,
+       time_remaining: time_remaining(contest)
      )}
   end
 
@@ -93,8 +92,8 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
 
   defp timer_or_final_result(assigns, %Contest{status: :future}) do
     ~L"""
-    <%= if @contest.time_remaining do %>
-    <% {days, hours, minutes, seconds} = @contest.time_remaining |> Util.to_human_time() %>
+    <%= if @time_remaining do %>
+    <% {days, hours, minutes, seconds} = @time_remaining |> Util.to_human_time() %>
     <p><%= Util.count_display(days) %> days <%= Util.count_display(hours) %>h <%= Util.count_display(minutes) %>m <%= Util.count_display(seconds) %>s</p>
     <% else %>
     <p> Date not yet set </p>
@@ -177,6 +176,13 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     rem = rem(rem, 60)
     seconds = div(rem, 1)
     {hours, minutes, seconds}
+  end
+
+  defp time_remaining(%Contest{contest_date: date}) do
+    case date do
+      nil -> nil
+      date -> DateTime.diff(date, DateTime.utc_now())
+    end
   end
 
   @impl true

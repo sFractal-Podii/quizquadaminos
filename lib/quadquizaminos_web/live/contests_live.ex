@@ -3,26 +3,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
-  import Phoenix.HTML.{Form, Tag}
   alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.ContestsLive.ContestComponent
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Util
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
 
   def mount(_params, %{"uid" => uid}, socket) do
-    :timer.send_interval(1000, self(), :count_down)
+    :timer.send_interval(1000, self(), :update_component_timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
+    current_user = uid |> current_user()
 
     {:ok,
      socket
      |> assign(
-       current_user: uid |> current_user(),
+       current_user: current_user,
        contests: Contests.list_contests(),
        countdown_interval: countdown_interval,
        contest_records: [],
@@ -77,6 +75,14 @@ defmodule QuadquizaminosWeb.ContestsLive do
     )
 
     {:noreply, _end_contest(socket, name)}
+  end
+
+  def handle_info(:update_component_timer, socket) do
+    Enum.map(socket.assigns.contests, fn contest ->
+      send(self(), {:update_component, contest_id: contest.id})
+    end)
+
+    {:noreply, socket}
   end
 
   def handle_info({:update_component, contest_id: contest_id}, socket) do
