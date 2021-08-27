@@ -244,6 +244,8 @@ defmodule Quadquizaminos.Contests do
     RSVP.changeset(rsvp, attrs, %User{})
   end
 
+  def user_rsvped?(%User{uid: nil}, %Contest{}), do: false
+
   def user_rsvped?(%User{} = user, %Contest{} = contest) do
     user
     |> RSVP.user_contest_rsvp_query(contest)

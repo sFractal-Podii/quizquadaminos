@@ -5,6 +5,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   use Phoenix.LiveComponent
   import Phoenix.HTML.Form
 
+  alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
@@ -143,6 +144,13 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
     ~L"""
     <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
+    """
+  end
+
+  defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
+       when id in [nil, "anonymous"] do
+    ~L"""
+    <button disabled>  RSVP </button>
     """
   end
 

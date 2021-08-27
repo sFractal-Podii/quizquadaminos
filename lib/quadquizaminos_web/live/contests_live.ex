@@ -11,11 +11,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
 
-  def mount(_params, %{"uid" => uid}, socket) do
+  def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :update_component_timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
-    current_user = uid |> current_user()
+    current_user = session["uid"] |> current_user()
 
     {:ok,
      socket
@@ -243,6 +243,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
             </section>
         </div>
     """
+  end
+
+  defp current_user(nil) do
+    %User{uid: nil, admin?: false}
   end
 
   defp current_user(uid) do
