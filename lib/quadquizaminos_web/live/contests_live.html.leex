@@ -9,24 +9,30 @@
 
         <table>
             <tr>
-                <th>Name</th>
+                <th></th><!-- contest name -->
                 <%= if @current_user.admin? do %>
                 <th></th> <!--start pause button-->
                 <th></th><!-- STOP button-->
                 <% end %>
                 <th></th><!--count up timer-->
-                <th>Contest Date</th>
-                <th>Start time</th>
-                <th>End time</th>
+                <th>Date</th>
+                <th>Start</th>
+                <th>End</th>
                 <%= if admin?(@current_user) do %>
                 <th colspan="2">contest date</th>
                 <% end %>
             </tr>
-                <%= for contest <- @contests do %>
-                  <tr>
-                  <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
-                  </tr>
-                <% end %>
+
+            <%= for {status, contests} <- @contests |> group_contest_by_status do %>
+              <tr>
+                <td colspan="8"><b><%= status(status)  %> Contests</b></td>
+              </tr>
+                  <%= for  contest <- contests do %>
+                    <tr>
+                    <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
+                    </tr>
+                    <% end %>
+            <% end %>
         </table>
         <% else %>
         <%= countdown_timer(assigns, admin?(@current_user)) %>

@@ -12,6 +12,8 @@ defmodule Quadquizaminos.Contests.Contest do
   import Ecto.Changeset
   import Ecto.Query
 
+  @sort_order [:running, :future, :stopped]
+
   schema "contests" do
     field :start_time, :utc_datetime_usec
     field :end_time, :utc_datetime_usec
@@ -44,5 +46,16 @@ defmodule Quadquizaminos.Contests.Contest do
 
   def ended_contest(query) do
     from c in query, where: not is_nil(c.start_time) and not is_nil(c.end_time)
+  end
+
+  def compare({s1, _}, {s2, _}) do
+    s1_index = Enum.find_index(@sort_order, fn s -> s == s1 end)
+    s2_index = Enum.find_index(@sort_order, fn s -> s == s2 end)
+
+    cond do
+      s1_index > s2_index -> :gt
+      s1_index < s2_index -> :lt
+      true -> :eq
+    end
   end
 end

@@ -245,6 +245,21 @@ defmodule QuadquizaminosWeb.ContestsLive do
     """
   end
 
+  defp group_contest_by_status(contests) do
+    contests
+    |> Enum.map(fn contest ->
+      %{contest | status: Contests.contest_status(contest.name)}
+    end)
+    |> Enum.group_by(fn contest -> contest.status end)
+    |> Enum.sort({:asc, Contests.Contest})
+  end
+
+  defp status(:stopped), do: "Past"
+
+  defp status(status) do
+    status |> to_string() |> Macro.camelize()
+  end
+
   defp current_user(nil) do
     %User{uid: nil, admin?: false}
   end
