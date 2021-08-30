@@ -20,12 +20,10 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
   def render(assigns) do
     ~L"""
     <td><%= @contest.name%></td>
-    <%= if @current_user.admin? do %>
       <td> <%= start_or_pause_button(assigns,@contest) %> </td>
       <td>
       <button class="<%= maybe_disable_button(@contest) %> <%= if contest_running?(@contest), do: "red" %> icon-button" phx-click="stop" phx-value-contest='<%= @contest.name %>' <%= maybe_disable_button(@contest) %>><i class="fas fa-stop-circle fa-2x"></i></button>
       </td>
-    <% end %>
 
     <td><%= timer_or_final_result(assigns, @contest) %> </td>
     <td><%= contest_date(assigns, @contest)%> </td>
@@ -111,7 +109,7 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
   end
 
   def contest_date(
-        %{current_user: %{admin?: true}, editing_date?: false} = assigns,
+        %{editing_date?: false} = assigns,
         %Contest{contest_date: nil} = contest
       ) do
     ~L"""
@@ -119,7 +117,7 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
     """
   end
 
-  def contest_date(%{current_user: %{admin?: true}, editing_date?: true} = assigns, _contest) do
+  def contest_date(%{editing_date?: true} = assigns, _contest) do
     ~L"""
       <%= form_for :count, "#", [phx_submit: :save_date, phx_target: @myself] %>
         <input type="datetime-local" id="contest_date" name="contest_date">
@@ -128,7 +126,7 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
     """
   end
 
-  def contest_date(%{current_user: %{admin?: true}, editing_date?: false} = assigns, contest) do
+  def contest_date(%{editing_date?: false} = assigns, contest) do
     ~L"""
     <%= truncate_date(contest.contest_date) %>
     <button class="button-clear" phx-click="edit_contest_date" phx-value-contest='<%= contest.name%>' phx-target="<%= @myself%>"><i class="fas fa-edit fa-2x"></i></button>
