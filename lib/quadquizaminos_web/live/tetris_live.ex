@@ -47,8 +47,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
        active_contests: Contests.active_contests(),
        contest_id: nil,
        choosing_contest: false,
-       has_email?: has_email?,
-       user_changeset: Accounts.change_user(current_user)
+       has_email?: has_email?
      )
      |> init_game
      |> start_game()}
@@ -173,14 +172,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp ask_for_email(assigns) do
     ~L"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <h3> What's your email address? </h3>
-    <%= f = form_for @user_changeset, "#", [phx_change: :validate, phx_submit: :update_email] %>
-    <%= label f, :email %>
-    <%= text_input f, :email, type: :email %>
-    <%= error_tag f, :email %>
-    <%= text_input f, :uid, type: :hidden %>
-    <button> Update Email </button>
-    </form>
+    <%= live_component @socket,  QuadquizaminosWeb.SharedLive.AskEmailComponent, id: 1, current_user: @current_user, redirect_to: @current_uri %>
     <% end %>
     """
   end
@@ -374,20 +366,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
-  def handle_event("validate", %{"user" => params}, socket) do
-    changeset =
-      %Accounts.User{}
-      |> Accounts.change_user(params)
-      |> Map.put(:action, :insert)
-
-    {:noreply, socket |> assign(user_changeset: changeset)}
-  end
-
-  def handle_event("update_email", %{"user" => params}, socket) do
-    case Accounts.update_email(params) do
-      {:ok, user} -> {:noreply, socket |> assign(current_user: user, has_email?: true)}
-      {:error, changeset} -> {:noreply, socket |> assign(user_changeset: changeset)}
-    end
+  def handle_params(_unsigned_params, uri, socket) do
+    {:noreply, socket |> assign(current_uri: uri)}
   end
 
   def handle_event("choose_category", %{"category" => category}, socket) do
@@ -760,6 +740,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_info(:tick, socket) do
     {:noreply, on_tick(socket.assigns.state, socket)}
+  end
+
+  def handle_info(:update_user, socket) do
+    {:noreply,
+     assign(socket,
+       has_email?: true,
+       current_user: Accounts.get_user(socket.assigns.current_user.uid)
+     )}
   end
 
   defp on_tick(:game_over, socket) do
