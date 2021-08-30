@@ -3,26 +3,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
-  import Phoenix.HTML.{Form, Tag}
   alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.ContestsLive.ContestComponent
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.Contest
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Util
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
 
-  def mount(_params, %{"uid" => uid}, socket) do
-    :timer.send_interval(1000, self(), :count_down)
+  def mount(_params, session, socket) do
+    :timer.send_interval(1000, self(), :update_component_timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
+    current_user = session["uid"] |> current_user()
 
     {:ok,
      socket
      |> assign(
-       current_user: uid |> current_user(),
+       current_user: current_user,
        contests: Contests.list_contests(),
        countdown_interval: countdown_interval,
        contest_records: [],
@@ -79,7 +77,15 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _end_contest(socket, name)}
   end
 
-  def handle_info({:update_timer, contest_id: contest_id}, socket) do
+  def handle_info(:update_component_timer, socket) do
+    Enum.map(socket.assigns.contests, fn contest ->
+      send(self(), {:update_component, contest_id: contest.id})
+    end)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:update_component, contest_id: contest_id}, socket) do
     send_update(ContestComponent, id: contest_id, current_user: socket.assigns.current_user)
     {:noreply, socket}
   end
@@ -237,6 +243,25 @@ defmodule QuadquizaminosWeb.ContestsLive do
             </section>
         </div>
     """
+  end
+
+  defp group_contest_by_status(contests) do
+    contests
+    |> Enum.map(fn contest ->
+      %{contest | status: Contests.contest_status(contest.name)}
+    end)
+    |> Enum.group_by(fn contest -> contest.status end)
+    |> Enum.sort({:asc, Contests.Contest})
+  end
+
+  defp status(:stopped), do: "Past"
+
+  defp status(status) do
+    status |> to_string() |> Macro.camelize()
+  end
+
+  defp current_user(nil) do
+    %User{uid: nil, admin?: false}
   end
 
   defp current_user(uid) do

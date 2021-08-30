@@ -15,7 +15,7 @@ defmodule Quadquizaminos.GameBoard do
     field :dropped_bricks, :integer
     field :bottom_blocks, :map
     field :correctly_answered_qna, :integer
-    belongs_to :contest, Quadquizaminos.Contest
+    belongs_to :contest, Quadquizaminos.Contests.Contest
   end
 
   def changeset(board, attrs \\ %{}) do

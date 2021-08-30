@@ -17,6 +17,10 @@ defmodule Quadquizaminos.Util do
     |> DateTime.to_date()
   end
 
+  def to_human_time(nil) do
+    {0, 0, 0, 0}
+  end
+
   def to_human_time(seconds) do
     days = div(seconds, 86_400)
     rem = rem(seconds, 86_400)
