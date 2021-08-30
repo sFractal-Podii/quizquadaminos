@@ -5,14 +5,15 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   use Phoenix.LiveComponent
   import Phoenix.HTML.Form
 
-  alias Quadquizaminos.Contest
+  alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.Util
 
   @impl true
   def mount(socket) do
-    {:ok, socket |> assign(editing_date?: false)}
+    {:ok, socket |> assign(editing_date?: false, rsvped?: false)}
   end
 
   @impl true
@@ -30,7 +31,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     <td><%= contest_date(assigns, @contest)%> </td>
     <td><%= truncate_date(@contest.start_time) %></td>
     <td><%= truncate_date(@contest.end_time) %></td>
-    <td><%= live_result_button(assigns, @contest) %></td>
+    <td><%= rsvp_or_results_button(assigns, @contest) %></td>
     """
   end
 
@@ -38,9 +39,10 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   def preload(list_of_assigns) do
     list_of_assigns
     |> Enum.map(fn assigns ->
-      contest = Contests.get_contest(assigns.id)
-      status = contest.name |> Contests.contest_status() |> to_string()
-      contest = %{contest | status: status}
+      contest =
+        Contests.get_contest(assigns.id)
+        |> Contests.load_contest_vitual_fields()
+
       Map.put(assigns, :contest, contest)
     end)
   end
@@ -49,23 +51,19 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   def update(assigns, socket) do
     contest = assigns.contest
 
-    time_elapsed =
-      case contest.status do
-        "running" -> Contests.time_elapsed(contest.name)
-        _ -> 0
-      end
-
-    Process.send_after(self(), {:update_timer, contest_id: contest.id}, 1000)
+    rsvped? = Contests.user_rsvped?(assigns.current_user, contest)
 
     {:ok,
      assign(socket,
-       contest: %{contest | time_elapsed: time_elapsed},
-       current_user: assigns.current_user
+       contest: contest,
+       current_user: assigns.current_user,
+       rsvped?: rsvped?,
+       time_remaining: time_remaining(contest)
      )}
   end
 
   defp start_or_pause_button(assigns, contest) do
-    if contest.status == "running" do
+    if contest.status == :running do
       ~L"""
       <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo fa-2x"></i></button>
       """
@@ -77,7 +75,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   end
 
   def contest_running?(contest) do
-    contest.status == "running"
+    contest.status == :running
   end
 
   def maybe_disable_button(contest) do
@@ -86,15 +84,28 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     end
   end
 
+  defp timer_or_final_result(assigns, %Contest{status: :running}) do
+    ~L"""
+    <% {hours, minutes, seconds} = @contest.time_elapsed |> to_human_time() %>
+    <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+    """
+  end
+
+  defp timer_or_final_result(assigns, %Contest{status: :future}) do
+    ~L"""
+    <%= if @time_remaining do %>
+    <% {days, hours, minutes, seconds} = @time_remaining |> Util.to_human_time() %>
+    <p><%= Util.count_display(days) %> days <%= Util.count_display(hours) %>h <%= Util.count_display(minutes) %>m <%= Util.count_display(seconds) %>s</p>
+    <% else %>
+    <p> Date not yet set </p>
+    <% end %>
+    """
+  end
+
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
       <%= live_redirect "Final Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
-      """
-    else
-      ~L"""
-      <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>
-      <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
       """
     end
   end
@@ -110,7 +121,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: true} = assigns, _contest) do
     ~L"""
-      <%= f = form_for :count, "#", [phx_submit: :save_date, phx_target: @myself] %>
+      <%= form_for :count, "#", [phx_submit: :save_date, phx_target: @myself] %>
         <input type="datetime-local" id="contest_date" name="contest_date">
         <button>Save</button>
       </form>
@@ -130,14 +141,32 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     """
   end
 
-  defp live_result_button(assigns, contest) do
-    if contest.name in Contests.active_contests_names() do
-      ~L"""
-      <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
-      """
-    else
-      ""
-    end
+  defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
+    ~L"""
+    <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
+    """
+  end
+
+  defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
+       when id in [nil, "anonymous"] do
+    ~L"""
+    <button disabled>  RSVP </button>
+    """
+  end
+
+  defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
+    ~L"""
+    <%= if @rsvped? do %>
+      <button disabled> RSVPED </button>
+    <% else %>
+      <button phx-click="rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>" > RSVP </button>
+    <% end %>
+    """
+  end
+
+  defp rsvp_or_results_button(assigns, %Contest{}) do
+    ~L"""
+    """
   end
 
   def truncate_date(nil) do
@@ -157,6 +186,13 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     {hours, minutes, seconds}
   end
 
+  defp time_remaining(%Contest{contest_date: date}) do
+    case date do
+      nil -> nil
+      date -> DateTime.diff(date, DateTime.utc_now())
+    end
+  end
+
   @impl true
   def handle_event(event, _params, socket)
       when event in ["add_contest_date", "edit_contest_date"] do
@@ -173,6 +209,27 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
         _ -> socket
       end
 
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("rsvp", %{"contest_id" => id} = attrs, socket) do
+    socket =
+      case Contests.create_rsvp(attrs, socket.assigns.current_user) do
+        {:ok, _rsvp} ->
+          socket |> assign(:rsvped?, true)
+
+        {:error, _changeset} ->
+          socket |> assign(:rsvped?, false)
+      end
+
+    id =
+      case Integer.parse(id) do
+        {int, _} -> int
+        :error -> id
+      end
+
+    send(self(), {:update_component, contest_id: id})
     {:noreply, socket}
   end
 end
