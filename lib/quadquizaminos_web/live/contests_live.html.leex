@@ -1,45 +1,42 @@
     <div class="container">
-     <%= if @live_action == :show do %>
-     <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
-     <% else %>
- <%= if @countdown_interval <= 0 || admin?(@current_user) do %>
+        <%= if @live_action == :show do %>
+        <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
+        <% else %>
+          <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
-        <%= raw display_text_input(admin?(@current_user)) %>
-             <table>
-             <tr>
-                 <th>Name</th>
-                 <%= if admin?(@current_user) do %>
-                 <th></th>
-                 <th></th>
-                 <% end %>
-                 <th></th>
-                 <th>Start time</th>
-                 <th>End time</th>
-             </tr>
-             <tr>
-                <%= for contest <- @contests do %>
-                  <tr>
-                  <td><%= contest.name%></td>
-                  <%= if admin?(@current_user) do %>
-                 <td>
-                 <%= start_or_pause_button(assigns,contest) %>
-                 </td>
-                 <td>
-                     <button class="<%= maybe_disable_button(contest) %> <%= if contest_running?(contest), do: "red" %> icon-button" phx-click="stop" phx-value-contest='<%= contest.name %>' <%= maybe_disable_button(contest) %>><i class="fas fa-stop-circle fa-2x"></i></button>
-                 </td>
-                 <% end %>
-                 <td>
-                <%= timer_or_final_result(assigns, contest) %>
-                </td>
-                <td><%= truncate_date(contest.start_time) %></td>
-                <td><%= truncate_date(contest.end_time) %></td>
-                 <td><%= live_result_button(assigns, contest) %></td>
+
+        <%= raw display_text_input(@current_user.admin?) %>
+
+        <table>
+            <tr>
+                <th></th><!-- contest name -->
+                <%= if @current_user.admin? do %>
+                <th></th> <!--start pause button-->
+                <th></th><!-- STOP button-->
+                <% end %>
+                <th></th><!--count up timer-->
+                <th>Date</th>
+                <th>Start</th>
+                <th>End</th>
+                <%= if admin?(@current_user) do %>
+                <th colspan="2">contest date</th>
+                <% end %>
             </tr>
-          <% end %>
+
+            <%= for {status, contests} <- @contests |> group_contest_by_status do %>
+              <tr>
+                <td colspan="8"><b><%= status(status)  %> Contests</b></td>
+              </tr>
+                  <%= for  contest <- contests do %>
+                    <tr>
+                    <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
+                    </tr>
+                    <% end %>
+            <% end %>
         </table>
-    <% else %>
+        <% else %>
         <%= countdown_timer(assigns, admin?(@current_user)) %>
-     <% end %>
-        
-<% end %>
-</div>
+        <% end %>
+
+        <% end %>
+    </div>

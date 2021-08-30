@@ -35,6 +35,18 @@ defmodule Quadquizaminos.Accounts do
     |> Repo.one()
   end
 
+  def change_user(user, attrs \\ %{}) do
+    User.changeset(user, attrs)
+  end
+
+  def update_email(%{"uid" => uid} = attrs) do
+    uid |> get_user() |> update_email(attrs)
+  end
+
+  def update_email(%User{} = user, attrs) do
+    user |> User.email_changeset(attrs) |> Repo.update()
+  end
+
   def update_login_level(selected_level, initially_selected_level) do
     initially_selected_query =
       LoginLevel.base_query()

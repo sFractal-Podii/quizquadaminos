@@ -1,28 +1,58 @@
 defmodule QuadquizaminosWeb.ContestsLive do
   use Phoenix.LiveView
+
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
   alias Quadquizaminos.Contests
+  alias QuadquizaminosWeb.ContestsLive.ContestComponent
+  alias Quadquizaminos.Accounts
+  alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Util
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
 
   def mount(_params, session, socket) do
-    :timer.send_interval(1000, self(), :count_down)
-    :timer.send_interval(1000, self(), :timer)
+    :timer.send_interval(1000, self(), :update_component_timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
+    current_user = session["uid"] |> current_user()
 
     {:ok,
      socket
      |> assign(
-       current_user: Map.get(session, "uid"),
+       current_user: current_user,
        contests: Contests.list_contests(),
        countdown_interval: countdown_interval,
        contest_records: [],
-       contest_id: nil
+       contest_id: nil,
+       editing_date?: false
      )}
+  end
+
+  def handle_event("add_contest_date", %{"contest" => name}, socket) do
+    contests =
+      Enum.map(socket.assigns.contests, fn contest ->
+        if contest.name == name do
+          %{contest | add_contest_date: true}
+        else
+          contest
+        end
+      end)
+
+    {:noreply, assign(socket, contests: contests, editing_date?: true)}
+  end
+
+  def handle_event("edit_contest_date", %{"contest" => name}, socket) do
+    contests =
+      Enum.map(socket.assigns.contests, fn contest ->
+        if contest.name == name do
+          %{contest | editing_date?: true}
+        else
+          contest
+        end
+      end)
+
+    {:noreply, assign(socket, contests: contests, editing_date?: true)}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
@@ -47,8 +77,17 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _end_contest(socket, name)}
   end
 
-  def handle_info(:timer, socket) do
-    {:noreply, _update_contests_timer(socket)}
+  def handle_info(:update_component_timer, socket) do
+    Enum.map(socket.assigns.contests, fn contest ->
+      send(self(), {:update_component, contest_id: contest.id})
+    end)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:update_component, contest_id: contest_id}, socket) do
+    send_update(ContestComponent, id: contest_id, current_user: socket.assigns.current_user)
+    {:noreply, socket}
   end
 
   def handle_info(:count_down, socket) do
@@ -94,29 +133,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
       contest ->
         Contests.contest_game_records(contest)
     end
-  end
-
-  defp _update_contests_timer(socket) do
-    inactive_contest =
-      Enum.reject(socket.assigns.contests, fn contest ->
-        contest.name in Contests.active_contests_names()
-      end)
-
-    contests =
-      Contests.active_contests_names()
-      |> Enum.map(fn name ->
-        time = Contests.time_elapsed(name)
-        status = Contests.contest_status(name)
-
-        contest =
-          Enum.find(socket.assigns.contests, fn contest ->
-            contest.name == name
-          end)
-
-        %{contest | time_elapsed: time, status: to_string(status)}
-      end)
-
-    assign(socket, contests: contests ++ inactive_contest)
   end
 
   defp _create_contest(socket, contest_name) do
@@ -173,45 +189,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     assign(socket, contests: contests)
   end
 
-  defp start_or_pause_button(assigns, contest) do
-    if contest.status == "running" do
-      ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo fa-2x"></i></button>
-      """
-    else
-      ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %>  icon-button" phx-click="start" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>><i class="fas fa-play-circle fa-2x"></i></button>
-      """
-    end
-  end
-
-  defp timer_or_final_result(assigns, contest) do
-    if contest.end_time do
-      ~L"""
-      <%= live_redirect "Final Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
-
-      """
-    else
-      ~L"""
-
-      <% {hours, minutes, seconds} = contest.time_elapsed |> to_human_time() %>
-      <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
-
-      """
-    end
-  end
-
-  defp live_result_button(assigns, contest) do
-    if contest.name in Contests.active_contests_names() do
-      ~L"""
-      <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
-
-      """
-    else
-      ""
-    end
-  end
-
   defp display_text_input(true = _admin?) do
     """
     <input type="text" phx-keydown="save"  phx-key="Enter">
@@ -233,33 +210,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     ids = Application.get_env(:quadquizaminos, :github_ids)
 
     current_user in (ids |> Enum.map(&(&1 |> to_string())))
-  end
-
-  defp to_human_time(seconds) do
-    hours = div(seconds, 3600)
-    rem = rem(seconds, 3600)
-    minutes = div(rem, 60)
-    rem = rem(rem, 60)
-    seconds = div(rem, 1)
-    {hours, minutes, seconds}
-  end
-
-  def truncate_date(nil) do
-    nil
-  end
-
-  def truncate_date(date) do
-    DateTime.truncate(date, :second)
-  end
-
-  def contest_running?(contest) do
-    contest.status == "running"
-  end
-
-  def maybe_disable_button(contest) do
-    if contest.end_time || not contest_running?(contest) do
-      "disabled"
-    end
   end
 
   def countdown_timer(_assigns, true = _admin?), do: ""
@@ -293,5 +243,31 @@ defmodule QuadquizaminosWeb.ContestsLive do
             </section>
         </div>
     """
+  end
+
+  defp group_contest_by_status(contests) do
+    contests
+    |> Enum.map(fn contest ->
+      %{contest | status: Contests.contest_status(contest.name)}
+    end)
+    |> Enum.group_by(fn contest -> contest.status end)
+    |> Enum.sort({:asc, Contests.Contest})
+  end
+
+  defp status(:stopped), do: "Past"
+
+  defp status(status) do
+    status |> to_string() |> Macro.camelize()
+  end
+
+  defp current_user(nil) do
+    %User{uid: nil, admin?: false}
+  end
+
+  defp current_user(uid) do
+    case Accounts.get_user(uid) do
+      nil -> %User{uid: "anonymous", name: "anonymous"}
+      %User{} = user -> %{user | admin?: admin?(uid)}
+    end
   end
 end
