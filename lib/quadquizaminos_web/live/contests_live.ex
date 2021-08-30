@@ -11,12 +11,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Util
 
-  @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
-
   def mount(_params, session, socket) do
-    :timer.send_interval(1000, self(), :count_down)
     :timer.send_interval(1000, self(), :update_component_timer)
-    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
     current_user = session["uid"] |> current_user()
 
@@ -25,78 +21,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
      |> assign(
        current_user: current_user,
        contests: Contests.list_contests(),
-       countdown_interval: countdown_interval,
        contest_records: [],
-       contest_id: nil,
-       editing_date?: false
+       contest_id: nil
      )}
-  end
-
-  def handle_event("save_date", %{"contest_date" => date}, socket) do
-    {:ok, date, 0} = DateTime.from_iso8601(date <> ":00Z")
-
-    contests =
-      Enum.map(
-        socket.assigns.contests,
-        fn contest ->
-          if contest.add_contest_date or contest.edit_contest_date do
-            {:ok, contest} = Contests.update_contest(contest, %{contest_date: date})
-            %{contest | add_contest_date: false, edit_contest_date: false}
-          else
-            contest
-          end
-        end
-      )
-
-    {:noreply, assign(socket, contests: contests)}
-  end
-
-  def handle_event("add_contest_date", %{"contest" => name}, socket) do
-    contests =
-      Enum.map(socket.assigns.contests, fn contest ->
-        if contest.name == name do
-          %{contest | add_contest_date: true}
-        else
-          contest
-        end
-      end)
-
-    {:noreply, assign(socket, contests: contests, editing_date?: true)}
-  end
-
-  def handle_event("edit_contest_date", %{"contest" => name}, socket) do
-    contests =
-      Enum.map(socket.assigns.contests, fn contest ->
-        if contest.name == name do
-          %{contest | editing_date?: true}
-        else
-          contest
-        end
-      end)
-
-    {:noreply, assign(socket, contests: contests, editing_date?: true)}
-  end
-
-  def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
-    {:noreply, socket |> AdminContestsLive._create_contest(contest_name)}
-  end
-
-  def handle_event("start", %{"contest" => name}, socket) do
-    {:noreply, AdminContestsLive.start_or_resume_contest(socket, name)}
-  end
-
-  def handle_event("restart", %{"contest" => name}, socket) do
-    {:noreply, AdminContestsLive._restart_contest(socket, name)}
-  end
-
-  def handle_event("stop", %{"contest" => name}, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "contest_record",
-      "record_contest_scores",
-      name
-    )
-
-    {:noreply, AdminContestLive._end_contest(socket, name)}
   end
 
   def handle_info(:update_component_timer, socket) do
@@ -114,11 +41,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def handle_info(:timer, socket) do
     {:noreply, AdminContestLive._update_contests_timer(socket)}
-  end
-
-  def handle_info(:count_down, socket) do
-    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
-    {:noreply, socket |> assign(countdown_interval: countdown_interval)}
   end
 
   def handle_info(%{event: "current_scores", payload: payload}, socket) do
@@ -203,69 +125,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def truncate_date(date) do
     DateTime.truncate(date, :second)
-  end
-
-  defp _create_contest(socket, contest_name) do
-    contests = socket.assigns.contests
-
-    case Contests.create_contest(%{name: contest_name}) do
-      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
-      _ -> socket
-    end
-  end
-
-  defp _start_contest(socket, name) do
-    contests =
-      Enum.map(socket.assigns.contests, fn
-        contest ->
-          if contest.name == name do
-            {:ok, {:ok, started_contest}} = Contests.start_contest(name)
-            started_contest
-          else
-            contest
-          end
-      end)
-
-    assign(socket, contests: contests)
-  end
-
-  defp _restart_contest(socket, name) do
-    contests =
-      Enum.map(socket.assigns.contests, fn
-        contest ->
-          if contest.name == name do
-            {:ok, restarted_contest} = Contests.restart_contest(name)
-            restarted_contest
-          else
-            contest
-          end
-      end)
-
-    assign(socket, contests: contests)
-  end
-
-  defp _end_contest(socket, name) do
-    contests =
-      Enum.map(socket.assigns.contests, fn
-        contest ->
-          if contest.name == name do
-            {:ok, {:ok, ended_contest}} = Contests.end_contest(name)
-            ended_contest
-          else
-            contest
-          end
-      end)
-
-    assign(socket, contests: contests)
-  end
-
-  defp start_or_resume_contest(socket, name) do
-    if name in Contests.active_contests_names() && GenServer.whereis(name |> String.to_atom()) do
-      Contests.resume_contest(name)
-      socket
-    else
-      _start_contest(socket, name)
-    end
   end
 
   defp group_contest_by_status(contests) do
