@@ -6,15 +6,12 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
-  alias QuadquizaminosWeb.ContestsLive.ContestComponent
+  alias QuadquizaminosWeb.ContestsLive.AdminContestComponent
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
-  @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
-
   def mount(_params, session, socket) do
-    :timer.send_interval(1000, self(), :count_down)
+    :timer.send_interval(1000, self(), :update_component_timer)
     :timer.send_interval(1000, self(), :timer)
-    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
     current_user = session["uid"] |> current_user()
 
@@ -23,7 +20,6 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
      |> assign(
        current_user: current_user,
        contests: Contests.list_contests(),
-       countdown_interval: countdown_interval,
        contest_records: [],
        contest_id: nil
      )}
@@ -55,11 +51,6 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
     {:noreply, _update_contests_timer(socket)}
   end
 
-  def handle_info(:count_down, socket) do
-    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
-    {:noreply, socket |> assign(countdown_interval: countdown_interval)}
-  end
-
   def handle_info(%{event: "current_scores", payload: payload}, socket) do
     contest_records = socket.assigns.contest_records
 
@@ -76,6 +67,19 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
       end
 
     {:noreply, socket |> assign(contest_records: contest_records)}
+  end
+
+  def handle_info(:update_component_timer, socket) do
+    Enum.map(socket.assigns.contests, fn contest ->
+      send(self(), {:update_component, contest_id: contest.id})
+    end)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:update_component, contest_id: contest_id}, socket) do
+    send_update(AdminContestComponent, id: contest_id, current_user: socket.assigns.current_user)
+    {:noreply, socket}
   end
 
   def handle_params(%{"id" => id}, _uri, socket) do
