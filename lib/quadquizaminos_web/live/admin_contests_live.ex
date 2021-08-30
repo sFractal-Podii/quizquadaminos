@@ -220,14 +220,6 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
     end
   end
 
-  defp display_text_input(true = _admin?) do
-    """
-    <input type="text" phx-keydown="save"  phx-key="Enter">
-    """
-  end
-
-  defp display_text_input(_), do: ""
-
   def start_or_resume_contest(socket, name) do
     if name in Contests.active_contests_names() && GenServer.whereis(name |> String.to_atom()) do
       Contests.resume_contest(name)
