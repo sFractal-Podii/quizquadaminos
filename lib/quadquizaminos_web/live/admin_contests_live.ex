@@ -2,8 +2,11 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
   use Phoenix.LiveView
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
+  alias Quadquizaminos.Accounts
+  alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
+  alias QuadquizaminosWeb.ContestsLive.ContestComponent
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
@@ -13,11 +16,12 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
     :timer.send_interval(1000, self(), :timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
+    current_user = session["uid"] |> current_user()
 
     {:ok,
      socket
      |> assign(
-       current_user: Map.get(session, "uid"),
+       current_user: current_user,
        contests: Contests.list_contests(),
        countdown_interval: countdown_interval,
        contest_records: [],
@@ -220,7 +224,7 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
 
   defp display_text_input(_), do: ""
 
-  defp start_or_resume_contest(socket, name) do
+  def start_or_resume_contest(socket, name) do
     if name in Contests.active_contests_names() && GenServer.whereis(name |> String.to_atom()) do
       Contests.resume_contest(name)
       socket
@@ -254,5 +258,39 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
     if contest.end_time || not contest_running?(contest) do
       "disabled"
     end
+  end
+
+  #### util functions
+
+  defp group_contest_by_status(contests) do
+    contests
+    |> Enum.map(fn contest ->
+      %{contest | status: Contests.contest_status(contest.name)}
+    end)
+    |> Enum.group_by(fn contest -> contest.status end)
+    |> Enum.sort({:asc, Contests.Contest})
+  end
+
+  defp status(:stopped), do: "Past"
+
+  defp status(status) do
+    status |> to_string() |> Macro.camelize()
+  end
+
+  defp current_user(nil) do
+    %User{uid: nil, admin?: false}
+  end
+
+  defp current_user(uid) do
+    case Accounts.get_user(uid) do
+      nil -> %User{uid: "anonymous", name: "anonymous"}
+      %User{} = user -> %{user | admin?: admin?(uid)}
+    end
+  end
+
+  defp admin?(current_user) do
+    ids = Application.get_env(:quadquizaminos, :github_ids)
+
+    current_user in (ids |> Enum.map(&(&1 |> to_string())))
   end
 end
