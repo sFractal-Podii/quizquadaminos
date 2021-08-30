@@ -4,7 +4,7 @@ defmodule Quadquizaminos.GameBoard.Records do
   """
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.GameBoard
-  alias Quadquizaminos.Contest
+  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Repo
 
   @spec record_player_game(boolean(), map()) ::
@@ -15,7 +15,7 @@ defmodule Quadquizaminos.GameBoard.Records do
 
   def record_player_game(_game_over, _game_records), do: nil
 
-  def top_10_games(sort_by \\ "score") do
+  def sort_games(sort_by \\ "score") do
     GameBoard.game_record_query(sort_by)
     |> Repo.all()
   end
@@ -94,5 +94,11 @@ defmodule Quadquizaminos.GameBoard.Records do
   def change_game_board(attrs) do
     %GameBoard{}
     |> GameBoard.changeset(attrs)
+  end
+
+  def fetch_records(page \\ 1, sorter \\ "score") do
+    query = GameBoard |> GameBoard.sort_by(sorter) |> GameBoard.paginate_query(page, 25) |> GameBoard.preloads([:user])
+    
+    Repo.all(query)
   end
 end
