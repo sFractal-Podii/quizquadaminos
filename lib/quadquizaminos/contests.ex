@@ -254,7 +254,7 @@ defmodule Quadquizaminos.Contests do
     |> _cancel_rsvp(user)
   end
 
-  defp _cancel_rsvp(nil, _user), do: {0, []}
+  defp _cancel_rsvp(nil, _user), do: {:error, changeset}
 
   defp _cancel_rsvp(%Contest{} = contest, user) do
     user
