@@ -110,7 +110,7 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
-  checks if the active contest has contest date set
+  checks if the active contest has no contest date set
   """
   @spec active_contest_without_date?(integer()) :: boolean()
   def active_contest_without_date?(contest_id) do

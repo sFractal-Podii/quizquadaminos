@@ -55,6 +55,12 @@ defmodule Quizquadaminos.ContestsTest do
     refute time_elapsed == 0
   end
 
+  test "active_contest_without_date?/1 checks if the active contest has no date set", %{
+    contest: contest
+  } do
+    assert Contests.active_contest_without_date?(contest.id)
+  end
+
   describe "contest_game_records/2" do
     setup do
       attrs = %{name: "Quiz Block ", uid: Integer.to_string(40_000_000), role: "admin"}
