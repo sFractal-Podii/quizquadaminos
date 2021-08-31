@@ -8,11 +8,13 @@ defmodule Quadquizaminos.Courses do
       File.dir?("#{@courses_directory}/#{folder}") and
         not (File.ls!("#{@courses_directory}/#{folder}") |> Enum.empty?())
     end)
-
   end
 
+  @doc """
+  Gives the list of all the chapters in a course
+  """
   def chapter_list(course) do
-    ("#{@courses_directory}/#{course}")
+    "#{@courses_directory}/#{course}"
     |> File.ls!()
     |> Enum.filter(fn folder ->
       File.dir?("#{@courses_directory}/#{course}/#{folder}") and
@@ -20,15 +22,28 @@ defmodule Quadquizaminos.Courses do
     end)
   end
 
-  def questions(chapter,course) do
+  @doc """
+  Gets the list of all files in side the course chapter
+  """
+  def question_list(course, chapter) do
     path = "#{@courses_directory}/#{course}/#{chapter}"
-    files = File.ls!(path)
-    for file <- files do
+    File.ls!(path)
+  end
+
+  def questions(chapter, course) do
+    for file <- question_list(course, chapter) do
       path = "#{@courses_directory}/#{course}/#{chapter}/#{file}"
       quiz(path)
     end
   end
 
+  @doc """
+  Returns HTML representation of the question
+  """
+  def question(course, chapter, file) do
+    path = "#{@courses_directory}/#{course}/#{chapter}/#{file}"
+    quiz(path)
+  end
 
   def quiz(file) do
     {:ok, content} = file |> File.read()
@@ -37,8 +52,6 @@ defmodule Quadquizaminos.Courses do
     answers = answers(answers)
     [question, answers]
   end
-
-
 
   defp answers(answers) do
     answers
@@ -49,5 +62,4 @@ defmodule Quadquizaminos.Courses do
     {:ok, question, _} = Earmark.as_html(question)
     question |> String.replace("#", "")
   end
-
 end

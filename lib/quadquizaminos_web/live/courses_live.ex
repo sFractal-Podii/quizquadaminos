@@ -7,17 +7,19 @@ defmodule QuadquizaminosWeb.CourseLive do
 
   def mount(_arg0, _session, socket) do
     {
-      :ok, assign(
-      socket,
-      course: [],
-      chapter: []
-      )}
+      :ok,
+      assign(
+        socket,
+        course: [],
+        chapter: [],
+        chapter_files: [],
+        question: nil
+      )
+    }
   end
 
-
-
   def handle_params(%{"chapter" => chapter, "course" => course}, _uri, socket) do
-    {:noreply, socket |> assign(course: course, chapter: chapter) }
+    {:noreply, socket |> assign(course: course, chapter: chapter)}
   end
 
   def render(%{live_action: :questions} = assigns) do
@@ -47,57 +49,80 @@ defmodule QuadquizaminosWeb.CourseLive do
     """
   end
 
-    def render(assigns) do
-      ~L"""
-      <div class="container">
-      <%= if @live_action == :show do %>
-      <h1> Chapter </h1>
+  def render(%{live_action: :show} = assigns) do
+    ~L"""
+    <div class="container">
+    <div class="row">
+      <div class="column">
+        <%= for chapter <- Courses.chapter_list(assigns.course) do%>
+        <ul>
+        <a href="#" phx-click="go-to-chapter" phx-value-chapter="<%= chapter%>" > <%= chapter %> </a> <br />
+        </ul>
+        <% end %>
+      </div> <!-- column -->
+
+      <div class="column">
+      <%= for file <- @chapter_files do %>
+      <ul>
+       <a href="#" phx-click="go-to-question" phx-value-question="<%= file %>" > <%= file %> </a> <br />
+       </ul>
+      <% end %>
+      </div> <!-- column -->
+
+      <div class="column column-75">
+      <%= raw @question %>
+      </div> <!-- column -->
+
+     </div> <!-- row -->
+     </div> <!-- container -->
+    """
+  end
+
+  def render(assigns) do
+    ~L"""
+      <h1> Courses </h1>
       <table>
       <tr>
       <th>Name </th>
       </tr>
-        <%= for chapter <- Courses.chapter_list(assigns.course) do%>
-        <tr>
-        <td>
-        <%= live_patch chapter, to: Routes.course_path(@socket, :questions , @course, chapter) %>
-        </td>
-        </tr>
-        <% end %>
-     <% else %>
-       <h1> Courses </h1>
-       <table>
-       <tr>
-       <th>Name </th>
-       </tr>
-       <%= for course <- Courses.courses_list() do %>
-       <tr>
-       <td>
-       <%= live_patch course, to: Routes.course_path(@socket, :show , course) %>
-       </td>
+      <%= for course <- Courses.courses_list() do %>
+      <tr>
+      <td>
+      <%= live_patch course, to: Routes.course_path(@socket, :show , course) %>
+      </td>
       </tr>
-       <% end %>
-       </table>
-     <% end %>
-     </div>
-      """
-    end
+      <% end %>
+      </table>
+    """
+  end
 
-    def handle_params(%{"course" => course}, _url, socket) do
-      {:noreply, socket |> assign(course: course)}
-    end
+  def handle_params(%{"course" => course}, _url, socket) do
+    {:noreply, socket |> assign(course: course)}
+  end
 
-    def handle_params(_params, _url, socket) do
-      {:noreply, socket}
-    end
+  def handle_params(_params, _url, socket) do
+    {:noreply, socket}
+  end
 
-    def answers(content) do
-      [question,answer] = content
-      answer
-    end
+  @impl true
+  def handle_event("go-to-chapter", %{"chapter" => chapter}, socket) do
+    files = Courses.question_list(socket.assigns.course, chapter)
+    {:noreply, socket |> assign(chapter_files: files, chapter: chapter, question: nil)}
+  end
 
-    def question(content) do
-      [question,answer] = content
-     question
-    end
+  @impl true
+  def handle_event("go-to-question", %{"question" => question}, socket) do
+    question = Courses.question(socket.assigns.course, socket.assigns.chapter, question)
+    {:noreply, socket |> assign(question: question)}
+  end
 
+  def answers(content) do
+    [question, answer] = content
+    answer
+  end
+
+  def question(content) do
+    [question, answer] = content
+    question
+  end
 end
