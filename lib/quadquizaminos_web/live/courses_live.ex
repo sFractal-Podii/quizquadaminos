@@ -1,7 +1,7 @@
 defmodule QuadquizaminosWeb.CourseLive do
   use Phoenix.LiveView
   import Phoenix.HTML
-  import Phoenix.HTML.Link
+  import Phoenix.HTML.Form
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.Courses
 
@@ -13,9 +13,11 @@ defmodule QuadquizaminosWeb.CourseLive do
       chapter: []
       )}
   end
-  
-  def handle_params(%{"chapter" => chapter}, _uri, socket) do
-    {:noreply, socket |> assign(chapter: chapter) }
+
+
+
+  def handle_params(%{"chapter" => chapter, "course" => course}, _uri, socket) do
+    {:noreply, socket |> assign(course: course, chapter: chapter) }
   end
 
   def render(%{live_action: :questions} = assigns) do
@@ -25,10 +27,18 @@ defmodule QuadquizaminosWeb.CourseLive do
     <th>
     <h1> Questions </h1>
     <th>
-    <%= for question <- Courses.questions(@chapter,@course) do %>
+
+    <%= for content <- Courses.questions(@chapter,@course) do %>
     <tr>
     <td>
-      <%= question %>
+      <%= raw(question(content)) %>
+      <%= for answer <- answers(content) do %>
+      <%= label do %>
+      <%= answer %>
+      <% end %>
+
+      <% end %>
+
     </td>
     </tr>
       <% end %>
@@ -78,6 +88,16 @@ defmodule QuadquizaminosWeb.CourseLive do
 
     def handle_params(_params, _url, socket) do
       {:noreply, socket}
+    end
+
+    def answers(content) do
+      [question,answer] = content
+      answer
+    end
+
+    def question(content) do
+      [question,answer] = content
+     question
     end
 
 end
