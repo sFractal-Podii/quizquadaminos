@@ -34,7 +34,7 @@ defmodule QuadquizaminosWeb.SharedLive.AskEmailComponent do
 
     case Accounts.update_email(params) do
       {:ok, user} ->
-        send(self(), :update_user)
+        send(self(), {:update_user, current_user: user, has_email?: true})
 
         {:noreply,
          socket

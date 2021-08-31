@@ -2,7 +2,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   @moduledoc """
   Component to compatmentalize contests
   """
-  use Phoenix.LiveComponent
+  use QuadquizaminosWeb, :live_component
   import Phoenix.HTML.Form
 
   alias Quadquizaminos.Accounts.User
@@ -144,6 +144,14 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
     ~L"""
     <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
+    """
+  end
+
+  defp rsvp_or_results_button(%{current_user: %User{email: nil}} = assigns, %Contest{
+         status: :future
+       }) do
+    ~L"""
+    <button phx-click="ask-for-email"> RSVP </button>
     """
   end
 

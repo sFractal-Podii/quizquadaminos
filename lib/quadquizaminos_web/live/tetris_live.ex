@@ -1,13 +1,8 @@
 defmodule QuadquizaminosWeb.TetrisLive do
-  use Phoenix.LiveView
-  import Phoenix.HTML.Form
-  import QuadquizaminosWeb.ErrorHelpers
-  import Phoenix.HTML, only: [raw: 1]
+  use QuadquizaminosWeb, :live_view
   alias Quadquizaminos.Contests
-  import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
   alias QuadquizaminosWeb.SvgBoard
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.{
     Bottom,
@@ -742,12 +737,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {:noreply, on_tick(socket.assigns.state, socket)}
   end
 
-  def handle_info(:update_user, socket) do
-    {:noreply,
-     assign(socket,
-       has_email?: true,
-       current_user: Accounts.get_user(socket.assigns.current_user.uid)
-     )}
+  def handle_info({:update_user, assigns}, socket) do
+    {:noreply, assign(socket, assigns)}
   end
 
   defp on_tick(:game_over, socket) do
