@@ -49,7 +49,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
 
   @impl true
   def update(assigns, socket) do
-    contest = assigns.contest
+    contest = update_active_contest_without_date(assigns.contest)
 
     rsvped? = Contests.user_rsvped?(assigns.current_user, contest)
 
@@ -60,6 +60,15 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
        rsvped?: rsvped?,
        time_remaining: time_remaining(contest)
      )}
+  end
+
+  defp update_active_contest_without_date(contest) do
+    if Contests.active_contest_without_date?(contest.id) do
+      {:ok, contest} = Contests.update_contest(contest, %{contest_date: contest.start_time})
+      contest
+    else
+      contest
+    end
   end
 
   defp start_or_pause_button(assigns, contest) do

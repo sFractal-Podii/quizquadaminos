@@ -44,6 +44,10 @@ defmodule Quadquizaminos.Contests.Contest do
       where: c.id == ^id
   end
 
+  def active_contest_without_date(query) do
+    from q in query, where: not is_nil(q.start_time) and is_nil(q.contest_date)
+  end
+
   def ended_contest(query) do
     from c in query, where: not is_nil(c.start_time) and not is_nil(c.end_time)
   end
