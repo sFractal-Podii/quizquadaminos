@@ -259,7 +259,8 @@ defmodule Quadquizaminos.Contests do
   defp _cancel_rsvp(%Contest{} = contest, user) do
     user
     |> RSVP.user_contest_rsvp_query(contest)
-    |> Repo.delete_all()
+    |> Repo.one()
+    |> Repo.delete()
   end
 
   def user_rsvped?(%User{uid: nil}, %Contest{}), do: false

@@ -240,10 +240,10 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
 
     socket =
       case Contests.cancel_rsvp(id, socket.assigns.current_user) do
-        {1, [%RSVP{} | _]} ->
+        {:ok, _rsvp} ->
           socket |> assign(:rsvped?, false)
 
-        {0, []} ->
+        {:error, _changeset} ->
           socket |> assign(:rsvped?, true)
       end
 

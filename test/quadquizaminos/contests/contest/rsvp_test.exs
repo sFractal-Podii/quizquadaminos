@@ -24,7 +24,8 @@ defmodule Quadquizaminos.ContestsTest.RSVP do
       contest: contest
     } do
       {:ok, %RSVP{}} = Contests.create_rsvp(attrs, current_user)
-      {1, [%RSVP{contest_id: id}]} = Contests.cancel_rsvp(contest.id, current_user)
+
+      {:ok, %RSVP{contest_id: id}} = Contests.cancel_rsvp(contest.id, current_user)
 
       refute Repo.get_by(RSVP, contest_id: id)
     end
