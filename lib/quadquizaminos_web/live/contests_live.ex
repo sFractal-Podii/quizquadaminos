@@ -13,6 +13,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :update_component_timer)
+    :timer.send_interval(1000, self(), :update_contest_record_timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
     current_user = session["uid"] |> current_user()
@@ -75,6 +76,11 @@ defmodule QuadquizaminosWeb.ContestsLive do
     )
 
     {:noreply, _end_contest(socket, name)}
+  end
+
+  def handle_info(:update_contest_record_timer, socket) do
+    contest_records = :ets.tab2list(:contest_records) |> IO.inspect(label: "++++++++++++++++++")
+    {:noreply, assign(socket, contest_records: contest_records)}
   end
 
   def handle_info(:update_component_timer, socket) do

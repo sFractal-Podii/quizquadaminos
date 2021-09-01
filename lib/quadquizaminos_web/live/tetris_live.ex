@@ -28,8 +28,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
-    :timer.send_interval(1000, self(), :broadcast_score)
-    QuadquizaminosWeb.Endpoint.subscribe("contest_record")
+    :ets.new(:contest_records, [:named_table, :public])
+    # :timer.send_interval(1000, self(), :broadcast_score)
+    # QuadquizaminosWeb.Endpoint.subscribe("contest_record")
     current_user = user_id |> Accounts.get_user()
 
     has_email? =
@@ -326,6 +327,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
       )
 
     bonus = if fast, do: 2, else: 0
+
+    save_contest_game(socket.assigns.contest_id, response.game_over, socket)
+    |> IO.inspect(label: "==================")
+
+    # :ets.tab2list(:contest_records) |> IO.inspect(label: "++++++++++++++++++++")
 
     if response.game_over, do: save_game(game_record(socket), socket)
 
@@ -951,6 +957,25 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp save_game(record, %{assigns: %{contest_id: contest_id}} = _socket) do
     record = record |> Map.put(:contest_id, contest_id)
     Records.record_player_game(true, record)
+  end
+
+  defp save_contest_game(contest_id, game_over?, socket) do
+    ended_contest? = Contests.ended_contest?(contest_id)
+    contest = Contests.get_contest(contest_id)
+
+    game_record =
+      socket
+      |> game_record()
+      |> Map.put(:contest_id, contest_id)
+
+    game_record =
+      cond do
+        game_over? -> Map.put(game_record, :end_time, DateTime.utc_now())
+        ended_contest? -> Map.put(game_record, :end_time, contest.end_time)
+        true -> Map.put(game_record, :end_time, nil)
+      end
+
+    :ets.insert(:contest_records, {game_record})
   end
 
   defp contest_game_records(active_contests, records) do
