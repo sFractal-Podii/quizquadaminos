@@ -29,8 +29,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
     :ets.new(:contest_records, [:named_table, :public])
-    # :timer.send_interval(1000, self(), :broadcast_score)
-    # QuadquizaminosWeb.Endpoint.subscribe("contest_record")
     current_user = user_id |> Accounts.get_user()
 
     has_email? =
@@ -328,12 +326,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    save_contest_game(socket.assigns.contest_id, response.game_over, socket)
-    |> IO.inspect(label: "==================")
+    if Contests.ended_contest?(socket.assigns.contest_id) do
+      :ets.delete(:contest_records)
+    else
+      cache_contest_game(socket.assigns.contest_id, response.game_over, socket)
+    end
 
-    # :ets.tab2list(:contest_records) |> IO.inspect(label: "++++++++++++++++++++")
-
-    if response.game_over, do: save_game(game_record(socket), socket)
+    if response.game_over || Contests.ended_contest?(socket.assigns.contest_id),
+      do: save_game(game_record(socket), socket)
 
     socket
     |> assign(brick: response.brick)
@@ -350,7 +350,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(score: socket.assigns.score + response.score + bonus)
     |> assign(
       state:
-        if(response.game_over,
+        if(response.game_over || Contests.ended_contest?(socket.assigns.contest_id),
           do: :game_over,
           else: :playing
         )
@@ -740,42 +740,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {x, y}
   end
 
-  def handle_info(:broadcast_score, socket) do
-    socket |> game_record() |> broadcast_score(socket)
-    {:noreply, socket}
-  end
-
-  def handle_info(%{event: "record_contest_scores", payload: contest_name}, socket) do
-    contest = Quadquizaminos.Contests.get_contest(contest_name)
-
-    record =
-      socket
-      |> game_record()
-      |> Map.put(:contest_id, socket.assigns.contest_id)
-
-    same_contest? = contest.id == socket.assigns.contest_id
-
-    if socket.assigns.state == :playing and same_contest? do
-      Records.record_player_game(true, record)
-    end
-
-    state = if same_contest?, do: :game_over, else: socket.assigns.state
-
-    {:noreply, socket |> assign(state: state)}
-  end
-
   def handle_info(:tick, socket) do
     {:noreply, on_tick(socket.assigns.state, socket)}
-  end
-
-  defp on_tick(:game_over, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "scores",
-      "current_score",
-      game_record(socket)
-    )
-
-    socket
   end
 
   defp on_tick(:playing, socket) do
@@ -941,25 +907,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Map.has_key?(bottom, {x, y})
   end
 
-  defp broadcast_score(records, %{assigns: %{contest_id: contest_id}} = _socket) do
-    records = [
-      %{records | end_time: nil}
-      |> Map.put(:contest_id, contest_id)
-    ]
-
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "contest_scores",
-      "current_scores",
-      records
-    )
-  end
-
   defp save_game(record, %{assigns: %{contest_id: contest_id}} = _socket) do
     record = record |> Map.put(:contest_id, contest_id)
     Records.record_player_game(true, record)
   end
 
-  defp save_contest_game(contest_id, game_over?, socket) do
+  defp cache_contest_game(contest_id, game_over?, socket) do
     ended_contest? = Contests.ended_contest?(contest_id)
     contest = Contests.get_contest(contest_id)
 

@@ -15,7 +15,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     :timer.send_interval(1000, self(), :update_component_timer)
     :timer.send_interval(1000, self(), :update_contest_record_timer)
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
-    QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
     current_user = session["uid"] |> current_user()
 
     {:ok,
@@ -69,17 +68,12 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("stop", %{"contest" => name}, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "contest_record",
-      "record_contest_scores",
-      name
-    )
-
     {:noreply, _end_contest(socket, name)}
   end
 
   def handle_info(:update_contest_record_timer, socket) do
-    {:noreply, assign(socket, contest_records: contest_records())}
+    tid = :ets.whereis(:contest_records)
+    {:noreply, assign(socket, contest_records: contest_live_records(tid))}
   end
 
   def handle_info(:update_component_timer, socket) do
@@ -100,34 +94,12 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket |> assign(countdown_interval: countdown_interval)}
   end
 
-  def handle_info(%{event: "current_scores", payload: payload}, socket) do
-    contest_records = socket.assigns.contest_records
-
-    contest_records =
-      (contest_records ++ payload)
-      |> Enum.sort_by(& &1.score, :desc)
-      |> Enum.uniq_by(& &1.uid)
-      |> Enum.take(10)
-
-    contest_records =
-      case socket.assigns.contest_id do
-        nil -> contest_records
-        contest_id -> contest_live_records(contest_records, contest_id)
-      end
-
-    {:noreply, socket |> assign(contest_records: contest_records)}
-  end
-
   def handle_params(%{"id" => id}, _uri, socket) do
     {:noreply, assign(socket, id: id, contest_records: contest_records(id))}
   end
 
   def handle_params(_params, _uri, socket) do
     {:noreply, socket}
-  end
-
-  defp contest_live_records(records, contest_id) do
-    Enum.filter(records, fn record -> record.contest_id == contest_id end)
   end
 
   defp contest_records(contest_id) do
@@ -276,7 +248,9 @@ defmodule QuadquizaminosWeb.ContestsLive do
     end
   end
 
-  defp contest_records do
+  defp contest_live_records(:undefined), do: []
+
+  defp contest_live_records(_tid) do
     contest_records = :ets.tab2list(:contest_records)
 
     contest_records =
