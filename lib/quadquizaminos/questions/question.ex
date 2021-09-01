@@ -3,6 +3,7 @@ defmodule Quadquizaminos.Questions.Question do
   @type t :: %__MODULE__{
           type: atom(),
           question: String.t(),
+          correct: String.t(),
           title: String.t(),
           score: map(),
           description: String.t(),
@@ -11,6 +12,7 @@ defmodule Quadquizaminos.Questions.Question do
         }
   defstruct title: nil,
             type: nil,
+            correct: nil,
             question: nil,
             description: nil,
             choices: [],
