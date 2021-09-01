@@ -79,8 +79,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:update_contest_record_timer, socket) do
-    contest_records = :ets.tab2list(:contest_records) |> IO.inspect(label: "++++++++++++++++++")
-    {:noreply, assign(socket, contest_records: contest_records)}
+    {:noreply, assign(socket, contest_records: contest_records())}
   end
 
   def handle_info(:update_component_timer, socket) do
@@ -275,5 +274,18 @@ defmodule QuadquizaminosWeb.ContestsLive do
       nil -> %User{uid: "anonymous", name: "anonymous"}
       %User{} = user -> %{user | admin?: admin?(uid)}
     end
+  end
+
+  defp contest_records do
+    contest_records = :ets.tab2list(:contest_records)
+
+    contest_records =
+      for {record} <- contest_records do
+        record
+      end
+
+    contest_records
+    |> Enum.sort_by(& &1.score, :desc)
+    |> Enum.uniq_by(& &1.uid)
   end
 end

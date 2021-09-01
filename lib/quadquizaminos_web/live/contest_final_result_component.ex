@@ -16,7 +16,7 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       <th>End time</th>
       </tr>
 
-      <%= for {record} <- @contest_records do %>
+      <%= for record <- @contest_records do %>
        <tr>
       <td><%= user_name(record) %></td>
       <td><%= record.score %></td>
