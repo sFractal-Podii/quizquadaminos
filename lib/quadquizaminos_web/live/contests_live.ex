@@ -23,8 +23,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
        current_user: current_user,
        contests: Contests.list_contests(),
        countdown_interval: countdown_interval,
+       contest_live_records: [],
        contest_records: [],
        contest_id: nil,
+       tid: :undefined,
        editing_date?: false
      )}
   end
@@ -72,8 +74,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:update_contest_record_timer, socket) do
-    tid = :ets.whereis(:contest_records)
-    {:noreply, assign(socket, contest_records: contest_live_records(tid))}
+    {:noreply, contest_live_records(socket)}
   end
 
   def handle_info(:update_component_timer, socket) do
@@ -248,10 +249,24 @@ defmodule QuadquizaminosWeb.ContestsLive do
     end
   end
 
-  defp contest_live_records(:undefined), do: []
+  defp contest_live_records(socket) do
+    case socket.assigns[:id] do
+      nil ->
+        socket
 
-  defp contest_live_records(_tid) do
-    contest_records = :ets.tab2list(:contest_records)
+      id ->
+        contest = Contests.get_contest(String.to_integer(id))
+        contest_name = String.to_atom(contest.name)
+        tid = :ets.whereis(contest_name)
+
+        assign(socket, tid: tid, contest_live_records: contest_live_records(tid, contest_name))
+    end
+  end
+
+  defp contest_live_records(:undefined, _contest_name), do: []
+
+  defp contest_live_records(_tid, contest_name) do
+    contest_records = :ets.tab2list(contest_name)
 
     contest_records =
       for {record} <- contest_records do
