@@ -326,10 +326,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    cache_or_clear_contest_records(socket.assigns.contest_id, response.game_over, socket)
+    ended_contest? =
+      if is_nil(socket.assigns[:contest_id]),
+        do: false,
+        else: Contests.ended_contest?(socket.assigns[:contest_id])
 
-    if response.game_over || Contests.ended_contest?(socket.assigns.contest_id),
-      do: save_game(game_record(socket), socket)
+    cache_or_clear_contest_records(socket.assigns[:contest_id], response.game_over, socket)
+
+    if response.game_over || ended_contest?,
+      do: save_game(game_record(socket), ended_contest?, socket)
 
     socket
     |> assign(brick: response.brick)
@@ -346,7 +351,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(score: socket.assigns.score + response.score + bonus)
     |> assign(
       state:
-        if(response.game_over || Contests.ended_contest?(socket.assigns.contest_id),
+        if(response.game_over || ended_contest?,
           do: :game_over,
           else: :playing
         )
@@ -415,7 +420,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    socket |> game_record() |> save_game(socket)
+    socket |> game_record() |> save_game(false, socket)
 
     {:noreply, socket |> assign(state: :game_over, modal: false)}
   end
@@ -903,22 +908,36 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Map.has_key?(bottom, {x, y})
   end
 
-  defp save_game(record, %{assigns: %{contest_id: contest_id}} = _socket) do
+  defp save_game(record, ended_contest?, %{assigns: %{contest_id: contest_id}} = _socket) do
+    record =
+      if ended_contest? && !is_nil(contest_id) do
+        contest = Contests.get_contest(contest_id)
+        %{record | end_time: contest.end_time}
+      else
+        record
+      end
+
     record = record |> Map.put(:contest_id, contest_id)
     Records.record_player_game(true, record)
   end
 
   defp cache_or_clear_contest_records(contest_id, game_over?, socket) do
-    contest = Contests.get_contest(contest_id)
-    contest_name = String.to_atom(contest.name)
-    tid = :ets.whereis(contest_name)
+    case contest_id do
+      nil ->
+        nil
 
-    cache_or_clear_contest_records(tid, %{
-      contest_name: contest_name,
-      contest_id: contest_id,
-      game_over: game_over?,
-      socket: socket
-    })
+      contest_id ->
+        contest = Contests.get_contest(contest_id)
+        contest_name = String.to_atom(contest.name)
+        tid = :ets.whereis(contest_name)
+
+        cache_or_clear_contest_records(tid, %{
+          contest_name: contest_name,
+          contest_id: contest_id,
+          game_over: game_over?,
+          socket: socket
+        })
+    end
   end
 
   defp cache_or_clear_contest_records(:undefined, _), do: nil
