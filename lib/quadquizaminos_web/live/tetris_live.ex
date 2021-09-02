@@ -28,7 +28,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
-    :ets.new(:contest_records, [:named_table, :public])
+
     current_user = user_id |> Accounts.get_user()
 
     has_email? =
@@ -326,11 +326,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    if Contests.ended_contest?(socket.assigns.contest_id) do
-      :ets.delete(:contest_records)
-    else
-      cache_contest_game(socket.assigns.contest_id, response.game_over, socket)
-    end
+    cache_or_clear_contest_records(socket.assigns.contest_id, response.game_over, socket)
 
     if response.game_over || Contests.ended_contest?(socket.assigns.contest_id),
       do: save_game(game_record(socket), socket)
@@ -912,7 +908,30 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Records.record_player_game(true, record)
   end
 
-  defp cache_contest_game(contest_id, game_over?, socket) do
+  defp cache_or_clear_contest_records(contest_id, game_over?, socket) do
+    contest = Contests.get_contest(contest_id)
+    contest_name = String.to_atom(contest.name)
+    tid = :ets.whereis(contest_name)
+
+    cache_or_clear_contest_records(tid, %{
+      contest_name: contest_name,
+      contest_id: contest_id,
+      game_over: game_over?,
+      socket: socket
+    })
+  end
+
+  defp cache_or_clear_contest_records(:undefined, _), do: nil
+
+  defp cache_or_clear_contest_records(_tid, %{socket: socket} = game_details) do
+    if Contests.ended_contest?(game_details[:contest_id]) do
+      :ets.delete(game_details[:contest_name])
+    else
+      cache_contest_records(game_details[:contest_id], game_details[:game_over], socket)
+    end
+  end
+
+  defp cache_contest_records(contest_id, game_over?, socket) do
     ended_contest? = Contests.ended_contest?(contest_id)
     contest = Contests.get_contest(contest_id)
 
@@ -928,19 +947,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
         true -> Map.put(game_record, :end_time, nil)
       end
 
-    :ets.insert(:contest_records, {game_record})
-  end
-
-  defp contest_game_records(active_contests, records) do
-    if Enum.empty?(active_contests) do
-      records
-    else
-      Enum.map(active_contests, fn name ->
-        contest = Quadquizaminos.Contests.get_contest(name)
-
-        records
-        |> Map.put(:contest_id, contest.id)
-      end)
-    end
+    contest_name = String.to_atom(contest.name)
+    :ets.insert(contest_name, {game_record})
   end
 end
