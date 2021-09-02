@@ -333,8 +333,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     cache_or_clear_contest_records(socket.assigns[:contest_id], response.game_over, socket)
 
+    game_record = %{game_record(socket) | score: socket.assigns.score + response.score + bonus}
+
     if response.game_over || ended_contest?,
-      do: save_game(game_record(socket), ended_contest?, socket)
+      do: save_game(game_record, ended_contest?, socket)
 
     socket
     |> assign(brick: response.brick)
