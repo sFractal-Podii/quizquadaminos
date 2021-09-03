@@ -1,6 +1,10 @@
 defmodule Quadquizaminos.Contests do
 
 
+  alias Quadquizaminos.Contests.Contest
+  alias Quadquizaminos.Accounts.User
+
+
 
   @moduledoc """
   Inserts and gets data from the database that would be used in different functions.
@@ -9,9 +13,10 @@ defmodule Quadquizaminos.Contests do
   -active contests
   """
 
-  alias Quadquizaminos.Contest
+  # alias Quadquizaminos.Contest
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Repo
+  alias Quadquizaminos.Contests.RSVP
 
   alias Quadquizaminos.Contest.ContestAgent
   import Ecto.Query, only: [from: 2]
@@ -29,6 +34,7 @@ defmodule Quadquizaminos.Contests do
   @spec create_contest(map()) :: {:ok, %Contest{}} | {:error, Ecto.Changeset.t()}
 
   def create_contest(attrs) do
+
     %Contest{}
     |> Contest.changeset(attrs)
     |> Repo.insert()
@@ -56,10 +62,72 @@ defmodule Quadquizaminos.Contests do
   """
   @spec list_contests() :: []
   @doc """
+  Populates relevant the contest virtual fields
+  """
+  @spec load_contest_vitual_fields(Contest.t() | [Contest.t()]) :: Contest.t()
+  def load_contest_vitual_fields(%Contest{} = contest) do
+    status =
+      case contest_status(contest.name) do
+        :stopped ->
+          if future_contest?(contest) do
+            :future
+          else
+            :stopped
+          end
+
+        status ->
+          status
+      end
+
+    %{contest | status: status, time_elapsed: time_elapsed(contest.name)}
+  end
+
+  def load_contest_vitual_fields(contests) when is_list(contests) do
+    Enum.map(contests, &load_contest_vitual_fields/1)
+  end
+
+  def load_contest_vitual_fields(%Contest{} = contest, %User{} = user) do
+    %{contest | rsvped?: user_rsvped?(user, contest)}
+    |> load_contest_vitual_fields()
+  end
+
+  def load_contest_vitual_fields(contests, %User{} = user) when is_list(contests) do
+    Enum.map(contests, fn contest -> load_contest_vitual_fields(contest, user) end)
+  end
+
+  @doc """
+  Returns a boolean indicating whether the contest will occur in the future.
+  If its exact match then false if returned
+  """
+  @spec future_contest?(Contest.t()) :: boolean()
+  def future_contest?(name) when is_binary(name) do
+    Repo.get_by(Contest, name: name)
+    |> future_contest?()
+  end
+
+  def future_contest?(%Contest{contest_date: nil}), do: true
+
+  def future_contest?(%Contest{contest_date: date}) do
+    case DateTime.compare(date, DateTime.utc_now()) do
+      :gt -> true
+      _ -> false
+    end
+  end
+
+  @doc """
   gets all the contests in the database, by default sorts them by the contest date in descending order
   """
   def list_contests do
     q = from c in Contest, order_by: [desc: c.contest_date]
+    Repo.all(q)
+  end
+
+  @doc """
+  Get ids of all the current contests
+  """
+
+  def list_contest_ids do
+    q = from c in Contest, order_by: [desc: c.contest_date], select: c.id
     Repo.all(q)
   end
 
@@ -123,12 +191,24 @@ defmodule Quadquizaminos.Contests do
   Checks on the status of the contest
   """
   def contest_status(name) do
-    ContestAgent.contest_status(name)
+    case ContestAgent.contest_status(name) do
+      :stopped ->
+        if future_contest?(name) do
+          :future
+        else
+          :stopped
+        end
+
+      status ->
+        status
+    end
   end
 
   @doc """
   Gets the state of time elapsed
   """
+  def time_elapsed(%Contest{name: name}), do: time_elapsed(name)
+
   def time_elapsed(name) do
     ContestAgent.time_elapsed(name)
   end
@@ -207,4 +287,28 @@ defmodule Quadquizaminos.Contests do
   end
 
   defp contest_game_records(_ended_contest, _contest, _sorter), do: []
+
+  @doc """
+  creates a new RSVP on the database
+  """
+  @spec create_rsvp(map(), User.t()) :: {:ok, RSVP.t()} | {:error, Changeset.t()}
+  def create_rsvp(attrs, %User{} = current_user) do
+    %RSVP{} |> RSVP.changeset(attrs, current_user) |> Repo.insert()
+  end
+
+  @doc """
+  Creates an RSVP changeset
+  """
+  @spec change_rsvp(RSVP.t(), map()) :: Ecto.Changeset.t()
+  def change_rsvp(rsvp \\ %RSVP{}, attrs \\ %{}) do
+    RSVP.changeset(rsvp, attrs, %User{})
+  end
+
+  def user_rsvped?(%User{uid: nil}, %Contest{}), do: false
+
+  def user_rsvped?(%User{} = user, %Contest{} = contest) do
+    user
+    |> RSVP.user_contest_rsvp_query(contest)
+    |> Repo.exists?()
+  end
 end

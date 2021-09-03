@@ -4,7 +4,7 @@ defmodule Quadquizaminos.GameBoard.Records do
   """
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.GameBoard
-  alias Quadquizaminos.Contest
+  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Repo
 
   @spec record_player_game(boolean(), map()) ::

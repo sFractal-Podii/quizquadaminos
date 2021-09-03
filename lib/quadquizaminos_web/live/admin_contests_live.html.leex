@@ -1,11 +1,11 @@
     <div class="container">
-        <%= if @live_action == :show do %>
-        <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
-        <% else %>
         <h1>Contests</h1>
-        <table>
+         <input type="text" phx-keydown="save"  phx-key="Enter">
+             <table>
             <tr>
                 <th></th><!-- contest name -->
+                <th></th> <!--start pause button-->
+                <th></th><!-- STOP button-->
                 <th></th><!--count up timer-->
                 <th>Date</th>
                 <th>Start</th>
@@ -18,10 +18,10 @@
               </tr>
                   <%= for  contest <- contests do %>
                     <tr>
-                    <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
+                    <%= live_component @socket, QuadquizaminosWeb.ContestsLive.AdminContestComponent, id: contest.id, current_user: @current_user %>
                     </tr>
                     <% end %>
             <% end %>
         </table>
-        <% end %>
-    </div>
+        
+</div>
