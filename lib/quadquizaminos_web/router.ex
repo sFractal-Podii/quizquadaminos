@@ -65,6 +65,7 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through [:browser, :authorize_admin]
 
     live "/", AdminLive
+    live "/contest", AdminContestsLive
   end
 
   scope "/auth", QuadquizaminosWeb do
