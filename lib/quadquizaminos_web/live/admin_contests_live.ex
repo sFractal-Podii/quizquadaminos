@@ -21,13 +21,21 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
        current_user: current_user,
        contests: Contests.list_contests(),
        contest_records: [],
-       contest_id: nil
+       contest_id: nil,
+       editing_date?: false
      )}
   end
 
   def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
     {:noreply, socket |> _create_contest(contest_name)}
   end
+
+  @impl true
+  def handle_event(event, _params, socket)
+      when event in ["add_contest_date", "edit_contest_date"] do
+    {:noreply, socket |> assign(editing_date?: true)}
+  end
+
 
   def handle_event("start", %{"contest" => name}, socket) do
     {:noreply, start_or_resume_contest(socket, name)}

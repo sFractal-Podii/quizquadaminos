@@ -1,6 +1,12 @@
     <div class="container">
         <h1>Contests</h1>
-         <input type="text" phx-keydown="save"  phx-key="Enter">
+        <div class="container">
+
+          <div class="row">
+            <div class="column"> <input type="text" phx-keydown="save"  phx-key="Enter"></div>
+            <div class="column"><button phx-click="add_contest_date">Add</button></div>
+          </div>
+        </div>
              <table>
             <tr>
                 <th></th><!-- contest name -->
