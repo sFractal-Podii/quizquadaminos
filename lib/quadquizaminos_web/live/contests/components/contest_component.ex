@@ -8,6 +8,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Contests
+  alias Quadquizaminos.Contests.RSVP
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.Util
 
@@ -101,7 +102,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
     ~L"""
     <%= if @rsvped? do %>
-      <button disabled> RSVPED </button>
+      <button class="red" phx-click="cancel_rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>"> CANCEL </button>
     <% else %>
       <button phx-click="rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>" > RSVP </button>
     <% end %>
@@ -155,6 +156,22 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
       end
 
     send(self(), {:update_component, contest_id: id})
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("cancel_rsvp", %{"contest_id" => id}, socket) do
+    id = String.to_integer(id)
+
+    socket =
+      case Contests.cancel_rsvp(id, socket.assigns.current_user) do
+        {:ok, _rsvp} ->
+          socket |> assign(:rsvped?, false)
+
+        {:error, _changeset} ->
+          socket |> assign(:rsvped?, true)
+      end
+
     {:noreply, socket}
   end
 end

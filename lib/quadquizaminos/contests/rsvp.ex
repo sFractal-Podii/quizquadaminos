@@ -32,6 +32,6 @@ defmodule Quadquizaminos.Contests.RSVP do
   end
 
   def user_contest_rsvp_query(%User{uid: uid}, %Contest{id: cid}) do
-    from r in "rsvps", where: r.user_id == ^uid and r.contest_id == ^cid, select: r
+    from r in __MODULE__, where: r.user_id == ^uid and r.contest_id == ^cid, select: r
   end
 end
