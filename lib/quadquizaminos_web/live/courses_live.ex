@@ -53,10 +53,11 @@ defmodule QuadquizaminosWeb.CourseLive do
     ~L"""
     <div class="container">
     <div class="row">
-      <div class="column">
+      <div class="column column-25">
         <%= for chapter <- Courses.chapter_list(assigns.course) do%>
         <ul>
-        <a href="#" phx-click="go-to-chapter" phx-value-chapter="<%= chapter%>" > <%= chapter %> </a> <br />
+        <%= live_redirect "start #{chapter}", to: Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter}) %>
+
         </ul>
         <% end %>
       </div> <!-- column -->

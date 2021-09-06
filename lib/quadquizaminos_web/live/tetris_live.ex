@@ -43,6 +43,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
      socket
      |> assign(
        start_timer: false,
+       course: nil,
+       chapter: nil,
+       course_modal: false,
        current_user: current_user,
        active_contests: Contests.active_contests(),
        contest_id: nil,
@@ -135,6 +138,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 <%= if @super_modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
+                <%= if @course_modal do %>
+                <%= live_modal @socket,  QuadquizaminosWeb.CourseModalComponent, id: 4, course_modal: @course_modal, course: @course, chapter: @chapter, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw SvgBoard.svg_head() %>
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
@@ -211,7 +217,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp pause_game(socket) do
-    assign(socket, state: :paused, modal: true)
+    if socket.assigns.course && socket.assigns.chapter do
+      assign(socket, state: :paused, course_modal: true)
+    else
+      assign(socket, state: :paused, modal: true)
+    end
   end
 
   defp start_game(socket) do
@@ -372,6 +382,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def do_move(%{assigns: %{brick: _brick, bottom: bottom}} = socket, :turn) do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
+  end
+
+  def handle_params(%{"course" => course, "chapter" => chapter}, _uri, socket) do
+    {:noreply, assign(socket, course: course, chapter: chapter)}
+  end
+
+  def handle_params(_params, uri, socket) do
+    {:noreply, socket}
   end
 
   def handle_event("validate", %{"user" => params}, socket) do

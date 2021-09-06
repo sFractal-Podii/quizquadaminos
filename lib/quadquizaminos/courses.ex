@@ -23,6 +23,19 @@ defmodule Quadquizaminos.Courses do
   end
 
   @doc """
+  Gets the list of all categories in side the course chapter
+  """
+  @spec category_list(String.t(), String.t()) :: [String.t(), ...]
+  def category_list(course, chapter) do
+    "#{@courses_directory}/#{course}/#{chapter}"
+    |> File.ls!()
+    |> Enum.filter(fn folder ->
+      File.dir?("#{@courses_directory}/#{course}/#{chapter}/#{folder}") and
+        not (File.ls!("#{@courses_directory}/#{course}/#{chapter}/#{folder}") |> Enum.empty?())
+    end)
+  end
+
+  @doc """
   Gets the list of all files in side the course chapter
   """
   def question_list(course, chapter) do
