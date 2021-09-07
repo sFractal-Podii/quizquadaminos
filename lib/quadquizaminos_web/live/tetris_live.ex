@@ -97,7 +97,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             <% end %>
             <%= raw SvgBoard.svg_foot() %>
             <hr>
-              <button phx-click="start">Play again?</button>
+            <%= live_redirect "Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button" %>
               </div>
         <div class="column column-25 column-offset-25">
         <p><%= @brick_count %> QuadBlocks dropped</p>
