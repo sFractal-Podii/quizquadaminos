@@ -249,16 +249,8 @@ defmodule Quadquizaminos.Contests do
   """
   @spec cancel_rsvp(integer(), User.t()) :: {:ok, RSVP.t()} | {:error, Changeset.t()}
   def cancel_rsvp(contest_id, %User{} = user) do
-    contest_id
-    |> get_contest()
-    |> _cancel_rsvp(user)
-  end
-
-  defp _cancel_rsvp(nil, _user), do: {:error, changeset}
-
-  defp _cancel_rsvp(%Contest{} = contest, user) do
     user
-    |> RSVP.user_contest_rsvp_query(contest)
+    |> RSVP.user_contest_rsvp_query(contest_id)
     |> Repo.one()
     |> Repo.delete()
   end
