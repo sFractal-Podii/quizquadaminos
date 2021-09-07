@@ -29,7 +29,6 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
     <td><%= contest_date(assigns, @contest)%> </td>
     <td><%= truncate_date(@contest.start_time) %></td>
     <td><%= truncate_date(@contest.end_time) %></td>
-    <td><%= rsvp_or_results_button(assigns, @contest) %></td>
     """
   end
 
@@ -136,34 +135,6 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
   def contest_date(assigns, contest) do
     ~L"""
     <%= truncate_date(contest.contest_date) %>
-    """
-  end
-
-  defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
-    ~L"""
-    <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
-    """
-  end
-
-  defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
-       when id in [nil, "anonymous"] do
-    ~L"""
-    <button disabled>  RSVP </button>
-    """
-  end
-
-  defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
-    ~L"""
-    <%= if @rsvped? do %>
-      <button disabled> RSVPED </button>
-    <% else %>
-      <button phx-click="rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>" > RSVP </button>
-    <% end %>
-    """
-  end
-
-  defp rsvp_or_results_button(assigns, %Contest{}) do
-    ~L"""
     """
   end
 
