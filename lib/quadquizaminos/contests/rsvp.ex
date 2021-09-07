@@ -31,7 +31,11 @@ defmodule Quadquizaminos.Contests.RSVP do
     end
   end
 
-  def user_contest_rsvp_query(%User{uid: uid}, %Contest{id: cid}) do
-    from r in __MODULE__, where: r.user_id == ^uid and r.contest_id == ^cid, select: r
+  def user_contest_rsvp_query(%User{uid: uid}, contest_id) when is_integer(contest_id) do
+    from r in __MODULE__, where: r.user_id == ^uid and r.contest_id == ^contest_id, select: r
+  end
+
+  def user_contest_rsvp_query(user, %Contest{id: cid}) do
+    user_contest_rsvp_query(user, cid)
   end
 end
