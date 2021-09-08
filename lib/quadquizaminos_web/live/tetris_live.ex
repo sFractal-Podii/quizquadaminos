@@ -31,8 +31,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     :timer.send_interval(50, self(), :tick)
     :timer.send_interval(1000, self(), :broadcast_score)
     QuadquizaminosWeb.Endpoint.subscribe("contest_record")
-    current_user = user_id |> current_user() 
-   
+    current_user = user_id |> current_user()
 
     has_email? =
       if(current_user.name == "anonymous" or current_user.email) do
@@ -50,7 +49,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
        contest_id: nil,
        choosing_contest: false,
        has_email?: has_email?,
-       user_changeset: (if current_user, do: Accounts.change_user(current_user))
+       user_changeset: Accounts.change_user(current_user)
      )
      |> init_game
      |> start_game()}
@@ -312,7 +311,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp current_user(uid) do
     Accounts.get_user(uid)
   end
-  
+
   def tuple_to_string({x, y, c}) do
     c = c |> to_string()
     {x, y, c} |> Tuple.to_list() |> to_string()
