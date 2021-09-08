@@ -6,6 +6,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   alias Quadquizaminos.Contests
   import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
+  alias Quadquizaminos.Accounts.User
   alias QuadquizaminosWeb.SvgBoard
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
@@ -30,10 +31,11 @@ defmodule QuadquizaminosWeb.TetrisLive do
     :timer.send_interval(50, self(), :tick)
     :timer.send_interval(1000, self(), :broadcast_score)
     QuadquizaminosWeb.Endpoint.subscribe("contest_record")
-    current_user = user_id |> Accounts.get_user()
+    current_user = user_id |> current_user() 
+   
 
     has_email? =
-      if(current_user && current_user.email) do
+      if(current_user.name == "anonymous" or current_user.email) do
         true
       else
         false
@@ -48,7 +50,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
        contest_id: nil,
        choosing_contest: false,
        has_email?: has_email?,
-       user_changeset: Accounts.change_user(current_user)
+       user_changeset: (if current_user, do: Accounts.change_user(current_user))
      )
      |> init_game
      |> start_game()}
@@ -291,8 +293,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
           end)
       end
 
-    uid = if socket.assigns.current_user, do: socket.assigns.current_user.uid, else: "anonymous"
-
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
@@ -300,11 +300,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
-      uid: uid,
+      uid: socket.assigns.current_user.uid,
       correctly_answered_qna: socket.assigns.correct_answers
     }
   end
 
+  defp current_user("anonymous") do
+    %User{name: "anonymous", uid: "anonymous", admin?: false}
+  end
+
+  defp current_user(uid) do
+    Accounts.get_user(uid)
+  end
+  
   def tuple_to_string({x, y, c}) do
     c = c |> to_string()
     {x, y, c} |> Tuple.to_list() |> to_string()
