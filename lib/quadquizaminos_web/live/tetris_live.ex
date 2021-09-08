@@ -331,34 +331,35 @@ defmodule QuadquizaminosWeb.TetrisLive do
         do: false,
         else: Contests.ended_contest?(socket.assigns[:contest_id])
 
-    cache_or_clear_contest_records(socket.assigns[:contest_id], response.game_over, socket)
+    cache_contest_records(socket.assigns[:contest_id], socket)
 
     game_record = %{game_record(socket) | score: socket.assigns.score + response.score + bonus}
 
     if response.game_over || ended_contest?,
       do: save_game(game_record, ended_contest?, socket)
 
-    socket
-    |> assign(brick: response.brick)
-    |> assign(bottom: response.bottom)
-    |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
-    |> assign(row_count: socket.assigns.row_count + response.row_count)
-    |> assign(
-      hint:
-        if(response.brick_count > 0,
-          do: Hints.next_hint(socket.assigns.hint),
-          else: socket.assigns.hint
-        )
-    )
-    |> assign(score: socket.assigns.score + response.score + bonus)
-    |> assign(
-      state:
-        if(response.game_over || ended_contest?,
-          do: :game_over,
-          else: :playing
-        )
-    )
-    |> show
+    socket =
+      socket
+      |> assign(brick: response.brick)
+      |> assign(bottom: response.bottom)
+      |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
+      |> assign(row_count: socket.assigns.row_count + response.row_count)
+      |> assign(
+        hint:
+          if(response.brick_count > 0,
+            do: Hints.next_hint(socket.assigns.hint),
+            else: socket.assigns.hint
+          )
+      )
+      |> assign(score: socket.assigns.score + response.score + bonus)
+      |> assign(
+        state:
+          if(response.game_over || ended_contest?,
+            do: :game_over,
+            else: :playing
+          )
+      )
+      |> show
   end
 
   def drop(_not_playing, socket, _fast), do: socket
@@ -923,52 +924,44 @@ defmodule QuadquizaminosWeb.TetrisLive do
     Records.record_player_game(true, record)
   end
 
-  defp cache_or_clear_contest_records(contest_id, game_over?, socket) do
-    case contest_id do
+  defp cache_contest_records(contest_id, %Phoenix.LiveView.Socket{} = socket) do
+    case Enum.find(socket.assigns.active_contests, fn contest -> contest.id == contest_id end) do
       nil ->
         nil
 
-      contest_id ->
-        contest = Contests.get_contest(contest_id)
+      contest ->
         contest_name = String.to_atom(contest.name)
         tid = :ets.whereis(contest_name)
 
-        cache_or_clear_contest_records(tid, %{
+        cache_contest_records(tid, %{
           contest_name: contest_name,
           contest_id: contest_id,
-          game_over: game_over?,
           socket: socket
         })
     end
   end
 
-  defp cache_or_clear_contest_records(:undefined, _), do: nil
+  defp cache_contest_records(:undefined, _), do: nil
 
-  defp cache_or_clear_contest_records(_tid, %{socket: socket} = game_details) do
-    if Contests.ended_contest?(game_details[:contest_id]) do
-      :ets.delete(game_details[:contest_name])
-    else
-      cache_contest_records(game_details[:contest_id], game_details[:game_over], socket)
-    end
-  end
+  defp cache_contest_records(tid, opts) do
+    # ended_contest? = Contests.ended_contest?(contest_id)
+    # contest = Contests.get_contest(contest_id)
 
-  defp cache_contest_records(contest_id, game_over?, socket) do
-    ended_contest? = Contests.ended_contest?(contest_id)
-    contest = Contests.get_contest(contest_id)
+    current_user = opts.socket.assigns.current_user
 
     game_record =
-      socket
+      opts.socket
       |> game_record()
-      |> Map.put(:contest_id, contest_id)
+      |> Map.put(:contest_id, opts.contest_id)
 
-    game_record =
-      cond do
-        game_over? -> Map.put(game_record, :end_time, DateTime.utc_now())
-        ended_contest? -> Map.put(game_record, :end_time, contest.end_time)
-        true -> Map.put(game_record, :end_time, nil)
-      end
+    # game_record =
+    #   cond do
+    #     game_over? -> Map.put(game_record, :end_time, DateTime.utc_now())
+    #     ended_contest? -> Map.put(game_record, :end_time, contest.end_time)
+    #     true -> Map.put(game_record, :end_time, nil)
+    #   end
 
-    contest_name = String.to_atom(contest.name)
-    :ets.insert(contest_name, {game_record})
+    uid = if current_user, do: current_user.uid
+    :ets.insert(opts.contest_name, {uid, game_record})
   end
 end
