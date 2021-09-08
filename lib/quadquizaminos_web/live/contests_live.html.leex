@@ -2,14 +2,30 @@
         <%= if @live_action == :show do %>
         <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
         <% else %>
+          <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
+        <%= if @current_user.admin? do  %>
+          <%= form_for :contest, "#", [phx_submit: :save] %>
+              <input type="text" id="name" name="name">
+              <input type="datetime-local" id="contest_date" name="contest_date">
+              <button>Save</button>
+              </form>
+        <%end%>
+
         <table>
             <tr>
                 <th></th><!-- contest name -->
+                <%= if @current_user.admin? do %>
+                <th></th> <!--start pause button-->
+                <th></th><!-- STOP button-->
+                <% end %>
                 <th></th><!--count up timer-->
                 <th>Date</th>
                 <th>Start</th>
                 <th>End</th>
+                <%= if admin?(@current_user) do %>
+                <th colspan="2">contest date</th>
+                <% end %>
             </tr>
 
             <%= for {status, contests} <- @contests |> group_contest_by_status do %>
@@ -23,5 +39,9 @@
                     <% end %>
             <% end %>
         </table>
+        <% else %>
+        <%= countdown_timer(assigns, admin?(@current_user)) %>
+        <% end %>
+
         <% end %>
     </div>
