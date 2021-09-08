@@ -2,6 +2,8 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
   use QuadquizaminosWeb, :live_component
 
   alias Quadquizaminos.Contests
+  alias Quadquizaminos.GameBoard
+  alias Quadquizaminos.Repo
 
   def render(assigns) do
     ~L"""
@@ -29,6 +31,20 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       <% end %>
       </table>
     """
+  end
+
+  def update(assigns, socket) do
+    contest_name = String.to_atom(assigns.contest.name)
+
+    records =
+      if :ets.whereis(contest_name) != :undefined do
+        :timer.send_interval(1000, self(), :update_records)
+        assigns.contest_records
+      else
+        Contests.contest_game_records(assigns.contest)
+      end
+
+    {:ok, assign(socket, contest_records: records)}
   end
 
   def handle_event("sort", %{"param" => param}, socket) do

@@ -286,7 +286,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
         bottom ->
           Enum.into(bottom, %{}, fn {key, value} ->
-            IO.inspect(key, label: "#{inspect(value)}==========================")
             {tuple_to_string(key), tuple_to_string(value)}
           end)
       end
