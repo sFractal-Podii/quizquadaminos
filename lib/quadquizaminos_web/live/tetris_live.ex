@@ -290,14 +290,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
           end)
       end
 
+    contest =
+      Enum.find(socket.assigns.active_contests, fn contest ->
+        socket.assigns[:contest_id] == contest.id
+      end)
+
+    end_time =
+      cond do
+        socket.assigns.state == :game_over -> DateTime.utc_now()
+        Contests.ended_contest?(socket.assigns[:contest_id]) -> if contest, do: contest.end_time
+        true -> nil
+      end
+
     %{
       start_time: socket.assigns.start_time,
-      end_time: DateTime.utc_now(),
+      end_time: end_time,
       uid: socket.assigns.current_user.uid,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
       uid: socket.assigns.current_user.uid,
+      contest_id: socket.assigns.contest_id,
       correctly_answered_qna: socket.assigns.correct_answers
     }
   end
@@ -337,13 +350,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
         do: false,
         else: Contests.ended_contest?(socket.assigns[:contest_id])
 
-    cache_contest_records(socket.assigns[:contest_id], socket)
-
-    game_record = %{game_record(socket) | score: socket.assigns.score + response.score + bonus}
-
-    if response.game_over || ended_contest?,
-      do: save_game(game_record, ended_contest?, socket)
-
     socket =
       socket
       |> assign(brick: response.brick)
@@ -365,10 +371,22 @@ defmodule QuadquizaminosWeb.TetrisLive do
             else: :playing
           )
       )
+      # |> cache_contest_game()
+      |> maybe_save_game_record()
       |> show
   end
 
   def drop(_not_playing, socket, _fast), do: socket
+
+  defp maybe_save_game_record(socket) do
+    # save if game over
+    if socket.assigns.state == :game_over or Contests.ended_contest?(socket.assigns.contest_id) do
+      Records.record_player_game(true, game_record(socket))
+    end
+
+    # save if contest ended
+    socket
+  end
 
   def move(_direction, %{assigns: %{state: :paused}} = socket), do: socket
 
@@ -429,9 +447,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    socket |> game_record() |> save_game(false, socket)
-
-    {:noreply, socket |> assign(state: :game_over, modal: false)}
+    {:noreply, socket |> assign(state: :game_over, modal: false) |> maybe_save_game_record()}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -915,19 +931,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp block_in_bottom?(x, y, bottom) do
     Map.has_key?(bottom, {x, y})
-  end
-
-  defp save_game(record, ended_contest?, %{assigns: %{contest_id: contest_id}} = _socket) do
-    record =
-      if ended_contest? && !is_nil(contest_id) do
-        contest = Contests.get_contest(contest_id)
-        %{record | end_time: contest.end_time}
-      else
-        record
-      end
-
-    record = record |> Map.put(:contest_id, contest_id)
-    Records.record_player_game(true, record)
   end
 
   defp cache_contest_records(contest_id, %Phoenix.LiveView.Socket{} = socket) do

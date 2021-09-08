@@ -198,6 +198,9 @@ defmodule Quadquizaminos.Contests do
   @doc """
   Checks if the contest has been completed
   """
+
+  def ended_contest?(nil), do: nil
+
   @spec ended_contest?(integer()) :: boolean()
   def ended_contest?(contest_id) do
     contest_id
