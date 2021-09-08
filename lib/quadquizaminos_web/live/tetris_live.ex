@@ -286,6 +286,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
         bottom ->
           Enum.into(bottom, %{}, fn {key, value} ->
+            IO.inspect(key, label: "#{inspect(value)}==========================")
             {tuple_to_string(key), tuple_to_string(value)}
           end)
       end
@@ -371,20 +372,30 @@ defmodule QuadquizaminosWeb.TetrisLive do
             else: :playing
           )
       )
-      # |> cache_contest_game()
+      |> cache_contest_game()
       |> maybe_save_game_record()
       |> show
   end
 
   def drop(_not_playing, socket, _fast), do: socket
 
+  defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
+    socket
+  end
+
+  defp cache_contest_game(socket) do
+    game_record = socket |> game_record() |> Map.delete(:bottom_blocks)
+    contest_name = String.to_atom(socket.assigns.contest.name)
+
+    :ets.insert(contest_name, {socket.assigns.current_user.uid, game_record})
+    socket
+  end
+
   defp maybe_save_game_record(socket) do
-    # save if game over
     if socket.assigns.state == :game_over or Contests.ended_contest?(socket.assigns.contest_id) do
       Records.record_player_game(true, game_record(socket))
     end
 
-    # save if contest ended
     socket
   end
 
@@ -483,7 +494,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
         :error -> nil
       end
 
-    {:noreply, socket |> new_game() |> assign(contest_id: contest_id)}
+    contest = if contest_id, do: Contests.get_contest(contest_id)
+
+    {:noreply, socket |> new_game() |> assign(contest_id: contest_id, contest: contest)}
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
@@ -931,46 +944,5 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp block_in_bottom?(x, y, bottom) do
     Map.has_key?(bottom, {x, y})
-  end
-
-  defp cache_contest_records(contest_id, %Phoenix.LiveView.Socket{} = socket) do
-    case Enum.find(socket.assigns.active_contests, fn contest -> contest.id == contest_id end) do
-      nil ->
-        nil
-
-      contest ->
-        contest_name = String.to_atom(contest.name)
-        tid = :ets.whereis(contest_name)
-
-        cache_contest_records(tid, %{
-          contest_name: contest_name,
-          contest_id: contest_id,
-          socket: socket
-        })
-    end
-  end
-
-  defp cache_contest_records(:undefined, _), do: nil
-
-  defp cache_contest_records(tid, opts) do
-    # ended_contest? = Contests.ended_contest?(contest_id)
-    # contest = Contests.get_contest(contest_id)
-
-    current_user = opts.socket.assigns.current_user
-
-    game_record =
-      opts.socket
-      |> game_record()
-      |> Map.put(:contest_id, opts.contest_id)
-
-    # game_record =
-    #   cond do
-    #     game_over? -> Map.put(game_record, :end_time, DateTime.utc_now())
-    #     ended_contest? -> Map.put(game_record, :end_time, contest.end_time)
-    #     true -> Map.put(game_record, :end_time, nil)
-    #   end
-
-    uid = if current_user, do: current_user.uid
-    :ets.insert(opts.contest_name, {uid, game_record})
   end
 end
