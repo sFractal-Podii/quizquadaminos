@@ -2,11 +2,15 @@
         <h1>Contests</h1>
         <div class="container">
 
-          <div class="row">
-            <div class="column"> <input type="text" phx-keydown="save"  phx-key="Enter"></div>
-            <div class="column"><button phx-click="add_contest_date">Add</button></div>
-          </div>
+              <%= form_for :contest, "#", [phx_submit: :save] %>
+              <input type="text" id="name" name="name">
+              <input type="datetime-local" id="contest_date" name="contest_date">
+              <button>Save</button>
+              </form>
         </div>
+
+
+
              <table>
             <tr>
                 <th></th><!-- contest name -->
@@ -29,5 +33,5 @@
                     <% end %>
             <% end %>
         </table>
-        
+
 </div>

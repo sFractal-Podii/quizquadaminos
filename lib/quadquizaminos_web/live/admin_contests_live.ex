@@ -1,10 +1,13 @@
 defmodule QuadquizaminosWeb.AdminContestsLive do
   use Phoenix.LiveView
+  use Phoenix.HTML
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
+  import QuadquizaminosWeb.ErrorHelpers
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
+  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.ContestsLive.AdminContestComponent
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
@@ -21,20 +24,21 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
        current_user: current_user,
        contests: Contests.list_contests(),
        contest_records: [],
-       contest_id: nil,
-       editing_date?: false
+       contest_id: nil
      )}
   end
 
-  def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
-    {:noreply, socket |> _create_contest(contest_name)}
+
+  def handle_event("save", %{"name" => name, "contest_date" => contest_date}, socket) do
+    {:ok, contest_date, 0} = DateTime.from_iso8601(contest_date <> ":00Z")
+    {:noreply, socket |> _create_contest(name, contest_date) }
   end
 
-  @impl true
-  def handle_event(event, _params, socket)
-      when event in ["add_contest_date", "edit_contest_date"] do
-    {:noreply, socket |> assign(editing_date?: true)}
-  end
+
+
+
+
+
 
 
   def handle_event("start", %{"contest" => name}, socket) do
@@ -112,6 +116,15 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
     end
   end
 
+
+  defp _create_contest(socket, contest_name, contest_date) do
+    contests = socket.assigns.contests
+    case Contests.create_contest(%{name: contest_name,contest_date: contest_date}) do
+      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
+      _ -> socket
+    end
+  end
+
   defp _update_contests_timer(socket) do
     inactive_contest =
       Enum.reject(socket.assigns.contests, fn contest ->
@@ -135,14 +148,7 @@ defmodule QuadquizaminosWeb.AdminContestsLive do
     assign(socket, contests: contests ++ inactive_contest)
   end
 
-  defp _create_contest(socket, contest_name) do
-    contests = socket.assigns.contests
 
-    case Contests.create_contest(%{name: contest_name}) do
-      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
-      _ -> socket
-    end
-  end
 
   defp _start_contest(socket, name) do
     contests =

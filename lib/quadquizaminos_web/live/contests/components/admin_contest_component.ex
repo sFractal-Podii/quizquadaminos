@@ -117,15 +117,6 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
     """
   end
 
-  def contest_date(%{editing_date?: true} = assigns, _contest) do
-    ~L"""
-      <%= form_for :count, "#", [phx_submit: :save_date, phx_target: @myself] %>
-        <input type="datetime-local" id="contest_date" name="contest_date">
-        <button>Save</button>
-      </form>
-    """
-  end
-
   def contest_date(%{editing_date?: false} = assigns, contest) do
     ~L"""
     <%= truncate_date(contest.contest_date) %>
@@ -195,19 +186,6 @@ defmodule QuadquizaminosWeb.ContestsLive.AdminContestComponent do
   def handle_event(event, _params, socket)
       when event in ["add_contest_date", "edit_contest_date"] do
     {:noreply, socket |> assign(editing_date?: true)}
-  end
-
-  @impl true
-  def handle_event("save_date", %{"contest_date" => date}, socket) do
-    {:ok, date, 0} = DateTime.from_iso8601(date <> ":00Z")
-
-    socket =
-      case Contests.update_contest(socket.assigns.contest, %{contest_date: date}) do
-        {:ok, contest} -> socket |> assign(editing_date?: false, contest: contest)
-        _ -> socket
-      end
-
-    {:noreply, socket}
   end
 
   @impl true
