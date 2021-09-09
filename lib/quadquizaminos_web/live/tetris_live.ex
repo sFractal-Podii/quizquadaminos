@@ -353,7 +353,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     socket =
       socket
       |> assign(brick: response.brick)
-      |> assign(bottom: response.bottom)
+      |> assign(bottom: if(response.game_over, do: socket.assigns.bottom, else: response.bottom))
       |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
       |> assign(row_count: socket.assigns.row_count + response.row_count)
       |> assign(
@@ -383,8 +383,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp cache_contest_game(socket) do
-    IO.inspect(socket.assigns.state, label: "++++++++++++++++++++++++")
-    IO.inspect(socket.assigns.correct_answers, label: "====================")
     game_record = socket |> game_record() |> Map.delete(:bottom_blocks)
     contest_name = String.to_atom(socket.assigns.contest.name)
 
