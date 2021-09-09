@@ -383,10 +383,15 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp cache_contest_game(socket) do
+    IO.inspect(socket.assigns.state, label: "++++++++++++++++++++++++")
+    IO.inspect(socket.assigns.correct_answers, label: "====================")
     game_record = socket |> game_record() |> Map.delete(:bottom_blocks)
     contest_name = String.to_atom(socket.assigns.contest.name)
 
-    :ets.insert(contest_name, {socket.assigns.current_user.uid, game_record})
+    if :ets.whereis(contest_name) != :undefined do
+      :ets.insert(contest_name, {socket.assigns.current_user.uid, game_record})
+    end
+
     socket
   end
 
