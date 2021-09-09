@@ -244,6 +244,17 @@ defmodule Quadquizaminos.Contests do
     RSVP.changeset(rsvp, attrs, %User{})
   end
 
+  @doc """
+  deletes RSVP from the database
+  """
+  @spec cancel_rsvp(integer(), User.t()) :: {:ok, RSVP.t()} | {:error, Changeset.t()}
+  def cancel_rsvp(contest_id, %User{} = user) do
+    user
+    |> RSVP.user_contest_rsvp_query(contest_id)
+    |> Repo.one()
+    |> Repo.delete()
+  end
+
   def user_rsvped?(%User{uid: nil}, %Contest{}), do: false
 
   def user_rsvped?(%User{} = user, %Contest{} = contest) do
