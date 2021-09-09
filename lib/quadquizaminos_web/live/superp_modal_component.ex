@@ -57,6 +57,4 @@ defmodule QuadquizaminosWeb.SuperpModalComponent do
     </div>
     """
   end
-
-
 end

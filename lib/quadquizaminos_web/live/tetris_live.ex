@@ -33,7 +33,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     current_user = user_id |> Accounts.get_user()
 
     has_email? =
-      if(current_user && current_user.email) do
+      if current_user && current_user.email do
         true
       else
         false

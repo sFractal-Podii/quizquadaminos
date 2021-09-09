@@ -17,21 +17,25 @@ defmodule Quadquizaminos.Threshold do
       {false, false} ->
         ## normal state, return new bottom and leave speed/score alone
         {bottom, speed, score}
+
       {true, false} ->
         ## under cyberattack means add attack blocks, reduce score, speed up game
         {Bottom.add_attack(bottom), 0, round(0.99 * score)}
+
       {false, true} ->
         ## being sued means add lawsuit blocks, reduce score, slow down game
         {Bottom.add_lawsuit(bottom), 6, round(0.99 * score)}
+
       {true, true} ->
         ## both lawsuit and cyberattack - add both blocks, reduce score more, speed up games
-        bottom = bottom
-          |> Bottom.add_lawsuit
-          |> Bottom.add_attack
+        bottom =
+          bottom
+          |> Bottom.add_lawsuit()
+          |> Bottom.add_attack()
+
         speed = 0
         score = round(0.95 * score)
         {bottom, speed, score}
-      end
     end
-
+  end
 end

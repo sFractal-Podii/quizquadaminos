@@ -1,6 +1,7 @@
 defmodule Quadquizaminos.Presets do
   def five_by_nine() do
-    %{{1, 14} => {1, 14, :blue},
+    %{
+      {1, 14} => {1, 14, :blue},
       {4, 14} => {4, 14, :green},
       {7, 14} => {7, 14, :pink},
       {8, 14} => {8, 14, :pink},
@@ -66,7 +67,8 @@ defmodule Quadquizaminos.Presets do
   end
 
   def attack() do
-    %{{1, 10} => {1, 10, :attack_yellow_gold},
+    %{
+      {1, 10} => {1, 10, :attack_yellow_gold},
       {2, 10} => {2, 10, :attack_yellow_gold},
       {3, 10} => {3, 10, :attack_yellow_gold},
       {4, 10} => {4, 10, :attack_yellow_gold},
@@ -79,7 +81,8 @@ defmodule Quadquizaminos.Presets do
   end
 
   def lawsuit() do
-    %{{5, 20} => {5, 20, :lawsuit_brown_gold},
+    %{
+      {5, 20} => {5, 20, :lawsuit_brown_gold},
       {5, 19} => {5, 19, :lawsuit_brown_gold},
       {5, 18} => {5, 18, :lawsuit_brown_gold},
       {5, 17} => {5, 17, :lawsuit_brown_gold},
@@ -123,5 +126,4 @@ defmodule Quadquizaminos.Presets do
       {10, 20} => {10, 20, :license_grey_brown}
     }
   end
-
 end

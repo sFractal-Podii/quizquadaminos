@@ -47,9 +47,10 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
   end
 
   def handle_event("sort", %{"param" => sort_by}, socket) do
-    
     socket = socket |> assign(sort_by: sort_by)
-    {:noreply, push_patch(socket, to: Routes.live_path(socket, __MODULE__, sort_by: sort_by, page: 1))}
+
+    {:noreply,
+     push_patch(socket, to: Routes.live_path(socket, __MODULE__, sort_by: sort_by, page: 1))}
   end
 
   def handle_params(%{"page" => page, "sort_by" => sorter}, _url, socket) do

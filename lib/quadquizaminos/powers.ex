@@ -15,7 +15,6 @@ defmodule Quadquizaminos.Powers do
 
   def all_powers() do
     @all_powers
-    |> Enum.sort
+    |> Enum.sort()
   end
-
 end

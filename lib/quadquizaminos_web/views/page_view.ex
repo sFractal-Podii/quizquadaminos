@@ -29,5 +29,4 @@ defmodule QuadquizaminosWeb.PageView do
      </div>
     """
   end
-
 end

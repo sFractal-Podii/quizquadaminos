@@ -1,5 +1,4 @@
 defmodule Quadquizaminos.Speed do
-
   @drop_speeds [
     # 20/s, 50 ms
     %{name: "full throttle", tick_count: 1},
@@ -40,5 +39,4 @@ defmodule Quadquizaminos.Speed do
   def decrease_speed(speed) do
     if speed + 1 > lowest_speed(), do: lowest_speed(), else: speed + 1
   end
-
 end
