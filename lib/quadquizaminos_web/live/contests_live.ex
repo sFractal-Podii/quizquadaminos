@@ -68,6 +68,12 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("stop", %{"contest" => name}, socket) do
+    table_name = String.to_atom(name)
+
+    if :ets.whereis(table_name) != :undefined do
+      :ets.delete(table_name)
+    end
+
     {:noreply, _end_contest(socket, name)}
   end
 
