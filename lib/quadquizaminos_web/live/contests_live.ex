@@ -78,7 +78,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:update_component_timer, socket) do
-    Enum.map(socket.assigns.contests, fn contest ->
+    Enum.each(socket.assigns.contests, fn contest ->
       send(self(), {:update_component, contest_id: contest.id})
     end)
 

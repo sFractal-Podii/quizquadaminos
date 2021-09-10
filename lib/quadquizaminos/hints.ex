@@ -172,55 +172,22 @@ defmodule Quadquizaminos.Hints do
   end
 
   def next_hint(previous_hint) do
-    ## walk thru the hints
-    case previous_hint do
-      :intro ->
-        :mobile
-
-      :mobile ->
-        :quiz
-
-      :quiz ->
-        :scoring
-
-      :scoring ->
-        :scoring2
-
-      :scoring2 ->
-        :vuln
-
-      :vuln ->
-        :rm_vuln
-
-      :rm_vuln ->
-        :clrblocks
-
-      :clrblocks ->
-        :addblock
-
-      :addblock ->
-        :speed
-
-      :speed ->
-        :delblock
-
-      :delblock ->
-        :mvblock
-
-      :mvblock ->
-        :speedup
-
-      :speedup ->
-        :slowdown
-
-      :slowdown ->
-        :superpower
-
-      :superpower ->
-        :intro
-
-      _ ->
-        :intro
-    end
+    %{
+      intro: :mobile,
+      mobile: :quiz,
+      quiz: :scoring,
+      scoring: :scoring2,
+      scoring2: :vuln,
+      vuln: :rm_vuln,
+      rm: :clrblocks,
+      clrblocks: :addblock,
+      addblock: :speed,
+      speed: :delblock,
+      delblock: :mvblock,
+      mvblock: :speedup,
+      speedup: :slowdown,
+      slowdown: :superpower,
+      superpower: :intro,
+    }|> Map.get(previous_hint, :intro)
   end
 end
