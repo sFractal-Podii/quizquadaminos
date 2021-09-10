@@ -2,8 +2,6 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
   use QuadquizaminosWeb, :live_component
 
   alias Quadquizaminos.Contests
-  alias Quadquizaminos.GameBoard
-  alias Quadquizaminos.Repo
 
   def render(assigns) do
     ~L"""
@@ -38,7 +36,6 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
 
     records =
       if :ets.whereis(contest_name) != :undefined do
-        :timer.send_interval(1000, self(), :update_records)
         assigns.contest_records
       else
         Contests.contest_game_records(assigns.contest)

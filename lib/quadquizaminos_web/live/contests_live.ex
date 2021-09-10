@@ -13,7 +13,17 @@ defmodule QuadquizaminosWeb.ContestsLive do
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
 
   def mount(_params, session, socket) do
-    :timer.send_interval(1000, self(), :update_component_timer)
+    case socket.assigns.live_action do
+      :show ->
+        :timer.send_interval(1000, self(), :update_records)
+
+      :index ->
+        :timer.send_interval(1000, self(), :update_component_timer)
+
+      _ ->
+        nil
+    end
+
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     current_user = session["uid"] |> current_user()
 
@@ -77,29 +87,38 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _end_contest(socket, name)}
   end
 
+  def handle_info(:update_records, %{assigns: %{contest: contest}} = socket) do
+    contest_name = String.to_atom(contest.name)
+
+    if :ets.whereis(contest_name) != :undefined do
+      records =
+        contest_name
+        |> :ets.tab2list()
+        |> Enum.map(fn {uid, record, name} ->
+          game_board = struct(%GameBoard{}, record)
+          %{game_board | user: %User{name: name, uid: uid}}
+        end)
+        |> Enum.sort_by(& &1.score, :desc)
+
+      send_update(QuadquizaminosWeb.ContestFinalResultComponent,
+        id: "final_result",
+        contest: socket.assigns.contest,
+        contest_records: records
+      )
+    end
+
+    {:noreply, socket}
+  end
+
   def handle_info(:update_records, socket) do
-    contest_name = String.to_atom(socket.assigns.contest.name)
-
-    records =
-      contest_name
-      |> :ets.tab2list()
-      |> Enum.map(fn {_uid, record} ->
-        struct(%GameBoard{}, record) |> Quadquizaminos.Repo.preload(:user)
-      end)
-      |> Enum.sort_by(& &1.score, :desc)
-
-    send_update(QuadquizaminosWeb.ContestFinalResultComponent,
-      id: "final_result",
-      contest: socket.assigns.contest,
-      contest_records: records
-    )
-
     {:noreply, socket}
   end
 
   def handle_info(:update_component_timer, socket) do
     Enum.map(socket.assigns.contests, fn contest ->
-      send(self(), {:update_component, contest_id: contest.id})
+      if Contests.contest_running?(contest.name) do
+        send(self(), {:update_component, contest_id: contest.id})
+      end
     end)
 
     {:noreply, socket}

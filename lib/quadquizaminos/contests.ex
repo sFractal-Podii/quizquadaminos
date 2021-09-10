@@ -15,6 +15,18 @@ defmodule Quadquizaminos.Contests do
     |> Repo.insert()
   end
 
+  @doc """
+  Checks if contest is running
+  """
+  @spec contest_running?(String.t() | atom()) :: boolean()
+  def contest_running?(name) when is_binary(name) do
+    name |> String.to_atom() |> contest_running?()
+  end
+
+  def contest_running?(name) do
+    if GenServer.whereis(name), do: true, else: false
+  end
+
   def get_contest(id) when is_integer(id) do
     Repo.get(Contest, id)
   end

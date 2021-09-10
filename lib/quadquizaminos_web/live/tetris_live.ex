@@ -350,30 +350,29 @@ defmodule QuadquizaminosWeb.TetrisLive do
         do: false,
         else: Contests.ended_contest?(socket.assigns[:contest_id])
 
-    socket =
-      socket
-      |> assign(brick: response.brick)
-      |> assign(bottom: if(response.game_over, do: socket.assigns.bottom, else: response.bottom))
-      |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
-      |> assign(row_count: socket.assigns.row_count + response.row_count)
-      |> assign(
-        hint:
-          if(response.brick_count > 0,
-            do: Hints.next_hint(socket.assigns.hint),
-            else: socket.assigns.hint
-          )
-      )
-      |> assign(score: socket.assigns.score + response.score + bonus)
-      |> assign(
-        state:
-          if(response.game_over || ended_contest?,
-            do: :game_over,
-            else: :playing
-          )
-      )
-      |> cache_contest_game()
-      |> maybe_save_game_record()
-      |> show
+    socket
+    |> assign(brick: response.brick)
+    |> assign(bottom: if(response.game_over, do: socket.assigns.bottom, else: response.bottom))
+    |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
+    |> assign(row_count: socket.assigns.row_count + response.row_count)
+    |> assign(
+      hint:
+        if(response.brick_count > 0,
+          do: Hints.next_hint(socket.assigns.hint),
+          else: socket.assigns.hint
+        )
+    )
+    |> assign(score: socket.assigns.score + response.score + bonus)
+    |> assign(
+      state:
+        if(response.game_over || ended_contest?,
+          do: :game_over,
+          else: :playing
+        )
+    )
+    |> cache_contest_game()
+    |> maybe_save_game_record()
+    |> show
   end
 
   def drop(_not_playing, socket, _fast), do: socket
@@ -385,9 +384,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp cache_contest_game(socket) do
     game_record = socket |> game_record() |> Map.delete(:bottom_blocks)
     contest_name = String.to_atom(socket.assigns.contest.name)
+    current_user = socket.assigns.current_user
 
     if :ets.whereis(contest_name) != :undefined do
-      :ets.insert(contest_name, {socket.assigns.current_user.uid, game_record})
+      :ets.insert(contest_name, {current_user.uid, game_record, current_user.name})
     end
 
     socket
@@ -850,6 +850,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
       drop(socket.assigns.state, socket, false)
     end
+  end
+
+  defp on_tick(:paused, socket) do
+    socket |> cache_contest_game()
   end
 
   defp on_tick(_state, socket) do
