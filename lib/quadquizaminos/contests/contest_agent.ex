@@ -71,8 +71,12 @@ defmodule Quadquizaminos.Contest.ContestAgent do
   end
 
   def end_contest(name) do
-    name
-    |> String.to_atom()
-    |> Agent.stop()
+    name = String.to_atom(name)
+
+    if :ets.whereis(name) != :undefined do
+      :ets.delete(name)
+    end
+
+    Agent.stop(name)
   end
 end
