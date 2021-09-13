@@ -67,11 +67,11 @@ defmodule QuadquizaminosWeb.LayoutView do
     <i class="fa fa-caret-down"></i>
     </a>
      <div class="dropdown-content">
-     <a class="button" href="<%= Routes.contests_path(QuadquizaminosWeb.Endpoint, :index) %>">
+     <a class="button" href="<%= Routes.admin_contests_path(QuadquizaminosWeb.Endpoint, :index) %>">
      Contest
      </a>
-     <a class = "button" href="<%= Routes.live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.AdminLive) %>">
-     Login
+     <a class = "button" href="<%= Routes.admin_live_path(QuadquizaminosWeb.Endpoint, QuadquizaminosWeb.AdminLive) %>">
+     Login Level
      </a>
     """
   end
