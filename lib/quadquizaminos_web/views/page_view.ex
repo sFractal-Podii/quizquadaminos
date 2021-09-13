@@ -1,6 +1,5 @@
 defmodule QuadquizaminosWeb.PageView do
   use QuadquizaminosWeb, :view
-  alias Quadquizaminos.Accounts
 
   def render("instructions.html", _params) do
     QuadquizaminosWeb.Instructions.game_instruction()

@@ -8,7 +8,6 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Contests.Contest
-  alias Quadquizaminos.Contests.RSVP
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
 

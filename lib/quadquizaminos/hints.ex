@@ -187,7 +187,8 @@ defmodule Quadquizaminos.Hints do
       mvblock: :speedup,
       speedup: :slowdown,
       slowdown: :superpower,
-      superpower: :intro,
-    }|> Map.get(previous_hint, :intro)
+      superpower: :intro
+    }
+    |> Map.get(previous_hint, :intro)
   end
 end

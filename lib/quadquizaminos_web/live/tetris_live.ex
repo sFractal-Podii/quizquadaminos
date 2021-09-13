@@ -1,7 +1,6 @@
 defmodule QuadquizaminosWeb.TetrisLive do
   use Phoenix.LiveView
-  import Phoenix.HTML.Form
-  import QuadquizaminosWeb.ErrorHelpers
+
   import Phoenix.HTML, only: [raw: 1]
   import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
@@ -287,7 +286,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
-      uid: socket.assigns.current_user.uid,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
@@ -942,18 +940,5 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp save_game(record, %{assigns: %{contest_id: contest_id}} = _socket) do
     record = record |> Map.put(:contest_id, contest_id)
     Records.record_player_game(true, record)
-  end
-
-  defp contest_game_records(active_contests, records) do
-    if Enum.empty?(active_contests) do
-      records
-    else
-      Enum.map(active_contests, fn name ->
-        contest = Quadquizaminos.Contests.get_contest(name)
-
-        records
-        |> Map.put(:contest_id, contest.id)
-      end)
-    end
   end
 end
