@@ -51,6 +51,22 @@ defmodule Quadquizaminos.Courses do
   end
 
   @doc """
+  Removes categories that are already answered
+  """
+  def remove_used_categories(course, chapter, categories) do
+    categories
+    |> Enum.reject(fn {k, v} -> maximum_category_position(course, chapter, k) == v end)
+    |> Enum.into(%{})
+    |> Map.keys()
+  end
+
+  def maximum_category_position(course, chapter, category) do
+    path = "#{@courses_directory}/#{course}/#{chapter}/#{category}"
+    {:ok, files} = File.ls(path)
+    Enum.count(files)
+  end
+
+  @doc """
   Returns HTML representation of the question
   """
   def question(course, chapter, file) do

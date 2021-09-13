@@ -1,13 +1,14 @@
 defmodule QuadquizaminosWeb.QuizModalComponent do
   use QuadquizaminosWeb, :live_component
   alias Quadquizaminos.QnA
+  alias Quadquizaminos.Courses
 
   def render(%{category: nil} = assigns) do
     ~L"""
     <div style="text-align:center;">
 
     <button phx-click="unpause">Continue</button><br>
-    <%= for category <- QnA.remove_used_categories(@categories) do %>
+    <%= for category <- qna_or_course_chapter_categories(assigns) do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
     <br>
@@ -44,6 +45,14 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
      <i class="<%= prefix(power)%> <%=power_icon(power)%>" title="<%= power |> to_string() %>" phx-click="powerup" phx-value-powerup="<%= power %>"></i>
      <% end %>
     """
+  end
+
+  defp qna_or_course_chapter_categories(%{course: nil, chapter: nil} = assigns) do
+    QnA.remove_used_categories(assigns[:categories])
+  end
+
+  defp qna_or_course_chapter_categories(%{course: course, chapter: chapter} = assigns) do
+    Courses.remove_used_categories(course, chapter, assigns[:chapter_categories])
   end
 
   defp answers(assigns, "bonus") do

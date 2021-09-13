@@ -3,6 +3,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   alias Quadquizaminos.Contests
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Courses
   alias QuadquizaminosWeb.SvgBoard
 
   alias Quadquizaminos.{
@@ -39,7 +40,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
        start_timer: false,
        course: nil,
        chapter: nil,
-       course_modal: false,
        current_user: current_user,
        active_contests: Contests.active_contests(),
        contest_id: nil,
@@ -126,13 +126,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, categories: @categories, category: @category, course: @course, chapter: @chapter , return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, categories: @categories, category: @category, chapter_categories: @chapter_categories,  course: @course, chapter: @chapter , return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                 <%= if @super_modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
-                <% end %>
-                <%= if @course_modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.CourseModalComponent, id: 4, course_modal: @course_modal, course: @course, chapter: @chapter, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw SvgBoard.svg_head() %>
@@ -203,11 +200,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp pause_game(socket) do
-    if socket.assigns.course && socket.assigns.chapter do
-      assign(socket, state: :paused, course_modal: true)
-    else
-      assign(socket, state: :paused, modal: true)
-    end
+    assign(socket, state: :paused, modal: true)
   end
 
   defp start_game(socket) do
@@ -419,11 +412,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_params(%{"course" => course, "chapter" => chapter}, uri, socket) do
-    {:noreply, assign(socket, course: course, chapter: chapter, current_uri: uri)}
+    {:noreply,
+     assign(socket,
+       course: course,
+       chapter: chapter,
+       current_uri: uri,
+       chapter_categories: init_chapter_categories(course, chapter)
+     )}
   end
 
   def handle_params(_unsigned_params, uri, socket) do
-    {:noreply, socket |> assign(current_uri: uri)}
+    {:noreply, socket |> assign(current_uri: uri, chapter_categories: %{})}
   end
 
   def handle_event("validate", %{"user" => params}, socket) do
@@ -914,6 +913,13 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp init_categories do
     QnA.categories()
     |> Enum.into(%{}, fn elem -> {elem, 0} end)
+  end
+
+  defp init_chapter_categories(course, chapter) do
+    course
+    |> Courses.category_list(chapter)
+    |> Enum.into(%{}, fn elem -> {elem, 0} end)
+    |> IO.inspect(label: "=================")
   end
 
   defp increment_position(categories, _category, nil), do: categories
