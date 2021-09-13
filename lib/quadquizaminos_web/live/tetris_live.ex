@@ -1,13 +1,9 @@
 defmodule QuadquizaminosWeb.TetrisLive do
-  use Phoenix.LiveView
-  import Phoenix.HTML.Form
-  import QuadquizaminosWeb.ErrorHelpers
-  import Phoenix.HTML, only: [raw: 1]
+  use QuadquizaminosWeb, :live_view
   alias Quadquizaminos.Contests
-  import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
+  alias Quadquizaminos.Accounts.User
   alias QuadquizaminosWeb.SvgBoard
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
 
   alias Quadquizaminos.{
     Bottom,
@@ -30,10 +26,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
     :timer.send_interval(50, self(), :tick)
     :timer.send_interval(1000, self(), :broadcast_score)
     QuadquizaminosWeb.Endpoint.subscribe("contest_record")
-    current_user = user_id |> Accounts.get_user()
+    current_user = user_id |> current_user()
 
     has_email? =
-      if(current_user && current_user.email) do
+      if(current_user.name == "anonymous" or current_user.email) do
         true
       else
         false
@@ -47,8 +43,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
        active_contests: Contests.active_contests(),
        contest_id: nil,
        choosing_contest: false,
-       has_email?: has_email?,
-       user_changeset: Accounts.change_user(current_user)
+       has_email?: has_email?
      )
      |> init_game
      |> start_game()}
@@ -97,7 +92,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
             <% end %>
             <%= raw SvgBoard.svg_foot() %>
             <hr>
-              <button phx-click="start">Play again?</button>
+            <%= live_redirect "Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button" %>
               </div>
         <div class="column column-25 column-offset-25">
         <p><%= @brick_count %> QuadBlocks dropped</p>
@@ -173,14 +168,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   defp ask_for_email(assigns) do
     ~L"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <h3> What's your email address? </h3>
-    <%= f = form_for @user_changeset, "#", [phx_change: :validate, phx_submit: :update_email] %>
-    <%= label f, :email %>
-    <%= text_input f, :email, type: :email %>
-    <%= error_tag f, :email %>
-    <%= text_input f, :uid, type: :hidden %>
-    <button> Update Email </button>
-    </form>
+    <%= live_component @socket,  QuadquizaminosWeb.SharedLive.AskEmailComponent, id: 1, current_user: @current_user, redirect_to: @current_uri %>
     <% end %>
     """
   end
@@ -291,8 +279,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
           end)
       end
 
-    uid = if socket.assigns.current_user, do: socket.assigns.current_user.uid, else: "anonymous"
-
     %{
       start_time: socket.assigns.start_time,
       end_time: DateTime.utc_now(),
@@ -300,9 +286,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
-      uid: uid,
+      uid: socket.assigns.current_user.uid,
       correctly_answered_qna: socket.assigns.correct_answers
     }
+  end
+
+  defp current_user("anonymous") do
+    %User{name: "anonymous", uid: "anonymous", admin?: false}
+  end
+
+  defp current_user(uid) do
+    Accounts.get_user(uid)
   end
 
   def tuple_to_string({x, y, c}) do
@@ -374,20 +368,8 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
-  def handle_event("validate", %{"user" => params}, socket) do
-    changeset =
-      %Accounts.User{}
-      |> Accounts.change_user(params)
-      |> Map.put(:action, :insert)
-
-    {:noreply, socket |> assign(user_changeset: changeset)}
-  end
-
-  def handle_event("update_email", %{"user" => params}, socket) do
-    case Accounts.update_email(params) do
-      {:ok, user} -> {:noreply, socket |> assign(current_user: user, has_email?: true)}
-      {:error, changeset} -> {:noreply, socket |> assign(user_changeset: changeset)}
-    end
+  def handle_params(_unsigned_params, uri, socket) do
+    {:noreply, socket |> assign(current_uri: uri)}
   end
 
   def handle_event("choose_category", %{"category" => category}, socket) do
@@ -760,6 +742,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_info(:tick, socket) do
     {:noreply, on_tick(socket.assigns.state, socket)}
+  end
+
+  def handle_info({:update_user, assigns}, socket) do
+    {:noreply, assign(socket, assigns)}
   end
 
   defp on_tick(:game_over, socket) do

@@ -89,6 +89,7 @@ defmodule QuadquizaminosWeb do
 
       import QuadquizaminosWeb.ErrorHelpers
       import QuadquizaminosWeb.Gettext
+      import QuadquizaminosWeb.LiveHelpers
       alias QuadquizaminosWeb.Router.Helpers, as: Routes
     end
   end

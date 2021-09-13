@@ -2,14 +2,29 @@
         <%= if @live_action == :show do %>
         <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, id: "final_result" %>
         <% else %>
+          <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
+
+        <%= raw display_text_input(@current_user.admin?) %>
+
+        <%=  if @modal do %>
+        <%= live_modal @socket, QuadquizaminosWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
+          <% end %>
+
         <table>
             <tr>
                 <th></th><!-- contest name -->
+                <%= if @current_user.admin? do %>
+                <th></th> <!--start pause button-->
+                <th></th><!-- STOP button-->
+                <% end %>
                 <th></th><!--count up timer-->
                 <th>Date</th>
                 <th>Start</th>
                 <th>End</th>
+                <%= if admin?(@current_user) do %>
+                <th colspan="2">contest date</th>
+                <% end %>
             </tr>
 
             <%= for {status, contests} <- @contests |> group_contest_by_status do %>
@@ -23,5 +38,9 @@
                     <% end %>
             <% end %>
         </table>
+        <% else %>
+        <%= countdown_timer(assigns, admin?(@current_user)) %>
+        <% end %>
+
         <% end %>
     </div>

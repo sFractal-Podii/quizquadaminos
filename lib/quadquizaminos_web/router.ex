@@ -61,11 +61,11 @@ defmodule QuadquizaminosWeb.Router do
     live "/privacy", PrivacyLive
   end
 
-  scope "/admin", QuadquizaminosWeb do
+  scope "/admin", QuadquizaminosWeb, as: :admin do
     pipe_through [:browser, :authorize_admin]
 
     live "/", AdminLive
-    live "/contest", AdminContestsLive
+    live "/contests", ContestsLive, :index
   end
 
   scope "/auth", QuadquizaminosWeb do
