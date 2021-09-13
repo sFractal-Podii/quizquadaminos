@@ -30,7 +30,7 @@ defmodule Quadquizaminos.Accounts do
     Repo.get_by(LoginLevel, name: level)
   end
 
-  def get_selected_login_level() do
+  def get_selected_login_level do
     LoginLevel.selected_level()
     |> Repo.one()
   end

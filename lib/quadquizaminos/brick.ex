@@ -10,7 +10,7 @@ defmodule Quadquizaminos.Brick do
 
   def new(attributes \\ []), do: __struct__(attributes)
 
-  def new_random() do
+  def new_random do
     %__MODULE__{
       name: random_name(),
       location: {3, -3},
@@ -19,17 +19,17 @@ defmodule Quadquizaminos.Brick do
     }
   end
 
-  def random_name() do
+  def random_name do
     ~w(i l z o t)a
     |> Enum.random()
   end
 
-  def random_rotation() do
+  def random_rotation do
     [0, 90, 180, 270]
     |> Enum.random()
   end
 
-  def random_reflection() do
+  def random_reflection do
     [true, false]
     |> Enum.random()
   end
@@ -137,7 +137,7 @@ defmodule Quadquizaminos.Brick do
   def color(%{name: :o}), do: :red
   def color(%{name: :t}), do: :yellow
 
-  def x_center(), do: @x_center
+  def x_center, do: @x_center
 
   def render(block, brick_count) do
     block

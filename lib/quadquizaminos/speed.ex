@@ -24,11 +24,11 @@ defmodule Quadquizaminos.Speed do
     Enum.at(@drop_speeds, speed).tick_count
   end
 
-  def highest_speed() do
+  def highest_speed do
     0
   end
 
-  def lowest_speed() do
+  def lowest_speed do
     length(@drop_speeds) - 1
   end
 

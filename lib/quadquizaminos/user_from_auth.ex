@@ -5,9 +5,9 @@ defmodule Quadquizaminos.UserFromAuth do
   require Logger
   require Jason
 
-  alias Ueberauth.Auth
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
+  alias Ueberauth.Auth
 
   def find_or_create(%Auth{} = auth) do
     case Accounts.get_user(uid(auth)) do

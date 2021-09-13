@@ -3,13 +3,13 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
-  alias Quadquizaminos.Contests
-  alias QuadquizaminosWeb.ContestsLive.ContestComponent
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Contests
   alias Quadquizaminos.Util
+  alias QuadquizaminosWeb.ContestsLive.ContestComponent
 
-  @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
+  @conference_date Application.compile_env(:quadquizaminos, :conference_date)
 
   def mount(_params, session, socket) do
     :timer.send_interval(1000, self(), :update_component_timer)

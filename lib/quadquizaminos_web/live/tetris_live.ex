@@ -3,12 +3,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
   import Phoenix.HTML.Form
   import QuadquizaminosWeb.ErrorHelpers
   import Phoenix.HTML, only: [raw: 1]
-  alias Quadquizaminos.Contests
   import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
-  alias QuadquizaminosWeb.SvgBoard
+  alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
+  alias QuadquizaminosWeb.SvgBoard
 
   alias Quadquizaminos.{
     Bottom,

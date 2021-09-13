@@ -3,8 +3,8 @@ defmodule Quadquizaminos.GameBoard.Records do
   This module is responsible for manipulating player game records.
   """
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Contests.Contest
+  alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Repo
 
   @spec record_player_game(boolean(), map()) ::

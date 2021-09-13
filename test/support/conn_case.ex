@@ -16,6 +16,7 @@ defmodule QuadquizaminosWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  import Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -32,10 +33,10 @@ defmodule QuadquizaminosWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Quadquizaminos.Repo)
+    :ok = Adapters.SQL.Sandbox.checkout(Quadquizaminos.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Quadquizaminos.Repo, {:shared, self()})
+      Adapters.SQL.Sandbox.mode(Quadquizaminos.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

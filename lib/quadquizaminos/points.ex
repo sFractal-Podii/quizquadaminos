@@ -77,7 +77,7 @@ defmodule Quadquizaminos.Points do
       Map.get(map, {x, y}, "□")
     end
     |> Enum.chunk_every(4)
-    |> Enum.map(&Enum.join/1)
+    |> Enum.map_join()
     |> Enum.join("\n")
   end
 

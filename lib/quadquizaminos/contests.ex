@@ -1,12 +1,10 @@
 defmodule Quadquizaminos.Contests do
-  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.Accounts.User
-
+  alias Quadquizaminos.Contest.ContestAgent
+  alias Quadquizaminos.Contests.Contest
+  alias Quadquizaminos.Contests.RSVP
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Repo
-  alias Quadquizaminos.Contests.RSVP
-
-  alias Quadquizaminos.Contest.ContestAgent
   import Ecto.Query, only: [from: 2]
 
   def create_contest(attrs) do
@@ -210,7 +208,7 @@ defmodule Quadquizaminos.Contests do
   Fetches the game records of a given contest that took place during the time of the contest
   """
 
-  @spec contest_game_records(%Contest{}) :: [%GameBoard{}, ...]
+  @spec contest_game_records(Contest) :: [GameBoard, ...]
   def contest_game_records(contest, sorter \\ "score") do
     contest.id
     |> ended_contest?()
