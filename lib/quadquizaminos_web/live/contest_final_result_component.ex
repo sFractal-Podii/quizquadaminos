@@ -31,6 +31,19 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
     """
   end
 
+  def update(assigns, socket) do
+    contest_name = String.to_atom(assigns.contest.name)
+
+    records =
+      if :ets.whereis(contest_name) != :undefined do
+        assigns.contest_records
+      else
+        Contests.contest_game_records(assigns.contest)
+      end
+
+    {:ok, assign(socket, contest_records: records)}
+  end
+
   def handle_event("sort", %{"param" => param}, socket) do
     [record | _] = socket.assigns.contest_records
 
