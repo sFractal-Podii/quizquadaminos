@@ -117,8 +117,18 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, assign(socket, id: id, contest_records: contest_records(id))}
   end
 
-  def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
+  def handle_params(_params, uri, socket) do
+    current_user = socket.assigns.current_user
+
+    # you cannot perfom admin tasks when not in admin scope
+    current_user =
+      if URI.parse(uri).path == "/contests" do
+        %{current_user | admin?: false}
+      else
+        current_user
+      end
+
+    {:noreply, socket |> assign(current_user: current_user)}
   end
 
   defp contest_live_records(records, contest_id) do
