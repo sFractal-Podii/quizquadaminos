@@ -18,7 +18,7 @@ defmodule Quadquizaminos.Contest.ContestAgent do
   def start_link(opts) do
     state = %{contest_name: opts[:name], time_elapsed: 0, status: :running}
     {:ok, _pid} = Agent.start_link(fn -> state end, opts)
-
+    :ets.new(opts[:name], [:named_table, :public])
     :timer.apply_interval(1000, __MODULE__, :update_timer, [opts[:name]])
     state
   end
@@ -71,8 +71,12 @@ defmodule Quadquizaminos.Contest.ContestAgent do
   end
 
   def end_contest(name) do
-    name
-    |> String.to_atom()
-    |> Agent.stop()
+    name = String.to_atom(name)
+
+    if :ets.whereis(name) != :undefined do
+      :ets.delete(name)
+    end
+
+    Agent.stop(name)
   end
 end
