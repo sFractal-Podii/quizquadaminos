@@ -1,5 +1,5 @@
 defmodule QuadquizaminosWeb.ContestsLive do
-  use Phoenix.LiveView
+  use QuadquizaminosWeb, :live_view
 
   import Phoenix.LiveView.Helpers
   import Phoenix.HTML, only: [raw: 1]
@@ -25,7 +25,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
        countdown_interval: countdown_interval,
        contest_records: [],
        contest_id: nil,
-       editing_date?: false
+       editing_date?: false,
+       modal: false
      )}
   end
 
@@ -65,6 +66,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def handle_event("restart", %{"contest" => name}, socket) do
     {:noreply, _restart_contest(socket, name)}
+  end
+
+  def handle_event("ask-for-email", _, socket) do
+    {:noreply, socket |> assign(modal: true)}
   end
 
   def handle_event("stop", %{"contest" => name}, socket) do
@@ -113,12 +118,29 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket |> assign(contest_records: contest_records)}
   end
 
-  def handle_params(%{"id" => id}, _uri, socket) do
-    {:noreply, assign(socket, id: id, contest_records: contest_records(id))}
+  def handle_info({:update_user, assigns}, socket) do
+    {:noreply,
+     socket
+     |> assign(assigns)
+     |> assign(modal: false)}
   end
 
-  def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
+  def handle_params(%{"id" => id}, uri, socket) do
+    {:noreply, assign(socket, id: id, contest_records: contest_records(id), current_uri: uri)}
+  end
+
+  def handle_params(_params, uri, socket) do
+    current_user = socket.assigns.current_user
+
+    # you cannot perfom admin tasks when not in admin scope
+    current_user =
+      if URI.parse(uri).path == "/contests" do
+        %{current_user | admin?: false}
+      else
+        current_user
+      end
+
+    {:noreply, socket |> assign(current_user: current_user, current_uri: uri)}
   end
 
   defp contest_live_records(records, contest_id) do
