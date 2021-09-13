@@ -172,9 +172,16 @@ defmodule Quadquizaminos.Contests do
         {Quadquizaminos.Contest.ContestAgent, [name: String.to_atom(name)]}
       )
 
-      name
-      |> get_contest()
-      |> update_contest(%{start_time: DateTime.utc_now()})
+      contest = name |> get_contest()
+      now = DateTime.utc_now()
+
+      date =
+        case contest do
+          %Contest{contest_date: nil} -> now
+          %Contest{contest_date: date} -> date
+        end
+
+      update_contest(contest, %{start_time: now, contest_date: date})
     end)
   end
 
