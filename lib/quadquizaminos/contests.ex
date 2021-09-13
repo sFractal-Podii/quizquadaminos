@@ -110,17 +110,6 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
-  checks if the active contest has no contest date set
-  """
-  @spec active_contest_without_date?(integer()) :: boolean()
-  def active_contest_without_date?(contest_id) do
-    contest_id
-    |> Contest.by_id()
-    |> Contest.active_contest_without_date()
-    |> Repo.exists?()
-  end
-
-  @doc """
   Gives us the names of all contests that are either running or paused
   """
   def active_contests_names do
@@ -183,9 +172,16 @@ defmodule Quadquizaminos.Contests do
         {Quadquizaminos.Contest.ContestAgent, [name: String.to_atom(name)]}
       )
 
-      name
-      |> get_contest()
-      |> update_contest(%{start_time: DateTime.utc_now()})
+      contest = name |> get_contest()
+      now = DateTime.utc_now()
+
+      date =
+        case contest do
+          %Contest{contest_date: nil} -> now
+          %Contest{contest_date: date} -> date
+        end
+
+      update_contest(contest, %{start_time: now, contest_date: date})
     end)
   end
 
