@@ -16,7 +16,6 @@ defmodule QuadquizaminosWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
-  import Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -30,10 +29,10 @@ defmodule QuadquizaminosWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Adapters.SQL.Sandbox.checkout(Quadquizaminos.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Quadquizaminos.Repo)
 
     unless tags[:async] do
-      Adapters.SQL.Sandbox.mode(Quadquizaminos.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Quadquizaminos.Repo, {:shared, self()})
     end
 
     :ok
