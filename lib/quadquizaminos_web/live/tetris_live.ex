@@ -24,8 +24,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
-    :timer.send_interval(1000, self(), :broadcast_score)
-    QuadquizaminosWeb.Endpoint.subscribe("contest_record")
     current_user = user_id |> current_user()
 
     has_email? =
@@ -279,14 +277,27 @@ defmodule QuadquizaminosWeb.TetrisLive do
           end)
       end
 
+    contest =
+      Enum.find(socket.assigns.active_contests, fn contest ->
+        socket.assigns[:contest_id] == contest.id
+      end)
+
+    end_time =
+      cond do
+        socket.assigns.state == :game_over -> DateTime.utc_now()
+        Contests.ended_contest?(socket.assigns[:contest_id]) -> if contest, do: contest.end_time
+        true -> nil
+      end
+
     %{
       start_time: socket.assigns.start_time,
-      end_time: DateTime.utc_now(),
+      end_time: end_time,
       uid: socket.assigns.current_user.uid,
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
       uid: socket.assigns.current_user.uid,
+      contest_id: socket.assigns.contest_id,
       correctly_answered_qna: socket.assigns.correct_answers
     }
   end
@@ -321,11 +332,14 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
     bonus = if fast, do: 2, else: 0
 
-    if response.game_over, do: save_game(game_record(socket), socket)
+    ended_contest? =
+      if is_nil(socket.assigns[:contest_id]),
+        do: false,
+        else: Contests.ended_contest?(socket.assigns[:contest_id])
 
     socket
     |> assign(brick: response.brick)
-    |> assign(bottom: response.bottom)
+    |> assign(bottom: if(response.game_over, do: socket.assigns.bottom, else: response.bottom))
     |> assign(brick_count: socket.assigns.brick_count + response.brick_count)
     |> assign(row_count: socket.assigns.row_count + response.row_count)
     |> assign(
@@ -338,15 +352,41 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(score: socket.assigns.score + response.score + bonus)
     |> assign(
       state:
-        if(response.game_over,
+        if(response.game_over || ended_contest?,
           do: :game_over,
           else: :playing
         )
     )
+    |> cache_contest_game()
+    |> maybe_save_game_record()
     |> show
   end
 
   def drop(_not_playing, socket, _fast), do: socket
+
+  defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
+    socket
+  end
+
+  defp cache_contest_game(socket) do
+    game_record = socket |> game_record() |> Map.delete(:bottom_blocks)
+    contest_name = String.to_atom(socket.assigns.contest.name)
+    current_user = socket.assigns.current_user
+
+    if :ets.whereis(contest_name) != :undefined do
+      :ets.insert(contest_name, {current_user.uid, game_record, current_user.name})
+    end
+
+    socket
+  end
+
+  defp maybe_save_game_record(socket) do
+    if socket.assigns.state == :game_over or Contests.ended_contest?(socket.assigns.contest_id) do
+      Records.record_player_game(true, game_record(socket))
+    end
+
+    socket
+  end
 
   def move(_direction, %{assigns: %{state: :paused}} = socket), do: socket
 
@@ -395,9 +435,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    socket |> game_record() |> save_game(socket)
-
-    {:noreply, socket |> assign(state: :game_over, modal: false)}
+    {:noreply, socket |> assign(state: :game_over, modal: false) |> maybe_save_game_record()}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -433,7 +471,9 @@ defmodule QuadquizaminosWeb.TetrisLive do
         :error -> nil
       end
 
-    {:noreply, socket |> new_game() |> assign(contest_id: contest_id)}
+    contest = if contest_id, do: Contests.get_contest(contest_id)
+
+    {:noreply, socket |> new_game() |> assign(contest_id: contest_id, contest: contest)}
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
@@ -716,30 +756,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
     {x, y}
   end
 
-  def handle_info(:broadcast_score, socket) do
-    socket |> game_record() |> broadcast_score(socket)
-    {:noreply, socket}
-  end
-
-  def handle_info(%{event: "record_contest_scores", payload: contest_name}, socket) do
-    contest = Quadquizaminos.Contests.get_contest(contest_name)
-
-    record =
-      socket
-      |> game_record()
-      |> Map.put(:contest_id, socket.assigns.contest_id)
-
-    same_contest? = contest.id == socket.assigns.contest_id
-
-    if socket.assigns.state == :playing and same_contest? do
-      Records.record_player_game(true, record)
-    end
-
-    state = if same_contest?, do: :game_over, else: socket.assigns.state
-
-    {:noreply, socket |> assign(state: state)}
-  end
-
   def handle_info(:tick, socket) do
     {:noreply, on_tick(socket.assigns.state, socket)}
   end
@@ -823,6 +839,10 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
       drop(socket.assigns.state, socket, false)
     end
+  end
+
+  defp on_tick(:paused, socket) do
+    socket |> cache_contest_game()
   end
 
   defp on_tick(_state, socket) do
@@ -919,36 +939,5 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp block_in_bottom?(x, y, bottom) do
     Map.has_key?(bottom, {x, y})
-  end
-
-  defp broadcast_score(records, %{assigns: %{contest_id: contest_id}} = _socket) do
-    records = [
-      %{records | end_time: nil}
-      |> Map.put(:contest_id, contest_id)
-    ]
-
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "contest_scores",
-      "current_scores",
-      records
-    )
-  end
-
-  defp save_game(record, %{assigns: %{contest_id: contest_id}} = _socket) do
-    record = record |> Map.put(:contest_id, contest_id)
-    Records.record_player_game(true, record)
-  end
-
-  defp contest_game_records(active_contests, records) do
-    if Enum.empty?(active_contests) do
-      records
-    else
-      Enum.map(active_contests, fn name ->
-        contest = Quadquizaminos.Contests.get_contest(name)
-
-        records
-        |> Map.put(:contest_id, contest.id)
-      end)
-    end
   end
 end

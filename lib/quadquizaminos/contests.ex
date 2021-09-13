@@ -15,6 +15,18 @@ defmodule Quadquizaminos.Contests do
     |> Repo.insert()
   end
 
+  @doc """
+  Checks if contest is running
+  """
+  @spec contest_running?(String.t() | atom()) :: boolean()
+  def contest_running?(name) when is_binary(name) do
+    name |> String.to_atom() |> contest_running?()
+  end
+
+  def contest_running?(name) do
+    if GenServer.whereis(name), do: true, else: false
+  end
+
   def get_contest(id) when is_integer(id) do
     Repo.get(Contest, id)
   end
@@ -172,9 +184,16 @@ defmodule Quadquizaminos.Contests do
         {Quadquizaminos.Contest.ContestAgent, [name: String.to_atom(name)]}
       )
 
-      name
-      |> get_contest()
-      |> update_contest(%{start_time: DateTime.utc_now()})
+      contest = name |> get_contest()
+      now = DateTime.utc_now()
+
+      date =
+        case contest do
+          %Contest{contest_date: nil} -> now
+          %Contest{contest_date: date} -> date
+        end
+
+      update_contest(contest, %{start_time: now, contest_date: date})
     end)
   end
 
@@ -198,6 +217,9 @@ defmodule Quadquizaminos.Contests do
   @doc """
   Checks if the contest has been completed
   """
+
+  def ended_contest?(nil), do: nil
+
   @spec ended_contest?(integer()) :: boolean()
   def ended_contest?(contest_id) do
     contest_id
