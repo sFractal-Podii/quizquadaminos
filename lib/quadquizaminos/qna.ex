@@ -43,6 +43,33 @@ defmodule Quadquizaminos.QnA do
     Enum.count(files)
   end
 
+  @doc """
+  Validates format of the markdown files
+  """
+  def validate_files do
+    folders = File.ls!("qna")
+
+    for folder <- folders,
+        path = "qna/" <> folder,
+        File.dir?(path),
+        File.ls!(path) != [],
+        position <- 0..(Enum.count(File.ls!(path)) ) do
+      try do
+        IO.inspect("............")
+        IO.inspect(folder)
+        IO.inspect(position)
+        Quadquizaminos.QnA.question(folder, position)
+      rescue
+        e ->
+          require Logger
+          Logger.error("Could not parse #{choose_file(folder, position)}")
+          reraise e, __STACKTRACE__
+      end
+    end
+
+    :ok
+  end
+
   defp build do
     categories() |> Enum.random() |> build()
   end

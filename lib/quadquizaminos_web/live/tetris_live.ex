@@ -905,7 +905,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   end
 
   defp add_power(socket) do
-    case socket.assigns.qna[:powerup] do
+    case socket.assigns.qna.powerup do
       nil ->
         socket
 
