@@ -26,8 +26,15 @@ defmodule QuadquizaminosWeb.ContestsLive do
        countdown_interval: countdown_interval,
        contest_records: [],
        contest_id: nil,
-       editing_date?: false
+       editing_date?: false,
+      #  changeset: Contests.change_contest()
      )}
+  end
+
+
+  def handle_event("validate",params, socket) do
+    IO.inspect(params, label: "========================")
+    {:noreply,socket}
   end
 
   def handle_event("add_contest_date", %{"contest" => name}, socket) do

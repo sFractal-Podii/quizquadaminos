@@ -5,7 +5,7 @@
           <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
         <%= if @current_user.admin? do  %>
-          <%= form_for :contest, "#", [phx_submit: :save] %>
+          <%= form_for :contest, "#", [phx_change: :validate, phx_submit: :save] %>
               <input type="text" id="name" name="name">
               <input type="datetime-local" id="contest_date" name="contest_date">
               <button>Save</button>

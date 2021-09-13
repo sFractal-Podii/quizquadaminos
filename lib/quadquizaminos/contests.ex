@@ -23,6 +23,10 @@ defmodule Quadquizaminos.Contests do
     Repo.get_by(Contest, name: name)
   end
 
+  def change_contest(attrs \\ %{}) do
+    Contest.changeset(%Contest{},attrs)
+  end
+
   @doc """
   Populates relevant the contest virtual fields
   """
