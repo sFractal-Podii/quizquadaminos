@@ -159,20 +159,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket |> assign(current_user: current_user, current_uri: uri)}
   end
 
-  defp contest_live_records(records, contest_id) do
-    Enum.filter(records, fn record -> record.contest_id == contest_id end)
-  end
-
-  defp contest_records(contest_id) do
-    case String.to_integer(contest_id) |> Contests.get_contest() do
-      nil ->
-        []
-
-      contest ->
-        Contests.contest_game_records(contest)
-    end
-  end
-
   defp _create_contest(socket, contest_name) do
     contests = socket.assigns.contests
 
