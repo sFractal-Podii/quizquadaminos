@@ -8,6 +8,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   alias Quadquizaminos.{
     Bottom,
     Brick,
+    Contests,
     Hints,
     Points,
     QnA,
