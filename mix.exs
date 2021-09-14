@@ -23,6 +23,7 @@ defmodule Quadquizaminos.MixProject do
   defp copy_qna(release) do
     IO.puts("Copying qna folder.....")
     File.cp_r!("qna", release.path <> "/qna")
+    File.cp_r!("courses", release.path <> "/courses")
     release
   end
 

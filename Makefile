@@ -55,9 +55,16 @@ lint-compile: ## check for warnings in functions used in the project
 lint-format: ## Check if the project is well formated using elixir formatter
 	mix format --dry-run --check-formatted
 
+.PHONY: lint-questions
+lint-questions: ## Check if the questions will be correctly parsed
+	mix validate.questions
+
+.PHONY: lint-credo
+lint-credo: ## Check for credo compliance
+	mix credo --strict
 
 .PHONY: lint
-lint: lint-compile lint-format ## Check if the project follows set conventions such as formatting
+lint: lint-compile lint-format lint-questions lint-credo ## Check if the project follows set conventions such as formatting
 
 
 .PHONY: test
@@ -101,6 +108,7 @@ release: ## Build a release of the application with MIX_ENV=prod
 
 .PHONY: docker-image
 docker-image: #builds docker image
+	mix validate.questions
 	docker build . -t quadquiz:$(APP_VERSION)
 
 .PHONY: push-image-gcp push-and-serve deploy-existing-image
