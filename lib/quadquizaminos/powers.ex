@@ -13,9 +13,8 @@ defmodule Quadquizaminos.Powers do
     :superpower
   ]
 
-  def all_powers() do
+  def all_powers do
     @all_powers
-    |> Enum.sort
+    |> Enum.sort()
   end
-
 end

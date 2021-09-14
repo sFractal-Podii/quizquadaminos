@@ -70,14 +70,13 @@ defmodule Quadquizaminos.Points do
   def to_string(points) do
     map =
       points
-      |> Enum.map(fn key -> {key, "■"} end)
       |> Map.new()
 
     for y <- 1..4, x <- 1..4 do
       Map.get(map, {x, y}, "□")
     end
     |> Enum.chunk_every(4)
-    |> Enum.map(&Enum.join/1)
+    |> Enum.map_join(fn key -> {key, "■"} end)
     |> Enum.join("\n")
   end
 

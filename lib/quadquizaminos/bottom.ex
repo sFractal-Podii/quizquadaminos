@@ -190,15 +190,15 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_vuln_and_license(bottom, {x, y, _color} = value) do
-    if Map.has_key?(bottom, {x,y}) do
-    value =
-      case value do
-        {x, y, :vuln_grey_yellow} -> {x, y, :purple}
-        {x, y, :license_grey_brown} -> {x, y, :purple}
-        _ -> value
-      end
+    if Map.has_key?(bottom, {x, y}) do
+      value =
+        case value do
+          {x, y, :vuln_grey_yellow} -> {x, y, :purple}
+          {x, y, :license_grey_brown} -> {x, y, :purple}
+          _ -> value
+        end
 
-    Map.merge(bottom, %{{x, y} => value})
+      Map.merge(bottom, %{{x, y} => value})
     else
       bottom
     end

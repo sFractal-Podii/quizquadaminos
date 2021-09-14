@@ -74,20 +74,21 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
   end
 
   defp power_icon(power) do
-    case power do
-      :deleteblock -> "fa-minus-square"
-      :addblock -> "fa-plus-square"
-      :moveblock -> "fa-arrows-alt"
-      :clearblocks -> "fa-eraser"
-      :speedup -> "fa-fast-forward"
-      :slowdown -> "fa-fast-backward"
-      :fixvuln -> "fa-wrench"
-      :fixlicense -> "fa-screwdriver"
-      :rm_all_vulns -> "fa-hammer"
-      :rm_all_lic_issues -> "fa-tape"
-      :superpower -> "fa-superpowers"
-      :cyberinsurance -> "fa-file-contract"
-    end
+    %{
+      deleteblock: "fa-minus-square",
+      addblock: "fa-plus-square",
+      moveblock: "fa-arrows-alt",
+      clearblocks: "fa-eraser",
+      speedup: "fa-fast-forward",
+      slowdown: "fa-fast-backward",
+      fixvuln: "fa-wrench",
+      fixlicense: "fa-screwdriver",
+      rm_all_vulns: "fa-hammer",
+      rm_all_lic_issues: "fa-tape",
+      superpower: "fa-superpowers",
+      cyberinsurance: "fa-file-contract"
+    }
+    |> Map.fetch!(power)
   end
 
   defp prefix(:superpower), do: "fab"

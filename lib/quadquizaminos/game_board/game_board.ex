@@ -70,8 +70,8 @@ defmodule Quadquizaminos.GameBoard do
   end
 
   def paginate_query(query, page, per_page) do
-     from q in query,
-        offset: (^page - 1) * ^per_page,
-        limit: ^per_page
+    from q in query,
+      offset: (^page - 1) * ^per_page,
+      limit: ^per_page
   end
 end
