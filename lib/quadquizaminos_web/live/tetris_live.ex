@@ -1,12 +1,8 @@
 defmodule QuadquizaminosWeb.TetrisLive do
-  use Phoenix.LiveView
+  use QuadquizaminosWeb, :live_view
 
-  import Phoenix.HTML, only: [raw: 1]
-  import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
-  alias Quadquizaminos.Contests
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias QuadquizaminosWeb.SvgBoard
 
   alias Quadquizaminos.{
@@ -127,7 +123,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, categories: @categories, category: @category, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, file_path: @file_path, categories: @categories, category: @category,return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                 <%= if @super_modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
@@ -246,7 +242,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(block_coordinates: nil)
     |> assign(bottom: %{})
     |> assign(brick_count: 0)
-    |> assign(category: nil, categories: init_categories())
+    |> assign(category: nil)
     |> assign(correct_answers: 0)
     |> assign(deleting_block: false)
     |> assign(fix_vuln_or_license: false)
@@ -411,21 +407,48 @@ defmodule QuadquizaminosWeb.TetrisLive do
     assign(socket, brick: socket.assigns.brick |> Tetris.try_spin_90(bottom))
   end
 
+  def handle_params(%{"course" => course, "chapter" => chapter}, uri, socket) do
+    {:noreply,
+     socket
+     |> assign(
+       current_uri: uri,
+       file_path: ["courses", course, chapter]
+     )
+     |> init_categories()}
+  end
+
   def handle_params(_unsigned_params, uri, socket) do
-    {:noreply, socket |> assign(current_uri: uri)}
+    {:noreply, socket |> assign(current_uri: uri, file_path: ["qna"]) |> init_categories()}
+  end
+
+  def handle_event("validate", %{"user" => params}, socket) do
+    changeset =
+      %Accounts.User{}
+      |> Accounts.change_user(params)
+      |> Map.put(:action, :insert)
+
+    {:noreply, socket |> assign(user_changeset: changeset)}
+  end
+
+  def handle_event("update_email", %{"user" => params}, socket) do
+    case Accounts.update_email(params) do
+      {:ok, user} -> {:noreply, socket |> assign(current_user: user, has_email?: true)}
+      {:error, changeset} -> {:noreply, socket |> assign(user_changeset: changeset)}
+    end
   end
 
   def handle_event("choose_category", %{"category" => category}, socket) do
     categories = socket.assigns.categories
     question_position = categories[category]
-    categories = increment_position(categories, category, question_position)
+    file_path = socket.assigns.file_path
+    categories = increment_position(file_path, categories, category, question_position)
 
     {:noreply,
      socket
      |> assign(
        category: category,
        categories: categories,
-       qna: QnA.question(category, question_position)
+       qna: QnA.question(file_path, category, question_position)
      )}
   end
 
@@ -884,16 +907,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def debug(_assigns, _, _), do: ""
 
-  defp init_categories do
-    QnA.categories()
-    |> Enum.into(%{}, fn elem -> {elem, 0} end)
+  defp init_categories(socket) do
+    categories =
+      QnA.categories(socket.assigns.file_path)
+      |> Enum.into(%{}, fn elem -> {elem, 0} end)
+
+    assign(socket, :categories, categories)
   end
 
-  defp increment_position(categories, _category, nil), do: categories
+  defp increment_position(_file_path, categories, _category, nil), do: categories
 
-  defp increment_position(categories, category, current_position) do
+  defp increment_position(file_path, categories, category, current_position) do
     position =
-      if QnA.maximum_category_position(category) == current_position do
+      if QnA.maximum_category_position(file_path, category) == current_position do
         current_position
       else
         current_position + 1

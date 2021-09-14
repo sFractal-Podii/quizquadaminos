@@ -1,13 +1,14 @@
 defmodule QuadquizaminosWeb.QuizModalComponent do
   use QuadquizaminosWeb, :live_component
   alias Quadquizaminos.QnA
+  alias Quadquizaminos.Courses
 
   def render(%{category: nil} = assigns) do
     ~L"""
     <div style="text-align:center;">
 
     <button phx-click="unpause">Continue</button><br>
-    <%= for category <- QnA.remove_used_categories(@categories) do %>
+    <%= for category <- QnA.remove_used_categories(@file_path, @categories) do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
     <br>
