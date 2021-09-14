@@ -25,15 +25,17 @@ defmodule Quadquizaminos.QnA do
   @doc """
   Removes categories that are already answered
   """
-  def remove_used_categories(file_path) do
-    file_path
-    |> Enum.reject(fn {k, v} -> maximum_category_position(k) == v end)
+  def remove_used_categories(file_path, categories) do
+    categories
+    |> Enum.reject(fn {category, position} ->
+      maximum_category_position(file_path, category) == position
+    end)
     |> Enum.into(%{})
     |> Map.keys()
   end
 
-  def maximum_category_position(category, question_type \\ "qna") do
-    path = "#{@qna_directory}/#{question_type}/#{category}"
+  def maximum_category_position(file_path, category) do
+    path = ([@qna_directory] ++ file_path ++ [category]) |> Enum.join("/")
     {:ok, files} = File.ls(path)
     Enum.count(files)
   end
@@ -148,7 +150,7 @@ defmodule Quadquizaminos.QnA do
     question |> String.replace("#", "")
   end
 
-  defp choose_file(file_path, category,  position) do
+  defp choose_file(file_path, category, position) do
     path = ([@qna_directory] ++ file_path ++ [category]) |> Enum.join("/")
     {:ok, files} = File.ls(path)
     files = Enum.sort(files)

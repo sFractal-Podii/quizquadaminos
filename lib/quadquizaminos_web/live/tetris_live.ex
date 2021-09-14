@@ -243,7 +243,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(block_coordinates: nil)
     |> assign(bottom: %{})
     |> assign(brick_count: 0)
-    |> assign(category: nil )
+    |> assign(category: nil)
     |> assign(correct_answers: 0)
     |> assign(deleting_block: false)
     |> assign(fix_vuln_or_license: false)
@@ -411,17 +411,16 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_params(%{"course" => course, "chapter" => chapter}, uri, socket) do
     {:noreply,
-     socket |> assign(
+     socket
+     |> assign(
        current_uri: uri,
-       file_path: ["courses", course, chapter],
-     ) |> init_categories()
-    }
+       file_path: ["courses", course, chapter]
+     )
+     |> init_categories()}
   end
 
   def handle_params(_unsigned_params, uri, socket) do
-    {:noreply, socket |> assign(current_uri: uri, file_path: ["qna"]
-      ) |> init_categories()
-      }
+    {:noreply, socket |> assign(current_uri: uri, file_path: ["qna"]) |> init_categories()}
   end
 
   def handle_event("validate", %{"user" => params}, socket) do
@@ -444,7 +443,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     categories = socket.assigns.categories
     question_position = categories[category]
     file_path = socket.assigns.file_path
-    categories = increment_position(categories, category, question_position)
+    categories = increment_position(file_path, categories, category, question_position)
 
     {:noreply,
      socket
@@ -911,17 +910,18 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def debug(_assigns, _, _), do: ""
 
   defp init_categories(socket) do
-    categories = QnA.categories(socket.assigns.file_path)
-    |> Enum.into(%{}, fn elem -> {elem, 0} end)
+    categories =
+      QnA.categories(socket.assigns.file_path)
+      |> Enum.into(%{}, fn elem -> {elem, 0} end)
+
     assign(socket, :categories, categories)
   end
 
+  defp increment_position(_file_path, categories, _category, nil), do: categories
 
-  defp increment_position(categories, _category, nil), do: categories
-
-  defp increment_position(categories, category, current_position) do
+  defp increment_position(file_path, categories, category, current_position) do
     position =
-      if QnA.maximum_category_position(category) == current_position do
+      if QnA.maximum_category_position(file_path, category) == current_position do
         current_position
       else
         current_position + 1
