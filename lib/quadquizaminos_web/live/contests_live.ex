@@ -1,15 +1,16 @@
 defmodule QuadquizaminosWeb.ContestsLive do
   use QuadquizaminosWeb, :live_view
 
-
-  alias Quadquizaminos.Contests
-  alias QuadquizaminosWeb.ContestsLive.ContestComponent
+  import Phoenix.LiveView.Helpers
+  import Phoenix.HTML, only: [raw: 1]
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Contests
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Util
+  alias QuadquizaminosWeb.ContestsLive.ContestComponent
 
-  @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
+  @conference_date Application.compile_env(:quadquizaminos, :conference_date)
 
   def mount(_params, session, socket) do
     case socket.assigns.live_action do
@@ -156,20 +157,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
       end
 
     {:noreply, socket |> assign(current_user: current_user, current_uri: uri)}
-  end
-
-  defp contest_live_records(records, contest_id) do
-    Enum.filter(records, fn record -> record.contest_id == contest_id end)
-  end
-
-  defp contest_records(contest_id) do
-    case String.to_integer(contest_id) |> Contests.get_contest() do
-      nil ->
-        []
-
-      contest ->
-        Contests.contest_game_records(contest)
-    end
   end
 
   defp _create_contest(socket, contest_name,"") do

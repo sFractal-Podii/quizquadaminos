@@ -1,5 +1,5 @@
 defmodule Quadquizaminos.QnA do
-  @qna_directory Application.get_env(:quadquizaminos, :qna_directory)
+  @qna_directory Application.compile_env(:quadquizaminos, :qna_directory)
 
   def question do
     build()

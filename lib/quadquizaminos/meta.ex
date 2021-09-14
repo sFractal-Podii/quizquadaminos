@@ -11,5 +11,4 @@ defmodule Quadquizaminos.Meta do
     {:ok, vsn} = :application.get_key(@app, :vsn)
     vsn
   end
-
 end
