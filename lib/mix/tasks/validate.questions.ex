@@ -9,5 +9,4 @@ defmodule Mix.Tasks.Validate.Questions do
     Quadquizaminos.QnA.validate_files()
     Logger.info("All Files are valid!")
   end
-
 end

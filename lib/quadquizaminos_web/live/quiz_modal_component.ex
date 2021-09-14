@@ -1,7 +1,6 @@
 defmodule QuadquizaminosWeb.QuizModalComponent do
   use QuadquizaminosWeb, :live_component
   alias Quadquizaminos.QnA
-  alias Quadquizaminos.Courses
 
   def render(%{category: nil} = assigns) do
     ~L"""
