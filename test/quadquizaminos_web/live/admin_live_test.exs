@@ -2,9 +2,9 @@ defmodule QuadquizaminosWeb.AdminLiveTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadquizaminos.Test.Auth
   alias Quadquizaminos.Accounts.LoginLevel
   alias Quadquizaminos.Repo
+  alias Quadquizaminos.Test.Auth
 
   setup do
     # admin logging in

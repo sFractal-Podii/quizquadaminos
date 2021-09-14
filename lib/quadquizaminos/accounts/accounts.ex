@@ -30,12 +30,15 @@ defmodule Quadquizaminos.Accounts do
     Repo.get_by(LoginLevel, name: level)
   end
 
-  def get_selected_login_level() do
+  def get_selected_login_level do
     LoginLevel.selected_level()
     |> Repo.one()
   end
 
-  def change_user(user, attrs \\ %{}) do
+  def change_user(user, attrs \\ %{})
+  def change_user(nil, _attrs), do: :user
+
+  def change_user(user, attrs) do
     User.changeset(user, attrs)
   end
 

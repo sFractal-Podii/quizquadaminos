@@ -13,8 +13,8 @@ defmodule QuadquizaminosWeb.LeaderboardLiveTest do
     assert html =~ "<h1>Leaderboard</h1>"
   end
 
-  ## This test should propabably go since we are already testing rendering of 
-  ## 25 records at a time which is what the current implementation does 
+  ## This test should propabably go since we are already testing rendering of
+  ## 25 records at a time which is what the current implementation does
   test "top 10 games played are displayed", %{conn: conn} do
     Enum.each(1..15, fn num ->
       attrs = %{name: "Quiz Block ", uid: Integer.to_string(num), role: "player"}

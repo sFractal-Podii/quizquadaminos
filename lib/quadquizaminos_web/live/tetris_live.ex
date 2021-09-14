@@ -1,8 +1,12 @@
 defmodule QuadquizaminosWeb.TetrisLive do
-  use QuadquizaminosWeb, :live_view
-  alias Quadquizaminos.Contests
+  use Phoenix.LiveView
+
+  import Phoenix.HTML, only: [raw: 1]
+  import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.Contests
+  alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias QuadquizaminosWeb.SvgBoard
 
   alias Quadquizaminos.{
@@ -27,7 +31,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     current_user = user_id |> current_user()
 
     has_email? =
-      if(current_user.name == "anonymous" or current_user.email) do
+      if current_user.name == "anonymous" or current_user.email do
         true
       else
         false
@@ -296,7 +300,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
       score: socket.assigns.score,
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
-      uid: socket.assigns.current_user.uid,
       contest_id: socket.assigns.contest_id,
       correctly_answered_qna: socket.assigns.correct_answers
     }
