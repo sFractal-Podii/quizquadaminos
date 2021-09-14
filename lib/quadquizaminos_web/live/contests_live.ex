@@ -30,13 +30,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
       #  changeset: Contests.change_contest()
      )}
   end
-
-
-  def handle_event("validate",params, socket) do
-    IO.inspect(params, label: "========================")
-    {:noreply,socket}
-  end
-
   def handle_event("add_contest_date", %{"contest" => name}, socket) do
     contests =
       Enum.map(socket.assigns.contests, fn contest ->
