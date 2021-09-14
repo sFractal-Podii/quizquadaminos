@@ -55,9 +55,6 @@ defmodule Quadquizaminos.QnA do
         File.ls!(path) != [],
         position <- 0..(Enum.count(File.ls!(path)) ) do
       try do
-        IO.inspect("............")
-        IO.inspect(folder)
-        IO.inspect(position)
         Quadquizaminos.QnA.question(folder, position)
       rescue
         e ->
