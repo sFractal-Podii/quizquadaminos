@@ -15,7 +15,7 @@ defmodule Quadquizaminos.GameBoard do
     field :dropped_bricks, :integer
     field :bottom_blocks, :map
     field :correctly_answered_qna, :integer
-    belongs_to :contest, Quadquizaminos.Contest
+    belongs_to :contest, Quadquizaminos.Contests.Contest
   end
 
   def changeset(board, attrs \\ %{}) do
@@ -70,8 +70,8 @@ defmodule Quadquizaminos.GameBoard do
   end
 
   def paginate_query(query, page, per_page) do
-     from q in query,
-        offset: (^page - 1) * ^per_page,
-        limit: ^per_page
+    from q in query,
+      offset: (^page - 1) * ^per_page,
+      limit: ^per_page
   end
 end

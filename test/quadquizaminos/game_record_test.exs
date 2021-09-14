@@ -109,7 +109,7 @@ defmodule Quadquizaminos.GameRecordTest do
     }
 
     more_time = %{
-      start_time: DateTime.add(now, 20000),
+      start_time: DateTime.add(now, 20_000),
       end_time: DateTime.utc_now(),
       uid: user.uid,
       score: 50,

@@ -13,6 +13,7 @@ defmodule Quadquizaminos.Accounts.User do
     field :role, :string
     field :provider, :string
     field :email, :string
+    field :admin?, :boolean, virtual: true
     has_many :game_boards, GameBoard, foreign_key: :uid, references: :uid
   end
 
@@ -21,7 +22,8 @@ defmodule Quadquizaminos.Accounts.User do
     |> cast(attrs, [:uid, :name, :avatar, :role, :provider, :email])
     |> validate_format(
       :email,
-      ~r/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+      ~r/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|
+      (\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
     )
   end
 

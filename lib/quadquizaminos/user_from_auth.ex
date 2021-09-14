@@ -5,9 +5,9 @@ defmodule Quadquizaminos.UserFromAuth do
   require Logger
   require Jason
 
-  alias Ueberauth.Auth
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
+  alias Ueberauth.Auth
 
   def find_or_create(%Auth{} = auth) do
     case Accounts.get_user(uid(auth)) do
@@ -16,7 +16,7 @@ defmodule Quadquizaminos.UserFromAuth do
 
       user ->
         {:ok, user}
-    end 
+    end
   end
 
   # github does it this way
@@ -41,11 +41,11 @@ defmodule Quadquizaminos.UserFromAuth do
   end
 
   defp uid(auth) do
-        case auth.provider do
-          :linkedin -> auth.uid
-          :google -> String.slice(auth.uid, 0, 8)
-                _ -> Integer.to_string(auth.uid) 
-        end
+    case auth.provider do
+      :linkedin -> auth.uid
+      :google -> String.slice(auth.uid, 0, 8)
+      _ -> Integer.to_string(auth.uid)
+    end
   end
 
   defp role(true = _configured_user?), do: "admin"
