@@ -5,6 +5,7 @@ defmodule QuadquizaminosWeb.CourseLive do
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.Courses
 
+  @impl true
   def mount(_arg0, _session, socket) do
     {
       :ok,
@@ -18,10 +19,7 @@ defmodule QuadquizaminosWeb.CourseLive do
     }
   end
 
-  def handle_params(%{"chapter" => chapter, "course" => course}, _uri, socket) do
-    {:noreply, socket |> assign(course: course, chapter: chapter)}
-  end
-
+  @impl true
   def render(%{live_action: :questions} = assigns) do
     ~L"""
     <div class="container">
@@ -49,6 +47,7 @@ defmodule QuadquizaminosWeb.CourseLive do
     """
   end
 
+  @impl true
   def render(%{live_action: :show} = assigns) do
     ~L"""
     <div class="container">
@@ -78,6 +77,7 @@ defmodule QuadquizaminosWeb.CourseLive do
     """
   end
 
+  @impl true
   def render(assigns) do
     ~L"""
       <h1> Courses </h1>
@@ -96,10 +96,17 @@ defmodule QuadquizaminosWeb.CourseLive do
     """
   end
 
+  @impl true
+  def handle_params(%{"chapter" => chapter, "course" => course}, _uri, socket) do
+    {:noreply, socket |> assign(course: course, chapter: chapter)}
+  end
+
+  @impl true
   def handle_params(%{"course" => course}, _url, socket) do
     {:noreply, socket |> assign(course: course)}
   end
 
+  @impl true
   def handle_params(_params, _url, socket) do
     {:noreply, socket}
   end
