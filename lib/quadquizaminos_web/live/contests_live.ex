@@ -1,21 +1,29 @@
 defmodule QuadquizaminosWeb.ContestsLive do
-  use Phoenix.LiveView
-  use Phoenix.HTML
+  use QuadquizaminosWeb, :live_view
 
-  import Phoenix.LiveView.Helpers
-  import Phoenix.HTML, only: [raw: 1]
+
   alias Quadquizaminos.Contests
   alias QuadquizaminosWeb.ContestsLive.ContestComponent
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
+  alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Util
 
   @conference_date Application.fetch_env!(:quadquizaminos, :conference_date)
 
   def mount(_params, session, socket) do
-    :timer.send_interval(1000, self(), :update_component_timer)
+    case socket.assigns.live_action do
+      :show ->
+        :timer.send_interval(1000, self(), :update_records)
+
+      :index ->
+        :timer.send_interval(1000, self(), :update_component_timer)
+
+      _ ->
+        nil
+    end
+
     countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
-    QuadquizaminosWeb.Endpoint.subscribe("contest_scores")
     current_user = session["uid"] |> current_user()
 
     {:ok,
@@ -69,19 +77,46 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, _restart_contest(socket, name)}
   end
 
-  def handle_event("stop", %{"contest" => name}, socket) do
-    QuadquizaminosWeb.Endpoint.broadcast(
-      "contest_record",
-      "record_contest_scores",
-      name
-    )
+  def handle_event("ask-for-email", _, socket) do
+    {:noreply, socket |> assign(modal: true)}
+  end
 
+  def handle_event("stop", %{"contest" => name}, socket) do
     {:noreply, _end_contest(socket, name)}
+  end
+
+  def handle_info(:update_records, %{assigns: %{contest: contest}} = socket) do
+    contest_name = String.to_atom(contest.name)
+
+    if :ets.whereis(contest_name) != :undefined do
+      records =
+        contest_name
+        |> :ets.tab2list()
+        |> Enum.map(fn {uid, record, name} ->
+          game_board = struct(%GameBoard{}, record)
+          %{game_board | user: %User{name: name, uid: uid}}
+        end)
+        |> Enum.sort_by(& &1.score, :desc)
+
+      send_update(QuadquizaminosWeb.ContestFinalResultComponent,
+        id: "final_result",
+        contest: socket.assigns.contest,
+        contest_records: records
+      )
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_info(:update_records, socket) do
+    {:noreply, socket}
   end
 
   def handle_info(:update_component_timer, socket) do
     Enum.map(socket.assigns.contests, fn contest ->
-      send(self(), {:update_component, contest_id: contest.id})
+      if Contests.contest_running?(contest.name) do
+        send(self(), {:update_component, contest_id: contest.id})
+      end
     end)
 
     {:noreply, socket}
@@ -97,30 +132,30 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket |> assign(countdown_interval: countdown_interval)}
   end
 
-  def handle_info(%{event: "current_scores", payload: payload}, socket) do
-    contest_records = socket.assigns.contest_records
+  def handle_info({:update_user, assigns}, socket) do
+    {:noreply,
+     socket
+     |> assign(assigns)
+     |> assign(modal: false)}
+  end
 
-    contest_records =
-      (contest_records ++ payload)
-      |> Enum.sort_by(& &1.score, :desc)
-      |> Enum.uniq_by(& &1.uid)
-      |> Enum.take(10)
+  def handle_params(%{"id" => id}, uri, socket) do
+    contest = Contests.get_contest(String.to_integer(id))
+    {:noreply, assign(socket, contest: contest, current_uri: uri)}
+  end
 
-    contest_records =
-      case socket.assigns.contest_id do
-        nil -> contest_records
-        contest_id -> contest_live_records(contest_records, contest_id)
+  def handle_params(_params, uri, socket) do
+    current_user = socket.assigns.current_user
+
+    # you cannot perfom admin tasks when not in admin scope
+    current_user =
+      if URI.parse(uri).path == "/contests" do
+        %{current_user | admin?: false}
+      else
+        current_user
       end
 
-    {:noreply, socket |> assign(contest_records: contest_records)}
-  end
-
-  def handle_params(%{"id" => id}, _uri, socket) do
-    {:noreply, assign(socket, id: id, contest_records: contest_records(id))}
-  end
-
-  def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
+    {:noreply, socket |> assign(current_user: current_user, current_uri: uri)}
   end
 
   defp contest_live_records(records, contest_id) do
@@ -153,7 +188,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
       _ -> socket
     end
   end
-  
+
   defp _start_contest(socket, name) do
     contests =
       Enum.map(socket.assigns.contests, fn
