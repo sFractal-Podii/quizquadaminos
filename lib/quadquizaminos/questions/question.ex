@@ -17,6 +17,5 @@ defmodule Quadquizaminos.Questions.Question do
             description: nil,
             choices: [],
             score: %{right: 0, wrong: 0},
-            powerup: nil,
-            location: %{}
+            powerup: nil
 end
