@@ -5,6 +5,7 @@ defmodule QuadquizaminosWeb.CourseLive do
   alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.Courses
 
+  @impl true
   def mount(_arg0, _session, socket) do
     {
       :ok,
@@ -18,10 +19,7 @@ defmodule QuadquizaminosWeb.CourseLive do
     }
   end
 
-  def handle_params(%{"chapter" => chapter, "course" => course}, _uri, socket) do
-    {:noreply, socket |> assign(course: course, chapter: chapter)}
-  end
-
+  @impl true
   def render(%{live_action: :questions} = assigns) do
     ~L"""
     <div class="container">
@@ -49,14 +47,16 @@ defmodule QuadquizaminosWeb.CourseLive do
     """
   end
 
+  @impl true
   def render(%{live_action: :show} = assigns) do
     ~L"""
     <div class="container">
     <div class="row">
-      <div class="column">
+      <div class="column column-25">
         <%= for chapter <- Courses.chapter_list(assigns.course) do%>
         <ul>
-        <a href="#" phx-click="go-to-chapter" phx-value-chapter="<%= chapter%>" > <%= chapter %> </a> <br />
+        <%= live_redirect "start #{chapter}", to: Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter}) %>
+
         </ul>
         <% end %>
       </div> <!-- column -->
@@ -78,6 +78,7 @@ defmodule QuadquizaminosWeb.CourseLive do
     """
   end
 
+  @impl true
   def render(assigns) do
     ~L"""
       <h1> Courses </h1>
@@ -96,10 +97,17 @@ defmodule QuadquizaminosWeb.CourseLive do
     """
   end
 
+  @impl true
+  def handle_params(%{"chapter" => chapter, "course" => course}, _uri, socket) do
+    {:noreply, socket |> assign(course: course, chapter: chapter)}
+  end
+
+  @impl true
   def handle_params(%{"course" => course}, _url, socket) do
     {:noreply, socket |> assign(course: course)}
   end
 
+  @impl true
   def handle_params(_params, _url, socket) do
     {:noreply, socket}
   end
