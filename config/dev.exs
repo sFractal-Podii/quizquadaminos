@@ -31,7 +31,7 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
   ]
 
 config :quadquizaminos,
-  qna_directory: Path.dirname(__DIR__)
+  base_questions_directory: Path.dirname(__DIR__)
 
 config :quadquizaminos,
   courses_directory: Path.join(Path.dirname(__DIR__), "courses")

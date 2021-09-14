@@ -1,7 +1,6 @@
 defmodule QuadquizaminosWeb.TetrisLive do
-  use Phoenix.LiveView
+  use QuadquizaminosWeb, :livew_view
 
-  import QuadquizaminosWeb.LiveHelpers
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
   alias QuadquizaminosWeb.SvgBoard

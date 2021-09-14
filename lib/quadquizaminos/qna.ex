@@ -1,5 +1,5 @@
 defmodule Quadquizaminos.QnA do
-  @qna_directory Application.get_env(:quadquizaminos, :qna_directory) |> to_string()
+  @base_questions_directory Application.get_env(:quadquizaminos, :base_questions_directory) |> to_string()
 
   def question(category, position) do
     build(category, position)
@@ -12,7 +12,7 @@ defmodule Quadquizaminos.QnA do
   ## Should this be done once at compile instead of every popup?
   ## Also means chapters when working with course
   def categories(file_path \\ ["qna"]) do
-    directory = ([@qna_directory] ++ file_path) |> Enum.join("/")
+    directory = ([@base_questions_directory] ++ file_path) |> Enum.join("/")
 
     directory
     |> File.ls!()
@@ -35,7 +35,7 @@ defmodule Quadquizaminos.QnA do
   end
 
   def maximum_category_position(file_path, category) do
-    path = ([@qna_directory] ++ file_path ++ [category]) |> Enum.join("/")
+    path = ([@base_questions_directory] ++ file_path ++ [category]) |> Enum.join("/")
     {:ok, files} = File.ls(path)
     Enum.count(files)
   end
@@ -154,7 +154,7 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp choose_file(file_path, category, position) do
-    path = ([@qna_directory] ++ file_path ++ [category]) |> Enum.join("/")
+    path = ([@base_questions_directory] ++ file_path ++ [category]) |> Enum.join("/")
     {:ok, files} = File.ls(path)
     files = Enum.sort(files)
     count = Enum.count(files)
