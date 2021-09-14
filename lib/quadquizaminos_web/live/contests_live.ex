@@ -27,7 +27,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
        contest_records: [],
        contest_id: nil,
        editing_date?: false,
-      #  changeset: Contests.change_contest()
      )}
   end
   def handle_event("add_contest_date", %{"contest" => name}, socket) do
@@ -57,7 +56,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("save", %{"name" => name, "contest_date" => contest_date}, socket) do
-    {:ok, contest_date, 0} = DateTime.from_iso8601(contest_date <> ":00Z")
+
     {:noreply, socket |> _create_contest(name, contest_date) }
   end
 
@@ -138,14 +137,23 @@ defmodule QuadquizaminosWeb.ContestsLive do
     end
   end
 
-  defp _create_contest(socket, contest_name, contest_date) do
+  defp _create_contest(socket, contest_name,"") do
     contests = socket.assigns.contests
-    case Contests.create_contest(%{name: contest_name,contest_date: contest_date}) do
+    case Contests.create_contest(%{name: contest_name,contest_date: nil}) do
       {:ok, contest} -> assign(socket, contests: contests ++ [contest])
       _ -> socket
     end
   end
 
+  defp _create_contest(socket, contest_name, contest_date) do
+    contests = socket.assigns.contests
+    {:ok, contest_date, 0} = DateTime.from_iso8601(contest_date <> ":00Z")
+    case Contests.create_contest(%{name: contest_name,contest_date: contest_date}) do
+      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
+      _ -> socket
+    end
+  end
+  
   defp _start_contest(socket, name) do
     contests =
       Enum.map(socket.assigns.contests, fn
