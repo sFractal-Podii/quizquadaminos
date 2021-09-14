@@ -26,7 +26,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
          <br/>
          <h2><%= raw @qna.question %></h2>
          <h2> Answer </h2>
-         <%= answers(assigns, @category) %>
+         <%= choices(assigns, @qna.type) %>
        <br/>
        <%= unless Enum.empty?(@qna.score) do %>
        <h2>Scores</h2>
@@ -55,7 +55,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     Courses.remove_used_categories(course, chapter, assigns[:chapter_categories])
   end
 
-  defp answers(assigns, "bonus") do
+  defp choices(assigns, "free-form") do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
     <%= text_input f, :guess %>
@@ -65,10 +65,10 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     """
   end
 
-  defp answers(assigns, category) do
+  defp choices(assigns, category) do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
-    <%= for {answer, index}<- @qna.answers do %>
+    <%= for {answer, index}<- @qna.choices do %>
       <%= label do %>
         <%= radio_button f, :guess, answer, value: index %>
         <%= answer %>

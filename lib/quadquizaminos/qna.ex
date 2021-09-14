@@ -43,6 +43,30 @@ defmodule Quadquizaminos.QnA do
     Enum.count(files)
   end
 
+  @doc """
+  Validates format of the markdown files
+  """
+  def validate_files do
+    folders = File.ls!("qna")
+
+    for folder <- folders,
+        path = "qna/" <> folder,
+        File.dir?(path),
+        File.ls!(path) != [],
+        position <- 0..(Enum.count(File.ls!(path)) ) do
+      try do
+        Quadquizaminos.QnA.question(folder, position)
+      rescue
+        e ->
+          require Logger
+          Logger.error("Could not parse #{choose_file(folder, position)}")
+          reraise e, __STACKTRACE__
+      end
+    end
+
+    :ok
+  end
+
   defp build do
     categories() |> Enum.random() |> build()
   end
@@ -52,15 +76,30 @@ defmodule Quadquizaminos.QnA do
   defp build(category, position) do
     {:ok, content} = category |> choose_file(position) |> File.read()
 
-    [question, answers] = content |> String.split(~r/## answers/i)
+    [header, body] =
+      case String.split(content, "---") do
+        [_header, _body] = result -> result
+        [body] -> [nil, body]
+      end
 
-    %{
+    [question, choices] = body |> String.split(~r/## answers/i)
+
+    %Quadquizaminos.Questions.Question{}
+    |> struct(%{
       question: question_as_html(question),
-      answers: answers(content, answers),
-      correct: correct_answer(answers, category),
+      choices: choices(content, choices),
+      correct: correct_answer(choices, category),
       powerup: powerup(content),
-      score: score(content)
-    }
+      score: score(content),
+      type: header(header).type
+    })
+  end
+
+  defp header(nil), do: %{type: nil}
+
+  defp header(header) do
+    {result, _} = Code.eval_string(header)
+    result
   end
 
   defp score(content) do
@@ -93,19 +132,19 @@ defmodule Quadquizaminos.QnA do
     end
   end
 
-  defp answers(content, answers) do
+  defp choices(content, answers) do
     regex = ~r/# answers(?<answers>.*)#/iUs
 
     case Regex.named_captures(regex, content) do
       %{"answers" => answers} ->
-        answers(answers)
+        choices(answers)
 
       nil ->
-        answers(answers)
+        choices(answers)
     end
   end
 
-  defp answers(answers) do
+  defp choices(answers) do
     answers
     |> String.split(["\n-", "\n*", "\n"], trim: true)
     |> Enum.with_index()
