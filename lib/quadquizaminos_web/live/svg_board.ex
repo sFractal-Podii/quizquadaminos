@@ -1,7 +1,7 @@
 defmodule QuadquizaminosWeb.SvgBoard do
   @box_width 20
   @box_height 20
-  def svg_head() do
+  def svg_head do
     """
     <svg
     version="1.0"
@@ -16,14 +16,11 @@ defmodule QuadquizaminosWeb.SvgBoard do
     """
   end
 
-  def svg_foot(), do: "</svg>"
+  def svg_foot, do: "</svg>"
 
   def boxes(points_with_colors) do
     points_with_colors
-    |> Enum.map(fn {x, y, color} ->
-      box({x, y}, color)
-    end)
-    |> Enum.join("\n")
+    |> Enum.map_join("\n", fn {x, y, color} -> box({x, y}, color) end)
   end
 
   def box({_x, _y} = point, color) do

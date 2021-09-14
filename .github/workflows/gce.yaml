@@ -21,7 +21,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
-  GCE_INSTANCE: staging-quiz
+  GCE_INSTANCE: quadblocks-staging
   GCE_INSTANCE_ZONE: us-east4-c
 
 jobs:

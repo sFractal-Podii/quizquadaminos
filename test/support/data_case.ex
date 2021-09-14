@@ -19,7 +19,6 @@ defmodule Quadquizaminos.DataCase do
   using do
     quote do
       alias Quadquizaminos.Repo
-
       import Ecto
       import Ecto.Changeset
       import Ecto.Query

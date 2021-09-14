@@ -1,14 +1,13 @@
 defmodule Quadquizaminos.Hints do
-
   def tldr(:intro) do
     """
-      <p>Click "How to Play" for instructions.</p>
-      <p>Fill all blocks in a row to clear the row.</p>
-      <p>Right/left arrows move quads right/left.</p>
-      <p>Up arrow rotates falling quad.</p>
-      <p>Down arrow drops falling quad.</p>
-      <p>Space bar pauses game and pops up quiz.</p>
-      """
+    <p>Click "How to Play" for instructions.</p>
+    <p>Fill all blocks in a row to clear the row.</p>
+    <p>Right/left arrows move quads right/left.</p>
+    <p>Up arrow rotates falling quad.</p>
+    <p>Down arrow drops falling quad.</p>
+    <p>Space bar pauses game and pops up quiz.</p>
+    """
   end
 
   def tldr(:mobile) do
@@ -173,41 +172,23 @@ defmodule Quadquizaminos.Hints do
   end
 
   def next_hint(previous_hint) do
-    ## walk thru the hints
-    case previous_hint do
-      :intro ->
-        :mobile
-      :mobile ->
-        :quiz
-      :quiz ->
-        :scoring
-      :scoring ->
-        :scoring2
-      :scoring2 ->
-        :vuln
-      :vuln ->
-        :rm_vuln
-      :rm_vuln ->
-        :clrblocks
-      :clrblocks ->
-        :addblock
-      :addblock ->
-        :speed
-      :speed ->
-        :delblock
-      :delblock ->
-        :mvblock
-      :mvblock ->
-        :speedup
-      :speedup ->
-        :slowdown
-      :slowdown ->
-        :superpower
-      :superpower ->
-        :intro
-      _ ->
-        :intro
-    end
+    %{
+      intro: :mobile,
+      mobile: :quiz,
+      quiz: :scoring,
+      scoring: :scoring2,
+      scoring2: :vuln,
+      vuln: :rm_vuln,
+      rm: :clrblocks,
+      clrblocks: :addblock,
+      addblock: :speed,
+      speed: :delblock,
+      delblock: :mvblock,
+      mvblock: :speedup,
+      speedup: :slowdown,
+      slowdown: :superpower,
+      superpower: :intro
+    }
+    |> Map.get(previous_hint, :intro)
   end
-
 end
