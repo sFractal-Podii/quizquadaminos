@@ -44,19 +44,22 @@ defmodule Quadquizaminos.QnA do
   Validates format of the markdown files
   """
   def validate_files do
-    folders = File.ls!("qna")
+    # should be refactored to test questions on the courses directory too
+    base_file = ["qna"]
+    base_file_path = base_file |> Enum.join("/")
+    folders = File.ls!(base_file_path)
 
     for folder <- folders,
-        path = "qna/" <> folder,
+        path = base_file_path <> "/" <> folder,
         File.dir?(path),
         File.ls!(path) != [],
         position <- 0..Enum.count(File.ls!(path)) do
       try do
-        Quadquizaminos.QnA.question(folder, position)
+        Quadquizaminos.QnA.question(base_file, folder, position)
       rescue
         e ->
           require Logger
-          # Logger.error("Could not parse #{choose_file(folder, position)}")
+          Logger.error("Could not parse #{choose_file(base_file, folder, position)}")
           reraise e, __STACKTRACE__
       end
     end
