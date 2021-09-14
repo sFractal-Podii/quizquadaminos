@@ -3,8 +3,8 @@ defmodule Quadquizaminos.GameBoard.Records do
   This module is responsible for manipulating player game records.
   """
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Contests.Contest
+  alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Repo
 
   @spec record_player_game(boolean(), map()) ::
@@ -97,8 +97,12 @@ defmodule Quadquizaminos.GameBoard.Records do
   end
 
   def fetch_records(page \\ 1, sorter \\ "score") do
-    query = GameBoard |> GameBoard.sort_by(sorter) |> GameBoard.paginate_query(page, 25) |> GameBoard.preloads([:user])
-    
+    query =
+      GameBoard
+      |> GameBoard.sort_by(sorter)
+      |> GameBoard.paginate_query(page, 25)
+      |> GameBoard.preloads([:user])
+
     Repo.all(query)
   end
 end

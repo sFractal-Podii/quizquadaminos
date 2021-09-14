@@ -2,9 +2,9 @@ defmodule QuadquizaminosWeb.ContestsLiveTest do
   use QuadquizaminosWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadquizaminos.Test.Auth
-  alias Quadquizaminos.{Contests, Util}
   alias Quadquizaminos.Contest.ContestAgent
+  alias Quadquizaminos.{Contests, Util}
+  alias Quadquizaminos.Test.Auth
 
   setup do
     Contests.create_contest(%{name: "ContestC"})
