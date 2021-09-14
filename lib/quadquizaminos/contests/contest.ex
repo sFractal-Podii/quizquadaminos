@@ -24,6 +24,7 @@ defmodule Quadquizaminos.Contests.Contest do
     field :time_remaining, :integer, virtual: true, default: 0
     field :name, :string
     field :contest_date, :utc_datetime_usec
+    field :rsvped?, :boolean, virtual: true, default: false
     has_many :game_records, Quadquizaminos.GameBoard
   end
 

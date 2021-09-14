@@ -1,5 +1,4 @@
 defmodule Quadquizaminos.Speed do
-
   @drop_speeds [
     # 20/s, 50 ms
     %{name: "full throttle", tick_count: 1},
@@ -25,11 +24,11 @@ defmodule Quadquizaminos.Speed do
     Enum.at(@drop_speeds, speed).tick_count
   end
 
-  def highest_speed() do
+  def highest_speed do
     0
   end
 
-  def lowest_speed() do
+  def lowest_speed do
     length(@drop_speeds) - 1
   end
 
@@ -40,5 +39,4 @@ defmodule Quadquizaminos.Speed do
   def decrease_speed(speed) do
     if speed + 1 > lowest_speed(), do: lowest_speed(), else: speed + 1
   end
-
 end
