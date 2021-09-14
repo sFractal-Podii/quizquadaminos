@@ -38,8 +38,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
      socket
      |> assign(
        start_timer: false,
-       course: nil,
-       chapter: nil,
        current_user: current_user,
        active_contests: Contests.active_contests(),
        contest_id: nil,
@@ -126,7 +124,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, categories: @categories, category: @category, chapter_categories: @chapter_categories,  course: @course, chapter: @chapter , return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadquizaminosWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, file_path: @file_path, categories: @categories, category: @category,return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
                 <% end %>
                 <%= if @super_modal do %>
                 <%= live_modal @socket,  QuadquizaminosWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadquizaminosWeb.Endpoint, :tetris)%>
@@ -245,7 +243,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     |> assign(block_coordinates: nil)
     |> assign(bottom: %{})
     |> assign(brick_count: 0)
-    |> assign(category: nil, categories: init_categories())
+    |> assign(category: nil )
     |> assign(correct_answers: 0)
     |> assign(deleting_block: false)
     |> assign(fix_vuln_or_license: false)
@@ -413,16 +411,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def handle_params(%{"course" => course, "chapter" => chapter}, uri, socket) do
     {:noreply,
-     assign(socket,
-       course: course,
-       chapter: chapter,
+     socket |> assign(
        current_uri: uri,
-       chapter_categories: init_chapter_categories(course, chapter)
-     )}
+       file_path: ["courses", course, chapter],
+     ) |> init_categories()
+    }
   end
 
   def handle_params(_unsigned_params, uri, socket) do
-    {:noreply, socket |> assign(current_uri: uri, chapter_categories: %{})}
+    {:noreply, socket |> assign(current_uri: uri, file_path: ["qna"]
+      ) |> init_categories()
+      }
   end
 
   def handle_event("validate", %{"user" => params}, socket) do
@@ -444,6 +443,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
   def handle_event("choose_category", %{"category" => category}, socket) do
     categories = socket.assigns.categories
     question_position = categories[category]
+    file_path = socket.assigns.file_path
     categories = increment_position(categories, category, question_position)
 
     {:noreply,
@@ -451,7 +451,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
      |> assign(
        category: category,
        categories: categories,
-       qna: QnA.question(category, question_position)
+       qna: QnA.question(file_path, category, question_position)
      )}
   end
 
@@ -910,17 +910,12 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def debug(_assigns, _, _), do: ""
 
-  defp init_categories do
-    QnA.categories()
+  defp init_categories(socket) do
+    categories = QnA.categories(socket.assigns.file_path)
     |> Enum.into(%{}, fn elem -> {elem, 0} end)
+    assign(socket, :categories, categories)
   end
 
-  defp init_chapter_categories(course, chapter) do
-    course
-    |> Courses.category_list(chapter)
-    |> Enum.into(%{}, fn elem -> {elem, 0} end)
-    |> IO.inspect(label: "=================")
-  end
 
   defp increment_position(categories, _category, nil), do: categories
 

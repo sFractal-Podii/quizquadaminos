@@ -1,44 +1,39 @@
 defmodule Quadquizaminos.QnA do
-  @qna_directory Application.get_env(:quadquizaminos, :qna_directory)
-
-  def question do
-    build()
-  end
-
-  def question(nil) do
-    %{}
-  end
-
-  def question(category) do
-    build(category)
-  end
+  @qna_directory Application.get_env(:quadquizaminos, :qna_directory) |> to_string()
 
   def question(category, position) do
     build(category, position)
   end
 
+  def question(file_path, category, position) do
+    build(file_path, category, position)
+  end
+
   ## Should this be done once at compile instead of every popup?
-  def categories do
-    @qna_directory
+  ## Also means chapters when working with course
+  def categories(file_path \\ ["qna"]) do
+    directory = ([@qna_directory] ++ file_path) |> Enum.join("/")
+
+    directory
     |> File.ls!()
     |> Enum.filter(fn folder ->
-      File.dir?("#{@qna_directory}/#{folder}") and
-        not (File.ls!("#{@qna_directory}/#{folder}") |> Enum.empty?())
+      File.dir?("#{directory}/#{folder}") and
+        not (File.ls!("#{directory}/#{folder}") |> Enum.empty?())
     end)
   end
 
   @doc """
   Removes categories that are already answered
   """
-  def remove_used_categories(categories) do
-    categories
+  def remove_used_categories(file_path) do
+    file_path
     |> Enum.reject(fn {k, v} -> maximum_category_position(k) == v end)
     |> Enum.into(%{})
     |> Map.keys()
   end
 
-  def maximum_category_position(category) do
-    path = "#{@qna_directory}/#{category}"
+  def maximum_category_position(category, question_type \\ "qna") do
+    path = "#{@qna_directory}/#{question_type}/#{category}"
     {:ok, files} = File.ls(path)
     Enum.count(files)
   end
@@ -53,13 +48,13 @@ defmodule Quadquizaminos.QnA do
         path = "qna/" <> folder,
         File.dir?(path),
         File.ls!(path) != [],
-        position <- 0..(Enum.count(File.ls!(path)) ) do
+        position <- 0..Enum.count(File.ls!(path)) do
       try do
         Quadquizaminos.QnA.question(folder, position)
       rescue
         e ->
           require Logger
-          Logger.error("Could not parse #{choose_file(folder, position)}")
+          # Logger.error("Could not parse #{choose_file(folder, position)}")
           reraise e, __STACKTRACE__
       end
     end
@@ -67,14 +62,8 @@ defmodule Quadquizaminos.QnA do
     :ok
   end
 
-  defp build do
-    categories() |> Enum.random() |> build()
-  end
-
-  defp build(cat, position \\ 0)
-
-  defp build(category, position) do
-    {:ok, content} = category |> choose_file(position) |> File.read()
+  defp build(file_path, category, position \\ 0) do
+    {:ok, content} = file_path |> choose_file(category, position) |> File.read()
 
     [header, body] =
       case String.split(content, "---") do
@@ -159,8 +148,8 @@ defmodule Quadquizaminos.QnA do
     question |> String.replace("#", "")
   end
 
-  defp choose_file(category, position) do
-    path = "#{@qna_directory}/#{category}"
+  defp choose_file(file_path, category,  position) do
+    path = ([@qna_directory] ++ file_path ++ [category]) |> Enum.join("/")
     {:ok, files} = File.ls(path)
     files = Enum.sort(files)
     count = Enum.count(files)

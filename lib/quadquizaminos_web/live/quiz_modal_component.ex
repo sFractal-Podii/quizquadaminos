@@ -8,7 +8,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     <div style="text-align:center;">
 
     <button phx-click="unpause">Continue</button><br>
-    <%= for category <- qna_or_course_chapter_categories(assigns) do %>
+    <%= for category <- QnA.categories(assigns[:file_path]) do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
     <br>
@@ -47,13 +47,6 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     """
   end
 
-  defp qna_or_course_chapter_categories(%{course: nil, chapter: nil} = assigns) do
-    QnA.remove_used_categories(assigns[:categories])
-  end
-
-  defp qna_or_course_chapter_categories(%{course: course, chapter: chapter} = assigns) do
-    Courses.remove_used_categories(course, chapter, assigns[:chapter_categories])
-  end
 
   defp choices(assigns, "free-form") do
     ~L"""
