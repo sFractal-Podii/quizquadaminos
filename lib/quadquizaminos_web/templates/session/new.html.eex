@@ -1,0 +1,16 @@
+<div class="container">
+	<div class="row">
+        <div class="column column-75">
+
+        	<div id="login_handle">
+        		<h1>Sign in with Handle</h1>
+            <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
+            <%= text_input f, :name, placeholder: "Enter name" %>
+                <div class="column column-25 column-offset-75">
+                    <%= submit "SIGN IN" %>
+                </div>
+            <% end %>
+            </div>
+        </div>
+    </div>
+</div>
