@@ -74,4 +74,20 @@ defmodule Quadquizaminos.Accounts do
     |> Ecto.Multi.update_all(:initially_selected, initially_selected_query, set: [active: false])
     |> Repo.transaction()
   end
+
+  def current_user("anonymous") do
+    %User{name: "anonymous", uid: "anonymous", admin?: false}
+  end
+
+  def current_user(uid) do
+    get_user(uid)
+  end
+
+  def has_email?(user) do
+    if user.name == "anonymous" or user.email do
+      true
+    else
+      false
+    end
+  end
 end
