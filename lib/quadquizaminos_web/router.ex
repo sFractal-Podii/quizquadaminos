@@ -48,8 +48,8 @@ defmodule QuadquizaminosWeb.Router do
     live "/courses", CourseLive
     live "/courses/:course", CourseLive, :show
     live "/courses/:course/:chapter", CourseLive, :questions
-    get "/anonymous", PageController, :anonymous
-    post "/anonymous", PageController, :anonymous
+    get "/anonymous", SessionController, :anonymous
+    post "/anonymous", SessionController, :anonymous
     resources "/sessions", SessionController, only: [:new, :create]
     get "/instructions", PageController, :instructions
 

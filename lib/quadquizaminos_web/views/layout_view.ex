@@ -26,7 +26,7 @@ defmodule QuadquizaminosWeb.LayoutView do
   defp sign_up_button(_login_level) do
     ~E"""
     <%= oath_sign_in() %>
-    <a class="button" href="<%= Routes.page_path(QuadquizaminosWeb.Endpoint, :anonymous )%>" >
+    <a class="button" href="<%= Routes.session_path(QuadquizaminosWeb.Endpoint, :anonymous )%>" >
           Sign in anonymously
         </a>
     </div>

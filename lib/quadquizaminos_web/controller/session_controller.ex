@@ -23,4 +23,12 @@ defmodule QuadquizaminosWeb.SessionController do
         |> redirect("/sessions/new")
     end
   end
+
+  def anonymous(conn, _params) do
+    conn
+    |> put_flash(:info, "Successfully authenticated.")
+    |> put_session(:uid, "anonymous")
+    |> configure_session(renew: true)
+    |> redirect(to: "/")
+  end
 end
