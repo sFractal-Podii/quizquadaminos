@@ -12,7 +12,7 @@ defmodule QuadquizaminosWeb.SessionController do
         conn
         |> put_flash(:info, "Successfully authenticated.")
         |> assign(:current_user, user)
-        |> put_session(:uid, user.name)
+        |> put_session(:uid, user.uid)
         |> configure_session(renew: true)
         |> redirect(to: "/")
 
