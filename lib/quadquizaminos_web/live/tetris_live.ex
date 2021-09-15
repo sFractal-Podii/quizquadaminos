@@ -2,7 +2,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
   use QuadquizaminosWeb, :live_view
 
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.Accounts.User
   alias QuadquizaminosWeb.SvgBoard
 
   alias Quadquizaminos.{
@@ -25,14 +24,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
-    current_user = user_id |> current_user()
-
-    has_email? =
-      if current_user.name == "anonymous" or current_user.email do
-        true
-      else
-        false
-      end
+    current_user = user_id |> Accounts.current_user()
 
     {:ok,
      socket
@@ -42,7 +34,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
        active_contests: Contests.active_contests(),
        contest_id: nil,
        choosing_contest: false,
-       has_email?: has_email?
+       has_email?: Accounts.has_email?(current_user)
      )
      |> init_game
      |> start_game()}
@@ -300,14 +292,6 @@ defmodule QuadquizaminosWeb.TetrisLive do
       contest_id: socket.assigns.contest_id,
       correctly_answered_qna: socket.assigns.correct_answers
     }
-  end
-
-  defp current_user("anonymous") do
-    %User{name: "anonymous", uid: "anonymous", admin?: false}
-  end
-
-  defp current_user(uid) do
-    Accounts.get_user(uid)
   end
 
   def tuple_to_string({x, y, c}) do
