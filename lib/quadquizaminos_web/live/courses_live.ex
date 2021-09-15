@@ -2,9 +2,8 @@ defmodule QuadquizaminosWeb.CourseLive do
   use Phoenix.LiveView
   import Phoenix.HTML
   import Phoenix.HTML.Form
-  alias QuadquizaminosWeb.Router.Helpers, as: Routes
   alias Quadquizaminos.Courses
-
+  alias QuadquizaminosWeb.Router.Helpers, as: Routes
   @impl true
   def mount(_arg0, _session, socket) do
     {
@@ -125,12 +124,12 @@ defmodule QuadquizaminosWeb.CourseLive do
   end
 
   def answers(content) do
-    [question, answer] = content
+    [_question, answer] = content
     answer
   end
 
   def question(content) do
-    [question, answer] = content
+    [question, _answer] = content
     question
   end
 end
