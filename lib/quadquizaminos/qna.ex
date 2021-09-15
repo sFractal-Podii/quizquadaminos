@@ -1,5 +1,6 @@
 defmodule Quadquizaminos.QnA do
-  @base_questions_directory Application.get_env(:quadquizaminos, :base_questions_directory) |> to_string()
+  @base_questions_directory Application.compile_env!(:quadquizaminos, :base_questions_directory)
+                            |> to_string()
 
   def question(category, position) do
     build(category, position)
