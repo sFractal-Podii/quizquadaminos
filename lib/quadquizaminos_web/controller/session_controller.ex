@@ -1,14 +1,13 @@
 defmodule QuadquizaminosWeb.SessionController do
   use QuadquizaminosWeb, :controller
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.Accounts.User
 
   def new(conn, _params) do
     render(conn, "new.html")
   end
 
   def create(conn, %{"session" => %{"name" => name}}) do
-    case Accounts.create_user(%User{}, %{name: name, uid: name}) do
+    case Accounts.find_or_create(name) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
