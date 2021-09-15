@@ -39,6 +39,9 @@ defmodule QuadquizaminosWeb.LayoutView do
     <div class="dropdown">
     <button class="dropbtn">Sign In</button>
       <div class="dropdown-content">
+          <a class = "button" href="<%= Routes.session_path(QuadquizaminosWeb.Endpoint, :new) %>">
+          Sign in with handle
+          </a>
           <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
           <i class="fas fa-github"></i>
           Sign in with GitHub
@@ -49,9 +52,7 @@ defmodule QuadquizaminosWeb.LayoutView do
           <a class = "button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "linkedin") %>">
           Sign in with LinkedIn
           </a>
-          <a class = "button" href="<%= Routes.session_path(QuadquizaminosWeb.Endpoint, :new) %>">
-          Sign in with handle
-          </a>
+          
     """
   end
 
