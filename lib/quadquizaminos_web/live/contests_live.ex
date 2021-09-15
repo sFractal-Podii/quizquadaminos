@@ -2,7 +2,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
   use QuadquizaminosWeb, :live_view
 
   import Phoenix.LiveView.Helpers
-  import Phoenix.HTML, only: [raw: 1]
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
@@ -35,9 +34,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
        countdown_interval: countdown_interval,
        contest_records: [],
        contest_id: nil,
-       editing_date?: false,
+       editing_date?: false
      )}
   end
+
   def handle_event("add_contest_date", %{"contest" => name}, socket) do
     contests =
       Enum.map(socket.assigns.contests, fn contest ->
@@ -65,10 +65,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_event("save", %{"name" => name, "contest_date" => contest_date}, socket) do
-
-    {:noreply, socket |> _create_contest(name, contest_date) }
+    {:noreply, socket |> _create_contest(name, contest_date)}
   end
-
 
   def handle_event("start", %{"contest" => name}, socket) do
     {:noreply, start_or_resume_contest(socket, name)}
@@ -114,7 +112,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:update_component_timer, socket) do
-    Enum.map(socket.assigns.contests, fn contest ->
+    Enum.each(socket.assigns.contests, fn contest ->
       if Contests.contest_running?(contest.name) do
         send(self(), {:update_component, contest_id: contest.id})
       end
@@ -159,9 +157,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket |> assign(current_user: current_user, current_uri: uri)}
   end
 
-  defp _create_contest(socket, contest_name,"") do
+  defp _create_contest(socket, contest_name, "") do
     contests = socket.assigns.contests
-    case Contests.create_contest(%{name: contest_name,contest_date: nil}) do
+
+    case Contests.create_contest(%{name: contest_name, contest_date: nil}) do
       {:ok, contest} -> assign(socket, contests: contests ++ [contest])
       _ -> socket
     end
@@ -170,7 +169,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
   defp _create_contest(socket, contest_name, contest_date) do
     contests = socket.assigns.contests
     {:ok, contest_date, 0} = DateTime.from_iso8601(contest_date <> ":00Z")
-    case Contests.create_contest(%{name: contest_name,contest_date: contest_date}) do
+
+    case Contests.create_contest(%{name: contest_name, contest_date: contest_date}) do
       {:ok, contest} -> assign(socket, contests: contests ++ [contest])
       _ -> socket
     end

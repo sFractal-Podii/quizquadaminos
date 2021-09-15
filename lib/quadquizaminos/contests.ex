@@ -34,7 +34,7 @@ defmodule Quadquizaminos.Contests do
   end
 
   def change_contest(attrs \\ %{}) do
-    Contest.changeset(%Contest{},attrs)
+    Contest.changeset(%Contest{}, attrs)
   end
 
   @doc """
