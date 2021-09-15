@@ -7,7 +7,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     <div style="text-align:center;">
 
     <button phx-click="unpause">Continue</button><br>
-    <%= for category <- QnA.remove_used_categories(@categories) do %>
+    <%= for category <- QnA.remove_used_categories(@file_path, @categories) do %>
      <button phx-click="choose_category" phx-value-category="<%= category%>"><%= Macro.camelize(category) %></button>
     <% end %>
     <br>
@@ -25,7 +25,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
          <br/>
          <h2><%= raw @qna.question %></h2>
          <h2> Answer </h2>
-         <%= answers(assigns, @category) %>
+         <%= choices(assigns, @qna.type) %>
        <br/>
        <%= unless Enum.empty?(@qna.score) do %>
        <h2>Scores</h2>
@@ -46,7 +46,7 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     """
   end
 
-  defp answers(assigns, "bonus") do
+  defp choices(assigns, "free-form") do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
     <%= text_input f, :guess %>
@@ -56,10 +56,10 @@ defmodule QuadquizaminosWeb.QuizModalComponent do
     """
   end
 
-  defp answers(assigns, category) do
+  defp choices(assigns, category) do
     ~L"""
     <%= f =  form_for :quiz, "#", phx_submit: :check_answer %>
-    <%= for {answer, index}<- @qna.answers do %>
+    <%= for {answer, index}<- @qna.choices do %>
       <%= label do %>
         <%= radio_button f, :guess, answer, value: index %>
         <%= answer %>

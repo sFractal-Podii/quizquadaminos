@@ -9,6 +9,16 @@ defmodule Quadquizaminos.Accounts do
     |> Repo.insert()
   end
 
+  def find_or_create(name) do
+    case get_user(name) do
+      nil ->
+        create_user(%User{}, %{name: name, uid: name})
+
+      user ->
+        {:ok, user}
+    end
+  end
+
   def get_user(id) do
     User
     |> Repo.get(id)
