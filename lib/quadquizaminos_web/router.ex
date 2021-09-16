@@ -45,9 +45,6 @@ defmodule QuadquizaminosWeb.Router do
     live "/contests/:id", ContestsLive, :show
     live "/contest_rules", ContestRules
     live "/contest_prizes", ContestPrizes
-    live "/courses", CourseLive
-    live "/courses/:course", CourseLive, :show
-    live "/courses/:course/:chapter", CourseLive, :questions
     get "/anonymous", SessionController, :anonymous
     post "/anonymous", SessionController, :anonymous
     resources "/sessions", SessionController, only: [:new, :create]
@@ -56,6 +53,9 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
     live "/tetris/instructions", TetrisLive, :instructions
+    live "/courses", CourseLive
+    live "/courses/:course", CourseLive, :show
+    live "/courses/:course/:chapter", CourseLive, :questions
   end
 
   scope "/", QuadquizaminosWeb do
