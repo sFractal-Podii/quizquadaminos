@@ -35,7 +35,10 @@ defmodule QuadquizaminosWeb.ContestsLive do
        contest_records: [],
        contest_id: nil,
        editing_date?: false,
-       changeset: Contests.change_contest(%Contests.Contest{})
+       changeset: Contests.change_contest(%Contests.Contest{}),
+       modal: false,
+       page: 1,
+       sort_by: "score"
      )}
   end
 
@@ -146,6 +149,20 @@ defmodule QuadquizaminosWeb.ContestsLive do
      socket
      |> assign(assigns)
      |> assign(modal: false)}
+  end
+
+  def handle_params(%{"id" => id, "page" => page, "sort_by" => sorter}, uri, socket) do
+    page = String.to_integer(page)
+    contest = Contests.get_contest(String.to_integer(id))
+
+    {:noreply,
+     assign(socket,
+       contest: contest,
+       current_uri: uri,
+       page: page,
+       sort_by: sorter,
+       contest_records: Contests.contest_game_records(contest, page, sorter)
+     )}
   end
 
   def handle_params(%{"id" => id}, uri, socket) do
