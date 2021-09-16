@@ -7,6 +7,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
   alias Quadquizaminos.GameBoard
+  alias Quadquizaminos.GameBoard.Records
   alias Quadquizaminos.Util
   alias QuadquizaminosWeb.ContestsLive.ContestComponent
 
@@ -36,7 +37,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
        contest_records: [],
        contest_id: nil,
        editing_date?: false,
-       modal: false
+       modal: false,
+       page: 1
      )}
   end
 
@@ -140,12 +142,28 @@ defmodule QuadquizaminosWeb.ContestsLive do
      |> assign(modal: false)}
   end
 
-  def handle_params(%{"id" => id}, uri, socket) do
+  def handle_params(%{"id" => id, "page" => page}, uri, socket) do
+    IO.puts("=========================")
+    page = String.to_integer(page)
+    contest = Contests.get_contest(String.to_integer(id))
+
+    {:noreply,
+     assign(socket,
+       contest: contest,
+       current_uri: uri,
+       page: page,
+       contest_records: Contests.contest_game_records(contest, page)
+     )}
+  end
+
+  def handle_params(%{"id" => id} = params, uri, socket) do
+    IO.inspect(params, label: "---------------")
     contest = Contests.get_contest(String.to_integer(id))
     {:noreply, assign(socket, contest: contest, current_uri: uri)}
   end
 
-  def handle_params(_params, uri, socket) do
+  def handle_params(params, uri, socket) do
+    IO.inspect(params, label: "++++++++++++++++")
     current_user = socket.assigns.current_user
 
     # you cannot perfom admin tasks when not in admin scope
