@@ -69,7 +69,9 @@ defmodule Quadquizaminos.QnA do
   end
 
   defp build(file_path, category, position \\ 0) do
-    {:ok, content} = file_path |> choose_file(category, position) |> File.read()
+    full_path = file_path |> choose_file(category, position)
+
+    {:ok, content} = File.read(full_path)
 
     [header, body] =
       case String.split(content, "---") do
@@ -83,7 +85,7 @@ defmodule Quadquizaminos.QnA do
     |> struct(%{
       question: question_as_html(question),
       choices: choices(content, choices),
-      correct: correct_answer(choices, category),
+      correct: correct_answer(file_path, full_path, category),
       powerup: powerup(content),
       score: score(content),
       type: header(header).type
@@ -172,24 +174,18 @@ defmodule Quadquizaminos.QnA do
 
   defp file_position(position, _index, _count), do: position
 
-  defp correct_answer(answers, "bonus") do
-    regex = ~r/\n\*(.+?)\n/
+  defp correct_answer(file_path, full_path, category) do
+    [file_name | _] = full_path |> String.split("/") |> Enum.reverse()
 
-    [[_, clue] | _t] = Regex.scan(regex, answers)
-    clue = String.trim(clue)
+    # since the first element in the list is the question type either qna or courses, we dont use it
+    [_h | query] = file_path ++ [category] ++ [file_name]
 
-    Application.get_env(:quadquizaminos, :bonus_answers)[String.to_atom(clue)]
-  end
+    answers_file =
+      @base_questions_directory <> "/" <> (file_path |> Enum.at(0)) <> "/answers.json"
 
-  defp correct_answer(answers, _category) do
-    regex = ~r/(\n-|\n\*)/
-
-    {_, correct} =
-      Regex.scan(regex, answers, capture: :first)
-      |> List.flatten()
-      |> Enum.with_index()
-      |> Enum.find(fn {k, _v} -> k == "\n*" end)
-
-    correct |> to_string()
+    case answers_file |> File.read!() |> Jason.decode!() |> get_in(query) do
+      nil -> nil
+      answer -> to_string(answer)
+    end
   end
 end
