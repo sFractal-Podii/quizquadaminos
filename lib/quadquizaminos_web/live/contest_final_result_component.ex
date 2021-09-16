@@ -28,6 +28,9 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       </tr>
       <% end %>
       </table>
+      <%= for i <- (@page - 5)..(@page + 5), i >0 do %>
+      <%= live_patch i, class: "button button-outline", to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)%>
+       <% end %>
     """
   end
 
@@ -38,21 +41,26 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       if :ets.whereis(contest_name) != :undefined do
         assigns.contest_records
       else
-        Contests.contest_game_records(assigns.contest)
+        Contests.contest_game_records(assigns.contest, assigns.page, assigns.sort_by)
       end
 
-    {:ok, assign(socket, contest_records: records)}
+    {:ok,
+     assign(socket,
+       contest_records: records,
+       contest: assigns.contest,
+       page: assigns.page,
+       sort_by: assigns.sort_by
+     )}
   end
 
-  def handle_event("sort", %{"param" => param}, socket) do
-    [record | _] = socket.assigns.contest_records
+  def handle_event("sort", %{"param" => sort_by}, socket) do
+    contest = socket.assigns.contest
+    socket = socket |> assign(sort_by: sort_by)
 
-    contest_records =
-      record.contest_id
-      |> Contests.get_contest()
-      |> Contests.contest_game_records(param)
-
-    {:noreply, assign(socket, contest_records: contest_records)}
+    {:noreply,
+     push_patch(socket,
+       to: Routes.contests_path(socket, :show, contest, sort_by: sort_by, page: 1)
+     )}
   end
 
   def truncate_date(nil) do

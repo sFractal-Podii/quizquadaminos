@@ -231,22 +231,23 @@ defmodule Quadquizaminos.Contests do
   """
 
   @spec contest_game_records(Contest) :: [GameBoard, ...]
-  def contest_game_records(contest, sorter \\ "score") do
+  def contest_game_records(contest, page \\ 1, sorter \\ "score") do
     contest.id
     |> ended_contest?()
-    |> contest_game_records(contest, sorter)
+    |> contest_game_records(contest, page, sorter)
   end
 
-  defp contest_game_records(true = _ended_contest, contest, sorter) do
+  defp contest_game_records(true = _ended_contest, contest, page, sorter) do
     contest.start_time
     |> GameBoard.by_start_and_end_time(contest.end_time)
     |> GameBoard.by_contest(contest.id)
     |> GameBoard.sort_by(sorter)
+    |> GameBoard.paginate_query(page, 25)
     |> GameBoard.preloads([:user])
     |> Repo.all()
   end
 
-  defp contest_game_records(_ended_contest, _contest, _sorter), do: []
+  defp contest_game_records(_ended_contest, _contest, _page, _sorter), do: []
 
   @doc """
   creates a new RSVP on the database
