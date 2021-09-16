@@ -6,7 +6,7 @@
         <h1>Contests</h1>
         <div class="container">
         <%= if @current_user.admin? do  %>
-        <%= form_for :contest, "#", [phx_submit: :save] %>
+        <%= form_for :contest, "#", [phx_change: :validate, phx_submit: :save] %>
           <div class="row">
                  <div class="column">
                     <input type="text" id="name" name="name">

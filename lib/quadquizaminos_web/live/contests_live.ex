@@ -34,7 +34,8 @@ defmodule QuadquizaminosWeb.ContestsLive do
        countdown_interval: countdown_interval,
        contest_records: [],
        contest_id: nil,
-       editing_date?: false
+       editing_date?: false,
+       changeset: Contests.change_contest(%Contests.Contest{})
      )}
   end
 
@@ -62,6 +63,15 @@ defmodule QuadquizaminosWeb.ContestsLive do
       end)
 
     {:noreply, assign(socket, contests: contests, editing_date?: true)}
+  end
+
+  def handle_event("validate", params, socket) do
+    changeset =
+      %Contests.Contest{}
+      |> Contests.change_contest(params)
+      |> Map.put(:action, :insert)
+
+    {:noreply, assign(socket, changeset: changeset)}
   end
 
   def handle_event("save", %{"name" => name, "contest_date" => contest_date}, socket) do

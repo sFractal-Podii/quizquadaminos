@@ -33,8 +33,11 @@ defmodule Quadquizaminos.Contests do
     Repo.get_by(Contest, name: name)
   end
 
-  def change_contest(attrs \\ %{}) do
-    Contest.changeset(%Contest{}, attrs)
+  def change_contest(contest, attrs \\ %{})
+  def change_contest(nil, _attrs), do: :contest
+
+  def change_contest(contest, attrs) do
+    Contest.changeset(contest, attrs)
   end
 
   @doc """
