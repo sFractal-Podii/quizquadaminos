@@ -28,6 +28,9 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       </tr>
       <% end %>
       </table>
+      <%= for i <- (@page - 5)..(@page + 5), i >0 do %>
+      <%= live_patch i, class: "button button-outline", to: Routes.contests_path(@socket, :show, @contest, page: i)%>
+       <% end %>
     """
   end
 
@@ -38,10 +41,10 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       if :ets.whereis(contest_name) != :undefined do
         assigns.contest_records
       else
-        Contests.contest_game_records(assigns.contest)
+        Contests.contest_game_records(assigns.contest, assigns.page)
       end
 
-    {:ok, assign(socket, contest_records: records)}
+    {:ok, assign(socket, contest_records: records, contest: assigns.contest, page: assigns.page)}
   end
 
   def handle_event("sort", %{"param" => param}, socket) do
