@@ -57,6 +57,7 @@ lint-format: ## Check if the project is well formated using elixir formatter
 
 .PHONY: lint-questions
 lint-questions: ## Check if the questions will be correctly parsed
+	mix gen.answers
 	mix validate.questions
 
 .PHONY: lint-credo

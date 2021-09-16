@@ -860,6 +860,7 @@ defmodule QuadquizaminosWeb.TetrisLive do
     socket
   end
 
+  defp correct_answer?(%{correct: nil}, _guess), do: false
   defp correct_answer?(%{correct: guess}, guess), do: true
 
   defp correct_answer?(%{correct: correct}, guess) do

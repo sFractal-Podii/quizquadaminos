@@ -34,6 +34,8 @@ npm-debug.log
 # this depending on your deployment strategy.
 /priv/static/
 
+**/answers.json
+
 # do not include secrets in releases.exs in git/github
 /config/releases.exs
 
