@@ -40,7 +40,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <% end %>
     </table>
     <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
-    <%= live_patch i, class: "button button-outline",  to: Routes.live_path(@socket,__MODULE__,page: i, sort_by: @sort_by), id: "goto-#{i}" %>
+    <%= live_patch i, to: Routes.live_path(@socket,__MODULE__,page: i, sort_by: @sort_by), id: "goto-#{i}" %>
     <% end %>
     </div>
     """
