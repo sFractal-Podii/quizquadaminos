@@ -76,3 +76,27 @@ Note it is http not https
 #### updating a running instance
 If you want to update an already running instance with a different version of the application, you need
 to ensure that the image is created and pushed to gcr.io using `make push-image-gcp` after which you can update an instance to use the image.
+
+
+#### Auto deployment
+The auto deployment is done using CI and CD configuration.Every push on github is tested before being merged to develop.It is then deployed to staging servers automatically.
+
+#### Setting Up a CI
+Create a workflow file,lint-elixir.yml.The file contains scripts that define the different jobs that need to be done by creating a build.
+The different jobs include:
+- init
+- lint
+- test
+- deploy
+Through the Continuous Integration, the following commands are executed:
+   - mix compile --warnings-as-errors
+   - mix format --dry-run --check-formatted
+   - mix validate.questions
+   - mix credo --strict
+
+#### Continuous Delivery
+This is an extension of continuous integration since it automatically deploys all code changes to staging server after the build stage.It is an automated release process and you can deploy your application anytime by clicking a button.
+
+
+
+

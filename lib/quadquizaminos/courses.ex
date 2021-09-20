@@ -1,6 +1,7 @@
 defmodule Quadquizaminos.Courses do
-  @courses_directory Application.get_env(:quadquizaminos, :courses_directory)
-
+  @courses_directory Application.compile_env!(:quadquizaminos, :base_questions_directory) <>
+                       "/courses"
+                       
   def courses_list do
     @courses_directory
     |> File.ls!()
