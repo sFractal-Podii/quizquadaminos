@@ -37,7 +37,6 @@ defmodule QuadquizaminosWeb.ContestsLiveTest do
     render_click(view, :start, %{"contest" => "ContestC"})
     html = render_click(view, :stop, %{"contest" => "ContestC"})
     contest = Contests.get_contest("ContestC")
-    IO.inspect(html)
     assert html =~ "Final Results"
     assert html =~ "#{DateTime.truncate(contest.end_time, :second)}</td>"
   end
@@ -52,7 +51,9 @@ defmodule QuadquizaminosWeb.ContestsLiveTest do
   test "admin can create a contest and set the date for the contest", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/admin/contests")
 
-    html = render_click(view, :save, %{"name" => "ContestD", "contest_date" => "2021-09-16T14:11"})
+    html =
+      render_click(view, :save, %{"name" => "ContestD", "contest_date" => "2021-09-16T14:11"})
+
     assert row_count(html) == 3
     assert html =~ "ContestD</td>"
     assert html =~ "2021-09-16 14:11:00Z\n"
@@ -60,13 +61,13 @@ defmodule QuadquizaminosWeb.ContestsLiveTest do
 
   test "admin can see the count up timer increase", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/admin/contests")
-     assert ContestAgent.time_elapsed("ContestC") == 0
-     render_click(view, :start, %{"contest" => "ContestC"})
-     assert render(view) =~ "00:00:00"
-     Process.sleep(1000)
-     send(view.pid, :timer)
-     assert ContestAgent.time_elapsed("ContestC") == 1
-     assert render(view) =~ "00:00:01"
+    assert ContestAgent.time_elapsed("ContestC") == 0
+    render_click(view, :start, %{"contest" => "ContestC"})
+    assert render(view) =~ "00:00:00"
+    Process.sleep(1000)
+    send(view.pid, :timer)
+    assert ContestAgent.time_elapsed("ContestC") == 1
+    assert render(view) =~ "00:00:01"
   end
 
   test "admin can see the timer after starting the contest", %{conn: conn} do
