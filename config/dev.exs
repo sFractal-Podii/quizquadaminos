@@ -33,15 +33,6 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
 config :quadquizaminos,
   base_questions_directory: Path.dirname(__DIR__)
 
-config :quadquizaminos,
-  courses_directory: Path.join(Path.dirname(__DIR__), "courses")
-
-config :quadquizaminos,
-  bonus_answers: [
-    "001": "test",
-    "002": "two words"
-  ]
-
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
