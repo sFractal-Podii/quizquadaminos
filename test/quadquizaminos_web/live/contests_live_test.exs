@@ -14,7 +14,7 @@ defmodule QuadquizaminosWeb.ContestsLiveTest do
 
   test "only admin can see the start, stop button", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/admin/contests")
-    assert html =~ "<button class=\"  icon-button\" phx-click=\"start\""
+    assert html =~ "<button class=\"  icon-button\" phx-click=\"restart\""
     assert html =~ "<button class=\"disabled  icon-button\" phx-click=\"stop\""
   end
 
