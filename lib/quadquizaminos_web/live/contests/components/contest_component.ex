@@ -165,7 +165,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
     ~L"""
     <%= if @rsvped? do %>
-      <button class="red" phx-click="cancel_rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>"> CANCEL </button>
+      <button class="red" phx-click="cancel_rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>"> CANCEL RSVP </button>
     <% else %>
       <button phx-click="rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>" > RSVP </button>
     <% end %>
