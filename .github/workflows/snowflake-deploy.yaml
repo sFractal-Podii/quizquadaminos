@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Build and Deploy to Google Compute Engine
+name: Snowflake Deploy
 
 on:
   push:
@@ -21,12 +21,12 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
-  GCE_INSTANCE: quadblocks-staging
+  GCE_INSTANCE: snowflake
   GCE_INSTANCE_ZONE: us-east4-c
 
 jobs:
   setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+    name: Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -48,16 +48,16 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |
-        echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA" .
+        echo '${{ secrets.SF_RELEASES_SECRETS }}' >> config/releases.exs
+        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:SF-$GITHUB_SHA" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
+        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:SF-$GITHUB_SHA"
 
     - name: Deploy
       run: |-
         gcloud compute instances update-container "$GCE_INSTANCE" \
           --zone "$GCE_INSTANCE_ZONE" \
-          --container-image "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
+          --container-image "gcr.io/duncan-openc2-plugfest/quadquiz:SF-$GITHUB_SHA"
