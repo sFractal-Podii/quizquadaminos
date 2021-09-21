@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Staging Deployment
+name: Snowflake Deploy
 
 on:
   push:
-    branches:
-    - develop
+    tags:
+    - v*-alpha$
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
@@ -27,11 +27,12 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment:
-      name: staging
-      url: 'http://34.86.107.98:4000'
+      name: alpha
+      url: 'http://34.86.212.145:4000'
     env:
       GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
       GCE_INSTANCE_ZONE: us-east4-c
+
 
     steps:
     - name: Checkout
