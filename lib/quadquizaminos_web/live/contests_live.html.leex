@@ -4,13 +4,23 @@
         <% else %>
           <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
-
-        <%= raw display_text_input(@current_user.admin?) %>
-
-        <%=  if @modal do %>
-        <%= live_modal @socket, QuadquizaminosWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
-          <% end %>
-
+        <div class="container">
+        <%= if @current_user.admin? do  %>
+        <%= form_for :contest, "#", [phx_change: :validate, phx_submit: :save] %>
+          <div class="row">
+                 <div class="column">
+                    <input type="text" id="name" name="name">
+                  </div>
+                 <div class="column">
+                    <input type="datetime-local" id="contest_date" name="contest_date">
+                  </div>
+                   <div class="column">
+                    <button>Save</button>
+                  </div>
+                    </form>
+              <%end%>
+          </div>
+      </div>
         <table>
             <tr>
                 <th></th><!-- contest name -->
