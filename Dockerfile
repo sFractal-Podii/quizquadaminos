@@ -29,6 +29,7 @@ COPY config ./config
 COPY lib ./lib
 COPY priv ./priv
 COPY qna ./qna
+COPY courses ./courses
 COPY Makefile ./Makefile
 
 RUN mix validate.questions
