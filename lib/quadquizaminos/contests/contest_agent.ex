@@ -1,16 +1,14 @@
 defmodule Quadquizaminos.Contest.ContestAgent do
   @moduledoc """
-  Each contest spins up a new agent which contains the following information about the contest
+  Each contest spins up a dynamically supervised agent which contains the following information about the contest
     - time elapsed
     - status of the contest
+    - contest name
   The agent can have the following statuses
    - running
    - paused
-
-  The agent is responsible for receiving events that will start or stop it.
-  The Genserver looksup different processes and monitors them.
-  The time elapse of each contest is updated depending on different state.
-  The agent is stopped to end the process.
+   - stopped
+    The agent is responsible for receiving events that will start, reset or stop it
   """
 
   use Agent

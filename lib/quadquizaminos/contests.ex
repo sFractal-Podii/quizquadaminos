@@ -1,4 +1,10 @@
 defmodule Quadquizaminos.Contests do
+  @moduledoc """
+  Inserts and gets data from the database that would be used in different functions.
+  -list of all contests
+  -timer
+  -active contests
+  """
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contest.ContestAgent
   alias Quadquizaminos.Contests.Contest
@@ -7,6 +13,15 @@ defmodule Quadquizaminos.Contests do
   alias Quadquizaminos.Repo
   import Ecto.Query, only: [from: 2]
 
+  @doc """
+    creates a contest with the given params
+     ## Example
+     iex> create_contest(%{name: "ContestB"})
+          {:ok,  %Contest{}}
+      iex> create_contest(%{name: "C"})
+            {:error,  changeset}
+  """
+  @spec create_contest(map()) :: {:ok, %Contest{}} | {:error, Ecto.Changeset.t()}
   def create_contest(attrs) do
     %Contest{}
     |> Contest.changeset(attrs)
@@ -29,6 +44,9 @@ defmodule Quadquizaminos.Contests do
     Repo.get(Contest, id)
   end
 
+  @doc """
+  Gets the given contest by name
+  """
   def get_contest(name) do
     Repo.get_by(Contest, name: name)
   end
@@ -162,6 +180,9 @@ defmodule Quadquizaminos.Contests do
     ContestAgent.resume_contest(name)
   end
 
+  @doc """
+  Checks on the status of the contest
+  """
   def contest_status(name) do
     case ContestAgent.contest_status(name) do
       :stopped ->
@@ -176,12 +197,19 @@ defmodule Quadquizaminos.Contests do
     end
   end
 
+  @doc """
+  Gets the state of time elapsed
+  """
   def time_elapsed(%Contest{name: name}), do: time_elapsed(name)
 
   def time_elapsed(name) do
     ContestAgent.time_elapsed(name)
   end
 
+  @doc """
+      Start the given contest name and updates the start time
+  """
+  @spec start_contest(String.t()) :: {:ok, Ecto.Schema.t()} | {:error, Ecto.Changeset.t()}
   def start_contest(name) do
     Repo.transaction(fn ->
       DynamicSupervisor.start_child(
@@ -202,6 +230,10 @@ defmodule Quadquizaminos.Contests do
     end)
   end
 
+  @doc """
+    Ends the given contest name and updates the end time
+  """
+  @spec end_contest(String.t()) :: {:ok, Ecto.Schema.t()} | {:error, Ecto.Changeset.t()}
   def end_contest(name) do
     # update end_time
     Repo.transaction(fn ->
@@ -213,6 +245,10 @@ defmodule Quadquizaminos.Contests do
     end)
   end
 
+  @doc """
+  Updates the existing contest with the given attributes
+  """
+  @spec update_contest(Contest.t(), map()) :: {:ok, Contest.t()} | {:error, Ecto.Changeset.t()}
   def update_contest(contest, attrs) do
     contest
     |> Contest.changeset(attrs)
