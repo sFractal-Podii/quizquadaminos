@@ -49,6 +49,7 @@ jobs:
     - name: Build
       run: |
         echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
+        mix gen.answers
         docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA" .
 
     # Push the Docker image to Google Container Registry
