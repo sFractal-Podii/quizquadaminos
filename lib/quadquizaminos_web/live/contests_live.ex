@@ -2,7 +2,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
   use QuadquizaminosWeb, :live_view
 
   import Phoenix.LiveView.Helpers
-  import Phoenix.HTML, only: [raw: 1]
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
@@ -36,6 +35,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
        contest_records: [],
        contest_id: nil,
        editing_date?: false,
+       changeset: Contests.change_contest(%Contests.Contest{}),
        modal: false,
        page: 1,
        sort_by: "score"
@@ -68,8 +68,17 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, assign(socket, contests: contests, editing_date?: true)}
   end
 
-  def handle_event("save", %{"key" => "Enter", "value" => contest_name}, socket) do
-    {:noreply, socket |> _create_contest(contest_name)}
+  def handle_event("validate", params, socket) do
+    changeset =
+      %Contests.Contest{}
+      |> Contests.change_contest(params)
+      |> Map.put(:action, :insert)
+
+    {:noreply, assign(socket, changeset: changeset)}
+  end
+
+  def handle_event("save", %{"name" => name, "contest_date" => contest_date}, socket) do
+    {:noreply, socket |> _create_contest(name, contest_date)}
   end
 
   def handle_event("start", %{"contest" => name}, socket) do
@@ -175,10 +184,20 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, socket |> assign(current_user: current_user, current_uri: uri)}
   end
 
-  defp _create_contest(socket, contest_name) do
+  defp _create_contest(socket, contest_name, "") do
     contests = socket.assigns.contests
 
-    case Contests.create_contest(%{name: contest_name}) do
+    case Contests.create_contest(%{name: contest_name, contest_date: nil}) do
+      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
+      _ -> socket
+    end
+  end
+
+  defp _create_contest(socket, contest_name, contest_date) do
+    contests = socket.assigns.contests
+    {:ok, contest_date, 0} = DateTime.from_iso8601(contest_date <> ":00Z")
+
+    case Contests.create_contest(%{name: contest_name, contest_date: contest_date}) do
       {:ok, contest} -> assign(socket, contests: contests ++ [contest])
       _ -> socket
     end
@@ -228,14 +247,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
     assign(socket, contests: contests)
   end
-
-  defp display_text_input(true = _admin?) do
-    """
-    <input type="text" phx-keydown="save"  phx-key="Enter">
-    """
-  end
-
-  defp display_text_input(_), do: ""
 
   defp start_or_resume_contest(socket, name) do
     if name in Contests.active_contests_names() && GenServer.whereis(name |> String.to_atom()) do
