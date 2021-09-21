@@ -32,7 +32,6 @@ COPY qna ./qna
 COPY courses ./courses
 COPY Makefile ./Makefile
 
-RUN mix validate.questions
 RUN npm ci --prefix ./assets
 RUN npm install -g @cyclonedx/bom@2.0.2
 RUN make sbom_fast
