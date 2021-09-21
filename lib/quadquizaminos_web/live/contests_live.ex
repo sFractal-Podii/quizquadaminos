@@ -1,4 +1,12 @@
 defmodule QuadquizaminosWeb.ContestsLive do
+  @moduledoc """
+  This is a module that does the following:
+  - Finds the already started contests
+  - Add the created contest to the socket
+  - Add the created contest to the contest list
+  - Ensures that the ended contest does not appear twice in the contest list
+  - Calculates the counter timer
+  """
   use QuadquizaminosWeb, :live_view
 
   import Phoenix.LiveView.Helpers
