@@ -12,9 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Build and Deploy to Snowflake Server
+name: Build and Deploy to Google Compute Engine
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+    - develop
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
