@@ -9,6 +9,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   """
   use QuadquizaminosWeb, :live_view
 
+  import Phoenix.HTML.Form
   import Phoenix.LiveView.Helpers
   alias Quadquizaminos.Accounts
   alias Quadquizaminos.Accounts.User
@@ -76,7 +77,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, assign(socket, contests: contests, editing_date?: true)}
   end
 
-  def handle_event("validate", params, socket) do
+  def handle_event("validate", %{"contest" => params}, socket) do
     changeset =
       %Contests.Contest{}
       |> Contests.change_contest(params)
@@ -85,8 +86,13 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:noreply, assign(socket, changeset: changeset)}
   end
 
-  def handle_event("save", %{"name" => name, "contest_date" => contest_date}, socket) do
-    {:noreply, socket |> _create_contest(name, contest_date)}
+  def handle_event(
+        "save",
+        %{"contest" => %{"name" => name, "contest_date" => contest_date}},
+        socket
+      ) do
+    socket = socket |> _create_contest(name, contest_date)
+    {:noreply, socket |> redirect(to: Routes.admin_contests_path(socket, :index))}
   end
 
   def handle_event("start", %{"contest" => name}, socket) do
@@ -196,8 +202,14 @@ defmodule QuadquizaminosWeb.ContestsLive do
     contests = socket.assigns.contests
 
     case Contests.create_contest(%{name: contest_name, contest_date: nil}) do
-      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
-      _ -> socket
+      {:ok, contest} ->
+        assign(socket,
+          contests: contests ++ [contest],
+          changeset: Contests.change_contest(%Contests.Contest{})
+        )
+
+      _ ->
+        socket
     end
   end
 
@@ -206,8 +218,14 @@ defmodule QuadquizaminosWeb.ContestsLive do
     {:ok, contest_date, 0} = DateTime.from_iso8601(contest_date <> ":00Z")
 
     case Contests.create_contest(%{name: contest_name, contest_date: contest_date}) do
-      {:ok, contest} -> assign(socket, contests: contests ++ [contest])
-      _ -> socket
+      {:ok, contest} ->
+        assign(socket,
+          contests: contests ++ [contest],
+          changeset: Contests.change_contest(%Contests.Contest{})
+        )
+
+      _ ->
+        socket
     end
   end
 
