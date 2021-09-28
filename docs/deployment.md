@@ -17,7 +17,7 @@ If you want to create a docker image for use in your laptop then you can use the
 ```shell
 make docker-image
 ```
-Note that the image tag will be build off the latest github tag if not specified. 
+Note that the image tag will be build off the latest github tag if not specified.
 You can specify the image tag by passing `APP_VERSION`
 
 ```shell
@@ -53,7 +53,7 @@ The instance name you provide above should be unique and should not be existing 
 If you want to update an already running instance with a different version of the application, you need
 to ensure that the image is created and pushed to gcr.io using `make push-image-gcp` after which you can update an instance to use the image.
 
-This is done by specifying the tag to the image you want to use (`image-tag`) and the running instance you want to update 
+This is done by specifying the tag to the image you want to use (`image-tag`) and the running instance you want to update
 (`instance-name`)
 
 ```shell
@@ -100,3 +100,24 @@ This is an extension of continuous integration since it automatically deploys al
 
 
 
+
+
+### Deployment to Staging
+This is automatically done whenever we merge/push into the develop branch.
+We also have an environment setup on github for the staging secrets
+
+### Deployment to Alpha
+
+To deploy to alpha you create a tag starting with `v` ending with the word `-alpha`, this will kick off an auto deployment to the alpha server.
+
+If you need to specify the secrets to be used for this environment:
+
+
+1. create a github environment called alpha (we already have one for this project)
+   ![adding environment](./images/deployment/create_env.png)
+
+2. On this environment ensure we have the following secrets
+  - COURSES_ANSWERS :: contains answers to all the courses questions
+  - QNA_ANSWERS  :: contains all the answers for the qna directory
+  - GCE_INSTANCE :: the  name of the gce instance we are to  deploy alpha to
+  - RELEASES_SECRETS :: the releases.exs file containing secrets specific to the alpha environment.
