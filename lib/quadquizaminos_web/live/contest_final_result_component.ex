@@ -28,17 +28,17 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       </tr>
       <% end %>
       </table>
+      <%= unless active_contest?(@contest.name) do %>
       <%= for i <- (@page - 5)..(@page + 5), i >0 do %>
       <%= live_patch i, class: "button button-outline", to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)%>
+       <% end %>
        <% end %>
     """
   end
 
   def update(assigns, socket) do
-    contest_name = String.to_atom(assigns.contest.name)
-
     records =
-      if :ets.whereis(contest_name) != :undefined do
+      if active_contest?(assigns.contest.name) do
         assigns.contest_records
       else
         Contests.contest_game_records(assigns.contest, assigns.page, assigns.sort_by)
@@ -48,19 +48,26 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
      assign(socket,
        contest_records: records,
        contest: assigns.contest,
-       page: assigns.page,
-       sort_by: assigns.sort_by
+       page: assigns[:page],
+       sort_by: assigns[:sort_by]
      )}
   end
 
   def handle_event("sort", %{"param" => sort_by}, socket) do
     contest = socket.assigns.contest
-    socket = socket |> assign(sort_by: sort_by)
 
-    {:noreply,
-     push_patch(socket,
-       to: Routes.contests_path(socket, :show, contest, sort_by: sort_by, page: 1)
-     )}
+    socket =
+      if active_contest?(contest.name) do
+        socket
+      else
+        socket = socket |> assign(sort_by: sort_by)
+
+        push_patch(socket,
+          to: Routes.contests_path(socket, :show, contest, sort_by: sort_by, page: 1)
+        )
+      end
+
+    {:noreply, socket}
   end
 
   def truncate_date(nil) do
@@ -69,6 +76,11 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
 
   def truncate_date(date) do
     DateTime.truncate(date, :second)
+  end
+
+  defp active_contest?(name) do
+    name = String.to_atom(name)
+    :ets.whereis(name) != :undefined
   end
 
   defp user_name(record) do
