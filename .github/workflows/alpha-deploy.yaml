@@ -51,20 +51,25 @@ jobs:
         gcloud --quiet auth configure-docker
 
     # Build the Docker image
+    # the `GITHUB_REF` will fetch the tag ref responsible for triggering the action.
+    # using `${GITHUB_REF##*/}` gets the tag used i.e v0.8.7-alpha. Check the link for more information
+    # https://stackoverflow.com/questions/9532654/expression-after-last-specific-character
     - name: Build
       run: |
         echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
         echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
         echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA" .
+        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
+        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}"
 
     - name: Deploy
       run: |-
         gcloud compute instances update-container "$GCE_INSTANCE" \
           --zone "$GCE_INSTANCE_ZONE" \
-          --container-image "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
+          --container-image "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}"
+
+
