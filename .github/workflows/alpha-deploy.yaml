@@ -56,15 +56,16 @@ jobs:
         echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
         echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
         echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA" .
+        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
+        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}"
 
     - name: Deploy
       run: |-
         gcloud compute instances update-container "$GCE_INSTANCE" \
           --zone "$GCE_INSTANCE_ZONE" \
-          --container-image "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
+          --container-image "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}"
+
