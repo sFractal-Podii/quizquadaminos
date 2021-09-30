@@ -270,16 +270,19 @@ defmodule QuadquizaminosWeb.TetrisLive do
           end)
       end
 
-    contest =
-      Enum.find(socket.assigns.active_contests, fn contest ->
-        socket.assigns[:contest_id] == contest.id
-      end)
+    socket = update_contest(socket)
 
     end_time =
       cond do
-        socket.assigns.state == :game_over -> DateTime.utc_now()
-        Contests.ended_contest?(socket.assigns[:contest_id]) -> if contest, do: contest.end_time
-        true -> nil
+        Contests.ended_contest?(socket.assigns[:contest_id]) ->
+          if socket.assigns[:contest],
+            do: socket.assigns[:contest].end_time
+
+        socket.assigns.state == :game_over ->
+          DateTime.utc_now()
+
+        true ->
+          nil
       end
 
     %{
@@ -954,5 +957,17 @@ defmodule QuadquizaminosWeb.TetrisLive do
 
   defp block_in_bottom?(x, y, bottom) do
     Map.has_key?(bottom, {x, y})
+  end
+
+  defp update_contest(socket) do
+    case socket.assigns[:contest] do
+      nil ->
+        socket
+
+      contest ->
+        if Contests.ended_contest?(contest.id) and is_nil(contest.end_time),
+          do: assign(socket, contest: Contests.get_contest(contest.id)),
+          else: socket
+    end
   end
 end
