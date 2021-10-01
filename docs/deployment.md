@@ -107,18 +107,37 @@ All work merged into the develop branch are automatically pushed to the staging 
 This is automatically done whenever we merge/push into the develop branch.
 We also have an environment setup on github for the staging secrets
 
-### Deployment to Alpha
+### Deployment to Alpha and Production
+
+Deployment to both servers is almost identical, only difference is that you create tags ending with `-alpha` for alpha deploys
 
 To deploy to alpha you create a tag starting with `v` ending with the word `-alpha`, this will kick off an auto deployment to the alpha server.
 
+To deploy to production you create a tag starting with `v` followed by a valid `major.minor.patch` sementic versioning format  for example `v0.1.2`. Valid tags for production are `vx.x.x` where x is any number
+
+
+#### Adding deployment secrets
 If you need to specify the secrets to be used for this environment:
 
 
 1. create a github environment called alpha (we already have one for this project)
-   ![adding environment](./images/deployment/create_env.png)
+
+   Here are steps to follow when creating github environment
+   ![create the environment](./images/deployment/create_env.png)
+   ![configure environment](./images/deployment/configure_env.png)
+
+   After configuring environment, head over to adding environment secrets
+   ![adding secrets](./images/deployment/add_secrets.png)
+
+   If the github environment already exists, go to settings -> Environment and update the
+   environment if need be.
+    ![update environment variables](./images/deployment/update_env.png)
+
 
 2. On this environment ensure we have the following secrets
   - COURSES_ANSWERS :: contains answers to all the courses questions
   - QNA_ANSWERS  :: contains all the answers for the qna directory
   - GCE_INSTANCE :: the  name of the gce instance we are to  deploy alpha to
   - RELEASES_SECRETS :: the releases.exs file containing secrets specific to the alpha environment.
+
+
