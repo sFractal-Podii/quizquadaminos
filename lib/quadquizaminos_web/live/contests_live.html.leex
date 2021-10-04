@@ -2,7 +2,6 @@
         <%= if @live_action == :show do %>
         <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
         <% else %>
-          <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
         <div class="container">
         <%= if @current_user.admin? do  %>
@@ -50,9 +49,6 @@
                     <% end %>
             <% end %>
         </table>
-        <% else %>
-        <%= countdown_timer(assigns, admin?(@current_user)) %>
-        <% end %>
 
         <% end %>
     </div>
