@@ -54,6 +54,7 @@ defmodule QuadquizaminosWeb.ContestPrizes do
     in the game.
     Or it has been for the best question in the Q&A.
     Or it might be used when there is a tie.
+    Or it could even be for the most creative handle.
     Or it might be some other criteria.
     </p>
 
