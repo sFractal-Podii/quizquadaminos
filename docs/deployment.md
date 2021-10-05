@@ -99,7 +99,8 @@ This is an extension of continuous integration since it automatically deploys al
 
 
 
-
+## Deployment strategy
+All work merged into the develop branch are automatically pushed to the staging server
 
 
 ### Deployment to Staging
