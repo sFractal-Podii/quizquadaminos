@@ -23,7 +23,7 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
     <th>Start time</th>
     <th>End time</th>
     <th>Date</th>
-    <th>Tetris board</th>
+    <th>Board</th>
     </tr>
 
     <%= for record <- @records do %>
