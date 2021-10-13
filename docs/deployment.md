@@ -99,10 +99,6 @@ This is an extension of continuous integration since it automatically deploys al
 
 
 
-## Deployment strategy
-All work merged into the develop branch are automatically pushed to the staging server
-
-
 ### Deployment to Staging
 This is automatically done whenever we merge/push into the develop branch.
 We also have an environment setup on github for the staging secrets
