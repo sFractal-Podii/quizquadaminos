@@ -34,7 +34,12 @@ defmodule QuadquizaminosWeb.ContestRules do
     Contestants must logon to the game using the 'handle' option
     (NOT github, google, anonymous, etc).
     Contestants may use any handle they want,
+<<<<<<< HEAD
     but recognize there are over 500 participants so there is the change of overlap.
+=======
+    but recognize there are over 500 participants
+    so there is the chance of overlap.
+>>>>>>> 8ac4b0584463ff5a2c09a16c134d1259d4ea967d
     The game does not check for overlap so pick something unique.
     Your ATTUID is unique but you probably want to combine it with something
     e.g. ds_sFractal_6284.
