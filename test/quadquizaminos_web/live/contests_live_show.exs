@@ -39,7 +39,8 @@ defmodule QuadquizaminosWeb.ContestsLiveShowTest do
     {:ok, _view, html} = live(conn, "/contests/#{contest.id}")
 
     assert row_count(html) == 2
-    assert html =~ "<h1>Contestboard</h1>"
+    assert html =~ "Contestboard</h1>"
+    assert html =~ "<td>Quiz Block </td>"
   end
 
   defp row_count(html) do
