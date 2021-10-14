@@ -47,6 +47,41 @@ defmodule QuadquizaminosWeb.ContestsLiveTest do
     assert html =~ "#{DateTime.truncate(contest.end_time, :second)}</td>"
   end
 
+  test "User can see the rsvp button", %{conn: conn} do
+    Contests.create_contest(%{name: "contestF"})
+    {:ok, _view, html} = live(conn, "/contests")
+    assert html =~ "RSVP </button>"
+  end
+
+  test "User can rsvp for a contest", %{conn: conn} do
+    Contests.create_contest(%{name: "contestG"})
+    {:ok, view, _html} = live(conn, "/contests")
+
+    html =
+      view
+      |> element("button", "RSVP")
+      |> render_click()
+
+    assert html =~ "CANCEL RSVP </button>"
+  end
+
+  test "User can cancel a rsvp for a contest", %{conn: conn} do
+    Contests.create_contest(%{name: "contestk"})
+    {:ok, view, _html} = live(conn, "/contests")
+    # RSVP a contest
+    view
+    |> element("button", "RSVP")
+    |> render_click()
+
+    # Cancel a contest RSVP
+    html =
+      view
+      |> element("button", "CANCEL RSVP")
+      |> render_click()
+
+    assert html =~ "RSVP </button>"
+  end
+
   test "admin can see the restart button", %{conn: conn} do
     Contests.create_contest(%{name: "contestE"})
     {:ok, view, _html} = live(conn, "/admin/contests")
