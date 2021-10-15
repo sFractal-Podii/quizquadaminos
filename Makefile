@@ -64,6 +64,10 @@ lint-questions: ## Check if the questions will be correctly parsed
 lint-credo: ## Check for credo compliance
 	mix credo --strict
 
+.PHONY: lint-unused
+lint-unused: ## Check for unused functions
+	mix unused 
+
 .PHONY: lint
 lint: lint-compile lint-format lint-questions lint-credo ## Check if the project follows set conventions such as formatting
 

@@ -24,19 +24,6 @@ defmodule Quadquizaminos.Courses do
   end
 
   @doc """
-  Gets the list of all categories in side the course chapter
-  """
-  @spec category_list(String.t(), String.t()) :: [String.t(), ...]
-  def category_list(course, chapter) do
-    "#{@courses_directory}/#{course}/#{chapter}"
-    |> File.ls!()
-    |> Enum.filter(fn folder ->
-      File.dir?("#{@courses_directory}/#{course}/#{chapter}/#{folder}") and
-        not (File.ls!("#{@courses_directory}/#{course}/#{chapter}/#{folder}") |> Enum.empty?())
-    end)
-  end
-
-  @doc """
   Gets the list of all files in side the course chapter
   """
   def question_list(course, chapter) do
@@ -49,22 +36,6 @@ defmodule Quadquizaminos.Courses do
       path = "#{@courses_directory}/#{course}/#{chapter}/#{file}"
       quiz(path)
     end
-  end
-
-  @doc """
-  Removes categories that are already answered
-  """
-  def remove_used_categories(course, chapter, categories) do
-    categories
-    |> Enum.reject(fn {k, v} -> maximum_category_position(course, chapter, k) == v end)
-    |> Enum.into(%{})
-    |> Map.keys()
-  end
-
-  def maximum_category_position(course, chapter, category) do
-    path = "#{@courses_directory}/#{course}/#{chapter}/#{category}"
-    {:ok, files} = File.ls(path)
-    Enum.count(files)
   end
 
   @doc """
