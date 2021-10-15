@@ -164,6 +164,7 @@ docker-image           builds docker image
 format                 Run formatting tools on the code
 lint-compile           check for warnings in functions used in the project
 lint-format            Check if the project is well formated using elixir formatter
+lint-unused            Check if there is unused functions
 lint                   Check if the project follows set conventions such as formatting
 push-and-serve-gcp     creates docker image then push to gcp and launches an instance with the image
 push-image-gcp         push image to gcp

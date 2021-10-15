@@ -120,31 +120,6 @@ defmodule Quadquizaminos.Contests do
   end
 
   @doc """
-  Get ids of all the current contests
-  """
-
-  def list_contest_ids do
-    q = from c in Contest, order_by: [desc: c.contest_date], select: c.id
-    Repo.all(q)
-  end
-
-  @doc """
-  Returns all contests that begin in the future
-  """
-  def future_contests do
-    q = from c in Contest, where: c.contest_date > ^DateTime.utc_now()
-    Repo.all(q)
-  end
-
-  @doc """
-  Get all past contests
-  """
-  def past_contests do
-    q = from c in Contest, where: not is_nil(c.end_time)
-    Repo.all(q)
-  end
-
-  @doc """
   Gives us the names of all contests that are either running or paused
   """
   def active_contests_names do
@@ -170,10 +145,6 @@ defmodule Quadquizaminos.Contests do
     name
     |> get_contest()
     |> update_contest(%{start_time: DateTime.utc_now()})
-  end
-
-  def pause_contest(name) do
-    ContestAgent.pause_contest(name)
   end
 
   def resume_contest(name) do
@@ -298,14 +269,6 @@ defmodule Quadquizaminos.Contests do
   @spec create_rsvp(map(), User.t()) :: {:ok, RSVP.t()} | {:error, Changeset.t()}
   def create_rsvp(attrs, %User{} = current_user) do
     %RSVP{} |> RSVP.changeset(attrs, current_user) |> Repo.insert()
-  end
-
-  @doc """
-  Creates an RSVP changeset
-  """
-  @spec change_rsvp(RSVP.t(), map()) :: Ecto.Changeset.t()
-  def change_rsvp(rsvp \\ %RSVP{}, attrs \\ %{}) do
-    RSVP.changeset(rsvp, attrs, %User{})
   end
 
   @doc """
