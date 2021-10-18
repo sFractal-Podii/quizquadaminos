@@ -9,9 +9,9 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
       <table>
       <tr>
       <th>Player</th>
-      <th phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">Score</th>
-      <th phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
-      <th phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
+      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">Score</th>
+      <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
+      <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
       <th>Start time</th>
       <th>End time</th>
       </tr>
@@ -56,18 +56,21 @@ defmodule QuadquizaminosWeb.ContestFinalResultComponent do
   def handle_event("sort", %{"param" => sort_by}, socket) do
     contest = socket.assigns.contest
 
-    socket =
-      if active_contest?(contest.name) do
-        socket
-      else
-        socket = socket |> assign(sort_by: sort_by)
+    socket = socket |> assign(sort_by: sort_by)
 
-        push_patch(socket,
-          to: Routes.contests_path(socket, :show, contest, sort_by: sort_by, page: 1)
-        )
-      end
+    params = [sort_by: sort_by]
 
-    {:noreply, socket}
+    {:noreply,
+     socket
+     |> push_patch(
+       to:
+         Routes.contests_path(
+           socket,
+           :show,
+           contest,
+           if(active_contest?(contest.name), do: params, else: params ++ [page: 1])
+         )
+     )}
   end
 
   def truncate_date(nil) do

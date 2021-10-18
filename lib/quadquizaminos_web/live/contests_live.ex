@@ -107,6 +107,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:update_records, %{assigns: %{contest: contest}} = socket) do
+    sorter = String.to_atom(socket.assigns.sort_by)
     contest_name = String.to_atom(contest.name)
 
     if :ets.whereis(contest_name) != :undefined do
@@ -117,7 +118,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
           game_board = struct(%GameBoard{}, record)
           %{game_board | user: %User{name: name, uid: uid}}
         end)
-        |> Enum.sort_by(& &1.score, :desc)
+        |> Enum.sort_by(&Map.get(&1, sorter), :desc)
 
       send_update(QuadquizaminosWeb.ContestFinalResultComponent,
         id: "final_result",
