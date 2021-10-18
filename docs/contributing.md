@@ -171,3 +171,31 @@ release                Build a release of the application with MIX_ENV=prod
 test                   Run the test suite
 update-instance        updates image of a running instance
 ```
+
+### Find unused functions
+It is used to identify uncalled public functions.
+
+```shell
+
+$ mix unused
+
+==> mix_unused
+Compiling 4 files (.ex)
+Generated mix_unused app
+==> quadquizaminos
+Compiling 67 files (.ex)
+Generated quadquizaminos app
+hint: Inspect.Quadquizaminos.Brick.__impl__/1 is unused
+    lib/quadquizaminos/brick.ex:141
+
+hint: Quadquizaminos.Brick.new/1 is unused
+    lib/quadquizaminos/brick.ex:11
+
+hint: Quadquizaminos.Brick.render/2 is unused
+    lib/quadquizaminos/brick.ex:134
+
+```
+
+NB: However some custom definition functions i.e child_spec/1 will return the function as unused even when you are using that indirectly in your supervisor.
+
+To define used functions, we add the pattern in unused: [ignored: [⋯]] in our config file.
