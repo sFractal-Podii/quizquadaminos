@@ -147,18 +147,18 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     """
   end
 
+  defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
+       when id in [nil, "anonymous"] do
+    ~L"""
+    <button disabled>  RSVP </button>
+    """
+  end
+
   defp rsvp_or_results_button(%{current_user: %User{email: nil}} = assigns, %Contest{
          status: :future
        }) do
     ~L"""
     <button phx-click="ask-for-email"> RSVP </button>
-    """
-  end
-
-  defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
-       when id in [nil, "anonymous"] do
-    ~L"""
-    <button disabled>  RSVP </button>
     """
   end
 
