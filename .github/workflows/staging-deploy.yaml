@@ -17,7 +17,7 @@ name: Staging Deploy
 on:
   push:
     branches:
-    - develop
+    - fix_npm_warning 
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
