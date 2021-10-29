@@ -2,39 +2,71 @@ defmodule QuadquizaminosWeb.LayoutView do
   use QuadquizaminosWeb, :view
   alias Quadquizaminos.Accounts
 
-  def hide_or_show_sign_up_button do
-    selected_login_level() |> sign_up_button()
+  @dropdown_item_class "block px-4 py-2 mt-2 text-sm font-semibold bg-transparent dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+
+  def hide_or_show_sign_up_button(styling \\ :milligram) do
+    selected_login_level() |> sign_up_button(styling)
   end
 
-  defp sign_up_button("by_config") do
-    ~E"""
-    <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
-        <i class="fas fa-github"></i>
-        Sign in with GitHub
-      </a>
-    """
+  defp sign_up_button("by_config", style) do
+    case style do
+      :milligram ->
+        ~E"""
+          <a class="button" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
+            <i class="fas fa-github"></i>
+            Sign in with GitHub
+          </a>
+        """
+
+      :tailwind ->
+        ~E"""
+        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+            href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">Github Sign In</a>
+        """
+    end
   end
 
-  defp sign_up_button("oauth_login") do
-    ~E"""
-      <%= oath_sign_in() %>
-    </div>
-    </div>
-    """
+  defp sign_up_button("oauth_login", style) do
+    case style do
+      :milligram ->
+        ~E"""
+          <%= oath_sign_in() %>
+        </div>
+        </div>
+        """
+
+      :tailwind ->
+        ~E"""
+          <%= oath_sign_in(:tailwind) %>
+        """
+    end
   end
 
-  defp sign_up_button(_login_level) do
-    ~E"""
-    <%= oath_sign_in() %>
-    <a class="button" href="<%= Routes.session_path(QuadquizaminosWeb.Endpoint, :anonymous )%>" >
-          Sign in anonymously
-        </a>
-    </div>
-    </div>
-    """
+  defp sign_up_button(_login_level, style) do
+    case style do
+      :milligram ->
+        ~E"""
+        <%= oath_sign_in() %>
+        <a class="button" href="<%= Routes.session_path(QuadquizaminosWeb.Endpoint, :anonymous )%>" >
+              Sign in anonymously
+            </a>
+        </div>
+        </div>
+        """
+
+      :tailwind ->
+        ~E"""
+        <%= oath_sign_in(:tailwind) %>
+        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+        href="<%= Routes.session_path(QuadquizaminosWeb.Endpoint, :anonymous )%>" > Sign in anonymously
+            </a>
+        """
+    end
   end
 
-  defp oath_sign_in do
+  defp oath_sign_in(style \\ :milligram)
+
+  defp oath_sign_in(:milligram) do
     ~E"""
     <div class="dropdown">
     <button class="dropbtn">Sign In</button>
@@ -53,6 +85,25 @@ defmodule QuadquizaminosWeb.LayoutView do
           Sign in with LinkedIn
           </a>
           
+    """
+  end
+
+  defp oath_sign_in(:tailwind) do
+    dropdown_item_class = @dropdown_item_class
+
+    ~E"""
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.session_path(QuadquizaminosWeb.Endpoint, :new) %>">
+      Handle
+      </a>
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "github") %>">
+       GitHub
+      </a>
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "google") %>">
+       Google
+      </a>
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadquizaminosWeb.Endpoint, :request, "linkedin") %>">
+       LinkedIn
+      </a>
     """
   end
 

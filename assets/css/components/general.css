@@ -1,0 +1,18 @@
+/* here is the doc on how to extract components https://tailwindcss.com/docs/extracting-components */
+@layer components {
+  .btn-primary {
+    @apply py-2 px-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75;
+  }
+
+  .heading-1 {
+    @apply font-bold text-3xl;
+  }
+
+  .heading-2 {
+    @apply font-bold text-2xl;
+  }
+
+  .heading-3 {
+    @apply font-bold text-xl;
+  }
+}

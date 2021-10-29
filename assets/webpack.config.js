@@ -17,7 +17,9 @@ module.exports = (env, options) => {
       ]
     },
     entry: {
-      app: glob.sync("./vendor/**/*.js").concat(["./js/app.js"])
+      app: glob.sync("./vendor/**/*.js").concat(["./js/app.js"]),
+      app_tailwind: "./js/app_tailwind.js"
+
     },
     output: {
       filename: "[name].js",
@@ -36,12 +38,12 @@ module.exports = (env, options) => {
         },
         {
           test: /\.[s]?css$/,
-          use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
+          use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"]
         }
       ]
     },
     plugins: [
-      new MiniCssExtractPlugin({ filename: "../css/app.css" }),
+      new MiniCssExtractPlugin({filename: "../css/[name].css"}),
       new CopyWebpackPlugin([{ from: "static/", to: "../" }])
     ].concat(devMode ? [new HardSourceWebpackPlugin()] : [])
   };
