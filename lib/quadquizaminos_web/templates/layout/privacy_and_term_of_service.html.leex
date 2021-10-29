@@ -6,23 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "QuadBlockQuiz: ", suffix: " · SupplyChain Edition" %>
-    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app_tailwind.css") %>"/>
+    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app_tailwind.js") %>"></script>
   </head>
   <body>
     <header>
-      <section class="container">
-        <a href="https://supplychainsandbox.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/scs-logo.png") %>" alt="supplychainsandbox Logo" />
-        </a>
-        <a class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
-        </a>
-        <H1>QuadBlockQuiz</H1>
-        <H3>Supply Chain Edition</H3>
+      <section class="container mx-auto px-4">
+          <div class="flex flex-row">
+              <div class="basis-1/2">
+                <a>
+                  <img class="object-contain h-32" src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
+                </a>
+              </div>
+              <div class="basis-1/2">
+                <a href="https://supplychainsandbox.org/">
+                  <img class="object-scale-down h-32" src="<%= Routes.static_path(@conn, "/images/scs-logo.png") %>" alt="supplychainsandbox Logo" />
+                </a>
+              </div>
+          </div>
+          <h1 class="heading-1 visible xs:invisible md:visible">QuadBlockQuiz <span class="text-sm">Supply Chain Edition</span> </h1>
       </section>
-      <%= render(QuadquizaminosWeb.LayoutView, "navbar.html", assigns) %>
+      <%= render(QuadquizaminosWeb.LayoutView, "navbar_tailwind.html", assigns) %>
     </header>
-    <%= @inner_content %>
+    <div class="container mx-auto px-4 md:px-20 pb-20">
+      <div class="font-sans"><%= @inner_content %></div>
+    </div>
   </body>
 </html>
