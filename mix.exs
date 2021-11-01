@@ -4,7 +4,7 @@ defmodule Quadquizaminos.MixProject do
   def project do
     [
       app: :quadquizaminos,
-      version: "0.11.0",
+      version: "0.12.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext, :unused] ++ Mix.compilers(),
