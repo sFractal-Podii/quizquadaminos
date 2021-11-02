@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit', // https://tailwindcss.com/docs/just-in-time-mode
   purge: [
     "../**/*.html.eex",
     "../**/*.html.leex",
