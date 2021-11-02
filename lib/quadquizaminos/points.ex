@@ -79,9 +79,4 @@ defmodule Quadquizaminos.Points do
     |> Enum.map_join(fn key -> {key, "■"} end)
     |> Enum.join("\n")
   end
-
-  def print(points) do
-    IO.puts(__MODULE__.to_string(points))
-    points
-  end
 end

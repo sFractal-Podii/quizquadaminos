@@ -123,14 +123,6 @@ defmodule Quadquizaminos.Brick do
     |> Points.to_string()
   end
 
-  def print(brick) do
-    brick
-    |> prepare
-    |> Points.print()
-
-    brick
-  end
-
   def color(%{name: :i}), do: :blue
   def color(%{name: :l}), do: :green
   def color(%{name: :z}), do: :orange

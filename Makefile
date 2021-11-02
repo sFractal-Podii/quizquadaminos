@@ -64,6 +64,10 @@ lint-questions: ## Check if the questions will be correctly parsed
 lint-credo: ## Check for credo compliance
 	mix credo --strict
 
+.PHONY: lint-unused
+lint-unused: ## Check for unused functions
+	mix unused 
+
 .PHONY: lint
 lint: lint-compile lint-format lint-questions lint-credo ## Check if the project follows set conventions such as formatting
 
@@ -79,7 +83,8 @@ format: mix format ## Run formatting tools on the code
 .PHONY: sbom sbom_fast
 sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
-	cd assets/  && npm install && npm install -g @cyclonedx/bom@2.0.2 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
+	cd assets/  && npm install && npm install -g @cyclonedx/bom@3.1.1 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml && cd ..
+	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	mkdir -p assets/static/.well-known/sbom
@@ -89,7 +94,8 @@ sbom: ## creates sbom for both  npm and hex dependancies
 
 sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
 	mix sbom.cyclonedx -o elixir_bom.xml
-	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml -a ../elixir_bom.xml && cd ..
+	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml && cd ..
+	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	mkdir -p assets/static/.well-known/sbom
