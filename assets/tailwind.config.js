@@ -10,6 +10,16 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
+    container: {
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+        md: '1rem',
+        lg: '4rem',
+        xl: '1rem',
+        '2xl': '1rem',
+      },
+    },
   },
   variants: {
     extend: {},
