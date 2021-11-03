@@ -28,7 +28,8 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
-  ]
+  ],
+  https: [port: 4001]
 
 config :quadquizaminos,
   base_questions_directory: Path.dirname(__DIR__)
@@ -46,12 +47,6 @@ config :quadquizaminos,
 #
 # The `http:` config above can be replaced with:
 #
-#     https: [
-#       port: 4001,
-#       cipher_suite: :strong,
-#       keyfile: "priv/cert/selfsigned_key.pem",
-#       certfile: "priv/cert/selfsigned.pem"
-#     ],
 #
 # If desired, both `http:` and `https:` keys can be
 # configured to run both http and https servers on

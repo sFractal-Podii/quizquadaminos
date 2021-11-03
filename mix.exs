@@ -52,9 +52,6 @@ defmodule Quadquizaminos.MixProject do
     release
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
   def application do
     [
       mod: {Quadquizaminos.Application, []},
@@ -70,13 +67,9 @@ defmodule Quadquizaminos.MixProject do
     ]
   end
 
-  # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib", "qna"]
 
-  # Specifies your project dependencies.
-  #
-  # Type `mix help deps` for examples and options.
   defp deps do
     [
       {:phoenix, "~> 1.5.7"},
@@ -101,16 +94,11 @@ defmodule Quadquizaminos.MixProject do
       {:ueberauth_google, "~>0.10"},
       {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
       {:earmark, "~> 1.4"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:site_encrypt, "~> 0.4"}
     ]
   end
 
-  # Aliases are shortcuts or tasks specific to the current project.
-  # For example, to install project dependencies and perform other setup tasks, run:
-  #
-  #     $ mix setup
-  #
-  # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],

@@ -1,9 +1,7 @@
 defmodule QuadquizaminosWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :quadquizaminos
+  use SiteEncrypt.Phoenix
 
-  # The session will be stored in the cookie and signed,
-  # this means its contents can be read but not tampered with.
-  # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
     key: "_quadquizaminos_key",
@@ -16,18 +14,12 @@ defmodule QuadquizaminosWeb.Endpoint do
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
-  # Serve at "/" the static files from "priv/static" directory.
-  #
-  # You should set gzip to true if you are running phx.digest
-  # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
     from: :quadquizaminos,
     gzip: true,
     only: ~w(css fonts images js favicon.ico robots.txt .well-known)
 
-  # Code reloading can be explicitly enabled under the
-  # :code_reloader configuration of your endpoint.
   if code_reloading? do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
@@ -51,4 +43,26 @@ defmodule QuadquizaminosWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug QuadquizaminosWeb.Router
+
+  @impl SiteEncrypt
+  def certification do
+    config = [
+      client: :native,
+      domains: ["quizquad.podiihq.com"],
+      emails: ["podii@podiihq.com"],
+      db_folder: System.get_env("SITE_ENCRYPT_DB", Path.join("tmp", "site_encrypt_db")),
+      directory_url:
+      case System.get_env("CERT_MODE", "local") do
+        "local" -> {:internal, port: 4002}
+      end
+      ]
+    SiteEncrypt.configure(config)
+  end
+  @impl Phoenix.Endpoint
+  def init(_key, config) do
+    IO.inspect("((((((")
+    ha = {:ok, SiteEncrypt.Phoenix.configure_https(config)}
+    IO.inspect ha, label: "(((((((())))))))))"
+    ha
+  end
 end
