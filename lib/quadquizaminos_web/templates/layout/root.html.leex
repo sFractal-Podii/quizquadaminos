@@ -13,14 +13,20 @@
     <div class="container">
     <header>
       <section>
+       <a class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
+        </a>
+        <div class="flex">
+        <h1>QuadBlockQuiz</h1>
+        <div id="flex">
+        <h3>Supply</h3>
+        <h3>Chain</h3>
+        <h3>Edition</h3>
+        </div> 
+        </div>
         <a href="https://www.bsideslv.org/" class="phx-logo">
           <img src="<%= Routes.static_path(@conn, "/images/BSidesLV.png") %>" alt="BsidesLV Logo" />
         </a>
-        <a class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
-        </a>
-        <H1>QuadBlockQuiz</H1>
-        <H3>Supply Chain Edition</H3>
       </section>
       <%= render(QuadquizaminosWeb.LayoutView, "navbar.html", assigns) %>
     </header>

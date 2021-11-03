@@ -166,6 +166,34 @@
   border: none;
 }
 
+.container{
+  text-align: center;
+  border-bottom: 1px solid #e3e3e3;
+  background: #eee;
+  border-radius: 6px;
+  padding: 3em 3em 1em;
+  margin-bottom: 3rem;
+  font-weight: 200;
+  font-size: 120%;
+}
+
+section{
+  justify-content: center;
+  display: flex;
+}
+
+.phx-logo img{
+  width: 200px;
+}
+
+h1{
+  align-self: center;
+}
+
+#flex{
+  flex-direction: column;
+}
+
 .icon-button {
   padding: 0 1rem;
   line-height: 0;
