@@ -56,6 +56,14 @@
 }
 
 
+.disabled:hover{
+  cursor: not-allowed;
+}
+
+.not_allowed:hover{
+  cursor: not-allowed;
+}
+
 /* Alerts and form errors */
 .alert {
   padding: 15px;
@@ -101,8 +109,9 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   background-color: #333;
+  align-items: center;
+  display: flex;
 }
 
 .nav li {
@@ -122,4 +131,44 @@
   margin: 5px;
 }
 
+.dropbtn {
+  border: none;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+}
+.dropdown-content a {
+  display: block;
+}
+.dropdown:hover .dropdown-content {
+  display: flex;
+  flex-direction: column;
+}
 
+.dropdown:hover .dropdown-content a{
+  display: flex;
+  align-items: center;
+}
+
+.red {
+  background-color: red;
+  border: none;
+}
+
+#content {
+  min-height: 87vh;
+}
+.icon-button {
+  padding: 0 1rem;
+  line-height: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}

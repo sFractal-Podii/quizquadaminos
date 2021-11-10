@@ -1,6 +1,7 @@
 defmodule Quadquizaminos.Presets do
-  def five_by_nine() do
-    %{{1, 14} => {1, 14, :blue},
+  def five_by_nine do
+    %{
+      {1, 14} => {1, 14, :blue},
       {4, 14} => {4, 14, :green},
       {7, 14} => {7, 14, :pink},
       {8, 14} => {8, 14, :pink},
@@ -65,8 +66,9 @@ defmodule Quadquizaminos.Presets do
     }
   end
 
-  def attack() do
-    %{{1, 10} => {1, 10, :attack_yellow_gold},
+  def attack do
+    %{
+      {1, 10} => {1, 10, :attack_yellow_gold},
       {2, 10} => {2, 10, :attack_yellow_gold},
       {3, 10} => {3, 10, :attack_yellow_gold},
       {4, 10} => {4, 10, :attack_yellow_gold},
@@ -78,8 +80,9 @@ defmodule Quadquizaminos.Presets do
     }
   end
 
-  def lawsuit() do
-    %{{5, 20} => {5, 20, :lawsuit_brown_gold},
+  def lawsuit do
+    %{
+      {5, 20} => {5, 20, :lawsuit_brown_gold},
       {5, 19} => {5, 19, :lawsuit_brown_gold},
       {5, 18} => {5, 18, :lawsuit_brown_gold},
       {5, 17} => {5, 17, :lawsuit_brown_gold},
@@ -92,20 +95,11 @@ defmodule Quadquizaminos.Presets do
     }
   end
 
-  def powers() do
-    [ :nextblock, :fixvuln, :fixlicense,
-      :deleteblock, :deleteblock,
-      :addblock, :addblock, :addblock,
-      :moveblock, :moveblock, :moveblock, :moveblock,
-      :speedup, :speedup, :speedup,
-      :slowdown,:slowdown,:slowdown ]
-  end
-
-  def speed() do
+  def speed do
     {3, Quadquizaminos.Speed.speed_tick_count(3)}
   end
 
-  def preset_vuln() do
+  def preset_vuln do
     %{
       {2, 20} => {2, 20, :pink},
       {3, 20} => {3, 20, :red},
@@ -119,7 +113,7 @@ defmodule Quadquizaminos.Presets do
     }
   end
 
-  def preset_lic() do
+  def preset_lic do
     %{
       {2, 20} => {2, 20, :pink},
       {3, 20} => {3, 20, :red},
@@ -132,5 +126,4 @@ defmodule Quadquizaminos.Presets do
       {10, 20} => {10, 20, :license_grey_brown}
     }
   end
-
 end

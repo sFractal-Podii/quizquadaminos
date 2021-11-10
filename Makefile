@@ -1,10 +1,12 @@
 # Configuration
 	# -------------
 
-APP_NAME ?= `grep 'app:' mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g'`
+APP_NAME := $(shell grep 'app:' mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g')
 APP_VERSION := $(shell git fetch && git describe --tags `git rev-list --tags --max-count=1`)
 DOCKER_IMAGE_TAG ?= $(APP_VERSION)
 GIT_REVISION ?= `git rev-parse HEAD`
+SBOM_FILE_NAME_CY ?= $(APP_NAME).$(APP_VERSION)-cyclonedx-sbom.1.0.0
+SBOM_FILE_NAME_SPDX ?= $(APP_NAME).$(APP_VERSION)-spdx-sbom.1.0.0
 
 # Introspection targets
 # ---------------------
@@ -28,6 +30,12 @@ header:
 	@printf "\033[33m%-23s\033[0m" "DOCKER_IMAGE_TAG"
 	@printf "\033[35m%s\033[0m" $(DOCKER_IMAGE_TAG)
 	@echo "\n"
+	@printf "\033[33m%-23s\033[0m" "CYCLONEDX FILENAME"
+	@printf "\033[35m%s\033[0m" $(SBOM_FILE_NAME_CY)
+	@echo "\n"
+	@printf "\033[33m%-23s\033[0m" "SPDX FILENAME"
+	@printf "\033[35m%s\033[0m" $(SBOM_FILE_NAME_SPDX)
+	@echo "\n"
 
 .PHONY: targets
 targets:
@@ -47,9 +55,21 @@ lint-compile: ## check for warnings in functions used in the project
 lint-format: ## Check if the project is well formated using elixir formatter
 	mix format --dry-run --check-formatted
 
+.PHONY: lint-questions
+lint-questions: ## Check if the questions will be correctly parsed
+	mix gen.answers
+	mix validate.questions
+
+.PHONY: lint-credo
+lint-credo: ## Check for credo compliance
+	mix credo --strict
+
+.PHONY: lint-unused
+lint-unused: ## Check for unused functions
+	mix unused 
 
 .PHONY: lint
-lint: lint-compile lint-format ## Check if the project follows set conventions such as formatting
+lint: lint-compile lint-format lint-questions lint-credo ## Check if the project follows set conventions such as formatting
 
 
 .PHONY: test
@@ -60,11 +80,28 @@ test: ## Run the test suite
 format: mix format ## Run formatting tools on the code
 
 
-.PHONY: sbom
+.PHONY: sbom sbom_fast
 sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
-	cd assets/  && npm install && npm install -g @cyclonedx/bom && cyclonedx-bom -o ../bom.xml -a ../elixir_bom.xml && cd ..
-	./cyclonedx-cli convert --input-file bom.xml --output-file bom.json
+	cd assets/  && npm install && npm install -g @cyclonedx/bom@3.1.1 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml && cd ..
+	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
+	mkdir -p assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
+
+sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
+	mix sbom.cyclonedx -o elixir_bom.xml
+	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml && cd ..
+	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
+	mkdir -p assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
+	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
 
 release: ## Build a release of the application with MIX_ENV=prod
@@ -82,21 +119,21 @@ docker-image: #builds docker image
 
 .PHONY: push-image-gcp push-and-serve deploy-existing-image
 push-image-gcp: ## push image to gcp
-	@if [[ "$(docker images -q gcr.io/twinklymaha/quadquiz:$(APP_VERSION)> /dev/null)" != "" ]]; then \
+	@if [[ "$(docker images -q gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION)> /dev/null)" != "" ]]; then \
   @echo "Removing previous image $(APP_VERSION) from your machine..."; \
-	docker rmi gcr.io/twinklymaha/quadquiz:$(APP_VERSION);\
+	docker rmi gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION);\
 	fi
-	docker build . -t gcr.io/twinklymaha/quadquiz:$(APP_VERSION)
+	docker build . -t gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION) --no-cache
 
-	gcloud container images delete gcr.io/twinklymaha/quadquiz:$(APP_VERSION) --force-delete-tags  || echo "no image to delete on the remote"
-	docker push gcr.io/twinklymaha/quadquiz:$(APP_VERSION)
-		
+	gcloud container images delete gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION) --force-delete-tags  || echo "no image to delete on the remote"
+	docker push gcr.io/duncan-openc2-plugfest/quadquiz:$(APP_VERSION)
+
 push-and-serve-gcp: push-image-gcp deploy-existing-image ## creates docker image then push to gcp and launches an instance with the image
 
 .PHONY: deploy-existing-image
 deploy-existing-image: ## creates an instance using existing gcp docker image
 	gcloud compute instances create-with-container $(instance-name) \
-		--container-image=gcr.io/twinklymaha/quadquiz:$(DOCKER_IMAGE_TAG) \
+		--container-image=gcr.io/duncan-openc2-plugfest/quadquiz:$(DOCKER_IMAGE_TAG) \
 		--machine-type=e2-micro \
 		--subnet=default \
 		--network-tier=PREMIUM \
@@ -106,4 +143,4 @@ deploy-existing-image: ## creates an instance using existing gcp docker image
 
 .PHONY: update-instance
 update-instance: ## updates image of a running instance
-	gcloud compute instances update-container $(instance-name) --container-image gcr.io/twinklymaha/quadquiz:$(image-tag)
+	gcloud compute instances update-container $(instance-name) --container-image gcr.io/duncan-openc2-plugfest/quadquiz:$(image-tag)

@@ -26,17 +26,28 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-#Google authentication configuration
+# Google authentication configuration
 config :ueberauth, Ueberauth,
   providers: [
-    google: {Ueberauth.Strategy.Google, [default_scope: "email profile", allow_private_emails: true]}
+    google:
+      {Ueberauth.Strategy.Google, [default_scope: "email profile", allow_private_emails: true]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: "",
   client_secret: ""
-  
-#Github authentication configuration 
+
+# Linkedin authentication configuration 
+config :ueberauth, Ueberauth,
+  providers: [
+    linkedin: {Ueberauth.Strategy.LinkedIn, [default_scope: "r_liteprofile r_emailaddress"]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
+  client_id: "",
+  client_secret: ""
+
+# Github authentication configuration 
 config :ueberauth, Ueberauth,
   providers: [
     github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
@@ -49,6 +60,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 config :quadquizaminos,
   # add github_id of authorized users
   github_ids: [1, 2],
+  conference_date: ~U[2021-10-03 16:00:00Z],
 
   # set bottom vulnerability defaulting value
   bottom_vulnerability_value: 77,

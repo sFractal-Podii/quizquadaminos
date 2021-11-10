@@ -17,17 +17,23 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.0",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^5.1.2",
     "css-loader": "^3.4.2",
+    "glob-parent": ">=5.1.2",
     "hard-source-webpack-plugin": "^0.13.1",
+    "is-svg": ">=4.2.2",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss": ">=8.2.10",
     "sass-loader": "^8.0.2",
+    "ssri": ">=8.0.1",
+    "tar": ">=4.4.18",
     "terser-webpack-plugin": "^2.3.2",
+    "trim-newlines": ">=3.0.1",
     "webpack": "4.41.5",
     "webpack-cli": "^3.3.2",
-    "is-svg": ">=4.2.2",
-    "ssri": ">=8.0.1"
+    "set-value": ">=4.0.1",
+    "nth-check": ">=2.0.1"
   }
 }

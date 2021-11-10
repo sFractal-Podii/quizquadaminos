@@ -4,25 +4,17 @@ defmodule Quadquizaminos.Powers do
     :addblock,
     :moveblock,
     :clearblocks,
-    :nextblock,
     :speedup,
     :slowdown,
-    :forensics,
-    :legal,
-    :cyberinsurance,
-    :sbom,
     :fixvuln,
     :fixlicense,
     :rm_all_vulns,
     :rm_all_lic_issues,
-    :automation,
-    :openchain,
     :superpower
   ]
 
-  def all_powers() do
+  def all_powers do
     @all_powers
-    |> Enum.sort
+    |> Enum.sort()
   end
-
 end

@@ -144,16 +144,36 @@ defmodule Quadquizaminos.Bottom do
     )
   end
 
+  def remove_all_vulnerabilities(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
+  end
+
   def remove_all_vulnerabilities(bottom) do
     remove_a_color(bottom, :vuln_grey_yellow)
+  end
+
+  def remove_all_license_issues(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
   end
 
   def remove_all_license_issues(bottom) do
     remove_a_color(bottom, :license_grey_brown)
   end
 
+  def remove_attacks(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
+  end
+
   def remove_attacks(bottom) do
     remove_a_color(bottom, :attack_yellow_gold)
+  end
+
+  def remove_lawsuits(bottom) when %{} == bottom do
+    ## if no blocks just return empty
+    bottom
   end
 
   def remove_lawsuits(bottom) do
@@ -170,14 +190,18 @@ defmodule Quadquizaminos.Bottom do
   end
 
   def remove_vuln_and_license(bottom, {x, y, _color} = value) do
-    value =
-      case value do
-        {x, y, :vuln_grey_yellow} -> {x, y, :purple}
-        {x, y, :license_grey_brown} -> {x, y, :purple}
-        _ -> value
-      end
+    if Map.has_key?(bottom, {x, y}) do
+      value =
+        case value do
+          {x, y, :vuln_grey_yellow} -> {x, y, :purple}
+          {x, y, :license_grey_brown} -> {x, y, :purple}
+          _ -> value
+        end
 
-    Map.merge(bottom, %{{x, y} => value})
+      Map.merge(bottom, %{{x, y} => value})
+    else
+      bottom
+    end
   end
 
   def attacked?(bottom, attack_threshold) do

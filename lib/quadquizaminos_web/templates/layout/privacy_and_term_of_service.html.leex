@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "QuadBlockQuiz: ", suffix: " · SupplyChain Edition" %>
+    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  </head>
+  <body>
+    <header>
+      <section class="container">
+        <a href="https://supplychainsandbox.org/" class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/scs-logo.png") %>" alt="supplychainsandbox Logo" />
+        </a>
+        <a class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
+        </a>
+        <H1>QuadBlockQuiz</H1>
+        <H3>Supply Chain Edition</H3>
+      </section>
+      <%= render(QuadquizaminosWeb.LayoutView, "navbar.html", assigns) %>
+    </header>
+    <%= @inner_content %>
+  </body>
+</html>

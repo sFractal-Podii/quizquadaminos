@@ -17,4 +17,9 @@ defmodule Quadquizaminos.Accounts.LoginLevel do
     from q in query,
       where: q.name == ^login_level
   end
+
+  def selected_level do
+    from l in __MODULE__,
+      where: l.active
+  end
 end

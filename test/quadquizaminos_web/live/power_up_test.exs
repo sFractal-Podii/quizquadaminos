@@ -174,13 +174,13 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       render_click(view, "powerup", %{"powerup" => "moveblock"})
 
       render_click(view, "transform_block", %{"x" => "5", "y" => "20", "color" => "purple"})
-      html = render_click(view, "add_block", %{"x" => "7", "y" => "18"})
+      html = render_click(view, "add_block", %{"x" => "7", "y" => "20"})
 
       refute html =~
                "<svg phx-click=\"transform_block\" phx-value-x=\"5\" phx-value-y=\"20\" phx-value-color=\"purple\">"
 
       assert html =~
-               "<svg phx-click=\"transform_block\" phx-value-x=\"7\" phx-value-y=\"18\" phx-value-color=\"purple\">"
+               "<svg phx-click=\"transform_block\" phx-value-x=\"7\" phx-value-y=\"20\" phx-value-color=\"purple\">"
     end
 
     test "powerup is depleted once used", %{view: view} do
@@ -192,7 +192,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
       render_click(view, "powerup", %{"powerup" => "moveblock"})
 
       render_click(view, "transform_block", %{"x" => "5", "y" => "20", "color" => "purple"})
-      render_click(view, "add_block", %{"x" => "7", "y" => "18"})
+      render_click(view, "add_block", %{"x" => "7", "y" => "20"})
 
       html = render_keydown(view, "keydown", %{"key" => " "})
 
@@ -257,7 +257,7 @@ defmodule QuadquizaminosWeb.PowerUpTest do
   defp pause_game(conn) do
     {:ok, view, _html} = live(conn, "/tetris")
 
-    render_click(view, "start")
+    render_click(view, "start", %{contest: ""})
     html = render_keydown(view, "keydown", %{"key" => " "})
     {view, html}
   end

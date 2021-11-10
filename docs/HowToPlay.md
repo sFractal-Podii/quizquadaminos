@@ -1,6 +1,6 @@
-# QuadBlocksQuiz - Supply Chain Edition
-QuadBlocksQuiz is a tetris-like game
-that is part Tetris and part trivia quiz.
+# QuadBlockQuiz - Supply Chain Edition
+QuadBlockQuiz is a tetrominoes-like game
+that is part tetrominoes and part trivia quiz.
 Being honest, the trivia is to educate on
 supply chain.
 
@@ -96,7 +96,7 @@ or answer questions for points and powerups
     + sFractal Consulting commits to improving it's OpenChain behavior, fully admitting it has not been a focus but intends to change that
 - Podii - In-kind Sponsor - developed much of the quiz software for this game, building on the work of Grox.io. Podii develops "software done right".
     + blah blah on supply chain, SBOM, OpenC2, OpenChain
-- Grox.io - In-kind Sponsor - developed much of the quadblocks software that is the basis for this game. Grox.io teaches programming. The Tetris game that is the basis of this game is developed as part of a Grox.io course.
+- Grox.io - In-kind Sponsor - developed much of the quadblocks software that is the basis for this game. Grox.io teaches programming. The tetrominoes game that is the basis of this game is developed as part of a Grox.io course.
     + blah blah on supply chain, SBOM, OpenC2, OpenChain
 - Google - In-kind Sponsor - Google donated the GCP resources to host this game
     + blah blah on supply chain, SBOM, OpenC2, OpenChain if we can get statements

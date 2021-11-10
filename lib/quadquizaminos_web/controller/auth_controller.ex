@@ -31,7 +31,7 @@ defmodule QuadquizaminosWeb.AuthController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
-        |> put_session(:user_id, user.user_id)
+        |> put_session(:uid, user.uid)
         |> configure_session(renew: true)
         |> redirect(to: "/")
 
@@ -41,5 +41,4 @@ defmodule QuadquizaminosWeb.AuthController do
         |> redirect(to: "/")
     end
   end
-
 end

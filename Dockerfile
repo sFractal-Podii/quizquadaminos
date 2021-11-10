@@ -10,7 +10,7 @@ ENV LANG=C.UTF-8 \
 RUN mkdir /opt/release
 WORKDIR /opt/release
 RUN mix local.hex --force && mix local.rebar --force
-RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.10.3/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli
+RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.17.0/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli
 
 COPY mix.exs .
 COPY mix.lock .
@@ -29,12 +29,14 @@ COPY config ./config
 COPY lib ./lib
 COPY priv ./priv
 COPY qna ./qna
+COPY courses ./courses
 COPY Makefile ./Makefile
 
-RUN make sbom
-RUN cp bom* ./assets/static
-RUN npm install --prefix ./assets && \
-    npm run deploy --prefix ./assets
+RUN npm ci --prefix ./assets
+RUN npm install -g @cyclonedx/bom@3.1.1
+RUN make sbom_fast
+RUN cp *bom* ./assets/static/.well-known/sbom/
+RUN npm run deploy --prefix ./assets
 
 
 # Final build step: digest static assets and generate the release

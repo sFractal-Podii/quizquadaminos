@@ -1,48 +1,102 @@
 defmodule Quadquizaminos.QnA do
-  @qna_directory Application.get_env(:quadquizaminos, :qna_directory)
-
-  def question do
-    build()
-  end
-
-  def question(nil) do
-    %{}
-  end
-
-  def question(category) do
-    build(category)
-  end
+  @base_questions_directory Application.compile_env!(:quadquizaminos, :base_questions_directory)
+                            |> to_string()
 
   def question(category, position) do
     build(category, position)
   end
 
+  def question(file_path, category, position) do
+    build(file_path, category, position)
+  end
+
   ## Should this be done once at compile instead of every popup?
-  def categories do
-    @qna_directory
+  ## Also means chapters when working with course
+  def categories(file_path \\ ["qna"]) do
+    directory = ([@base_questions_directory] ++ file_path) |> Enum.join("/")
+
+    directory
     |> File.ls!()
     |> Enum.filter(fn folder ->
-      File.dir?("#{@qna_directory}/#{folder}") and
-        not (File.ls!("#{@qna_directory}/#{folder}") |> Enum.empty?())
+      File.dir?("#{directory}/#{folder}") and
+        not (File.ls!("#{directory}/#{folder}") |> Enum.empty?())
     end)
   end
 
-  defp build do
-    categories() |> Enum.random() |> build()
+  @doc """
+  Removes categories that are already answered
+  """
+  def remove_used_categories(file_path, categories) do
+    categories
+    |> Enum.reject(fn {category, position} ->
+      maximum_category_position(file_path, category) == position
+    end)
+    |> Enum.into(%{})
+    |> Map.keys()
   end
 
-  defp build(category, position \\ 0) do
-    {:ok, content} = category |> choose_file(position) |> File.read()
+  def maximum_category_position(file_path, category) do
+    path = ([@base_questions_directory] ++ file_path ++ [category]) |> Enum.join("/")
+    {:ok, files} = File.ls(path)
+    Enum.count(files)
+  end
 
-    [question, answers] = content |> String.split(~r/## answers/i)
+  @doc """
+  Validates format of the markdown files
+  """
+  def validate_files do
+    # should be refactored to test questions on the courses directory too
+    base_file = ["qna"]
+    base_file_path = base_file |> Enum.join("/")
+    folders = File.ls!(base_file_path)
 
-    %{
+    for folder <- folders,
+        path = base_file_path <> "/" <> folder,
+        File.dir?(path),
+        File.ls!(path) != [],
+        position <- 0..Enum.count(File.ls!(path)) do
+      try do
+        Quadquizaminos.QnA.question(base_file, folder, position)
+      rescue
+        e ->
+          require Logger
+          Logger.error("Could not parse #{choose_file(base_file, folder, position)}")
+          reraise e, __STACKTRACE__
+      end
+    end
+
+    :ok
+  end
+
+  defp build(file_path, category, position \\ 0) do
+    full_path = file_path |> choose_file(category, position)
+
+    {:ok, content} = File.read(full_path)
+
+    [header, body] =
+      case String.split(content, "---") do
+        [_header, _body] = result -> result
+        [body] -> [nil, body]
+      end
+
+    [question, choices] = body |> String.split(~r/## answers/i)
+
+    %Quadquizaminos.Questions.Question{}
+    |> struct(%{
       question: question_as_html(question),
-      answers: answers(content, answers),
-      correct: correct_answer(answers),
+      choices: choices(content, choices),
+      correct: correct_answer(file_path, full_path, category),
       powerup: powerup(content),
-      score: score(content)
-    }
+      score: score(content),
+      type: header(header).type
+    })
+  end
+
+  defp header(nil), do: %{type: nil}
+
+  defp header(header) do
+    {result, _} = Code.eval_string(header)
+    result
   end
 
   defp score(content) do
@@ -75,19 +129,19 @@ defmodule Quadquizaminos.QnA do
     end
   end
 
-  defp answers(content, answers) do
+  defp choices(content, answers) do
     regex = ~r/# answers(?<answers>.*)#/iUs
 
     case Regex.named_captures(regex, content) do
       %{"answers" => answers} ->
-        answers(answers)
+        choices(answers)
 
       nil ->
-        answers(answers)
+        choices(answers)
     end
   end
 
-  defp answers(answers) do
+  defp choices(answers) do
     answers
     |> String.split(["\n-", "\n*", "\n"], trim: true)
     |> Enum.with_index()
@@ -102,8 +156,8 @@ defmodule Quadquizaminos.QnA do
     question |> String.replace("#", "")
   end
 
-  defp choose_file(category, position \\ 0) do
-    path = "#{@qna_directory}/#{category}"
+  defp choose_file(file_path, category, position) do
+    path = ([@base_questions_directory] ++ file_path ++ [category]) |> Enum.join("/")
     {:ok, files} = File.ls(path)
     files = Enum.sort(files)
     count = Enum.count(files)
@@ -120,15 +174,18 @@ defmodule Quadquizaminos.QnA do
 
   defp file_position(position, _index, _count), do: position
 
-  defp correct_answer(answers) do
-    regex = ~r/(\n-|\n\*)/
+  defp correct_answer(file_path, full_path, category) do
+    [file_name | _] = full_path |> String.split("/") |> Enum.reverse()
 
-    {_, correct} =
-      Regex.scan(regex, answers, capture: :first)
-      |> List.flatten()
-      |> Enum.with_index()
-      |> Enum.find(fn {k, _v} -> k == "\n*" end)
+    # since the first element in the list is the question type either qna or courses, we dont use it
+    [_h | query] = file_path ++ [category] ++ [file_name]
 
-    correct |> to_string()
+    answers_file =
+      @base_questions_directory <> "/" <> (file_path |> Enum.at(0)) <> "/answers.json"
+
+    case answers_file |> File.read!() |> Jason.decode!() |> get_in(query) do
+      nil -> nil
+      answer -> to_string(answer)
+    end
   end
 end

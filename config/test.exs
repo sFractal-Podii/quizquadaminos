@@ -22,7 +22,7 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
 config :logger, level: :warn
 
 config :quadquizaminos,
-  qna_directory: Path.join(Path.dirname(__DIR__), "test/quadquizaminos/qna")
+  base_questions_directory: Path.join(Path.dirname(__DIR__), "test/quadquizaminos/qna")
 
 config :ueberauth, Ueberauth,
   providers: [
@@ -36,6 +36,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 config :quadquizaminos,
   # add github_id of authorized users
   github_ids: [4_000_000],
+  conference_date: ~U[2021-05-18 18:40:00Z],
 
   # set bottom vulnerability defaulting value
   bottom_vulnerability_value: 77,

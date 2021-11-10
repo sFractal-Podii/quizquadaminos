@@ -11,6 +11,10 @@ defmodule QuadquizaminosWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :privacy_and_term_of_service do
+    plug :put_root_layout, {QuadquizaminosWeb.LayoutView, "privacy_and_term_of_service.html"}
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -23,23 +27,49 @@ defmodule QuadquizaminosWeb.Router do
     plug QuadquizaminosWeb.Authorize, roles: ["admin"]
   end
 
+  pipeline :authorize_by_login_level do
+    plug QuadquizaminosWeb.Authorize, :login_level
+  end
+
   scope "/", QuadquizaminosWeb do
-    pipe_through :browser
+    pipe_through [:browser]
 
     get "/", PageController, :index
+    get "/sbom", PageController, :sbom
+    get "/.well-known", PageController, :wellknown
+
     live "/leaderboard", LeaderboardLive
-    get "/anonymous", PageController, :anonymous
-    post "/anonymous", PageController, :anonymous
+    live "/leaderboard/:board_id", LeaderboardLive.Show
+    live "/contestboard", ContestboardLive
+    live "/contests", ContestsLive, :index
+    live "/contests/:id", ContestsLive, :show
+    live "/contest_rules", ContestRules
+    live "/contest_prizes", ContestPrizes
+    get "/anonymous", SessionController, :anonymous
+    post "/anonymous", SessionController, :anonymous
+    resources "/sessions", SessionController, only: [:new, :create]
+    get "/instructions", PageController, :instructions
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
     live "/tetris/instructions", TetrisLive, :instructions
+    live "/courses", CourseLive
+    live "/courses/:course", CourseLive, :show
+    live "/courses/:course/:chapter", CourseLive, :questions
   end
 
-  scope "/admin", QuadquizaminosWeb do
+  scope "/", QuadquizaminosWeb do
+    pipe_through [:browser, :privacy_and_term_of_service]
+
+    live "/termsofservice", TermsOfServiceLive
+    live "/privacy", PrivacyLive
+  end
+
+  scope "/admin", QuadquizaminosWeb, as: :admin do
     pipe_through [:browser, :authorize_admin]
 
-    live "/login_levels", AdminLive
+    live "/", AdminLive
+    live "/contests", ContestsLive, :index
   end
 
   scope "/auth", QuadquizaminosWeb do

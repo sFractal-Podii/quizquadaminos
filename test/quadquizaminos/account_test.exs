@@ -6,12 +6,12 @@ defmodule Quadquizaminos.AccountTest do
   alias Quadquizaminos.Repo
 
   test "user_has_role?/2 checks if user matches the role given" do
-    attrs = %{name: "Quiz Block ", user_id: 40_000_000, role: "admin"}
+    attrs = %{name: "Quiz Block ", uid: Integer.to_string(40_000_000), role: "admin"}
     {:ok, user} = Accounts.create_user(%User{}, attrs)
-    assert Accounts.user_has_role?(user.user_id, ["admin"])
+    assert Accounts.user_has_role?(user.uid, ["admin"])
     assert Accounts.user_has_role?(user, ["admin"])
     refute Accounts.user_has_role?("anonymous", ["admin"])
-    refute Accounts.user_has_role?(user.user_id, ["player"])
+    refute Accounts.user_has_role?(user.uid, ["player"])
   end
 
   test "update_login_level/2 updates selected login_level to true and unselected to false" do

@@ -1,0 +1,58 @@
+    <div class="container">
+        <%= if @live_action == :show do %>
+        <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
+        <% else %>
+        <h1>Contests</h1>
+        <div class="container">
+        <%= if @current_user.admin? do  %>
+        <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :save] %>
+          <div class="row">
+                 <div class="column">
+                    <%= text_input f, :name %>
+                   <%= error_tag f, :name %>
+                  </div>
+                 <div phx-update="ignore" id="contest_date" class="column">
+                    <%= datetime_local_input f, :contest_date %>
+                  </div>
+                   <div class="column">
+                    <%= submit "Save" %>
+                  </div>
+                    </form>
+              <%end%>
+          </div>
+      </div>
+
+        <%=  if @modal do %>
+        <%= live_modal @socket, QuadquizaminosWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
+      <% end %>
+
+        <table>
+            <tr>
+                <th></th><!-- contest name -->
+                <%= if @current_user.admin? do %>
+                <th></th> <!--start pause button-->
+                <th></th><!-- STOP button-->
+                <% end %>
+                <th></th><!--count up timer-->
+                <th>Date</th>
+                <th>Start</th>
+                <th>End</th>
+                <%= if admin?(@current_user) do %>
+                <th colspan="2">contest date</th>
+                <% end %>
+            </tr>
+
+            <%= for {status, contests} <- @contests |> group_contest_by_status do %>
+              <tr>
+                <td colspan="8"><b><%= status(status)  %> Contests</b></td>
+              </tr>
+                  <%= for  contest <- contests do %>
+                    <tr>
+                    <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
+                    </tr>
+                    <% end %>
+            <% end %>
+        </table>
+
+        <% end %>
+    </div>
