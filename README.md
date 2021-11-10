@@ -32,8 +32,3 @@ This [contribution guide](./docs/contributing.md) outlines how you can contribut
 ## [Instructions on how to play](./docs/HowToPlay.md)
 Instruction of how to play the game
 are [here](./docs/HowToPlay.md)
-
-
-## Release drafter
-
-Testing if release notes will be generated when I merge the branch to auto-release-draft branch.
