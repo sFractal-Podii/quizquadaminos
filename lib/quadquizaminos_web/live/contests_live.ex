@@ -15,10 +15,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   alias Quadquizaminos.Accounts.User
   alias Quadquizaminos.Contests
   alias Quadquizaminos.GameBoard
-  alias Quadquizaminos.Util
   alias QuadquizaminosWeb.ContestsLive.ContestComponent
-
-  @conference_date Application.compile_env(:quadquizaminos, :conference_date)
 
   def mount(_params, session, socket) do
     case socket.assigns.live_action do
@@ -32,7 +29,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
         nil
     end
 
-    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
     current_user = session["uid"] |> current_user()
 
     {:ok,
@@ -40,7 +36,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
      |> assign(
        current_user: current_user,
        contests: Contests.list_contests(),
-       countdown_interval: countdown_interval,
        contest_records: [],
        contest_id: nil,
        editing_date?: false,
@@ -112,6 +107,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
   end
 
   def handle_info(:update_records, %{assigns: %{contest: contest}} = socket) do
+    sorter = String.to_atom(socket.assigns.sort_by)
     contest_name = String.to_atom(contest.name)
 
     if :ets.whereis(contest_name) != :undefined do
@@ -122,7 +118,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
           game_board = struct(%GameBoard{}, record)
           %{game_board | user: %User{name: name, uid: uid}}
         end)
-        |> Enum.sort_by(& &1.score, :desc)
+        |> Enum.sort_by(&Map.get(&1, sorter), :desc)
 
       send_update(QuadquizaminosWeb.ContestFinalResultComponent,
         id: "final_result",
@@ -140,7 +136,7 @@ defmodule QuadquizaminosWeb.ContestsLive do
 
   def handle_info(:update_component_timer, socket) do
     Enum.each(socket.assigns.contests, fn contest ->
-      if Contests.contest_running?(contest.name) do
+      unless Contests.ended_contest?(contest.id) do
         send(self(), {:update_component, contest_id: contest.id})
       end
     end)
@@ -151,11 +147,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
   def handle_info({:update_component, contest_id: contest_id}, socket) do
     send_update(ContestComponent, id: contest_id, current_user: socket.assigns.current_user)
     {:noreply, socket}
-  end
-
-  def handle_info(:count_down, socket) do
-    countdown_interval = DateTime.diff(@conference_date, DateTime.utc_now())
-    {:noreply, socket |> assign(countdown_interval: countdown_interval)}
   end
 
   def handle_info({:update_user, assigns}, socket) do
@@ -287,39 +278,6 @@ defmodule QuadquizaminosWeb.ContestsLive do
     ids = Application.get_env(:quadquizaminos, :github_ids)
 
     current_user in (ids |> Enum.map(&(&1 |> to_string())))
-  end
-
-  def countdown_timer(_assigns, true = _admin?), do: ""
-
-  def countdown_timer(assigns, _) do
-    ~L"""
-    <div class="container">
-            <section class="phx-hero">
-                <h1>Contest countdown </h1>
-                <div class="row">
-                    <div class="column column-25">
-                        <% {days, hours, minutes, seconds} = Util.to_human_time(@countdown_interval) %>
-
-                        <h2><%= days |> Util.count_display() %></h2>
-                        <h2>DAYS</h2>
-                    </div>
-                    <div class="column column-25">
-                        <h2><%= Util.count_display(hours)%></h2>
-                        <h2>HOURS</h2>
-                    </div>
-                    <div class="column column-25">
-                        <h2><%=Util.count_display(minutes)%></h2>
-                        <h2>MINUTES</h2>
-                    </div>
-                    <div class="column column-25">
-                        <h2><%=Util.count_display(seconds)%></h2>
-                        <h2>SECONDS</h2>
-                    </div>
-                </div>
-                <h3>Contest coming soon</h3>
-            </section>
-        </div>
-    """
   end
 
   defp group_contest_by_status(contests) do

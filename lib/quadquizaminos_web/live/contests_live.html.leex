@@ -2,7 +2,6 @@
         <%= if @live_action == :show do %>
         <%= live_component @socket, QuadquizaminosWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
         <% else %>
-          <%= if @countdown_interval <= 0 || @current_user.admin? do %>
         <h1>Contests</h1>
         <div class="container">
         <%= if @current_user.admin? do  %>
@@ -12,7 +11,7 @@
                     <%= text_input f, :name %>
                    <%= error_tag f, :name %>
                   </div>
-                 <div phx-update="ignore" class="column">
+                 <div phx-update="ignore" id="contest_date" class="column">
                     <%= datetime_local_input f, :contest_date %>
                   </div>
                    <div class="column">
@@ -22,6 +21,10 @@
               <%end%>
           </div>
       </div>
+
+        <%=  if @modal do %>
+        <%= live_modal @socket, QuadquizaminosWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
+      <% end %>
 
         <table>
             <tr>
@@ -50,9 +53,6 @@
                     <% end %>
             <% end %>
         </table>
-        <% else %>
-        <%= countdown_timer(assigns, admin?(@current_user)) %>
-        <% end %>
 
         <% end %>
     </div>

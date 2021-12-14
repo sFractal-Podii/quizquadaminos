@@ -3,7 +3,6 @@ defmodule Quadquizaminos.GameBoard.Records do
   This module is responsible for manipulating player game records.
   """
   alias Quadquizaminos.Accounts
-  alias Quadquizaminos.Contests.Contest
   alias Quadquizaminos.GameBoard
   alias Quadquizaminos.Repo
 
@@ -51,22 +50,6 @@ defmodule Quadquizaminos.GameBoard.Records do
       |> change_game_board()
       |> Repo.insert()
     end
-  end
-
-  def create_contest(attrs) do
-    %Contest{}
-    |> Contest.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def latest_contest do
-    Contest |> Repo.all() |> Enum.max_by(fn contest -> contest.id end)
-  end
-
-  def update_contest(contest, attrs) do
-    contest
-    |> Contest.changeset(attrs)
-    |> Repo.update()
   end
 
   def get_game!(board_id) do
