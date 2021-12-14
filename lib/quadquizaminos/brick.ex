@@ -1,5 +1,4 @@
 defmodule Quadquizaminos.Brick do
-  @x_center 40
 
   defstruct name: :i,
             location: {40, 0},
@@ -129,7 +128,6 @@ defmodule Quadquizaminos.Brick do
   def color(%{name: :o}), do: :red
   def color(%{name: :t}), do: :yellow
 
-  def x_center, do: @x_center
 
   def render(block, brick_count) do
     block
