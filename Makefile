@@ -87,7 +87,6 @@ sbom: ## creates sbom for both  npm and hex dependancies
 	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
-	mkdir -p assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
@@ -98,7 +97,6 @@ sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclo
 	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
-	mkdir -p assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
