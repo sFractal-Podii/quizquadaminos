@@ -9,12 +9,12 @@
     },
     "title": "QuadBlockQuiz Not Affected by Log4j exploits",
     "tracking": {
-      "current_release_date": "2021-12-13T17:00:00.000Z",
-      "id": "QuadBlockQuiz 20211214 No Log4j",
-      "initial_release_date": "2021-12-13T17:00:00.000Z",
+      "current_release_date": "2021-12-14T17:00:00.000Z",
+      "id": "quadblockquiz_vex_20211214_no_log4j",
+      "initial_release_date": "2021-12-14T17:00:00.000Z",
       "revision_history": [
         {
-          "date": "2021-12-14T14:00:00.000Z",
+          "date": "2021-12-14T17:00:00.000Z",
           "number": "1.0.0",
           "summary": "Initial version"
         }
@@ -34,21 +34,31 @@
         "label": "WHITE"
       }
     }
+  "lang": "en-US",
+  "aggregate_severity": {
+      "text": "Critical"
+    }
   },
   "product_tree": {
     "branches": [
       {
-        "category": "product_family",
-        "name": "QuadBlockQuiz",
+        "category": "vendor",
+        "name": "sFractal Consulting",
         "branches": [
-          {
-            "category": "vendor",
+          "category": "product_family",
+          "name": "QuadBlockQuiz Games",
+          "branches": [
+            "category": "product_name",
             "name": "QuadBlockQuiz",
-            "product": {
-              "product_id": "CSAFPID-0001",
-              "name": "QuadBlockQuiz"
-            }
-          }
+            "branches": [
+              "category": "product_version",
+              "name": "12.0.1",
+              "product": {
+                "product_id": "qbq-12-0-1-001",
+                "name": "QuadBlockQuiz  v12.0.1"
+              }
+            ]
+          ]
         ]
       }
     ]
@@ -57,16 +67,20 @@
     {
       "product_status": {
         "known_not_affected": [
-          "CSAFPID-0001"
+          "qbq-12-0-1-001"
         ]
       },
       "cve": "CVE-2021-44228",
+      "cwe": {
+        "id": "CWE-502",
+        "name": "Deserialization of Untrusted Data"
+      },
       "threats": [
         {
           "category": "impact",
-          "details": "The vulnerable code is not present in these products.\nSet the component_not_present flag once the flags are implemented in CSAF.  Log4j not used in this product. No java in this product",
+          "details": "The log4j component is not present in this products. No java in this product. Set the component_not_present flag once the flags are implemented in CSAF.",
           "product_ids": [
-            "CSAFPID-0001"
+            "qbq-12-0-1-001"
           ]
         }
       ]
