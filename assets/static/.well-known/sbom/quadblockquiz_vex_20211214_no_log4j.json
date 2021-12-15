@@ -33,9 +33,9 @@
       "tlp": {
         "label": "WHITE"
       }
-    }
-  "lang": "en-US",
-  "aggregate_severity": {
+    },
+    "lang": "en-US",
+    "aggregate_severity": {
       "text": "Critical"
     }
   },
@@ -45,20 +45,26 @@
         "category": "vendor",
         "name": "sFractal Consulting",
         "branches": [
-          "category": "product_family",
-          "name": "QuadBlockQuiz Games",
-          "branches": [
-            "category": "product_name",
-            "name": "QuadBlockQuiz",
+          {
+            "category": "product_family",
+            "name": "QuadBlockQuiz Games",
             "branches": [
-              "category": "product_version",
-              "name": "12.0.1",
-              "product": {
-                "product_id": "qbq-12-0-1-001",
-                "name": "QuadBlockQuiz  v12.0.1"
+              {
+                "category": "product_name",
+                "name": "QuadBlockQuiz",
+                "branches": [
+                  {
+                    "category": "product_version",
+                    "name": "12.0.1",
+                    "product": {
+                      "product_id": "qbq-12-0-1-001",
+                      "name": "QuadBlockQuiz  v12.0.1"
+                    }
+                  }
+                ]
               }
             ]
-          ]
+          }
         ]
       }
     ]
