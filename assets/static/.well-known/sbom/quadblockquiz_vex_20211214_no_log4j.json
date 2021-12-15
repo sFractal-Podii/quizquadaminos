@@ -37,7 +37,14 @@
     "lang": "en-US",
     "aggregate_severity": {
       "text": "Critical"
-    }
+    },
+    "references": [
+      {
+        "category": "self",
+        "url": "http://quizquadblocks.sfractal.com:4000/.well-known/sbom/QuadBlockQuiz_20211214_No_Log4j.html",
+        "summary": "The canonical URL."
+      }
+    ]
   },
   "product_tree": {
     "branches": [
@@ -92,6 +99,7 @@
       ],
       "references": [
         {
+          "category": "external",
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
           "summary": "Log42j vulnerability. An attacker who can control log messages or log message parameters can execute arbitrary code loaded from LDAP servers when message lookup substitution is enabled."
         }
