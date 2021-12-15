@@ -1,0 +1,109 @@
+{
+  "document": {
+    "category": "vex",
+    "csaf_version": "2.0",
+    "publisher": {
+      "category": "vendor",
+      "name": "sFractal PSIRT",
+      "namespace": "https://www.sfractal.com/"
+    },
+    "title": "QuadBlockQuiz Not Affected by Log4j exploits",
+    "tracking": {
+      "current_release_date": "2021-12-14T17:00:00.000Z",
+      "id": "quadblockquiz_vex_20211214_no_log4j",
+      "initial_release_date": "2021-12-14T17:00:00.000Z",
+      "revision_history": [
+        {
+          "date": "2021-12-14T17:00:00.000Z",
+          "number": "1.0.0",
+          "summary": "Initial version"
+        }
+      ],
+      "status": "final",
+      "version": "1.0.0",
+      "generator": {
+        "date": "2021-12-14T13:59:32.299Z",
+        "engine": {
+          "version": "1.9.0",
+          "name": "Secvisogram"
+        }
+      }
+    },
+    "distribution": {
+      "tlp": {
+        "label": "WHITE"
+      }
+    },
+    "lang": "en-US",
+    "aggregate_severity": {
+      "text": "Critical"
+    },
+    "references": [
+      {
+        "category": "self",
+        "url": "http://quizquadblocks.sfractal.com:4000/.well-known/sbom/QuadBlockQuiz_20211214_No_Log4j.html",
+        "summary": "The canonical URL."
+      }
+    ]
+  },
+  "product_tree": {
+    "branches": [
+      {
+        "category": "vendor",
+        "name": "sFractal Consulting",
+        "branches": [
+          {
+            "category": "product_family",
+            "name": "QuadBlockQuiz Games",
+            "branches": [
+              {
+                "category": "product_name",
+                "name": "QuadBlockQuiz",
+                "branches": [
+                  {
+                    "category": "product_version",
+                    "name": "12.0.1",
+                    "product": {
+                      "product_id": "qbq-12-0-1-001",
+                      "name": "QuadBlockQuiz  v12.0.1"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "vulnerabilities": [
+    {
+      "product_status": {
+        "known_not_affected": [
+          "qbq-12-0-1-001"
+        ]
+      },
+      "cve": "CVE-2021-44228",
+      "cwe": {
+        "id": "CWE-502",
+        "name": "Deserialization of Untrusted Data"
+      },
+      "threats": [
+        {
+          "category": "impact",
+          "details": "The log4j component is not present in this products. No java in this product. Set the component_not_present flag once the flags are implemented in CSAF.",
+          "product_ids": [
+            "qbq-12-0-1-001"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "category": "external",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+          "summary": "Log42j vulnerability. An attacker who can control log messages or log message parameters can execute arbitrary code loaded from LDAP servers when message lookup substitution is enabled."
+        }
+      ]
+    }
+  ]
+}
