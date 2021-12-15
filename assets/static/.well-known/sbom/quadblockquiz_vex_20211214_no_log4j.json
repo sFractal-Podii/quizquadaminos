@@ -89,6 +89,12 @@
             "qbq-12-0-1-001"
           ]
         }
+      ],
+      "references": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+          "summary": "Log42j vulnerability. An attacker who can control log messages or log message parameters can execute arbitrary code loaded from LDAP servers when message lookup substitution is enabled."
+        }
       ]
     }
   ]
