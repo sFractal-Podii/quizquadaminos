@@ -126,20 +126,4 @@ defmodule Quadquizaminos.Brick do
   def color(%{name: :o}), do: :red
   def color(%{name: :t}), do: :yellow
 
-
-  defimpl Inspect, for: Quadquizaminos.Brick do
-    import Inspect.Algebra
-
-    def inspect(brick, _opts) do
-      concat([
-        Quadquizaminos.Brick.to_string(brick),
-        "\n",
-        inspect(brick.location),
-        " ",
-        inspect(brick.reflection),
-        " ",
-        inspect(brick.rotation)
-      ])
-    end
-  end
 end
