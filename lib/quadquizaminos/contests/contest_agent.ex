@@ -45,23 +45,6 @@ defmodule Quadquizaminos.Contest.ContestAgent do
     |> Agent.update(fn state -> %{state | time_elapsed: 0} end)
   end
 
-  def update_timer(name) do
-    name
-    |> Agent.get_and_update(fn
-      %{time_elapsed: time, status: :running} = state ->
-        {state, %{state | time_elapsed: time + 1}}
-
-      state ->
-        {state, state}
-    end)
-  end
-
-  def pause_contest(name) do
-    name
-    |> String.to_atom()
-    |> Agent.update(fn state -> %{state | status: :paused} end)
-  end
-
   def resume_contest(name) do
     name
     |> String.to_atom()
