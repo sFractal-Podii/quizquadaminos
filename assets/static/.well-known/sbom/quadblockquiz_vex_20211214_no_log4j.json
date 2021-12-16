@@ -72,10 +72,10 @@
                 "branches": [
                   {
                     "category": "product_version",
-                    "name": "12.0.1",
+                    "name": "12.0.2",
                     "product": {
                       "product_id": "qbq-12-0-1-001",
-                      "name": "QuadBlockQuiz v12.0.1"
+                      "name": "QuadBlockQuiz v12.0.2"
                     }
                   }
                 ]
