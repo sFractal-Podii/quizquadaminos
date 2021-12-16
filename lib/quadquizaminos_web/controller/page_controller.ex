@@ -21,12 +21,12 @@ defmodule QuadquizaminosWeb.PageController do
     render(conn, "instructions.html")
   end
 
-  def sbom(conn, _params) do
-    render(conn, "sbom.html")
+  def redirect_to_well_known(conn, _params) do
+    redirect(conn, to: "/.well-known/sbom")
   end
 
-  def wellknown(conn, _params) do
-    render(conn, "wellknown.html")
+  def sbom(conn, _params) do
+    render(conn, "sbom.html")
   end
 
   defp current_user(nil), do: nil

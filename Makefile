@@ -89,7 +89,6 @@ sbom: ## creates sbom for both  npm and hex dependancies
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
-	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
 sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
 	mix sbom.cyclonedx -o elixir_bom.xml
@@ -99,7 +98,6 @@ sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclo
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	cp $(SBOM_FILE_NAME_CY).* assets/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_SPDX).* assets/static/.well-known/sbom
-	cp $(SBOM_FILE_NAME_CY).json assets/static/.well-known/sbom/sbom.json
 
 
 release: ## Build a release of the application with MIX_ENV=prod
