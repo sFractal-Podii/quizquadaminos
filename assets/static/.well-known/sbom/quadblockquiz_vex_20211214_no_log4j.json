@@ -9,7 +9,7 @@
     },
     "title": "QuadBlockQuiz Not Affected by Log4j exploits",
     "tracking": {
-      "current_release_date": "2021-12-14T17:00:00.000Z",
+      "current_release_date": "2021-12-15T23:00:00.000Z",
       "id": "quadblockquiz_vex_20211214_no_log4j",
       "initial_release_date": "2021-12-14T17:00:00.000Z",
       "revision_history": [
@@ -17,10 +17,15 @@
           "date": "2021-12-14T17:00:00.000Z",
           "number": "1.0.0",
           "summary": "Initial version"
+        },
+        {
+          "date": "2021-12-15T23:00:00.000Z",
+          "number": "1.0.1",
+          "summary": "better use of CSAF, info content same"
         }
       ],
       "status": "final",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "generator": {
         "date": "2021-12-14T13:59:32.299Z",
         "engine": {
@@ -41,8 +46,13 @@
     "references": [
       {
         "category": "self",
-        "url": "http://quizquadblocks.sfractal.com:4000/.well-known/sbom/QuadBlockQuiz_20211214_No_Log4j.html",
-        "summary": "The canonical URL."
+        "url": "http://quizquadblocks.sfractal.com:4000/.well-known/sbom/quadblockquiz_vex_20211214_no_log4j.json",
+        "summary": "QuadBlockQuiz qbq-12-0-1-001 - CSAF Version"
+      },
+      {
+        "category": "self",
+        "url": "http://quizquadblocks.sfractal.com:4000/.well-known/sbom/quadblockquiz_vex_20211214_no_log4j.html",
+        "summary": "QuadBlockQuiz qbq-12-0-1-001 - HTML Version"
       }
     ]
   },
@@ -65,7 +75,7 @@
                     "name": "12.0.1",
                     "product": {
                       "product_id": "qbq-12-0-1-001",
-                      "name": "QuadBlockQuiz  v12.0.1"
+                      "name": "QuadBlockQuiz v12.0.1"
                     }
                   }
                 ]
@@ -102,6 +112,11 @@
           "category": "external",
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
           "summary": "Log42j vulnerability. An attacker who can control log messages or log message parameters can execute arbitrary code loaded from LDAP servers when message lookup substitution is enabled."
+        },
+        {
+          "category": "external",
+          "url": "https://raw.githubusercontent.com/CVEProject/cvelist/master/2021/45xxx/CVE-2021-44228.json",
+          "summary": "CVE-2021-44228 Mitre 4.0 json"
         }
       ]
     }
