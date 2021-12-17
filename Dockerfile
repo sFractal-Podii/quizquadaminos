@@ -44,6 +44,8 @@ RUN mix phx.digest && mix release
 
 FROM debian:buster-slim AS app
 
+ENV LANG=C.UTF-8
+
 RUN apt-get update && apt-get install -y openssl
 
 RUN useradd --create-home app
