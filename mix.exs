@@ -7,36 +7,11 @@ defmodule Quadquizaminos.MixProject do
       version: "0.12.2",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext, :unused] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       build_embedded: true,
       deps: deps(),
-      unused: [
-        ignore: [
-          {QuadquizaminosWeb.Router.Helpers},
-          {QuadquizaminosWeb.Endpoint},
-          {QuadquizaminosWeb.ErrorView},
-          {QuadquizaminosWeb.Gettext},
-          {Quadquizaminos.ReleaseTask},
-          {Quadquizaminos.Repo},
-          {QuadquizaminosWeb.Router},
-          {QuadquizaminosWeb.SessionView},
-          {QuadquizaminosWeb.LayoutView},
-          {QuadquizaminosWeb.SessionController},
-          {QuadquizaminosWeb.PageController},
-          {QuadquizaminosWeb.AuthController},
-          {QuadquizaminosWeb.Telemetry},
-          {QuadquizaminosWeb.UserSocket},
-          {QuadquizaminosWeb.AuthView},
-          {QuadquizaminosWeb.PageView},
-          {:_, :__schema__, :_},
-          {:_, :__struct__, :_},
-          {:_, :__changeset__, :_},
-          {:_, :child_spec, :_},
-          {:_, :__live__, 0}
-        ]
-      ],
       releases: [
         quadquizaminos: [
           steps: [:assemble, &copy_qna/1]
@@ -80,7 +55,6 @@ defmodule Quadquizaminos.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.5.7"},
-      {:mix_unused, "~> 0.2.0"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.5"},
       {:postgrex, ">= 0.0.0"},
