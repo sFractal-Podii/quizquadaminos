@@ -39,6 +39,7 @@
     "terser-webpack-plugin": "^2.3.2",
     "trim-newlines": ">=3.0.1",
     "webpack": "4.41.5",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^3.3.2",
+    "json-schema": ">=0.4.0"
   }
 }
