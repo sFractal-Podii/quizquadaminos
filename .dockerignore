@@ -3,6 +3,6 @@ assets/node_modules/
 deps/
 doc/
 docs/
-priv/static/
+priv/static/assets
 test/
 tmp/

@@ -1,6 +1,5 @@
 import Config
 
-# Configure your database
 config :quadquizaminos, Quadquizaminos.Repo,
   username: "postgres",
   password: "postgres",
@@ -9,12 +8,6 @@ config :quadquizaminos, Quadquizaminos.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-# For development, we disable any cache and enable
-# debugging and code reloading.
-#
-# The watchers configuration can be used to run external
-# watchers to your application. For example, we use it
-# with webpack to recompile .js and .css sources.
 config :quadquizaminos, QuadquizaminosWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
@@ -22,10 +15,16 @@ config :quadquizaminos, QuadquizaminosWeb.Endpoint,
   check_origin: false,
   watchers: [
     node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
+      "build.js",
+      "--watch",
+      cd: Path.expand("../assets", __DIR__)
+    ],
+    npx: [
+      "tailwindcss",
+      "--input=css/app_tailwind.css",
+      "--output=../priv/static/assets/app_tailwind.css",
+      "--postcss",
+      "--watch",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
