@@ -4,7 +4,6 @@ module.exports = {
     './js/**/*.js',
     '../lib/*_web/**/*.*ex'
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
      fontFamily: {
       'sans': ['Helvetica']},

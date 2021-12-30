@@ -42,12 +42,9 @@ RUN syft debian:buster-slim -o spdx-json > debian.buster_slim-spdx-bom.json
 RUN syft debian:buster-slim -o cyclonedx-json > debian.buster_slim-cyclonedx-bom.json
 RUN syft debian:buster-slim -o cyclonedx > debian.buster_slim-cyclonedx-bom.xml
 
-RUN cp *bom* ./assets/static/.well-known/sbom/
-RUN npm run deploy --prefix ./assets
-
-
-# Final build step: digest static assets and generate the release
-RUN mix phx.digest && mix release
+RUN cp *bom* ./priv/static/.well-known/sbom/
+RUN mix assets.deploy
+RUN mix release
 
 FROM debian:buster-slim AS app
 
