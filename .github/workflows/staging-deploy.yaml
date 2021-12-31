@@ -18,15 +18,12 @@ on:
   push:
     branches:
     - develop
-  pull_request:
-    types: [labeled]
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
 
 jobs:
   setup-build-publish-deploy:
-    if: github.event_name = 'push' || github.event.label.name = 'preview' || contains(github.event.pull_request.labels.*.name, 'preview')
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment:

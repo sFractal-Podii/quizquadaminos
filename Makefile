@@ -100,7 +100,9 @@ release: ## Build a release of the application with MIX_ENV=prod
 	MIX_ENV=prod mix deps.get --only prod
 	MIX_ENV=prod mix compile
 	npm install --prefix ./assets
-	MIX_ENV=prod mix assets.deploy
+	npm run deploy --prefix ./assets
+	mkdir -p priv/static
+	MIX_ENV=prod mix phx.digest
 	MIX_ENV=prod mix release
 
 .PHONY: docker-image
