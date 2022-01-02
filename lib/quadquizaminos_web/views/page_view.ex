@@ -1,10 +1,6 @@
 defmodule QuadquizaminosWeb.PageView do
   use QuadquizaminosWeb, :view
 
-  def render("instructions.html", _params) do
-    QuadquizaminosWeb.Instructions.game_instruction()
-  end
-
   def render("sbom.html", _params) do
     files =
       :quadquizaminos
