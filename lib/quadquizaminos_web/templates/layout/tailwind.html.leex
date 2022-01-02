@@ -11,55 +11,45 @@
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/app_tailwind.js") %>"></script>
   </head>
   <body>
-    <div id="content">
-    <header>
-      <section class="container">
+    <div>
+      <header>
+        <section class="container">
           <div class="bg-light-blue-300">
             <a href="https://www.bsideslv.org/">
               <img class="object-fill w-px w-2" src="<%= Routes.static_path(@conn, "/images/BSidesLV.png") %>" alt="BsidesLV Logo" />
             </a>
           </div>
 
-        <div class="bg-light-blue-300 h-48 w-96">
-        <a> <img class="object-contain " src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" /> </a>
-        </div>
-        <H1>QuadBlockQuiz</H1>
-        <H3>Supply Chain Edition</H3>
-      </section>
-      <%= render(QuadquizaminosWeb.LayoutView, "navbar.html", assigns) %>
-    </header>
-    <%= @inner_content %>
+          <div class="bg-light-blue-300 h-48 w-96">
+            <a> <img class="object-contain " src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" /> </a>
+          </div>
+          <H1>QuadBlockQuiz</H1>
+          <H3>Supply Chain Edition</H3>
+        </section>
+        <%= render(QuadquizaminosWeb.LayoutView, "navbar_tailwind.html", assigns) %>
+      </header>
+      <div class="container mx-auto px-4 md:px-20 pb-20">
+        <%= @inner_content %>
+      </div>
     </div>
-  <footer>
-  <table>
-  <tr>
-    <td>
+    <div class="container mx-auto">
+    <footer class="grid grid-flow-col place-items-center h-32 gap-4">
       <a href="https://sfractal.com/" class="phx-logo">
         <img src="<%= Routes.static_path(@conn, "/images/sFractalConsulting.png") %>" alt="sFractal Logo" />
       </a>
-    </td>
-    <td>
       <a href="https://podiihq.com/" class="phx-logo">
         <img src="<%= Routes.static_path(@conn, "/images/podiilogo.png") %>" alt="Podii Logo" />
       </a>
-    </td>
-    <td>
       <a href="https://briarcutter.com/" class="phx-logo">
         <img src="<%= Routes.static_path(@conn, "/images/Briar Cutter Final PNG@2x.png") %>" alt="Briar Cutter Logo" />
       </a>
-    </td>
-    <td>
       <a href="https://grox.io/" class="phx-logo">
         <img src="<%= Routes.static_path(@conn, "/images/groxio.png") %>" alt="Grox.io Logo" />
-      </a>
-    </td>
-    <td>
-      <a href="https://google.com/" class="phx-logo">
-        <img src="<%= Routes.static_path(@conn, "/images/google2.0.0.jpg") %>" alt="Google Logo" />
-      </a>
-    </td>
-</tr>
-<table>
-</footer>
+        </a>
+        <a href="https://google.com/" class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/google2.0.0.jpg") %>" alt="Google Logo" />
+        </a>
+    </footer>
+      </div>
   </body>
 </html>

@@ -17,8 +17,8 @@ defmodule QuadquizaminosWeb.PageController do
     )
   end
 
-  def instructions(conn, _params) do
-    render(conn, "instructions.html")
+  def how_to_play(conn, _params) do
+    render(conn, "how-to-play.html")
   end
 
   def redirect_to_well_known(conn, _params) do

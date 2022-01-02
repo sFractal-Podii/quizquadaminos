@@ -15,6 +15,10 @@ defmodule QuadquizaminosWeb.Router do
     plug :put_root_layout, {QuadquizaminosWeb.LayoutView, "privacy_and_term_of_service.html"}
   end
 
+  pipeline :tailwind_layout do
+    plug :put_root_layout, {QuadquizaminosWeb.LayoutView, "tailwind.html"}
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -48,7 +52,6 @@ defmodule QuadquizaminosWeb.Router do
     get "/anonymous", SessionController, :anonymous
     post "/anonymous", SessionController, :anonymous
     resources "/sessions", SessionController, only: [:new, :create]
-    get "/instructions", PageController, :instructions
 
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
@@ -63,6 +66,12 @@ defmodule QuadquizaminosWeb.Router do
 
     live "/termsofservice", TermsOfServiceLive
     live "/privacy", PrivacyLive
+  end
+
+  scope "/", QuadquizaminosWeb do
+    pipe_through [:browser, :tailwind_layout]
+
+    get "/how-to-play", PageController, :how_to_play
   end
 
   scope "/admin", QuadquizaminosWeb, as: :admin do
