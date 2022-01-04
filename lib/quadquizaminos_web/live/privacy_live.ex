@@ -3,10 +3,10 @@ defmodule QuadquizaminosWeb.PrivacyLive do
 
   def render(assigns) do
     ~L"""
-            <h1>Privacy Policy</h1>
-            <h3>Version 1.0.0 (last updated 6-May-2021)</h3>
+            <h1 class="heading-1 text-center mt-6">Privacy Policy</h1>
+            <p class="font-bold text-center">Version 1.0.0 (last updated 6-May-2021)</p>
 
-            sFractal takes your privacy as seriously
+            <p class="mt-6">sFractal takes your privacy as seriously
             as you do.
             We want to give you control over the little information we collect from you 
             and work transparently to keep that information no longer than necessary. 
@@ -21,10 +21,10 @@ defmodule QuadquizaminosWeb.PrivacyLive do
             you agree to the collection
             and use of information in accordance with this Privacy Policy.
             Parts of this Privacy Policy has been created
-            with the help of the Privacy Policy Generator.
+            with the help of the Privacy Policy Generator.</p>
 
 
-            <h2>What data is collected by QuadBlockQuiz?</h2>
+            <h2 class="heading-3 mt-6">What data is collected by QuadBlockQuiz?</h2>
             We are only collecting publicly accessbile information.
             If you login using our anonymous feature,
             we are collecting/keeping no information at all.
@@ -32,7 +32,7 @@ defmodule QuadquizaminosWeb.PrivacyLive do
             then we are only keeping enough information to display your score,
             and to contact you should you win a prize.
 
-            <h2>How is my data used by QuadBlockQuiz?</h2>
+            <h2 class="heading-3 mt-6">How is my data used by QuadBlockQuiz?</h2>
             We use your data to operate, maintain, and improve our game.
             In particular, your identiy (if provided by OAUTH from GitHub,
             Google, Twitter, or LinkedIn) is used to display your score
@@ -40,7 +40,7 @@ defmodule QuadquizaminosWeb.PrivacyLive do
             We may use your contact information from OAUTH to inform you of prizes
             should you win our contest.
 
-            <h2>How is my data shared?</h2>
+            <h2 class="heading-3 mt-6">How is my data shared?</h2>
             Your data
             (which we believe to only be publicly accessible information)
             will not be shared other than
@@ -51,15 +51,15 @@ defmodule QuadquizaminosWeb.PrivacyLive do
             (4) in conjunction with an investigation of suspected or actual illegal activity
             (5) to protect the rights, property, or safety of sFractal or it's users.
 
-            <h2>Information from Third-Party Social Media Services</h2>
+            <h2 class="heading-3 mt-6">Information from Third-Party Social Media Services</h2>
             We allow you to create an account
             and log in to use the game
             through the following third-party Social Media Services:
-            GitHub,
-            Google,
-            Facebook,
-            Twitter,
-            LinkedIn.
+            <li>GitHub </li>
+            <li>Google </li>
+            <li>Facebook </li>
+            <li>Twitter </li>
+            <li>LinkedIn </li>
             If you decide to register through
             or otherwise grant us access to a third-party Social Media Service,
             We may collect personal data that is already associated
@@ -67,7 +67,7 @@ defmodule QuadquizaminosWeb.PrivacyLive do
             such as your name, or your email address,
             associated with that account.
 
-            <h2>What about cookies?</h2>
+            <h2 class="heading-3 mt-6">What about cookies?</h2>
             We may use techologies such as cookies, local storage,
             web sessions, websockets
             and other automated tecnologies on our websites.
@@ -80,30 +80,30 @@ defmodule QuadquizaminosWeb.PrivacyLive do
             Note that rejecting cookies may affect your ability
             to interact with the website.
 
-            <h2>How do I access or delete my data?</h2>
-            Contact quadblockquiz@googlegroups.com
+            <h2 class="heading-3 mt-6">How do I access or delete my data?</h2>
+            Contact: quadblockquiz@googlegroups.com
 
-            <h2>Retention</h2>
+            <h2 class="heading-3 mt-6">Retention</h2>
             To the extent possible, we keep no data longer than necessary;
             and will delete all data within one year unless we have
             the owner's consent to retain for a specific purpose
             (e.g. bragging rights to remain on Leaderboard).
 
-            <h2>How do we protect your information?</h2>
+            <h2 class="heading-3 mt-6">How do we protect your information?</h2>
             We intend to only collect publicly available information
             and we maintain administrative, technical, and physical
             safeguards to protect any data we maintain against
             accidental, unlawful, or unauthorized
             destruction, loss, adulteration, access, distortion, or use.
 
-            <h2>Children under 13</h2>
+            <h2 class="heading-3 mt-6">Children under 13</h2>
             This website is intended for a general audience
             and is not directed at children.
             We do not knowlingly collect personal information
             online from indivuals under the age of 13
             or such other age as may be directed by applicable law.
 
-            <h2>Links to Other Websites</h2>
+            <h2 class="heading-3 mt-6">Links to Other Websites</h2>
             Our Service may contain links to other websites
             that are not operated by Us.
             If You click on a third party link,
@@ -115,13 +115,13 @@ defmodule QuadquizaminosWeb.PrivacyLive do
             for the content, privacy policies or practices
             of any third party sites or services.
 
-            <h2>Changes to this policy</h2>
+            <h2 class="heading-3 mt-6">Changes to this policy</h2>
             sFractal may amend this policy from time to time.
             We encourage you to regularly check this page to review any changes.
             Near the top of this page, we will indicate when
             it was most recently updated.
 
-            <h2>Security of Your Personal Data</h2>
+            <h2 class="heading-3 mt-6">Security of Your Personal Data</h2>
             The security of Your Personal Data is important to Us,
             but remember that no method of transmission over the Internet,
             or method of electronic storage is 100% secure.
