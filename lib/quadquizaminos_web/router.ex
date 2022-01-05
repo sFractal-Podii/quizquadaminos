@@ -47,7 +47,6 @@ defmodule QuadquizaminosWeb.Router do
     live "/contestboard", ContestboardLive
     live "/contests", ContestsLive, :index
     live "/contests/:id", ContestsLive, :show
-    live "/contest_rules", ContestRules
     live "/contest_prizes", ContestPrizes
     get "/anonymous", SessionController, :anonymous
     post "/anonymous", SessionController, :anonymous
@@ -72,6 +71,7 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through [:browser, :tailwind_layout]
 
     get "/how-to-play", PageController, :how_to_play
+    live "/contest_rules", ContestRules
   end
 
   scope "/admin", QuadquizaminosWeb, as: :admin do

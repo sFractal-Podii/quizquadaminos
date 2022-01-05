@@ -15,4 +15,9 @@
   .heading-3 {
     @apply font-bold text-xl;
   }
+
+ 
+  .contest-rule a{
+    @apply text-blue-600;
+  }
 }
