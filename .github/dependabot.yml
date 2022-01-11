@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/assets"
+    target-branch: "develop"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "mix"
+    directory: "/"
+    target-branch: "develop"
+    schedule:
+      interval: "daily"
