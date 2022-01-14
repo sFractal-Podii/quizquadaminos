@@ -171,3 +171,13 @@
 .pointer {
   cursor: pointer;
 }
+
+.shadowbox {
+  width: 25em;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px rgb(185, 184, 184);
+  padding: 8px 12px;
+  background-image: linear-gradient(180deg, rgb(245, 243, 243), rgb(255, 255, 255) 40%, rgb(240, 239, 239));
+  /* background-color: white; */
+}
