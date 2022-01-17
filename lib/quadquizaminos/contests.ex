@@ -21,7 +21,7 @@ defmodule Quadquizaminos.Contests do
       iex> create_contest(%{name: "C"})
             {:error,  changeset}
   """
-  @spec create_contest(map()) :: {:ok, %Contest{}} | {:error, Ecto.Changeset.t()}
+  @spec create_contest(map()) :: {:ok, Contest.t()} | {:error, Ecto.Changeset.t()}
   def create_contest(attrs) do
     %Contest{}
     |> Contest.changeset(attrs)
