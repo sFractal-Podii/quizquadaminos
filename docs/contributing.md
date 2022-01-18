@@ -36,6 +36,9 @@ To squash the commits replace the word `pick` with the letter `s` on the followi
 see [deployment](./deployment.md) for deployment options and how to deploy
 
 ## working with questions
+QuadBlockQuiz includes both playing quadblocks
+and answering questions
+to gain points and powerups. 
 
 ### Adding questions
 
