@@ -12,37 +12,68 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
 
   def render(assigns) do
     ~L"""
-    <div class="container">
-    <h1>Leaderboard</h1>
-    <table>
-    <tr>
-    <th>Player</th>
-    <th class="pointer" phx-click="sort" phx-value-param="score">Score</th>
-    <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks">Bricks</th>
-    <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna">Questions</th>
-    <th>Start time</th>
-    <th>End time</th>
-    <th>Date</th>
-    <th>Board</th>
-    </tr>
-
-    <%= for record <- @records do %>
-     <tr>
-    <td><%= record.user.name %></td>
-    <td class="score"><%= record.score %></td>
-    <td><%= record.dropped_bricks %></td>
-    <td><%= record.correctly_answered_qna %></td>
-    <td><%= Util.datetime_to_time(record.start_time) %></td>
-    <td><%= Util.datetime_to_time(record.end_time) %></td>
-    <td><%= Util.datetime_to_date(record.start_time) %></td>
-    <td><%= live_redirect "view", to: Routes.live_path(@socket, QuadquizaminosWeb.LeaderboardLive.Show, record)%></td>
-    </tr>
-    <% end %>
-    </table>
-    <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
-    <%= live_patch i, class: "button button-outline",  to: Routes.live_path(@socket,__MODULE__,page: i, sort_by: @sort_by), id: "goto-#{i}" %>
-    <% end %>
+    <div class="md:grid md:items-center md:justify-center md:space-y-12">
+      <div class="table">
+        <div class="table-caption heading-1">Leaderboard</div>
+        <div class="hidden md:table-header-group md:bg-sky-50 ">
+          <div class="md:table-cell md:p-4">Player</div>
+          <div class="md:cursor-pointer md:table-cell md:p-4" phx-click="sort" phx-value-param="score">Score</div>
+          <div class="md:cursor-pointer md:table-cell md:p-4" phx-click="sort" phx-value-param="dropped_bricks">Bricks</div>
+          <div class="md:cursor-pointer md:table-cell md:p-4" phx-click="sort" phx-value-param="correctly_answered_qna">Questions</div>
+          <div class="md:table-cell md:p-4">Start time</div>
+          <div class="md:table-cell md:p-4">End time</div>
+          <div class="md:table-cell md:p-4">Date</div>
+          <div class="md:table-cell md:p-4"></div>
+        </div>
+        <%= for record <- @records do %>
+        <div class="hidden md:table-row-group">
+          <div class="md:table-row ">
+            <div class="table-cell md:p-4"><%= record.user.name %></div>
+            <div class="table-cell md:p-4"><%= record.score %></div>
+            <div class="table-cell md:p-4"><%= record.dropped_bricks %></div>
+            <div class="table-cell md:p-4"><%= record.correctly_answered_qna %></div>
+            <div class="table-cell md:p-4"><%= Util.datetime_to_time(record.start_time) %></div>
+            <div class="table-cell md:p-4"><%= Util.datetime_to_time(record.end_time) %></div>
+            <div class="table-cell md:p-4"><%= Util.datetime_to_date(record.start_time) %></div>
+            <div class="table-cell md:p-4"><a href="<%= Routes.live_path(@socket, QuadquizaminosWeb.LeaderboardLive.Show, record) %>"><i class="fas fa-chevron-right"></i></a></div>
+          </div>
+        </div>
+         <div class="rounded-lg shadow md:hidden">
+           <ul class="list-decimal py-4 pl-4">
+             <li class="inline-flex">
+               <%= user_avatar(record.user.avatar, assigns) %>
+               <div class="flex justify-between pt-2 space-x-40 px-4">
+                 <div class="flex flex-col">
+                   <p class="text-base font-sans tracking-wide"><%= record.user.name %></p>
+                   <p class="text-gray-400 text-sm"><%= DateTime.diff(record.end_time, record.start_time)%> sec</p>
+                 </div>
+                 <p class="tracking-wide text-base font-sans font-bold"><%= record.score %></p>
+               </div>
+             </li>
+           </ul>
+         </div> 
+        <% end %>
+      </div>
+      <div class="hidden md:flex md:items-center md:justify-center">
+        <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
+          <div class="md:border md:border-blue-600 md:p-4">
+            <%= live_patch i, class: "button button-outline",  to: Routes.live_path(@socket,__MODULE__,page: i, sort_by: @sort_by), id: "goto-#{i}" %>
+         </div>
+        <% end %>
+      </div>
     </div>
+    """
+  end
+
+  defp user_avatar(nil, assigns) do
+    ~L"""
+      <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src="<%= Routes.static_path(QuadquizaminosWeb.Endpoint, "/images/user-avatar.jpeg") %>" alt="user avatar" />
+    """
+  end
+
+  defp user_avatar(avatar, assigns) do
+    ~L"""
+     <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src="<%= avatar %>" />
     """
   end
 

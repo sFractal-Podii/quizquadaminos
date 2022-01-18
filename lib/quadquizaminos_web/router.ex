@@ -42,7 +42,6 @@ defmodule QuadquizaminosWeb.Router do
     get "/sbom", PageController, :redirect_to_well_known
     get "/.well-known/sbom", PageController, :sbom
 
-    live "/leaderboard", LeaderboardLive
     live "/leaderboard/:board_id", LeaderboardLive.Show
     live "/contestboard", ContestboardLive
     live "/contests", ContestsLive, :index
@@ -72,6 +71,7 @@ defmodule QuadquizaminosWeb.Router do
 
     get "/how-to-play", PageController, :how_to_play
     live "/contest_rules", ContestRules
+    live "/leaderboard", LeaderboardLive
   end
 
   scope "/admin", QuadquizaminosWeb, as: :admin do
