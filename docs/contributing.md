@@ -194,3 +194,31 @@ release                Build a release of the application with MIX_ENV=prod
 test                   Run the test suite
 update-instance        updates image of a running instance
 ```
+
+
+## Redesign of the project layout
+
+Currently the project is being redesigned using [tailwindcss framework](https://tailwindcss.com) which enables us to build complex responsive layouts. 
+
+At the moment the project is using both `phoenixcss` and `tailwindcss` framework. This was done, so that we couldn't affect the agile methodology adapted earlier and also not to affect the already existing pages layouts that are using phoenixcss framework. 
+
+#### Steps to follow when redesigning a page using tailwindcss framework
+
+1. Use Prototype design layouts of the pages that are drawn on [figma](https://www.figma.com/file/vAUOkmrAHEo4Q2q1JtW9e1/quizquadaminos?node-id=156%3A2). 
+   Mobile design layout are available under `Android google pixel` and design layout for medium to large screens are available under `Web page` .
+
+2. Under `router.ex` add the path of the page you are redesigning inside the scope that is piped through tailwind_layout i.e
+
+    ```
+    scope "/", QuadquizaminosWeb do
+    pipe_through [:browser, :tailwind_layout]
+
+    get "/how-to-play", PageController, :how_to_play
+    live "/contest_rules", ContestRules
+    live "/leaderboard", LeaderboardLive
+    end
+
+   ```
+
+
+ 
