@@ -44,7 +44,7 @@ defmodule QuadquizaminosWeb.Router do
 
     live "/leaderboard/:board_id", LeaderboardLive.Show
     live "/contestboard", ContestboardLive
-    live "/contests", ContestsLive, :index
+    
     live "/contests/:id", ContestsLive, :show
     live "/contest_prizes", ContestPrizes
     get "/anonymous", SessionController, :anonymous
@@ -72,6 +72,7 @@ defmodule QuadquizaminosWeb.Router do
     get "/how-to-play", PageController, :how_to_play
     live "/contest_rules", ContestRules
     live "/leaderboard", LeaderboardLive
+    live "/contests", ContestsLive, :index
   end
 
   scope "/admin", QuadquizaminosWeb, as: :admin do

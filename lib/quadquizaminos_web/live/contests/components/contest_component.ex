@@ -19,19 +19,20 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   @impl true
   def render(assigns) do
     ~L"""
-    <td><%= @contest.name%></td>
+    <div class="table-cell md:p-4"><%= @contest.name%></div>
     <%= if @current_user.admin? do %>
-      <td> <%= start_or_pause_button(assigns,@contest) %> </td>
-      <td>
+      <div class="table-cell md:p-4"> <%= start_or_pause_button(assigns,@contest) %> </div>
+      <div class="table-cell md:p-4">
       <button class="<%= maybe_disable_button(@contest) %> <%= if contest_running?(@contest), do: "red" %> icon-button" phx-click="stop" phx-value-contest='<%= @contest.name %>' <%= maybe_disable_button(@contest) %>><i class="fas fa-stop-circle fa-2x"></i></button>
-      </td>
+      </div>
     <% end %>
 
-    <td><%= timer_or_final_result(assigns, @contest) %> </td>
-    <td><%= contest_date(assigns, @contest)%> </td>
-    <td><%= truncate_date(@contest.start_time) %></td>
-    <td><%= truncate_date(@contest.end_time) %></td>
-    <td><%= rsvp_or_results_button(assigns, @contest) %></td>
+    <div class="table-cell md:p-4"><%= timer_or_final_result(assigns, @contest) %> </div>
+    <div class="table-cell md:p-4"><%= contest_date(assigns, @contest)%> </div>
+    <div class="table-cell md:p-4"><%= truncate_date(@contest.start_time) %></div>
+    <div class="table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
+    <div class="table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
+    <button class="bg-blue-600 p-2 rounded w-24 text-white">Test</button>
     """
   end
 
