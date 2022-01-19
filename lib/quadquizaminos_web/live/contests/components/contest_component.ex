@@ -19,7 +19,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   @impl true
   def render(assigns) do
     ~L"""
-    <div class="table-cell md:p-4"><%= @contest.name%></div>
+    <div class="hidden table-cell md:p-4"><%= @contest.name%></div>
     <%= if @current_user.admin? do %>
       <div class="table-cell md:p-4"> <%= start_or_pause_button(assigns,@contest) %> </div>
       <div class="table-cell md:p-4">
@@ -27,12 +27,27 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
       </div>
     <% end %>
 
-    <div class="table-cell md:p-4"><%= timer_or_final_result(assigns, @contest) %> </div>
-    <div class="table-cell md:p-4"><%= contest_date(assigns, @contest)%> </div>
-    <div class="table-cell md:p-4"><%= truncate_date(@contest.start_time) %></div>
-    <div class="table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
-    <div class="table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
-    <button class="bg-blue-600 p-2 rounded w-24 text-white">Test</button>
+    <div class="hidden table-cell md:p-4"><%= timer_or_final_result(assigns, @contest) %> </div>
+    <div class="hidden table-cell md:p-4"><%= contest_date(assigns, @contest)%> </div>
+    <div class="hidden table-cell md:p-4"><%= truncate_date(@contest.start_time) %></div>
+    <div class="hidden table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
+    <div class="hidden table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
+    <div class="rounded-lg shadow md:hidden">
+      <div class="table-row p-4 leading-normal">
+        <div class="table-cell p-4 heading-3 text-blue-600"><%= @contest.name%></div></div>
+      <div class="table-row p-4 leading-normal">
+        <div class="table-cell p-4">Date:</div>
+        <div class="table-cell p-4"><%=contest_date(assigns, @contest)%></div>
+      </div>
+      <div class="table-row p-4 leading-normal">
+        <div class="table-cell p-4">Start:</div>
+        <div class="table-cell p-4"><%= truncate_date(@contest.start_time) %></div>
+      </div>
+      <div class="table-row p-4 leading-normal">
+      <div class="table-cell p-4">End:</div>
+      <div class="table-cell p-4"><%= truncate_date(@contest.end_time) %></div>
+      </div> 
+    </div>
     """
   end
 
@@ -106,7 +121,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
-      <%= live_redirect "Final Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
+      <button class="bg-blue-600 p-2 rounded w-32 text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, contest)%></button>
       """
     end
   end
@@ -151,7 +166,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
        when id in [nil, "anonymous"] do
     ~L"""
-    <button disabled>  RSVP </button>
+    <button class="bg-blue-600 p-2 rounded w-32 text-white opacity-60 cursor-not-allowed">  RSVP </button>
     """
   end
 
