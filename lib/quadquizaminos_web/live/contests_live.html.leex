@@ -51,7 +51,7 @@
           <div class="table-cell md:p-4 md:bg-sky-50"></div>
         </div>
         <%= for  contest <- contests do %>
-          <div class="md:table-row ">
+          <div class="md:table-row">
               <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
           </div>
         <% end %>
