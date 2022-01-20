@@ -33,7 +33,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     <div class="md:table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
     <div class="md:table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
     </div>
-  
+
     <div class="grid grid-cols-1 rounded-lg shadow md:hidden p-4 w-70">
     <div class="p-4 heading-3 text-blue-600"><%= @contest.name%></div>
       <div class="inline-flex space-x-4">
@@ -52,7 +52,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
         <p><%= timer_or_final_result(assigns, @contest) %></p>
       </div>
     </div>
-    
+
     """
   end
 
