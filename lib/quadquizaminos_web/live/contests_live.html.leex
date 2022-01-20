@@ -41,7 +41,7 @@
        <div class="md:table-cell md:p-4">contest date</div>
        <% end %>
     </div>
-        <%= for {status, contests} <- @contests |> group_contest_by_status do %>
+      <%= for {status, contests} <- @contests |> group_contest_by_status do %>
         <div class="md:table-row">
           <div class="table-cell md:p-4 md:bg-sky-50"><%= status(status)  %> Contests </div>
           <div class="table-cell md:p-4 md:bg-sky-50"></div>
@@ -50,12 +50,10 @@
           <div class="table-cell md:p-4 md:bg-sky-50"></div>
           <div class="table-cell md:p-4 md:bg-sky-50"></div>
         </div>
-        <%= for  contest <- contests do %>
-          <div class="md:table-row">
-              <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
-          </div>
+        <%= for contest <- contests do %>
+              <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>   
         <% end %>
-        <% end %>
+      <% end %>
   </div>
       
 
