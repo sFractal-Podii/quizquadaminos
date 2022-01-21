@@ -53,7 +53,6 @@ defmodule QuadquizaminosWeb.Router do
     pipe_through :authorize
     live "/tetris", TetrisLive, :tetris
     live "/tetris/instructions", TetrisLive, :instructions
-    live "/courses", CourseLive
     live "/courses/:course", CourseLive, :show
     live "/courses/:course/:chapter", CourseLive, :questions
   end
@@ -73,6 +72,7 @@ defmodule QuadquizaminosWeb.Router do
     live "/leaderboard", LeaderboardLive
     live "/contests", ContestsLive, :index
     live "/contest-prizes", ContestPrizes
+    live "/courses", CourseLive
   end
 
   scope "/admin", QuadquizaminosWeb, as: :admin do
