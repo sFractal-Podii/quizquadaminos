@@ -34,23 +34,30 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     <div class="md:table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
     </div>
 
-    <div class="grid grid-cols-1 rounded-lg shadow md:hidden p-4 w-70">
-    <div class="p-4 heading-3 text-blue-600"><%= @contest.name%></div>
-      <div class="inline-flex space-x-4">
-        <p>Date:</p>
-        <p><%=contest_date(assigns, @contest)%></p>
-      </div>
-      <div class="inline-flex space-x-4">
-        <p>Start:</p>
-        <p><%= truncate_date(@contest.start_time) %></p>
-      </div>
-      <div class="inline-flex space-x-4">
-        <p>End:</p>
-        <p><%= truncate_date(@contest.end_time) %></p>
-      </div>
-      <div class="inline-flex space-x-4">
-        <p><%= timer_or_final_result(assigns, @contest) %></p>
-      </div>
+    <div class="flex rounded-lg flex-row shadow md:hidden items-center justify-center gap-x-8">
+     <div class="flex flex-col p-4">
+        <div class="heading-3 text-blue-600">
+          <%= @contest.name%> 
+        </div>
+        <div class="inline-flex space-x-4">
+          <p class="opacity-50">Date:</p>
+          <p><%=contest_date(assigns, @contest)%></p>
+        </div>
+        <div class="inline-flex space-x-4">
+          <p class="opacity-50">Start:</p>
+          <p><%= truncate_date(@contest.start_time) %></p>
+        </div>
+        <div class="inline-flex space-x-4">
+          <p class="opacity-50">End:</p>
+          <p class="pl-1"><%= truncate_date(@contest.end_time) %></p>
+        </div>
+        <div>
+          <p><%= timer_or_final_result(assigns, @contest) %></p>
+        </div>
+     </div>
+      <div> 
+      <i class="far fa-envelope fa-5x"></i>
+      </div> 
     </div>
 
     """
@@ -126,7 +133,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~L"""
-      <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, contest)%></button>
+      <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, contest)%></button>
       """
     end
   end
@@ -164,14 +171,14 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
 
   defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
     ~L"""
-    <%= live_redirect "Live Results", class: "button",  to: Routes.contests_path(@socket, :show, contest)%>
+    <%= live_redirect "Live Results", class: "md:bg-blue-600 md:flex md:items-center md:justify-center md:rounded md:w-32 md:h-10 md:text-white",  to: Routes.contests_path(@socket, :show, contest)%>
     """
   end
 
   defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
        when id in [nil, "anonymous"] do
     ~L"""
-    <button class="bg-blue-600 p-2 rounded w-32 md:text-white opacity-60 cursor-not-allowed">  RSVP </button>
+    <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white md:opacity-60 md:cursor-not-allowed">  RSVP </button>
     """
   end
 
@@ -186,9 +193,9 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
   defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
     ~L"""
     <%= if @rsvped? do %>
-      <button class="red" phx-click="cancel_rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>"> CANCEL RSVP </button>
+      <button class="md:bg-red-600 md:p-2 md:rounded md:w-40  md:text-white" phx-click="cancel_rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>"> CANCEL RSVP </button>
     <% else %>
-      <button phx-click="rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>" > RSVP </button>
+      <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white" phx-click="rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>" > RSVP </button>
     <% end %>
     """
   end

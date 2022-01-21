@@ -42,7 +42,7 @@
        <% end %>
     </div>
       <%= for {status, contests} <- @contests |> group_contest_by_status do %>
-        <div class="md:table-row">
+        <div class="md:table-row pt-4">
           <div class="table-cell md:p-4 md:bg-sky-50"><%= status(status)  %> Contests </div>
           <div class="table-cell md:p-4 md:bg-sky-50"></div>
           <div class="table-cell md:p-4 md:bg-sky-50"></div>
