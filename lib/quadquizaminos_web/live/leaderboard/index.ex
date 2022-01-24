@@ -42,10 +42,10 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
            <ul class="list-decimal py-4 pl-4">
              <li class="inline-flex">
                <%= user_avatar(record.user.avatar, assigns) %>
-               <div class="flex justify-between pt-2 space-x-40 px-4">
-                 <div class="flex flex-col">
+               <div class="grid grid-cols-2 gap-x-44 pt-2 px-4">
+                 <div class="grid w-48">
                    <p class="text-base font-sans tracking-wide"><%= record.user.name %></p>
-                   <p class="text-gray-400 text-sm"><%= DateTime.diff(record.end_time, record.start_time)%> sec</p>
+                   <p class="text-gray-400 text-sm"><%= time_taken(record.start_time, record.end_time)%></p>
                  </div>
                  <p class="tracking-wide text-base font-sans font-bold"><%= record.score %></p>
                </div>
@@ -54,15 +54,23 @@ defmodule QuadquizaminosWeb.LeaderboardLive do
          </div> 
         <% end %>
       </div>
-      <div class="hidden md:flex md:items-center md:justify-center">
+      <div class="hidden md:flex md:items-center md:justify-center md:gap-x-2">
         <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
-          <div class="md:border md:border-blue-600 md:p-4">
+          <div class="md:border md:border-blue-600 md:p-2 md:rounded">
             <%= live_patch i, class: "button button-outline",  to: Routes.live_path(@socket,__MODULE__,page: i, sort_by: @sort_by), id: "goto-#{i}" %>
          </div>
         <% end %>
       </div>
     </div>
     """
+  end
+
+  defp time_taken(start_time, end_time) when is_nil(start_time) or is_nil(end_time) do
+    "playing"
+  end
+
+  defp time_taken(start_time, end_time) do
+    "#{DateTime.diff(end_time, start_time)} sec"
   end
 
   defp user_avatar(nil, assigns) do
