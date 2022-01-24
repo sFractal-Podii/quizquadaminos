@@ -72,6 +72,8 @@ defmodule QuadquizaminosWeb.Router do
     live "/leaderboard", LeaderboardLive
     live "/contests", ContestsLive, :index
     live "/contest-prizes", ContestPrizes
+
+    pipe_through :authorize
     live "/courses", CourseLive
   end
 
