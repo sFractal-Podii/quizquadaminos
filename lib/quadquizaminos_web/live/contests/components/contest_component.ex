@@ -55,7 +55,7 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
         </div>
       </div>
       <div>
-        <%= if @contest_status == "Past" do %>
+        <%= if @contest.status == :stopped do %>
           <i class="fas fa-medal fa-3x text-blue-400"></i>
         <% else %>
           <i class="far fa-envelope fa-3x text-blue-400"></i>
@@ -87,7 +87,6 @@ defmodule QuadquizaminosWeb.ContestsLive.ContestComponent do
     {:ok,
      assign(socket,
        contest: contest,
-       contest_status: assigns.contest_status,
        current_user: assigns.current_user,
        rsvped?: rsvped?,
        time_remaining: time_remaining(contest)
