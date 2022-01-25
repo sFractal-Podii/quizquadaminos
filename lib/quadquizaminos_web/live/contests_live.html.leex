@@ -49,7 +49,7 @@
         <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
       </div>
       <%= for contest <- contests do %>
-        <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user, contest_status: "#{status(status)}" %>   
+        <%= live_component @socket, QuadquizaminosWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>   
       <% end %>
     <% end %>
   </div>
