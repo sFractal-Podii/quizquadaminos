@@ -73,7 +73,7 @@ defmodule Quadquizaminos.MixProject do
       {:ueberauth_github, "~> 0.7"},
       {:ueberauth_linkedin, git: "https://github.com/fajarmf/ueberauth_linkedin"},
       {:ueberauth_google, "~>0.10"},
-      {:sbom, git: "https://github.com/voltone/sbom", runtime: false},
+      {:sbom, git: "https://github.com/sigu/sbom", runtime: false},
       {:earmark, "~> 1.4"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]

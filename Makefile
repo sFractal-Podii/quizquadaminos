@@ -80,7 +80,7 @@ format: mix format ## Run formatting tools on the code
 sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/  && npm install && npm install -g @cyclonedx/bom@3.4.1 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml && cd ..
-	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
+	./cyclonedx-cli merge --name $(APP_NAME) --version $(APP_VERSION) --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY)-all.xml --output-file $(SBOM_FILE_NAME_CY).json
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxjson --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	rm $(SBOM_FILE_NAME_CY).xml && mv $(SBOM_FILE_NAME_CY)-all.xml $(SBOM_FILE_NAME_CY).xml
@@ -90,7 +90,7 @@ sbom: ## creates sbom for both  npm and hex dependancies
 sbom_fast: ## creates sbom without dependancy instalment, assumes you have cyclonedx-bom javascript package installed globally
 	mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/ && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml && cd ..
-	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
+	./cyclonedx-cli merge --name $(APP_NAME) --version $(APP_VERSION) --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY)-all.xml --output-file $(SBOM_FILE_NAME_CY).json
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxjson --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	rm $(SBOM_FILE_NAME_CY).xml && mv $(SBOM_FILE_NAME_CY)-all.xml $(SBOM_FILE_NAME_CY).xml
