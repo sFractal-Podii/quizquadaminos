@@ -143,11 +143,11 @@ If you need to specify the secrets to be used for this environment:
 
 ### Release guide format
 
-1. Release to production and Alpha should at least be done once per week if there are issues/features that has been worked on.
+1. Release to production and Alpha should at least be done once per week if there are issues/features that have been worked on.
 
 2. For small tweaks like , fixing bugs, dependabot changes, updating a single mobility page a `double dot release` should be done. That is the last digit is increased by one i.e `(v0.12.3 to v0.12.4)`.
 
-3. When a new feature has been worked on or a bunch of mobility pages has been updated, a `single dot realease` should be done. That is, increasing the middle digit by one i.e`(v0.13.0 to v0.14.0)` .
+3. When a new feature has been worked on or a bunch of mobility pages have been updated, a `single dot realease` should be done. That is, increasing the middle digit by one i.e`(v0.13.0 to v0.14.0)` .
 
 4. Making a release, involves the following cycle:
      
@@ -158,5 +158,14 @@ If you need to specify the secrets to be used for this environment:
      * If alpha has issues, fix in dev and start with first bullet again but on next release number (ie fix is next double dot digit from the broken release).
      * if alpha passes sanity check, make a release to production.
      * Sanity check production works (if not, fix in development and go through cycle again)
+
+#### VM instances
+
+|               | Name     | IP_Address |
+| ----------- | ----------- |-----------------|
+| Production      | Frost       | [35.245.104.155:4000]([35.245.104.155:4000) |
+| Alpha   | Snowflake        | [34.86.212.145:4000]([34.86.212.145:4000) |
+| Staging | quadblocs-staging | [34.86.107.98:4000]([34.86.212.145:4000) | 
+
 
     
