@@ -81,7 +81,7 @@ sbom: ## creates sbom for both  npm and hex dependancies
 	mix deps.get && mix sbom.cyclonedx -o elixir_bom.xml
 	cd assets/  && npm install && npm install -g @cyclonedx/bom@3.1.1 && cyclonedx-bom -o ../$(SBOM_FILE_NAME_CY).xml && cd ..
 	./cyclonedx-cli merge --input-files ./$(SBOM_FILE_NAME_CY).xml ./elixir_bom.xml --output-file $(SBOM_FILE_NAME_CY)-all.xml
-	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).xml --output-file $(SBOM_FILE_NAME_CY).json
+	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY)-all.xml --output-file $(SBOM_FILE_NAME_CY).json
 	./cyclonedx-cli convert --input-file $(SBOM_FILE_NAME_CY).json --output-format spdxtag --output-file $(SBOM_FILE_NAME_SPDX).spdx
 	cp $(SBOM_FILE_NAME_CY).* priv/static/.well-known/sbom
 	cp $(SBOM_FILE_NAME_SPDX).* priv/static/.well-known/sbom
