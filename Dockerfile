@@ -2,6 +2,7 @@
 FROM elixir:1.11.2 AS app_builder
 
 ARG env=prod
+ARG cyclonedx_cli_version=v0.22.0
 
 ENV LANG=C.UTF-8 \
    TERM=xterm \
@@ -10,7 +11,7 @@ ENV LANG=C.UTF-8 \
 RUN mkdir /opt/release
 WORKDIR /opt/release
 RUN mix local.hex --force && mix local.rebar --force
-RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.17.0/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli
+RUN curl -L  https://github.com/CycloneDX/cyclonedx-cli/releases/download/$cyclonedx_cli_version/cyclonedx-linux-x64 --output cyclonedx-cli && chmod a+x cyclonedx-cli
 RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
 COPY mix.exs .
