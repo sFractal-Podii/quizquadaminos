@@ -34,7 +34,7 @@ COPY courses ./courses
 COPY Makefile ./Makefile
 
 RUN npm ci --prefix ./assets
-RUN npm install -g @cyclonedx/bom@3.1.1
+RUN npm install -g @cyclonedx/bom@3.4.1
 RUN make sbom_fast
 # make sbom for the production docker image
 RUN syft debian:buster-slim -o spdx > debian.buster_slim-spdx-bom.spdx
