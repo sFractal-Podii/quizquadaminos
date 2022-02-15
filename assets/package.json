@@ -17,7 +17,7 @@
     "postcss-cli": "^9.1.0",
     "postcss-import": "^14.0.2",
     "tailwindcss": "^3.0.19",
-    "nanoid": ">=3.1.31"
+    "nanoid": ">=3.3.0"
   },
   "dependenciesComments": {
     "nanoid": "added due to dependabot"
