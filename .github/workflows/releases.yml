@@ -40,8 +40,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./quadquizaminos.*-*.*.json
-          asset_name: ./quadquizaminos.*-*.*.json
+          asset_path: ./quadquizaminos.*.json
+          asset_name: quadquizaminos.*.json
           asset_content_type: application/octet-stream
       - name: Upload SBOM XML
         uses: actions/upload-release-asset@v1
@@ -49,6 +49,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./quadquizaminos.*-*.*.xml
-          asset_name: ./quadquizaminos.*-*.*.xml
+          asset_path: ./quadquizaminos.*.xml
+          asset_name: quadquizaminos.*.xml
           asset_content_type: application/octet-stream
