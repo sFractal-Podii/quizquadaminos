@@ -40,8 +40,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: priv/static/.well-known/sbom/quadquizaminos.*.json
-          asset_name: quadquizaminos.*.json
+          asset_path: ./priv/static/.well-known/sbom/
+          asset_name: quadquizaminos
           asset_content_type: application/octet-stream
       - name: Upload SBOM XML
         uses: actions/upload-release-asset@v1
