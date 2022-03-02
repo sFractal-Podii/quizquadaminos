@@ -1,5 +1,5 @@
-defmodule QuadBlockQuizWeb.CoordModalComponent do
-  use QuadBlockQuizWeb, :live_component
+defmodule QuadblockquizWeb.CoordModalComponent do
+  use QuadblockquizWeb, :live_component
 
   def render(assigns) do
     ~L"""
@@ -11,7 +11,7 @@ defmodule QuadBlockQuizWeb.CoordModalComponent do
        <%= text_input f, :y, type: :number, min: "1", max: "20" %>
       <%= submit  "Add Block" %>
       </form>
-      <% end %>      
+      <% end %>
     """
   end
 end

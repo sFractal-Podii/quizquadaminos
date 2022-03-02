@@ -1,4 +1,4 @@
-defmodule QuadBlockQuiz.Repo.Migrations.AlterContestsTable do
+defmodule Quadblockquiz.Repo.Migrations.AlterContestsTable do
   use Ecto.Migration
 
   def change do

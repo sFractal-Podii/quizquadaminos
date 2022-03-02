@@ -7,10 +7,10 @@
       "name": "sFractal PSIRT",
       "namespace": "https://www.sfractal.com/"
     },
-    "title": "QuadBlockQuiz Not Affected by Log4j exploits",
+    "title": "quadblockquiz Not Affected by Log4j exploits",
     "tracking": {
       "current_release_date": "2021-12-14T17:00:00.000Z",
-      "id": "quadblockquiz_vex_20211214_no_log4j",
+      "id": "Quadblockquiz_vex_20211214_no_log4j",
       "initial_release_date": "2021-12-14T17:00:00.000Z",
       "revision_history": [
         {
@@ -41,7 +41,7 @@
     "references": [
       {
         "category": "self",
-        "url": "http://quizquadblocks.sfractal.com:4000/.well-known/sbom/QuadBlockQuiz_20211214_No_Log4j.html",
+        "url": "http://quizquadblocks.sfractal.com:4000/.well-known/sbom/Quadblockquiz_20211214_No_Log4j.html",
         "summary": "The canonical URL."
       }
     ]
@@ -54,18 +54,18 @@
         "branches": [
           {
             "category": "product_family",
-            "name": "QuadBlockQuiz Games",
+            "name": "quadblockquiz Games",
             "branches": [
               {
                 "category": "product_name",
-                "name": "QuadBlockQuiz",
+                "name": "Quadblockquiz",
                 "branches": [
                   {
                     "category": "product_version",
                     "name": "12.0.1",
                     "product": {
                       "product_id": "qbq-12-0-1-001",
-                      "name": "QuadBlockQuiz  v12.0.1"
+                      "name": "quadblockquiz  v12.0.1"
                     }
                   }
                 ]

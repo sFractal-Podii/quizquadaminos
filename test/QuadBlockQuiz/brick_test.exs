@@ -1,8 +1,8 @@
-defmodule QuadBlockQuiz.BrickTest do
+defmodule Quadblockquiz.BrickTest do
   use ExUnit.Case
 
-  import QuadBlockQuiz.Brick
-  alias QuadBlockQuiz.Points
+  import Quadblockquiz.Brick
+  alias Quadblockquiz.Points
 
   test "Creates a new brick" do
     assert new_brick().name == :i
@@ -69,7 +69,7 @@ defmodule QuadBlockQuiz.BrickTest do
   end
 
   test "should convert brick to string" do
-    actual = new_brick() |> QuadBlockQuiz.Brick.to_string()
+    actual = new_brick() |> Quadblockquiz.Brick.to_string()
     expected = "□■□□\n□■□□\n□■□□\n□■□□"
 
     assert actual == expected

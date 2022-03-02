@@ -1,4 +1,4 @@
-defmodule QuadBlockQuizWeb.PrivacyLive do
+defmodule QuadblockquizWeb.PrivacyLive do
   use Phoenix.LiveView
 
   def render(assigns) do
@@ -8,8 +8,8 @@ defmodule QuadBlockQuizWeb.PrivacyLive do
 
             <p class="mt-6">sFractal takes your privacy as seriously
             as you do.
-            We want to give you control over the little information we collect from you 
-            and work transparently to keep that information no longer than necessary. 
+            We want to give you control over the little information we collect from you
+            and work transparently to keep that information no longer than necessary.
 
             This Privacy Policy describes the policies and procedures we apply to the
             use and disclosure of your information we collect
@@ -24,7 +24,7 @@ defmodule QuadBlockQuizWeb.PrivacyLive do
             with the help of the Privacy Policy Generator.</p>
 
 
-            <h2 class="heading-3 mt-6">What data is collected by QuadBlockQuiz?</h2>
+            <h2 class="heading-3 mt-6">What data is collected by Quadblockquiz?</h2>
             We are only collecting publicly accessbile information.
             If you login using our anonymous feature,
             we are collecting/keeping no information at all.
@@ -32,7 +32,7 @@ defmodule QuadBlockQuizWeb.PrivacyLive do
             then we are only keeping enough information to display your score,
             and to contact you should you win a prize.
 
-            <h2 class="heading-3 mt-6">How is my data used by QuadBlockQuiz?</h2>
+            <h2 class="heading-3 mt-6">How is my data used by Quadblockquiz?</h2>
             We use your data to operate, maintain, and improve our game.
             In particular, your identiy (if provided by OAUTH from GitHub,
             Google, Twitter, or LinkedIn) is used to display your score
@@ -81,7 +81,7 @@ defmodule QuadBlockQuizWeb.PrivacyLive do
             to interact with the website.
 
             <h2 class="heading-3 mt-6">How do I access or delete my data?</h2>
-            Contact: quadblockquiz@googlegroups.com
+            Contact: Quadblockquiz@googlegroups.com
 
             <h2 class="heading-3 mt-6">Retention</h2>
             To the extent possible, we keep no data longer than necessary;

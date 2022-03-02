@@ -1,5 +1,5 @@
-defmodule QuadBlockQuizWeb.ErrorView do
-  use QuadBlockQuizWeb, :view
+defmodule QuadblockquizWeb.ErrorView do
+  use QuadblockquizWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

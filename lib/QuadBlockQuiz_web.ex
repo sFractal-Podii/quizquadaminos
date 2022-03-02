@@ -1,12 +1,12 @@
-defmodule QuadBlockQuizWeb do
+defmodule QuadblockquizWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use QuadBlockQuizWeb, :controller
-      use QuadBlockQuizWeb, :view
+      use QuadblockquizWeb, :controller
+      use QuadblockquizWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,19 +19,19 @@ defmodule QuadBlockQuizWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: QuadBlockQuizWeb
+      use Phoenix.Controller, namespace: QuadblockquizWeb
 
       import Plug.Conn
-      import QuadBlockQuizWeb.Gettext
-      alias QuadBlockQuizWeb.Router.Helpers, as: Routes
+      import QuadblockquizWeb.Gettext
+      alias QuadblockquizWeb.Router.Helpers, as: Routes
     end
   end
 
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/QuadBlockQuiz_web/templates",
-        namespace: QuadBlockQuizWeb
+        root: "lib/quadblockquiz_web/templates",
+        namespace: QuadblockquizWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -45,7 +45,7 @@ defmodule QuadBlockQuizWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {QuadBlockQuizWeb.LayoutView, "live.html"}
+        layout: {QuadblockquizWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())
     end
@@ -72,7 +72,7 @@ defmodule QuadBlockQuizWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import QuadBlockQuizWeb.Gettext
+      import QuadblockquizWeb.Gettext
     end
   end
 
@@ -87,10 +87,10 @@ defmodule QuadBlockQuizWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import QuadBlockQuizWeb.ErrorHelpers
-      import QuadBlockQuizWeb.Gettext
-      import QuadBlockQuizWeb.LiveHelpers
-      alias QuadBlockQuizWeb.Router.Helpers, as: Routes
+      import QuadblockquizWeb.ErrorHelpers
+      import QuadblockquizWeb.Gettext
+      import QuadblockquizWeb.LiveHelpers
+      alias QuadblockquizWeb.Router.Helpers, as: Routes
     end
   end
 

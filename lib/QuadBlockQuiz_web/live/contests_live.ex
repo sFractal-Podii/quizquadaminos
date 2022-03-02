@@ -1,4 +1,4 @@
-defmodule QuadBlockQuizWeb.ContestsLive do
+defmodule QuadblockquizWeb.ContestsLive do
   @moduledoc """
   This is a module that does the following:
   - Finds the already started contests
@@ -7,15 +7,15 @@ defmodule QuadBlockQuizWeb.ContestsLive do
   - Ensures that the ended contest does not appear twice in the contest list
   - Calculates the counter timer
   """
-  use QuadBlockQuizWeb, :live_view
+  use QuadblockquizWeb, :live_view
 
   import Phoenix.HTML.Form
   import Phoenix.LiveView.Helpers
-  alias QuadBlockQuiz.Accounts
-  alias QuadBlockQuiz.Accounts.User
-  alias QuadBlockQuiz.Contests
-  alias QuadBlockQuiz.GameBoard
-  alias QuadBlockQuizWeb.ContestsLive.ContestComponent
+  alias Quadblockquiz.Accounts
+  alias Quadblockquiz.Accounts.User
+  alias Quadblockquiz.Contests
+  alias Quadblockquiz.GameBoard
+  alias QuadblockquizWeb.ContestsLive.ContestComponent
 
   def mount(_params, session, socket) do
     case socket.assigns.live_action do
@@ -120,7 +120,7 @@ defmodule QuadBlockQuizWeb.ContestsLive do
         end)
         |> Enum.sort_by(&Map.get(&1, sorter), :desc)
 
-      send_update(QuadBlockQuizWeb.ContestFinalResultComponent,
+      send_update(QuadblockquizWeb.ContestFinalResultComponent,
         id: "final_result",
         contest: socket.assigns.contest,
         contest_records: records
@@ -275,7 +275,7 @@ defmodule QuadBlockQuizWeb.ContestsLive do
   end
 
   defp admin?(current_user) do
-    ids = Application.get_env(:QuadBlockQuiz, :github_ids)
+    ids = Application.get_env(:quadblockquiz, :github_ids)
 
     current_user in (ids |> Enum.map(&(&1 |> to_string())))
   end

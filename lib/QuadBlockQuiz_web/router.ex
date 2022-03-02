@@ -1,22 +1,22 @@
-defmodule QuadBlockQuizWeb.Router do
-  use QuadBlockQuizWeb, :router
+defmodule QuadblockquizWeb.Router do
+  use QuadblockquizWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug QuadBlockQuizWeb.Auth
-    plug :put_root_layout, {QuadBlockQuizWeb.LayoutView, :root}
+    plug QuadblockquizWeb.Auth
+    plug :put_root_layout, {QuadblockquizWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
 
   pipeline :privacy_and_term_of_service do
-    plug :put_root_layout, {QuadBlockQuizWeb.LayoutView, "privacy_and_term_of_service.html"}
+    plug :put_root_layout, {QuadblockquizWeb.LayoutView, "privacy_and_term_of_service.html"}
   end
 
   pipeline :tailwind_layout do
-    plug :put_root_layout, {QuadBlockQuizWeb.LayoutView, "tailwind.html"}
+    plug :put_root_layout, {QuadblockquizWeb.LayoutView, "tailwind.html"}
   end
 
   pipeline :api do
@@ -24,18 +24,18 @@ defmodule QuadBlockQuizWeb.Router do
   end
 
   pipeline :authorize do
-    plug QuadBlockQuizWeb.Authorize
+    plug QuadblockquizWeb.Authorize
   end
 
   pipeline :authorize_admin do
-    plug QuadBlockQuizWeb.Authorize, roles: ["admin"]
+    plug QuadblockquizWeb.Authorize, roles: ["admin"]
   end
 
   pipeline :authorize_by_login_level do
-    plug QuadBlockQuizWeb.Authorize, :login_level
+    plug QuadblockquizWeb.Authorize, :login_level
   end
 
-  scope "/", QuadBlockQuizWeb do
+  scope "/", QuadblockquizWeb do
     pipe_through [:browser]
 
     get "/", PageController, :index
@@ -57,14 +57,14 @@ defmodule QuadBlockQuizWeb.Router do
     live "/courses/:course/:chapter", CourseLive, :questions
   end
 
-  scope "/", QuadBlockQuizWeb do
+  scope "/", QuadblockquizWeb do
     pipe_through [:browser, :privacy_and_term_of_service]
 
     live "/termsofservice", TermsOfServiceLive
     live "/privacy", PrivacyLive
   end
 
-  scope "/", QuadBlockQuizWeb do
+  scope "/", QuadblockquizWeb do
     pipe_through [:browser, :tailwind_layout]
 
     get "/how-to-play", PageController, :how_to_play
@@ -77,14 +77,14 @@ defmodule QuadBlockQuizWeb.Router do
     live "/courses", CourseLive
   end
 
-  scope "/admin", QuadBlockQuizWeb, as: :admin do
+  scope "/admin", QuadblockquizWeb, as: :admin do
     pipe_through [:browser, :authorize_admin]
 
     live "/", AdminLive
     live "/contests", ContestsLive, :index
   end
 
-  scope "/auth", QuadBlockQuizWeb do
+  scope "/auth", QuadblockquizWeb do
     pipe_through :browser
 
     get "/:provider", AuthController, :request
@@ -94,7 +94,7 @@ defmodule QuadBlockQuizWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", QuadBlockQuizWeb do
+  # scope "/api", QuadblockquizWeb do
   #   pipe_through :api
   # end
 
@@ -116,7 +116,7 @@ defmodule QuadBlockQuizWeb.Router do
         pipe_through [:browser]
       end
 
-      live_dashboard "/dashboard", metrics: QuadBlockQuizWeb.Telemetry
+      live_dashboard "/dashboard", metrics: QuadblockquizWeb.Telemetry
     end
   end
 end

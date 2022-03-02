@@ -1,16 +1,16 @@
-defmodule QuadBlockQuizWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :QuadBlockQuiz
+defmodule QuadblockquizWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :quadblockquiz
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_QuadBlockQuiz_key",
+    key: "_quadblockquiz_key",
     signing_salt: "LJXBjDvl"
   ]
 
-  socket "/socket", QuadBlockQuizWeb.UserSocket,
+  socket "/socket", QuadblockquizWeb.UserSocket,
     websocket: true,
     longpoll: false
 
@@ -22,7 +22,7 @@ defmodule QuadBlockQuizWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :QuadBlockQuiz,
+    from: :quadblockquiz,
     gzip: true,
     only: ~w(assets fonts images favicon.ico robots.txt .well-known)
 
@@ -32,7 +32,7 @@ defmodule QuadBlockQuizWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :QuadBlockQuiz
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :quadblockquiz
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
@@ -50,5 +50,5 @@ defmodule QuadBlockQuizWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug QuadBlockQuizWeb.Router
+  plug QuadblockquizWeb.Router
 end

@@ -1,11 +1,11 @@
-defmodule QuadBlockQuizWeb.ContestsLiveShowTest do
-  use QuadBlockQuizWeb.ConnCase
+defmodule QuadblockquizWeb.ContestsLiveShowTest do
+  use QuadblockquizWeb.ConnCase
 
   import Phoenix.LiveViewTest
 
-  alias QuadBlockQuiz.{Accounts, Contests}
-  alias QuadBlockQuiz.Accounts.User
-  alias QuadBlockQuiz.GameBoard.Records
+  alias Quadblockquiz.{Accounts, Contests}
+  alias Quadblockquiz.Accounts.User
+  alias Quadblockquiz.GameBoard.Records
 
   setup do
     attrs = %{name: "Quiz Block ", uid: Integer.to_string(40_000_000), role: "admin"}

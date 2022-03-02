@@ -1,6 +1,6 @@
 <div class="grid items-center justify-center md:space-y-12">
     <%= if @live_action == :show do %>
-      <%= live_component @socket, QuadBlockQuizWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
+      <%= live_component @socket, QuadblockquizWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
     <% else %>
     <div class="heading-1">Contests</div>
     <div class="container">
@@ -22,7 +22,7 @@
       <%end%>
     </div>
   <%=  if @modal do %>
-    <%= live_modal @socket, QuadBlockQuizWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
+    <%= live_modal @socket, QuadblockquizWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
   <% end %>
   <div class="table">
     <div class="hidden md:table-header-group md:bg-white md:text-base md:font-bold font-normal">
@@ -49,7 +49,7 @@
         <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
       </div>
       <%= for contest <- contests do %>
-        <%= live_component @socket, QuadBlockQuizWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>   
+        <%= live_component @socket, QuadblockquizWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
       <% end %>
     <% end %>
   </div>

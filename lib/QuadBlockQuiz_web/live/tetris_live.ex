@@ -1,10 +1,10 @@
-defmodule QuadBlockQuizWeb.TetrisLive do
-  use QuadBlockQuizWeb, :live_view
+defmodule QuadblockquizWeb.TetrisLive do
+  use QuadblockquizWeb, :live_view
 
-  alias QuadBlockQuiz.Accounts
-  alias QuadBlockQuizWeb.SvgBoard
+  alias Quadblockquiz.Accounts
+  alias QuadblockquizWeb.SvgBoard
 
-  alias QuadBlockQuiz.{
+  alias Quadblockquiz.{
     Bottom,
     Brick,
     Contests,
@@ -16,7 +16,7 @@ defmodule QuadBlockQuizWeb.TetrisLive do
     Threshold
   }
 
-  alias QuadBlockQuiz.GameBoard.Records
+  alias Quadblockquiz.GameBoard.Records
 
   @debug false
   @box_width 20
@@ -45,7 +45,7 @@ defmodule QuadBlockQuizWeb.TetrisLive do
       <div class ="container">
         <div class="row">
             <div class="column column-50 column-offset-25">
-              <h1>Welcome to QuadBlockQuiz!</h1>
+              <h1>Welcome to Quadblockquiz!</h1>
               <%= if @has_email? do %>
               <%= join_contest(assigns) %>
               <% else %>
@@ -116,10 +116,10 @@ defmodule QuadBlockQuizWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal @socket,  QuadBlockQuizWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, file_path: @file_path, categories: @categories, category: @category,return_to: Routes.tetris_path(QuadBlockQuizWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadblockquizWeb.QuizModalComponent, id: 1, powers: @powers, score: @score,  modal: @modal, qna: @qna, file_path: @file_path, categories: @categories, category: @category,return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)%>
                 <% end %>
                 <%= if @super_modal do %>
-                <%= live_modal @socket,  QuadBlockQuizWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadBlockQuizWeb.Endpoint, :tetris)%>
+                <%= live_modal @socket,  QuadblockquizWeb.SuperpModalComponent, id: 3, powers: @powers,  super_modal: @super_modal, return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)%>
                 <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw SvgBoard.svg_head() %>
@@ -159,7 +159,7 @@ defmodule QuadBlockQuizWeb.TetrisLive do
   defp ask_for_email(assigns) do
     ~L"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <%= live_component @socket,  QuadBlockQuizWeb.SharedLive.AskEmailComponent, id: 1, current_user: @current_user, redirect_to: @current_uri %>
+    <%= live_component @socket,  QuadblockquizWeb.SharedLive.AskEmailComponent, id: 1, current_user: @current_user, redirect_to: @current_uri %>
     <% end %>
     """
   end
@@ -779,7 +779,7 @@ defmodule QuadBlockQuizWeb.TetrisLive do
   end
 
   defp on_tick(:game_over, socket) do
-    QuadBlockQuizWeb.Endpoint.broadcast(
+    QuadblockquizWeb.Endpoint.broadcast(
       "scores",
       "current_score",
       game_record(socket)

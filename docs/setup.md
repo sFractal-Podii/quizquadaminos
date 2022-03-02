@@ -184,7 +184,7 @@ There is a convenience tasks that generates default answers (0 for multichoice a
 $ mix gen.answers
 
 Compiling 67 files (.ex)
-Generated QuadBlockQuiz app
+Generated Quadblockquiz app
 
 12:57:05.448 [info]  Generating answers for qna..
 

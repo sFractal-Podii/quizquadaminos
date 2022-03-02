@@ -1,4 +1,4 @@
-defmodule QuadBlockQuiz.Repo.Migrations.AddLoginLevelsTable do
+defmodule Quadblockquiz.Repo.Migrations.AddLoginLevelsTable do
   use Ecto.Migration
 
   def up do
@@ -8,7 +8,7 @@ defmodule QuadBlockQuiz.Repo.Migrations.AddLoginLevelsTable do
     end
 
     execute "
-    insert into login_levels values 
+    insert into login_levels values
     ('by_config'), ('oauth_login'), ('anonymous_login');
     "
   end

@@ -1,6 +1,6 @@
-defmodule QuadBlockQuizWeb.LayoutView do
-  use QuadBlockQuizWeb, :view
-  alias QuadBlockQuiz.Accounts
+defmodule QuadblockquizWeb.LayoutView do
+  use QuadblockquizWeb, :view
+  alias Quadblockquiz.Accounts
 
   @dropdown_item_class "block px-4 py-2 mt-2 text-sm font-semibold bg-transparent dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
 
@@ -12,7 +12,7 @@ defmodule QuadBlockQuizWeb.LayoutView do
     case style do
       :milligram ->
         ~E"""
-          <a class="button" href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "github") %>">
+          <a class="button" href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "github") %>">
             <i class="fas fa-github"></i>
             Sign in with GitHub
           </a>
@@ -21,7 +21,7 @@ defmodule QuadBlockQuizWeb.LayoutView do
       :tailwind ->
         ~E"""
         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-            href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "github") %>">Github Sign In</a>
+            href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "github") %>">Github Sign In</a>
         """
     end
   end
@@ -47,7 +47,7 @@ defmodule QuadBlockQuizWeb.LayoutView do
       :milligram ->
         ~E"""
         <%= oath_sign_in() %>
-        <a class="button" href="<%= Routes.session_path(QuadBlockQuizWeb.Endpoint, :anonymous )%>" >
+        <a class="button" href="<%= Routes.session_path(QuadblockquizWeb.Endpoint, :anonymous )%>" >
               Sign in anonymously
             </a>
         </div>
@@ -58,7 +58,7 @@ defmodule QuadBlockQuizWeb.LayoutView do
         ~E"""
         <%= oath_sign_in(:tailwind) %>
         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-        href="<%= Routes.session_path(QuadBlockQuizWeb.Endpoint, :anonymous )%>" > Sign in anonymously
+        href="<%= Routes.session_path(QuadblockquizWeb.Endpoint, :anonymous )%>" > Sign in anonymously
             </a>
         """
     end
@@ -71,20 +71,20 @@ defmodule QuadBlockQuizWeb.LayoutView do
     <div class="dropdown">
     <button class="dropbtn">Sign In</button>
       <div class="dropdown-content">
-          <a class = "button" href="<%= Routes.session_path(QuadBlockQuizWeb.Endpoint, :new) %>">
+          <a class = "button" href="<%= Routes.session_path(QuadblockquizWeb.Endpoint, :new) %>">
           Sign in with handle
           </a>
-          <a class="button" href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "github") %>">
+          <a class="button" href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "github") %>">
           <i class="fas fa-github"></i>
           Sign in with GitHub
           </a>
-          <a class = "button" href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "google") %>">
+          <a class = "button" href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "google") %>">
           Sign in with Google
           </a>
-          <a class = "button" href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "linkedin") %>">
+          <a class = "button" href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "linkedin") %>">
           Sign in with LinkedIn
           </a>
-          
+
     """
   end
 
@@ -92,16 +92,16 @@ defmodule QuadBlockQuizWeb.LayoutView do
     dropdown_item_class = @dropdown_item_class
 
     ~E"""
-      <a class="<%= dropdown_item_class %>" href="<%= Routes.session_path(QuadBlockQuizWeb.Endpoint, :new) %>">
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.session_path(QuadblockquizWeb.Endpoint, :new) %>">
       Handle
       </a>
-      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "github") %>">
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "github") %>">
        GitHub
       </a>
-      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "google") %>">
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "google") %>">
        Google
       </a>
-      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadBlockQuizWeb.Endpoint, :request, "linkedin") %>">
+      <a class="<%= dropdown_item_class %>" href="<%= Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "linkedin") %>">
        LinkedIn
       </a>
     """
@@ -122,10 +122,10 @@ defmodule QuadBlockQuizWeb.LayoutView do
     <i class="fa fa-caret-down"></i>
     </a>
      <div class="dropdown-content">
-     <a class="button" href="<%= Routes.admin_contests_path(QuadBlockQuizWeb.Endpoint, :index) %>">
+     <a class="button" href="<%= Routes.admin_contests_path(QuadblockquizWeb.Endpoint, :index) %>">
      Contest
      </a>
-     <a class = "button" href="<%= Routes.admin_live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.AdminLive) %>">
+     <a class = "button" href="<%= Routes.admin_live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.AdminLive) %>">
      Login Level
      </a>
     """
