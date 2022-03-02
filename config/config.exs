@@ -7,15 +7,15 @@
 # General application configuration
 import Config
 
-config :QuadBlockQuiz,
-  ecto_repos: [QuadBlockQuiz.Repo]
+config :quadblockquiz,
+  ecto_repos: [Quadblockquiz.Repo]
 
 # Configures the endpoint
-config :QuadBlockQuiz, QuadBlockQuizWeb.Endpoint,
+config :quadblockquiz, QuadblockquizWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "opws1EmgzMXcvizL4aa4yjIHQ5sn4iLXv/5oW5Q3MEW4KnOOJR3GJjWncVAIB4Go",
-  render_errors: [view: QuadBlockQuizWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: QuadBlockQuiz.PubSub,
+  render_errors: [view: QuadblockquizWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Quadblockquiz.PubSub,
   live_view: [signing_salt: "R60FXxE3"]
 
 # Configures Elixir's Logger
@@ -37,7 +37,7 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: "",
   client_secret: ""
 
-# Linkedin authentication configuration 
+# Linkedin authentication configuration
 config :ueberauth, Ueberauth,
   providers: [
     linkedin: {Ueberauth.Strategy.LinkedIn, [default_scope: "r_liteprofile r_emailaddress"]}
@@ -47,7 +47,7 @@ config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
   client_id: "",
   client_secret: ""
 
-# Github authentication configuration 
+# Github authentication configuration
 config :ueberauth, Ueberauth,
   providers: [
     github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
@@ -57,14 +57,14 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
   client_id: "",
   client_secret: ""
 
-config :QuadBlockQuiz,
+config :quadblockquiz,
   # add github_id of authorized users
   github_ids: [1, 2],
   conference_date: ~U[2021-10-03 16:00:00Z],
 
   # set bottom vulnerability defaulting value
   bottom_vulnerability_value: 77,
-  # this threshold determines the marking of vulnerability to new incoming block when 
+  # this threshold determines the marking of vulnerability to new incoming block when
   # brick counter is evenly divided by it
   vulnerability_new_brick_threshold: 7
 

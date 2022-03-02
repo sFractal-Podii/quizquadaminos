@@ -1,15 +1,15 @@
-defmodule QuadBlockQuizWeb.ContestsLive.ContestComponent do
+defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   @moduledoc """
   Component to compatmentalize contests
   """
-  use QuadBlockQuizWeb, :live_component
+  use QuadblockquizWeb, :live_component
   import Phoenix.HTML.Form
 
-  alias QuadBlockQuiz.Accounts.User
-  alias QuadBlockQuiz.Contests
-  alias QuadBlockQuiz.Contests.Contest
-  alias QuadBlockQuiz.Util
-  alias QuadBlockQuizWeb.Router.Helpers, as: Routes
+  alias Quadblockquiz.Accounts.User
+  alias Quadblockquiz.Contests
+  alias Quadblockquiz.Contests.Contest
+  alias Quadblockquiz.Util
+  alias QuadblockquizWeb.Router.Helpers, as: Routes
 
   @impl true
   def mount(socket) do
@@ -36,7 +36,7 @@ defmodule QuadBlockQuizWeb.ContestsLive.ContestComponent do
     <div class="flex rounded-lg flex-row shadow md:hidden justify-center p-4 gap-x-12 border border-t-0 mb-4">
       <div class="flex flex-col space-y-2">
         <div class="heading-3 text-blue-500 text-lg font-normal tracking-wide">
-          <%= @contest.name%> 
+          <%= @contest.name%>
         </div>
         <div class="inline-flex space-x-4">
           <p class="text-gray-400 font-normal text-xs">Date:</p>
@@ -59,8 +59,8 @@ defmodule QuadBlockQuizWeb.ContestsLive.ContestComponent do
           <i class="fas fa-medal fa-3x text-blue-400"></i>
         <% else %>
           <i class="far fa-envelope fa-3x text-blue-400"></i>
-        <% end %> 
-      </div> 
+        <% end %>
+      </div>
     </div>
 
     """

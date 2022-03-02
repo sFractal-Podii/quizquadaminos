@@ -1,8 +1,8 @@
-defmodule QuadBlockQuiz.GameRecordTest do
-  use QuadBlockQuiz.DataCase
-  alias QuadBlockQuiz.{Accounts, GameBoard, Repo}
-  alias QuadBlockQuiz.Accounts.User
-  alias QuadBlockQuiz.GameBoard.Records
+defmodule Quadblockquiz.GameRecordTest do
+  use Quadblockquiz.DataCase
+  alias Quadblockquiz.{Accounts, GameBoard, Repo}
+  alias Quadblockquiz.Accounts.User
+  alias Quadblockquiz.GameBoard.Records
 
   describe "record_player_game/2:" do
     setup do
@@ -117,8 +117,8 @@ defmodule QuadBlockQuiz.GameRecordTest do
       correctly_answered_qna: :rand.uniform(45)
     }
 
-    {:ok, %QuadBlockQuiz.GameBoard{id: less_id}} = Records.record_player_game(true, less_time)
-    {:ok, %QuadBlockQuiz.GameBoard{id: more_id}} = Records.record_player_game(true, more_time)
+    {:ok, %Quadblockquiz.GameBoard{id: less_id}} = Records.record_player_game(true, less_time)
+    {:ok, %Quadblockquiz.GameBoard{id: more_id}} = Records.record_player_game(true, more_time)
 
     [more, less] = Records.top_10_games()
     assert less.id == less_id

@@ -1,6 +1,6 @@
-defmodule QuadBlockQuizWeb.SessionController do
-  use QuadBlockQuizWeb, :controller
-  alias QuadBlockQuiz.Accounts
+defmodule QuadblockquizWeb.SessionController do
+  use QuadblockquizWeb, :controller
+  alias Quadblockquiz.Accounts
 
   def new(conn, _params) do
     render(conn, "new.html")

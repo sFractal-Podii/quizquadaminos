@@ -1,9 +1,9 @@
-defmodule QuadBlockQuizWeb.LeaderboardLive.Show do
-  use QuadBlockQuizWeb, :live_view
+defmodule QuadblockquizWeb.LeaderboardLive.Show do
+  use QuadblockquizWeb, :live_view
 
-  alias QuadBlockQuiz.GameBoard.Records
+  alias Quadblockquiz.GameBoard.Records
 
-  alias QuadBlockQuizWeb.SvgBoard
+  alias QuadblockquizWeb.SvgBoard
 
   @impl true
   def render(assigns) do
@@ -20,7 +20,7 @@ defmodule QuadBlockQuizWeb.LeaderboardLive.Show do
     <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
     <li><b>Questions:</b><%= @record.correctly_answered_qna %></li>
     </ul>
-    <%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadBlockQuizWeb.LeaderboardLive) %>
+    <%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive) %>
     </div>
     </div>
     </div>

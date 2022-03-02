@@ -1,10 +1,10 @@
-defmodule QuadBlockQuizWeb.LeaderboardLive do
+defmodule QuadblockquizWeb.LeaderboardLive do
   use Phoenix.LiveView
 
-  alias QuadBlockQuizWeb.Router.Helpers, as: Routes
+  alias QuadblockquizWeb.Router.Helpers, as: Routes
 
-  alias QuadBlockQuiz.GameBoard.Records
-  alias QuadBlockQuiz.Util
+  alias Quadblockquiz.GameBoard.Records
+  alias Quadblockquiz.Util
 
   def mount(_params, _session, socket) do
     {:ok, socket |> assign(page: 1, records: Records.fetch_records(), sort_by: "score")}
@@ -35,7 +35,7 @@ defmodule QuadBlockQuizWeb.LeaderboardLive do
             <div class="table-cell md:p-4"><%= Util.datetime_to_time(record.start_time) %></div>
             <div class="table-cell md:p-4"><%= Util.datetime_to_time(record.end_time) %></div>
             <div class="table-cell md:p-4"><%= Util.datetime_to_date(record.start_time) %></div>
-            <div class="table-cell md:p-4"><a href="<%= Routes.live_path(@socket, QuadBlockQuizWeb.LeaderboardLive.Show, record) %>"><i class="fas fa-chevron-right"></i></a></div>
+            <div class="table-cell md:p-4"><a href="<%= Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive.Show, record) %>"><i class="fas fa-chevron-right"></i></a></div>
           </div>
         </div>
          <div class="rounded-lg shadow md:hidden">
@@ -51,7 +51,7 @@ defmodule QuadBlockQuizWeb.LeaderboardLive do
                </div>
              </li>
            </ul>
-         </div> 
+         </div>
         <% end %>
       </div>
       <div class="hidden md:flex md:items-center md:justify-center md:gap-x-2">
@@ -75,7 +75,7 @@ defmodule QuadBlockQuizWeb.LeaderboardLive do
 
   defp user_avatar(nil, assigns) do
     ~L"""
-      <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src="<%= Routes.static_path(QuadBlockQuizWeb.Endpoint, "/images/user-avatar.jpeg") %>" alt="user avatar" />
+      <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg") %>" alt="user avatar" />
     """
   end
 

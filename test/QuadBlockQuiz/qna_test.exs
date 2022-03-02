@@ -1,7 +1,7 @@
-defmodule QuadBlockQuiz.QnaTest do
+defmodule Quadblockquiz.QnaTest do
   use ExUnit.Case
 
-  alias QuadBlockQuiz.QnA
+  alias Quadblockquiz.QnA
 
   test "answers are determined by hyphen or asterisk in newline" do
     %{answers: answers} = QnA.question("open_chain_sample")

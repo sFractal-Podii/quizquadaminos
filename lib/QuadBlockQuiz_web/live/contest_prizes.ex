@@ -1,6 +1,6 @@
-defmodule QuadBlockQuizWeb.ContestPrizes do
+defmodule QuadblockquizWeb.ContestPrizes do
   use Phoenix.LiveView
-  alias QuadBlockQuizWeb.Router.Helpers, as: Routes
+  alias QuadblockquizWeb.Router.Helpers, as: Routes
 
   def render(assigns) do
     prices = [
@@ -50,8 +50,8 @@ defmodule QuadBlockQuizWeb.ContestPrizes do
     ~L"""
     <h1 class="heading-1 mt-7 text-4xl tracking-widest">Contest Prizes</h1>
     <p class="pb-7">
-    This is the prize page for the AT&T Software Symposium Security Workshop QuadBlockQuiz contest. See
-    <a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestRules) %> > Contest Rules </a>
+    This is the prize page for the AT&T Software Symposium Security Workshop quadblockquiz contest. See
+    <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules) %> > Contest Rules </a>
     for more information on contest rules.
     </p>
 

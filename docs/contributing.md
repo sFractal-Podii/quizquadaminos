@@ -36,7 +36,7 @@ To squash the commits replace the word `pick` with the letter `s` on the followi
 see [deployment](./deployment.md) for deployment options and how to deploy
 
 ## working with questions
-QuadBlockQuiz includes both playing quadblocks
+Quadblockquiz includes both playing quadblocks
 and answering questions
 to gain points and powerups. 
 
@@ -132,7 +132,7 @@ There is a convenience tasks that generates default answers (0 for multichoice a
 $ mix gen.answers
 
 Compiling 67 files (.ex)
-Generated QuadBlockQuiz app
+Generated Quadblockquiz app
 
 12:57:05.448 [info]  Generating answers for qna..
 
@@ -213,7 +213,7 @@ At the moment the project is using both `phoenixcss` and `tailwindcss` framework
 2. Under `router.ex` add the path of the page you are redesigning inside the scope that is piped through tailwind_layout i.e
 
     ```
-    scope "/", QuadBlockQuizWeb do
+    scope "/", QuadblockquizWeb do
     pipe_through [:browser, :tailwind_layout]
 
     get "/how-to-play", PageController, :how_to_play

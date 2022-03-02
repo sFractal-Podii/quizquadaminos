@@ -1,4 +1,4 @@
-defmodule QuadBlockQuizWeb.Telemetry do
+defmodule QuadblockquizWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
@@ -31,11 +31,11 @@ defmodule QuadBlockQuizWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("QuadBlockQuiz.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("QuadBlockQuiz.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("QuadBlockQuiz.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("QuadBlockQuiz.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("QuadBlockQuiz.repo.query.idle_time", unit: {:native, :millisecond}),
+      summary("quadblockquiz.repo.query.total_time", unit: {:native, :millisecond}),
+      summary("quadblockquiz.repo.query.decode_time", unit: {:native, :millisecond}),
+      summary("quadblockquiz.repo.query.query_time", unit: {:native, :millisecond}),
+      summary("quadblockquiz.repo.query.queue_time", unit: {:native, :millisecond}),
+      summary("quadblockquiz.repo.query.idle_time", unit: {:native, :millisecond}),
 
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),
@@ -49,7 +49,7 @@ defmodule QuadBlockQuizWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {QuadBlockQuizWeb, :count_users, []}
+      # {QuadblockquizWeb, :count_users, []}
     ]
   end
 end

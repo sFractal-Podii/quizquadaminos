@@ -1,6 +1,6 @@
-defmodule QuadBlockQuizWeb.ContestRules do
+defmodule QuadblockquizWeb.ContestRules do
   use Phoenix.LiveView
-  alias QuadBlockQuizWeb.Router.Helpers, as: Routes
+  alias QuadblockquizWeb.Router.Helpers, as: Routes
 
   def render(assigns) do
     ~L"""
@@ -17,9 +17,9 @@ defmodule QuadBlockQuizWeb.ContestRules do
             <p>
               These are the rules for the
               AT&T Software Symposium Security Workshop
-              QuadBlockQuiz contest.
+              quadblockquiz contest.
               Prizes are described at
-              <a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestPrizes) %> >prizes</a>.
+              <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %> >prizes</a>.
               This contests was organized by sFractal Consulting
               to increase awarenessa and adoption of supply chain cybersecurity.
             </p>
@@ -110,7 +110,7 @@ defmodule QuadBlockQuizWeb.ContestRules do
                   contest contestant who answered correctly the most trivia questions,
                   who will then be ineligible for the other Contest prizes.
                 </li>
-                <li> 
+                <li>
                   The "????" prize will be awarded to the eligible
                   contest contestant based on surpise criteria announced
                   after the conclusion of the contest.
@@ -120,7 +120,7 @@ defmodule QuadBlockQuizWeb.ContestRules do
                   (e.g first on points and first on bricks would only receive one prize
                   for points, and then 'runner up' on bricks would win that prize).
                 </li>
-                <li> 
+                <li>
                   The organizers retain the right to adjust or shutdown the contest
                   at any time, and has the right to investigate possible cheating
                   or tampering.
@@ -129,14 +129,14 @@ defmodule QuadBlockQuizWeb.ContestRules do
             </div>
             <p>
               See our
-              <a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.PrivacyLive) %> > Privacy </a>
-              policy and our <a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.TermsOfServiceLive) %> > Terms Of Service </a>.
+              <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive) %> > Privacy </a>
+              policy and our <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive) %> > Terms Of Service </a>.
               The TL;DR version is
               we only use your handle on the
               Leaderboard and Contest Scoreboard, and your email
               for the purpose of contacting you regarding prizes.
             </p>
-          </div>  
+          </div>
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
-defmodule QuadBlockQuizWeb.CourseLive do
+defmodule QuadblockquizWeb.CourseLive do
   use Phoenix.LiveView
   import Phoenix.HTML
   import Phoenix.HTML.Form
-  alias QuadBlockQuiz.Accounts
-  alias QuadBlockQuiz.Courses
-  alias QuadBlockQuizWeb.Router.Helpers, as: Routes
+  alias Quadblockquiz.Accounts
+  alias Quadblockquiz.Courses
+  alias QuadblockquizWeb.Router.Helpers, as: Routes
   @impl true
   def mount(_arg0, %{"uid" => user_id}, socket) do
     current_user = user_id |> Accounts.current_user()
@@ -91,7 +91,7 @@ defmodule QuadBlockQuizWeb.CourseLive do
       <%= for course <- Courses.courses_list() do %>
         <div class="pt-4 md:pt-0 shadow md:shadow-none flex flex-row md:flex-col border-t-0 md:border border-grey-200 rounded-xl">
           <div class="pt-4 pb-0 md:pt-0">
-            <img class="rounded-lg h-20 w-64 md:w-full md:h-52" src="<%= Routes.static_path(QuadBlockQuizWeb.Endpoint, "/images/Supply Chain Sandbox logo_dark_draft.png") %>" alt="course chapter" />
+            <img class="rounded-lg h-20 w-64 md:w-full md:h-52" src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/Supply Chain Sandbox logo_dark_draft.png") %>" alt="course chapter" />
           </div>
           <div class="p-2 md:p-4 md:space-y-4">
             <div>
@@ -104,7 +104,7 @@ defmodule QuadBlockQuizWeb.CourseLive do
             <div class="hidden md:flex md:justify-between">
               <div>
                 <h2 class="text-xl font-normal  ">Mentor</h2>
-                <img class="rounded-full h-12 w-12 flex items-center justify-center " src="<%= Routes.static_path(QuadBlockQuizWeb.Endpoint, "/images/user-avatar.jpeg") %>" alt="user avatar" />
+                <img class="rounded-full h-12 w-12 flex items-center justify-center " src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg") %>" alt="user avatar" />
               </div>
               <div class="pt-7">
                 <button class="rounded-sm bg-blue-600 text-white flex items-center justify-center text-base font-normal h-12 w-40"><%= live_patch "start course", to: Routes.course_path(@socket, :show , course) %></button>
@@ -121,9 +121,9 @@ defmodule QuadBlockQuizWeb.CourseLive do
             <%= ask_for_email(assigns) %>
           </div>
         </div>
-      </div>  
+      </div>
     <% end %>
-      
+
     """
   end
 
@@ -162,7 +162,7 @@ defmodule QuadBlockQuizWeb.CourseLive do
   defp ask_for_email(assigns) do
     ~L"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <%= live_component @socket,  QuadBlockQuizWeb.SharedLive.AskEmailComponent, id: 2, current_user: @current_user, redirect_to: @current_uri %>
+    <%= live_component @socket,  QuadblockquizWeb.SharedLive.AskEmailComponent, id: 2, current_user: @current_user, redirect_to: @current_uri %>
     <% end %>
     """
   end

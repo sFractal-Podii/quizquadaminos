@@ -1,5 +1,5 @@
-defmodule QuadBlockQuizWeb.SuperpModalComponent do
-  use QuadBlockQuizWeb, :live_component
+defmodule QuadblockquizWeb.SuperpModalComponent do
+  use QuadblockquizWeb, :live_component
 
   def render(assigns) do
     ~L"""

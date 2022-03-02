@@ -1,11 +1,11 @@
-defmodule QuadBlockQuizWeb.PageController do
+defmodule QuadblockquizWeb.PageController do
   @moduledoc """
   Static page controller
   """
 
-  use QuadBlockQuizWeb, :controller
-  alias QuadBlockQuiz.Accounts
-  alias QuadBlockQuiz.GameBoard.Records
+  use QuadblockquizWeb, :controller
+  alias Quadblockquiz.Accounts
+  alias Quadblockquiz.GameBoard.Records
 
   def index(conn, _params) do
     login_level = Accounts.get_selected_login_level()

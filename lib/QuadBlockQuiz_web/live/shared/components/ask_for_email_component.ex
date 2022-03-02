@@ -1,6 +1,6 @@
-defmodule QuadBlockQuizWeb.SharedLive.AskEmailComponent do
-  use QuadBlockQuizWeb, :live_component
-  alias QuadBlockQuiz.Accounts
+defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
+  use QuadblockquizWeb, :live_component
+  alias Quadblockquiz.Accounts
 
   def update(assigns, socket) do
     changeset = Accounts.change_user(assigns.current_user)

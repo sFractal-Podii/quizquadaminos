@@ -18,19 +18,19 @@
       <a class="<%= element_class %>"
         href= <%= Routes.page_path(@conn, :how_to_play) %> >How to Play</a>
       <a class="<%= element_class %>"
-        href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.LeaderboardLive) %> >Leader board</a>
+        href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.LeaderboardLive) %> >Leader board</a>
       <a class="<%= element_class %>"
-        href= <%= Routes.contests_path(QuadBlockQuizWeb.Endpoint, :index) %> >Contests</a>
+        href= <%= Routes.contests_path(QuadblockquizWeb.Endpoint, :index) %> >Contests</a>
       <a class="<%= element_class %>"
-        href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestPrizes) %> >Contest prizes</a>
+        href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %> >Contest prizes</a>
       <a class="<%= element_class %>"
-        href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestRules) %> >Contest rules</a>
+        href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules) %> >Contest rules</a>
       <a class="<%= element_class %>"
-        href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.CourseLive) %> > Courses </a>
+        href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.CourseLive) %> > Courses </a>
       <a class="<%= element_class %>"
-        href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.TermsOfServiceLive) %> > Terms Of Service </a>
+        href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive) %> > Terms Of Service </a>
       <a class="<%= element_class %>"
-        href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.PrivacyLive) %> > Privacy </a>
+        href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive) %> > Privacy </a>
       <a class="<%= element_class %>"
         href= <%= Routes.page_path(@conn, :sbom) %> >SBOM</a>
 
@@ -38,7 +38,7 @@
 
         <%= if @current_user do %>
 
-            <%= if QuadBlockQuiz.Accounts.user_has_role?(@current_user, ["admin"]) do %>
+            <%= if Quadblockquiz.Accounts.user_has_role?(@current_user, ["admin"]) do %>
                 <div @click.away="open = false" class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-600 md:w-auto md:inline md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
                     <span>Admin</span>
@@ -49,9 +49,9 @@
                         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
                             href="/admin">Admin Page</a>
                         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                            href="<%= Routes.admin_contests_path(QuadBlockQuizWeb.Endpoint, :index) %>">Contest</a>
+                            href="<%= Routes.admin_contests_path(QuadblockquizWeb.Endpoint, :index) %>">Contest</a>
                         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                            href="<%= Routes.admin_live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.AdminLive) %>"> Login Level </a>
+                            href="<%= Routes.admin_live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.AdminLive) %>"> Login Level </a>
                         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
                             href="/dashboard">Live Dashboard</a>
                     </div>
@@ -59,7 +59,7 @@
                 </div>
             <% end %> <!-- check if admin -->
 
-            <%= link "Logout", to: Routes.auth_path(QuadBlockQuizWeb.Endpoint, :delete), method: "delete", class: element_class %>
+            <%= link "Logout", to: Routes.auth_path(QuadblockquizWeb.Endpoint, :delete), method: "delete", class: element_class %>
         <% else %> <!--if current user-->
           <div @click.away="open = false" class="relative" x-data="{ open: false }">
               <button @click="open = !open" class="flex flex-row items-center w-full px-2 py-4 mt-2 text-sm font-semibold text-left bg-transparent dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-600 md:w-auto md:inline md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">

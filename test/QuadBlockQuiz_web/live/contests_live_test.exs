@@ -1,10 +1,10 @@
-defmodule QuadBlockQuizWeb.ContestsLiveTest do
-  use QuadBlockQuizWeb.ConnCase
+defmodule QuadblockquizWeb.ContestsLiveTest do
+  use QuadblockquizWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias QuadBlockQuiz.Contests
-  alias QuadBlockQuiz.{Contests, Util}
-  alias QuadBlockQuiz.Test.Auth
+  alias Quadblockquiz.Contests
+  alias Quadblockquiz.{Contests, Util}
+  alias Quadblockquiz.Test.Auth
 
   setup do
     conn = Auth.login()

@@ -1,7 +1,7 @@
-defmodule QuadBlockQuiz.TetrisTest do
+defmodule Quadblockquiz.TetrisTest do
   use ExUnit.Case
-  import QuadBlockQuiz.Tetris
-  alias QuadBlockQuiz.Brick
+  import Quadblockquiz.Tetris
+  alias Quadblockquiz.Brick
 
   test "try to move right, success" do
     brick = Brick.new(location: {5, 1})
@@ -46,7 +46,7 @@ defmodule QuadBlockQuiz.TetrisTest do
     bottom = %{}
     brick_count = 1
 
-    %{score: score, bottom: bottom} = QuadBlockQuiz.Tetris.drop(brick, bottom, :red, brick_count)
+    %{score: score, bottom: bottom} = Quadblockquiz.Tetris.drop(brick, bottom, :red, brick_count)
 
     assert Map.get(bottom, {7, 20}) == {7, 20, :red}
     assert score == 0
@@ -62,7 +62,7 @@ defmodule QuadBlockQuiz.TetrisTest do
       end
       |> Map.new()
 
-    %{score: score, bottom: bottom} = QuadBlockQuiz.Tetris.drop(brick, bottom, :red, brick_count)
+    %{score: score, bottom: bottom} = Quadblockquiz.Tetris.drop(brick, bottom, :red, brick_count)
 
     assert bottom == %{}
     assert score == 1600
