@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "QuadBlockQuiz: ", suffix: " · SupplyChain Edition" %>
+    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/assets/app_tailwind.css") %>"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/app_tailwind.js") %>"></script>
+  </head>
+  <body>
+    <div>
+      <header>
+        <section class="container">
+          <div class="bg-light-blue-300">
+            <a href="https://www.bsideslv.org/">
+              <img class="object-fill w-px w-2" src="<%= Routes.static_path(@conn, "/images/BSidesLV.png") %>" alt="BsidesLV Logo" />
+            </a>
+          </div>
+
+          <div class="bg-light-blue-300 h-48 w-96">
+            <a> <img class="object-contain " src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" /> </a>
+          </div>
+          <H1>QuadBlockQuiz</H1>
+          <H3>Supply Chain Edition</H3>
+        </section>
+        <%= render(QuadBlockQuizWeb.LayoutView, "navbar_tailwind.html", assigns) %>
+      </header>
+      <div class="container mx-auto px-4 md:px-20 pb-20">
+        <%= @inner_content %>
+      </div>
+    </div>
+    <footer class="h-64 bg-slate-100">
+    <div class="h-64 container mx-auto grid grid-flow-col  gap-4 place-items-center ">
+      <a href="https://sfractal.com/" class="phx-logo">
+        <img src="<%= Routes.static_path(@conn, "/images/sFractalConsulting.png") %>" alt="sFractal Logo" class="max-h-32"/>
+      </a>
+      <a href="https://podiihq.com/" class="phx-logo">
+        <img src="<%= Routes.static_path(@conn, "/images/podiilogo.png") %>" alt="Podii Logo" class="max-h-32"/>
+      </a>
+      <a href="https://briarcutter.com/" class="phx-logo">
+        <img src="<%= Routes.static_path(@conn, "/images/Briar Cutter Final PNG@2x.png") %>" alt="Briar Cutter Logo" class="max-h-32"/>
+      </a>
+      <a href="https://grox.io/" class="phx-logo">
+        <img src="<%= Routes.static_path(@conn, "/images/groxio.png") %>" alt="Grox.io Logo" class="max-h-32"/>
+        </a>
+        <a href="https://google.com/" class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/google2.0.0.png") %>" alt="Google Logo" class="max-h-32"/>
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

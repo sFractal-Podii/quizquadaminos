@@ -1,4 +1,4 @@
-defmodule QuadquizaminosWeb.ChannelCase do
+defmodule QuadBlockQuizWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule QuadquizaminosWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use QuadquizaminosWeb.ChannelCase, async: true`, although
+  by setting `use QuadBlockQuizWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule QuadquizaminosWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import QuadquizaminosWeb.ChannelCase
+      import QuadBlockQuizWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint QuadquizaminosWeb.Endpoint
+      @endpoint QuadBlockQuizWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Quadquizaminos.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(QuadBlockQuiz.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Quadquizaminos.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(QuadBlockQuiz.Repo, {:shared, self()})
     end
 
     :ok

@@ -1,4 +1,4 @@
 #!/bin/sh
-./prod/rel/quadquizaminos/bin/quadquizaminos eval Quadquizaminos.ReleaseTask.createdb
-./prod/rel/quadquizaminos/bin/quadquizaminos eval Quadquizaminos.ReleaseTask.migrate
-./prod/rel/quadquizaminos/bin/quadquizaminos start
+./prod/rel/QuadBlockQuiz/bin/QuadBlockQuiz eval QuadBlockQuiz.ReleaseTask.createdb
+./prod/rel/QuadBlockQuiz/bin/QuadBlockQuiz eval QuadBlockQuiz.ReleaseTask.migrate
+./prod/rel/QuadBlockQuiz/bin/QuadBlockQuiz start

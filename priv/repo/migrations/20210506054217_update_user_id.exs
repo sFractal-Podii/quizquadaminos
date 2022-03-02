@@ -1,4 +1,4 @@
-defmodule Quadquizaminos.Repo.Migrations.UpdateUserId do
+defmodule QuadBlockQuiz.Repo.Migrations.UpdateUserId do
   use Ecto.Migration
 
   def up do
