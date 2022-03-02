@@ -7,15 +7,15 @@
 # General application configuration
 import Config
 
-config :quadquizaminos,
-  ecto_repos: [Quadquizaminos.Repo]
+config :QuadBlockQuiz,
+  ecto_repos: [QuadBlockQuiz.Repo]
 
 # Configures the endpoint
-config :quadquizaminos, QuadquizaminosWeb.Endpoint,
+config :QuadBlockQuiz, QuadBlockQuizWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "opws1EmgzMXcvizL4aa4yjIHQ5sn4iLXv/5oW5Q3MEW4KnOOJR3GJjWncVAIB4Go",
-  render_errors: [view: QuadquizaminosWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Quadquizaminos.PubSub,
+  render_errors: [view: QuadBlockQuizWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: QuadBlockQuiz.PubSub,
   live_view: [signing_salt: "R60FXxE3"]
 
 # Configures Elixir's Logger
@@ -57,7 +57,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
   client_id: "",
   client_secret: ""
 
-config :quadquizaminos,
+config :QuadBlockQuiz,
   # add github_id of authorized users
   github_ids: [1, 2],
   conference_date: ~U[2021-10-03 16:00:00Z],

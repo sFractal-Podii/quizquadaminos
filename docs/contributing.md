@@ -132,7 +132,7 @@ There is a convenience tasks that generates default answers (0 for multichoice a
 $ mix gen.answers
 
 Compiling 67 files (.ex)
-Generated quadquizaminos app
+Generated QuadBlockQuiz app
 
 12:57:05.448 [info]  Generating answers for qna..
 
@@ -213,7 +213,7 @@ At the moment the project is using both `phoenixcss` and `tailwindcss` framework
 2. Under `router.ex` add the path of the page you are redesigning inside the scope that is piped through tailwind_layout i.e
 
     ```
-    scope "/", QuadquizaminosWeb do
+    scope "/", QuadBlockQuizWeb do
     pipe_through [:browser, :tailwind_layout]
 
     get "/how-to-play", PageController, :how_to_play

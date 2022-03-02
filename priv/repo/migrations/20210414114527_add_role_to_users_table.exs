@@ -1,4 +1,4 @@
-defmodule Quadquizaminos.Repo.Migrations.AddRoleToUsersTable do
+defmodule QuadBlockQuiz.Repo.Migrations.AddRoleToUsersTable do
   use Ecto.Migration
 
   def change do
