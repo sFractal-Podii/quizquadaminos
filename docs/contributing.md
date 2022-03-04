@@ -4,7 +4,7 @@ This project uses [semantic versioning](https://semver.org/) as much as we can
 
 ## Issue tracking
 
-We use github issues to track issues , checkout [the project board](https://github.com/sFractal-Podii/quizquadaminos/projects/1) for issues
+We use github issues to track issues , checkout [the project board](https://github.com/sFractal-Podii/quadblockquiz/projects/1) for issues
 
 All issues have priorities with `A` being the highest priority
 
@@ -132,7 +132,7 @@ There is a convenience tasks that generates default answers (0 for multichoice a
 $ mix gen.answers
 
 Compiling 67 files (.ex)
-Generated Quadblockquiz app
+Generated quadblockquiz app
 
 12:57:05.448 [info]  Generating answers for qna..
 
@@ -207,7 +207,7 @@ At the moment the project is using both `phoenixcss` and `tailwindcss` framework
 
 #### Steps to follow when redesigning a page using tailwindcss framework
 
-1. Use Prototype design layouts of the pages that are drawn on [figma](https://www.figma.com/file/vAUOkmrAHEo4Q2q1JtW9e1/quizquadaminos?node-id=156%3A2). 
+1. Use Prototype design layouts of the pages that are drawn on [figma](https://www.figma.com/file/vAUOkmrAHEo4Q2q1JtW9e1/quadblockquiz?node-id=156%3A2). 
    Mobile design layout are available under `Android google pixel` and design layout for medium to large screens are available under `Web page` .
 
 2. Under `router.ex` add the path of the page you are redesigning inside the scope that is piped through tailwind_layout i.e
