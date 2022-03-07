@@ -1,4 +1,4 @@
-defmodule Quadblockquiz.ContestsTest do
+defmodule Quizquadaminos.ContestsTest do
   use Quadblockquiz.DataCase
   alias Quadblockquiz.{Accounts, Contests}
   alias Quadblockquiz.Accounts.User
