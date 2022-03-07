@@ -1,14 +1,14 @@
 import Config
 
-config :quadblockquiz, Quadblockquiz.Repo,
+config :QuadBlockQuiz, QuadBlockQuiz.Repo,
   username: "postgres",
   password: "postgres",
-  database: "quadblockquiz_dev",
+  database: "QuadBlockQuiz_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :quadblockquiz, QuadblockquizWeb.Endpoint,
+config :QuadBlockQuiz, QuadBlockQuizWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -29,7 +29,7 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
     ]
   ]
 
-config :quadblockquiz,
+config :QuadBlockQuiz,
   base_questions_directory: Path.dirname(__DIR__)
 
 # ## SSL Support
@@ -57,13 +57,13 @@ config :quadblockquiz,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :quadblockquiz, QuadblockquizWeb.Endpoint,
+config :QuadBlockQuiz, QuadBlockQuizWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/quadblockquiz_web/(live|views)/.*(ex)$",
-      ~r"lib/quadblockquiz_web/templates/.*(eex)$"
+      ~r"lib/QuadBlockQuiz_web/(live|views)/.*(ex)$",
+      ~r"lib/QuadBlockQuiz_web/templates/.*(eex)$"
     ]
   ]
 

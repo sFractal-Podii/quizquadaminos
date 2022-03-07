@@ -1,4 +1,4 @@
-defmodule QuadblockquizWeb.SvgBoard do
+defmodule QuadBlockQuizWeb.SvgBoard do
   @box_width 20
   @box_height 20
   def svg_head do

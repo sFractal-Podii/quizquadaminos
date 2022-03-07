@@ -1,10 +1,10 @@
-defmodule QuadblockquizWeb.AdminLiveTest do
-  use QuadblockquizWeb.ConnCase
+defmodule QuadBlockQuizWeb.AdminLiveTest do
+  use QuadBlockQuizWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadblockquiz.Accounts.LoginLevel
-  alias Quadblockquiz.Repo
-  alias Quadblockquiz.Test.Auth
+  alias QuadBlockQuiz.Accounts.LoginLevel
+  alias QuadBlockQuiz.Repo
+  alias QuadBlockQuiz.Test.Auth
 
   setup do
     # admin logging in

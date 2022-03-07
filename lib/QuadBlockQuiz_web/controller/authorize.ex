@@ -1,12 +1,12 @@
-defmodule QuadblockquizWeb.Authorize do
+defmodule QuadBlockQuizWeb.Authorize do
   @moduledoc """
   Authorization plug
   """
   import Plug.Conn
-  use QuadblockquizWeb, :controller
+  use QuadBlockQuizWeb, :controller
 
-  alias Quadblockquiz.Accounts
-  alias Quadblockquiz.GameBoard.Records
+  alias QuadBlockQuiz.Accounts
+  alias QuadBlockQuiz.GameBoard.Records
 
   def init(opts), do: opts
 

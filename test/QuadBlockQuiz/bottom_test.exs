@@ -1,6 +1,6 @@
-defmodule Quadblockquiz.BottomTest do
+defmodule QuadBlockQuiz.BottomTest do
   use ExUnit.Case
-  import Quadblockquiz.Bottom
+  import QuadBlockQuiz.Bottom
 
   test "various collisions" do
     bottom = %{{1, 1} => {1, 1, :blue}}

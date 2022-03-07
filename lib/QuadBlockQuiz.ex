@@ -1,6 +1,6 @@
-defmodule Quadblockquiz do
+defmodule QuadBlockQuiz do
   @moduledoc """
-  quadblockquiz keeps the contexts that define your domain
+  QuadBlockQuiz keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

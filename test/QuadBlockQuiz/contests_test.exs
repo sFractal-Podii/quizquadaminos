@@ -1,8 +1,8 @@
 defmodule Quizquadaminos.ContestsTest do
-  use Quadblockquiz.DataCase
-  alias Quadblockquiz.{Accounts, Contests}
-  alias Quadblockquiz.Accounts.User
-  alias Quadblockquiz.GameBoard.Records
+  use QuadBlockQuiz.DataCase
+  alias QuadBlockQuiz.{Accounts, Contests}
+  alias QuadBlockQuiz.Accounts.User
+  alias QuadBlockQuiz.GameBoard.Records
 
   setup do
     {:ok, contest} = Contests.create_contest(%{name: "ContestC"})
@@ -140,9 +140,9 @@ defmodule Quizquadaminos.ContestsTest do
       correctly_answered_qna: 3
     }
 
-    {:ok, %Quadblockquiz.GameBoard{id: less_id}} = Records.create_record(less_time)
+    {:ok, %QuadBlockQuiz.GameBoard{id: less_id}} = Records.create_record(less_time)
 
-    {:ok, %Quadblockquiz.GameBoard{id: more_id}} = Records.create_record(more_time)
+    {:ok, %QuadBlockQuiz.GameBoard{id: more_id}} = Records.create_record(more_time)
 
     [less, more] = Contests.contest_game_records(contest)
     assert less.id == less_id

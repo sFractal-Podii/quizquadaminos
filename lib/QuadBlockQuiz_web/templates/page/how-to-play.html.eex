@@ -127,9 +127,9 @@
   </p>
   <p>
     See
-    <a href="<%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules) %>">contest rules </a>
+    <a href="<%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestRules) %>">contest rules </a>
     and
-    <a href="<%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %>">contest prizes </a>
+    <a href="<%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestPrizes) %>">contest prizes </a>
     for more information.
   </p>
 </div>

@@ -1,4 +1,4 @@
-defmodule QuadblockquizWeb.TermsOfServiceLive do
+defmodule QuadBlockQuizWeb.TermsOfServiceLive do
   use Phoenix.LiveView
 
   def render(assigns) do
@@ -11,7 +11,7 @@ defmodule QuadblockquizWeb.TermsOfServiceLive do
     <p class="mt-6">The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>
     <h3 class="heading-3 mt-6">Definitions</h3>
     <p class="mt-6">For the purposes of these Terms and Conditions:</p>
-    <div class="pl-10 mt-6">
+    <div class="pl-10 mt-6">  
       <ul class="list-disc">
         <li>
           <p><strong>Affiliate</strong> means an entity that controls, is controlled by or is under common control with a party, where &quot;control&quot; means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.</p>
@@ -38,7 +38,7 @@ defmodule QuadblockquizWeb.TermsOfServiceLive do
           <p><strong>Third-party Social Media Service</strong> means any services or content (including data, information, products or services) provided by a third-party that may be displayed, included or made available by the Service.</p>
         </li>
         <li>
-          <p><strong>Website</strong> refers to Quadblockquiz, accessible from <a href="http://Quadblockquiz.org" rel="external nofollow noopener" target="_blank">http://Quadblockquiz.org</a></p>
+          <p><strong>Website</strong> refers to QuadBlockQuiz, accessible from <a href="http://quadblockquiz.org" rel="external nofollow noopener" target="_blank">http://quadblockquiz.org</a></p>
         </li>
         <li>
           <p><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.</p>
@@ -68,9 +68,9 @@ defmodule QuadblockquizWeb.TermsOfServiceLive do
     <h2 class="heading-2 mt-6">&quot;AS IS&quot; and &quot;AS AVAILABLE&quot; Disclaimer</h2>
     <p class="mt-6">The Service is provided to You &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; and with all faults and defects without warranty of any kind. To the maximum extent permitted under applicable law, the Company, on its own behalf and on behalf of its Affiliates and its and their respective licensors and service providers, expressly disclaims all warranties, whether express, implied, statutory or otherwise, with respect to the Service, including all implied warranties of merchantability, fitness for a particular purpose, title and non-infringement, and warranties that may arise out of course of dealing, course of performance, usage or trade practice. Without limitation to the foregoing, the Company provides no warranty or undertaking, and makes no representation of any kind that the Service will meet Your requirements, achieve any intended results, be compatible or work with any other software, applications, systems or services, operate without interruption, meet any performance or reliability standards or be error free or that any errors or defects can or will be corrected.</p>
     <p class="mt-6">
-    Without limiting the foregoing, neither the Company nor any of the company's provider makes any representation or warranty of any kind, express or implied:
+    Without limiting the foregoing, neither the Company nor any of the company's provider makes any representation or warranty of any kind, express or implied: 
     </p>
-    <div class="pl-10 mt-6">
+    <div class="pl-10 mt-6">  
       <ul class="list-decimal">
       <li>as to the operation or availability of the Service, or the information, content, and materials or products included thereon; </li>
       <li>that the Service will be uninterrupted or error-free; </li>
@@ -101,7 +101,7 @@ defmodule QuadblockquizWeb.TermsOfServiceLive do
     <p class="mt-6">By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the revised terms. If You do not agree to the new terms, in whole or in part, please stop using the website and the Service.</p>
     <h2 class="heading-2mt-6">Contact Us</h2>
     <p class="mt-6">If you have any questions about these Terms and Conditions, You can contact us:</p>
-    <p>By email: Quadblockquiz@googlegroups.com</p>
+    <p>By email: quadblockquiz@googlegroups.com</p>
 
 
     """

@@ -1,5 +1,5 @@
-defmodule QuadblockquizWeb.ModalComponent do
-  use QuadblockquizWeb, :live_component
+defmodule QuadBlockQuizWeb.ModalComponent do
+  use QuadBlockQuizWeb, :live_component
 
   @impl true
   def render(assigns) do

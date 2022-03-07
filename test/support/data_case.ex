@@ -1,4 +1,4 @@
-defmodule Quadblockquiz.DataCase do
+defmodule QuadBlockQuiz.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Quadblockquiz.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Quadblockquiz.DataCase, async: true`, although
+  by setting `use QuadBlockQuiz.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,19 +18,19 @@ defmodule Quadblockquiz.DataCase do
 
   using do
     quote do
-      alias Quadblockquiz.Repo
+      alias QuadBlockQuiz.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Quadblockquiz.DataCase
+      import QuadBlockQuiz.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Quadblockquiz.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(QuadBlockQuiz.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Quadblockquiz.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(QuadBlockQuiz.Repo, {:shared, self()})
     end
 
     :ok

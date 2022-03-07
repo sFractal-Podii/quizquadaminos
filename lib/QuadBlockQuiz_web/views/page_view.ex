@@ -1,9 +1,9 @@
-defmodule QuadblockquizWeb.PageView do
-  use QuadblockquizWeb, :view
+defmodule QuadBlockQuizWeb.PageView do
+  use QuadBlockQuizWeb, :view
 
   def render("sbom.html", _params) do
     files =
-      :quadblockquiz
+      :QuadBlockQuiz
       |> Application.app_dir("/priv/static/.well-known/sbom")
       |> File.ls!()
 

@@ -1,4 +1,4 @@
-defmodule Quadblockquiz.Repo.Migrations.AddEmailToUserTable do
+defmodule QuadBlockQuiz.Repo.Migrations.AddEmailToUserTable do
   use Ecto.Migration
 
   def change do

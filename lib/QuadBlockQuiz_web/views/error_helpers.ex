@@ -1,4 +1,4 @@
-defmodule QuadblockquizWeb.ErrorHelpers do
+defmodule QuadBlockQuizWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -39,9 +39,9 @@ defmodule QuadblockquizWeb.ErrorHelpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(QuadblockquizWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(QuadBlockQuizWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(QuadblockquizWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(QuadBlockQuizWeb.Gettext, "errors", msg, opts)
     end
   end
 end

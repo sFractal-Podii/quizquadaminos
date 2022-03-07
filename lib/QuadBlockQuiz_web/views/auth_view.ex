@@ -1,3 +1,3 @@
-defmodule QuadblockquizWeb.AuthView do
-  use QuadblockquizWeb, :view
+defmodule QuadBlockQuizWeb.AuthView do
+  use QuadBlockQuizWeb, :view
 end

@@ -2,23 +2,23 @@
         <ul class="nav">
          <li><a href="/">Home</a></li>
          <li><a href= <%= Routes.page_path(@conn, :how_to_play) %> >How to Play</a></li>
-         <li><a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.LeaderboardLive) %> >Leader board</a></li>
-         <li><a href= <%= Routes.contests_path(QuadblockquizWeb.Endpoint, :index) %> >Contests</a></li>
-         <li><a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %> >Contest prizes</a></li>
-         <li><a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules) %> >Contest rules</a></li>
-         <li><a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.CourseLive) %> > Courses </a></li>
-         <li><a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive) %> > Terms Of Service </a></li>
-         <li><a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive) %> > Privacy </a></li>
+         <li><a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.LeaderboardLive) %> >Leader board</a></li>
+         <li><a href= <%= Routes.contests_path(QuadBlockQuizWeb.Endpoint, :index) %> >Contests</a></li>
+         <li><a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestPrizes) %> >Contest prizes</a></li>
+         <li><a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.ContestRules) %> >Contest rules</a></li>
+         <li><a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.CourseLive) %> > Courses </a></li>
+         <li><a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.TermsOfServiceLive) %> > Terms Of Service </a></li>
+         <li><a href= <%= Routes.live_path(QuadBlockQuizWeb.Endpoint, QuadBlockQuizWeb.PrivacyLive) %> > Privacy </a></li>
          <li><a href= <%= Routes.page_path(@conn, :sbom) %> >SBOM</a></li>
         <%= if @current_user do %>
-
-        <%= if Quadblockquiz.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
+        
+        <%= if QuadBlockQuiz.Accounts.user_has_role?(@current_user, ["admin"]) and Mix.env() == :prod do %>
         <li><a href="/dashboard">Live Dashboard</a></li>
         <% end %>
-        <%= if Quadblockquiz.Accounts.user_has_role?(@current_user, ["admin"]) do %>
+        <%= if QuadBlockQuiz.Accounts.user_has_role?(@current_user, ["admin"]) do %>
           <li><%= admin_dropdown() %></li>
         <% end %>
-        <%= link "Logout", to: Routes.auth_path(QuadblockquizWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
+        <%= link "Logout", to: Routes.auth_path(QuadBlockQuizWeb.Endpoint, :delete), method: "delete", class: "button logout"%>
         <% else %>
          <%= hide_or_show_sign_up_button() %>
 

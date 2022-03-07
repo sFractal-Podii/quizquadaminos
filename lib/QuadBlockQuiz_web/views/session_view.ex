@@ -1,3 +1,3 @@
-defmodule QuadblockquizWeb.SessionView do
-  use QuadblockquizWeb, :view
+defmodule QuadBlockQuizWeb.SessionView do
+  use QuadBlockQuizWeb, :view
 end

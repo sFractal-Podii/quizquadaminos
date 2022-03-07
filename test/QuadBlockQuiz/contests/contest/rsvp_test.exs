@@ -1,9 +1,9 @@
-defmodule Quadblockquiz.ContestsTest.RSVP do
-  use Quadblockquiz.DataCase
-  alias Quadblockquiz.Accounts
-  alias Quadblockquiz.Accounts.User
-  alias Quadblockquiz.Contests
-  alias Quadblockquiz.Contests.RSVP
+defmodule QuadBlockQuiz.ContestsTest.RSVP do
+  use QuadBlockQuiz.DataCase
+  alias QuadBlockQuiz.Accounts
+  alias QuadBlockQuiz.Accounts.User
+  alias QuadBlockQuiz.Contests
+  alias QuadBlockQuiz.Contests.RSVP
 
   describe "RSVP" do
     setup do

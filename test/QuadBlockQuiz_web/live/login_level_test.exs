@@ -1,10 +1,10 @@
-defmodule QuadblockquizWeb.LoginLevelTest do
-  use QuadblockquizWeb.ConnCase
+defmodule QuadBlockQuizWeb.LoginLevelTest do
+  use QuadBlockQuizWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadblockquiz.Accounts
-  alias Quadblockquiz.Accounts.User
-  alias Quadblockquiz.Test.Auth
+  alias QuadBlockQuiz.Accounts
+  alias QuadBlockQuiz.Accounts.User
+  alias QuadBlockQuiz.Test.Auth
 
   test "all sign up button is displayed when there is no login level selected", %{conn: conn} do
     conn = get(conn, "/")
