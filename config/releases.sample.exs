@@ -7,7 +7,7 @@ host_url = "35.232.208.120"
 # Configure your database
 # In order to configure the database, you must create a database instance on GCP.
 # Provide the username, password, database name and hostname(public IP address)
-config :quadquizaminos, Quadquizaminos.Repo,
+config :quadblockquiz, Quadblockquiz.Repo,
   username: "postgres",
   password: "provide_database_password",
   database: "database_name",
@@ -23,7 +23,7 @@ config :quadquizaminos, Quadquizaminos.Repo,
 
 #  secret_key_base: "Thi679jhjhjasfrkf1q23dddd0......................"
 
-config :quadquizaminos, QuadquizaminosWeb.Endpoint,
+config :quadblockquiz, QuadblockquizWeb.Endpoint,
   http: [:inet6, port: 4000],
   secret_key_base: "add_secret_key_base"
 
@@ -42,7 +42,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 
 # Provide github ids for users who will be allowed to play this game
 # github_ids: [1111, 2222]
-config :quadquizaminos,
+config :quadblockquiz,
   github_ids: []
 
-config :quadquizaminos, QuadquizaminosWeb.Endpoint, url: [host: host_url, port: 4000]
+config :quadblockquiz, QuadblockquizWeb.Endpoint, url: [host: host_url, port: 4000]

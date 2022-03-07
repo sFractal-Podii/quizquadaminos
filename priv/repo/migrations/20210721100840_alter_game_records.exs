@@ -1,4 +1,4 @@
-defmodule Quadquizaminos.Repo.Migrations.AlterGameRecords do
+defmodule Quadblockquiz.Repo.Migrations.AlterGameRecords do
   use Ecto.Migration
 
   def change do
