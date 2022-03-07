@@ -1,4 +1,4 @@
-defmodule QuadBlockQuiz.Repo.Migrations.AddGameBoardTable do
+defmodule Quadquizaminos.Repo.Migrations.AddGameBoardTable do
   use Ecto.Migration
 
   def change do

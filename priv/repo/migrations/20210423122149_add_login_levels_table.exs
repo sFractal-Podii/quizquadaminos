@@ -1,4 +1,4 @@
-defmodule QuadBlockQuiz.Repo.Migrations.AddLoginLevelsTable do
+defmodule Quadquizaminos.Repo.Migrations.AddLoginLevelsTable do
   use Ecto.Migration
 
   def up do
