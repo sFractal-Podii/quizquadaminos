@@ -1,6 +1,6 @@
-defmodule QuadblockquizWeb.QuizModalComponent do
-  use QuadblockquizWeb, :live_component
-  alias Quadblockquiz.QnA
+defmodule QuadBlockQuizWeb.QuizModalComponent do
+  use QuadBlockQuizWeb, :live_component
+  alias QuadBlockQuiz.QnA
 
   def render(%{category: nil} = assigns) do
     ~L"""

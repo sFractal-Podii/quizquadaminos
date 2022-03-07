@@ -1,4 +1,4 @@
-defmodule QuadblockquizWeb.ConnCase do
+defmodule QuadBlockQuizWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule QuadblockquizWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use QuadblockquizWeb.ConnCase, async: true`, although
+  by setting `use QuadBlockQuizWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,20 +22,20 @@ defmodule QuadblockquizWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import QuadblockquizWeb.ConnCase
+      import QuadBlockQuizWeb.ConnCase
 
-      alias QuadblockquizWeb.Router.Helpers, as: Routes
+      alias QuadBlockQuizWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint QuadblockquizWeb.Endpoint
+      @endpoint QuadBlockQuizWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Quadblockquiz.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(QuadBlockQuiz.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Quadblockquiz.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(QuadBlockQuiz.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

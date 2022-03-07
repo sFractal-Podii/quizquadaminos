@@ -1,6 +1,6 @@
-defmodule QuadblockquizWeb.AdminLive do
+defmodule QuadBlockQuizWeb.AdminLive do
   use Phoenix.LiveView
-  alias Quadblockquiz.Accounts
+  alias QuadBlockQuiz.Accounts
   import Phoenix.HTML, only: [raw: 1]
 
   def mount(_param, _session, socket) do
@@ -53,7 +53,7 @@ defmodule QuadblockquizWeb.AdminLive do
   end
 
   def handle_event("reset-game-table", _, socket) do
-    {_count, _} = Quadblockquiz.Repo.delete_all(Quadblockquiz.GameBoard)
+    {_count, _} = QuadBlockQuiz.Repo.delete_all(QuadBlockQuiz.GameBoard)
     {:noreply, socket |> assign(cleared?: true)}
   end
 

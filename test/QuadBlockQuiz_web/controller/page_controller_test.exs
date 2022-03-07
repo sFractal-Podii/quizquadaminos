@@ -1,8 +1,8 @@
-defmodule QuadblockquizWeb.PageControllerTest do
-  use QuadblockquizWeb.ConnCase
+defmodule QuadBlockQuizWeb.PageControllerTest do
+  use QuadBlockQuizWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadblockquiz.Accounts.User
+  alias QuadBlockQuiz.Accounts.User
 
   test "user is restricted to access tetris game if not logged in", %{conn: conn} do
     conn = get(conn, "/tetris")
@@ -23,12 +23,12 @@ defmodule QuadblockquizWeb.PageControllerTest do
     }
 
     conn
-    |> bypass_through(QuadblockquizWeb.Router, [:browser])
+    |> bypass_through(QuadBlockQuizWeb.Router, [:browser])
     |> get("/auth/github/callback")
     |> assign(:ueberauth_auth, auth)
-    |> QuadblockquizWeb.AuthController.callback(%{})
+    |> QuadBlockQuizWeb.AuthController.callback(%{})
 
-    %User{role: "admin"} = Quadblockquiz.Repo.get(User, Integer.to_string(auth.uid))
+    %User{role: "admin"} = QuadBlockQuiz.Repo.get(User, Integer.to_string(auth.uid))
   end
 
   test "non configured users are given player role when authenticated", %{conn: conn} do
@@ -45,12 +45,12 @@ defmodule QuadblockquizWeb.PageControllerTest do
     }
 
     conn
-    |> bypass_through(QuadblockquizWeb.Router, [:browser])
+    |> bypass_through(QuadBlockQuizWeb.Router, [:browser])
     |> get("/auth/github/callback")
     |> assign(:ueberauth_auth, auth)
-    |> QuadblockquizWeb.AuthController.callback(%{})
+    |> QuadBlockQuizWeb.AuthController.callback(%{})
 
-    %User{role: "player"} = Quadblockquiz.Repo.get(User, Integer.to_string(auth.uid))
+    %User{role: "player"} = QuadBlockQuiz.Repo.get(User, Integer.to_string(auth.uid))
   end
 
   test "users get notified if Successfully authenticated via github", %{conn: conn} do
@@ -68,10 +68,10 @@ defmodule QuadblockquizWeb.PageControllerTest do
 
     conn =
       conn
-      |> bypass_through(QuadblockquizWeb.Router, [:browser])
+      |> bypass_through(QuadBlockQuizWeb.Router, [:browser])
       |> get("/auth/github/callback")
       |> assign(:ueberauth_auth, auth)
-      |> QuadblockquizWeb.AuthController.callback(%{})
+      |> QuadBlockQuizWeb.AuthController.callback(%{})
 
     assert get_flash(conn, :info) == "Successfully authenticated."
   end
@@ -92,10 +92,10 @@ defmodule QuadblockquizWeb.PageControllerTest do
 
       conn =
         conn
-        |> bypass_through(QuadblockquizWeb.Router, [:browser])
+        |> bypass_through(QuadBlockQuizWeb.Router, [:browser])
         |> get("/auth/google/callback")
         |> assign(:ueberauth_auth, auth)
-        |> QuadblockquizWeb.AuthController.callback(%{})
+        |> QuadBlockQuizWeb.AuthController.callback(%{})
 
       [conn: conn, auth: auth]
     end
@@ -105,7 +105,7 @@ defmodule QuadblockquizWeb.PageControllerTest do
     end
 
     test "user role is saved as player", %{auth: auth} do
-      %User{role: "player"} = Quadblockquiz.Repo.get(User, auth.uid)
+      %User{role: "player"} = QuadBlockQuiz.Repo.get(User, auth.uid)
     end
   end
 
@@ -116,7 +116,7 @@ defmodule QuadblockquizWeb.PageControllerTest do
 
     {:ok, _view, html} = live(conn, "/tetris")
 
-    assert html =~ "<h1>Welcome to Quadblockquiz!</h1>"
+    assert html =~ "<h1>Welcome to QuadBlockQuiz!</h1>"
   end
 
   describe "login with linkedin" do
@@ -135,10 +135,10 @@ defmodule QuadblockquizWeb.PageControllerTest do
 
       conn =
         conn
-        |> bypass_through(QuadblockquizWeb.Router, [:browser])
+        |> bypass_through(QuadBlockQuizWeb.Router, [:browser])
         |> get("/auth/linkedin/callback")
         |> assign(:ueberauth_auth, auth)
-        |> QuadblockquizWeb.AuthController.callback(%{})
+        |> QuadBlockQuizWeb.AuthController.callback(%{})
 
       [conn: conn, auth: auth]
     end
@@ -148,11 +148,11 @@ defmodule QuadblockquizWeb.PageControllerTest do
     end
 
     test "check if user logged in with linkedin", %{auth: auth} do
-      %User{provider: "linkedin"} = Quadblockquiz.Repo.get(User, auth.uid)
+      %User{provider: "linkedin"} = QuadBlockQuiz.Repo.get(User, auth.uid)
     end
 
     test "user role is saved as player", %{auth: auth} do
-      %User{role: "player"} = Quadblockquiz.Repo.get(User, auth.uid)
+      %User{role: "player"} = QuadBlockQuiz.Repo.get(User, auth.uid)
     end
   end
 end

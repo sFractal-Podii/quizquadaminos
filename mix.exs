@@ -1,9 +1,9 @@
-defmodule Quadblockquiz.MixProject do
+defmodule QuadBlockQuiz.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :quadblockquiz,
+      app: :QuadBlockQuiz,
       version: "0.14.6",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -13,7 +13,7 @@ defmodule Quadblockquiz.MixProject do
       build_embedded: true,
       deps: deps(),
       releases: [
-        quadblockquiz: [
+        QuadBlockQuiz: [
           steps: [:assemble, &copy_qna/1]
         ]
       ]
@@ -32,7 +32,7 @@ defmodule Quadblockquiz.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Quadblockquiz.Application, []},
+      mod: {QuadBlockQuiz.Application, []},
       extra_applications: [
         :logger,
         :runtime_tools,

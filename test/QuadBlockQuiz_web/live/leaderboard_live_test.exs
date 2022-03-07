@@ -1,11 +1,11 @@
-defmodule QuadblockquizWeb.LeaderboardLiveTest do
-  use QuadblockquizWeb.ConnCase
+defmodule QuadBlockQuizWeb.LeaderboardLiveTest do
+  use QuadBlockQuizWeb.ConnCase
 
   import Phoenix.LiveViewTest
 
-  alias Quadblockquiz.Accounts
-  alias Quadblockquiz.Accounts.User
-  alias Quadblockquiz.GameBoard.Records
+  alias QuadBlockQuiz.Accounts
+  alias QuadBlockQuiz.Accounts.User
+  alias QuadBlockQuiz.GameBoard.Records
 
   test "users can access leaderboard", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/leaderboard")

@@ -1,9 +1,9 @@
-defmodule QuadblockquizWeb.Auth do
+defmodule QuadBlockQuizWeb.Auth do
   @moduledoc """
   Auth plug, checks for the current user and adds them to assigns.
   """
   import Plug.Conn
-  use QuadblockquizWeb, :controller
+  use QuadBlockQuizWeb, :controller
 
   def init(opts), do: opts
 

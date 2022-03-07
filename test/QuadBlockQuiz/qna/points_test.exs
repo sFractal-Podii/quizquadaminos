@@ -1,6 +1,6 @@
-defmodule Quadblockquiz.PointsTest do
+defmodule QuadBlockQuiz.PointsTest do
   use ExUnit.Case
-  alias Quadblockquiz.Points
+  alias QuadBlockQuiz.Points
 
   describe "points with color" do
     setup do

@@ -1,9 +1,9 @@
-defmodule Quadblockquiz.AccountTest do
-  use Quadblockquiz.DataCase
-  alias Quadblockquiz.Accounts
-  alias Quadblockquiz.Accounts.LoginLevel
-  alias Quadblockquiz.Accounts.User
-  alias Quadblockquiz.Repo
+defmodule QuadBlockQuiz.AccountTest do
+  use QuadBlockQuiz.DataCase
+  alias QuadBlockQuiz.Accounts
+  alias QuadBlockQuiz.Accounts.LoginLevel
+  alias QuadBlockQuiz.Accounts.User
+  alias QuadBlockQuiz.Repo
 
   test "user_has_role?/2 checks if user matches the role given" do
     attrs = %{name: "Quiz Block ", uid: Integer.to_string(40_000_000), role: "admin"}

@@ -1,8 +1,8 @@
-defmodule QuadblockquizWeb.TetrisLiveTest do
-  use QuadblockquizWeb.ConnCase
+defmodule QuadBlockQuizWeb.TetrisLiveTest do
+  use QuadBlockQuizWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Quadblockquiz.Test.Auth
+  alias QuadBlockQuiz.Test.Auth
 
   setup do
     conn = Auth.login()
@@ -21,7 +21,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
     end
 
     test "player can see categories of topics to select", %{conn: conn} do
-      categories = Quadblockquiz.QnA.categories()
+      categories = QuadBlockQuiz.QnA.categories()
       {_view, html} = pause_game(conn)
 
       Enum.each(categories, fn category ->
@@ -40,7 +40,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
   describe "select topic" do
     test "player can select topic of the question to answer", %{conn: conn} do
-      categories = Quadblockquiz.QnA.categories()
+      categories = QuadBlockQuiz.QnA.categories()
       {view, _html} = pause_game(conn)
 
       Enum.map(categories, fn category ->
@@ -50,11 +50,11 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
     end
 
     test "choosing correct answer asks player to choose another category", %{conn: conn} do
-      [category | categories] = Quadblockquiz.QnA.categories()
+      [category | categories] = QuadBlockQuiz.QnA.categories()
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => category})
-      right_answer = Quadblockquiz.QnA.question(category).correct
+      right_answer = QuadBlockQuiz.QnA.question(category).correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
       assert html =~ "Continue"
       assert html =~ "#{categories |> Enum.random() |> Macro.camelize()}"
@@ -63,8 +63,8 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
   describe "Configuring question scoring points" do
     test "scoring points are displayed on qna", %{conn: conn} do
-      [category | _] = Quadblockquiz.QnA.categories()
-      score = Quadblockquiz.QnA.question(category).score
+      [category | _] = QuadBlockQuiz.QnA.categories()
+      score = QuadBlockQuiz.QnA.question(category).score
 
       {view, _html} = pause_game(conn)
       html = render_click(view, "choose_category", %{"category" => category})
@@ -75,9 +75,9 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
     end
 
     test "points are added with scores set on qna if answered correctly", %{conn: conn} do
-      [category | _] = Quadblockquiz.QnA.categories()
-      right_answer = Quadblockquiz.QnA.question(category).correct
-      score = Quadblockquiz.QnA.question(category).score
+      [category | _] = QuadBlockQuiz.QnA.categories()
+      right_answer = QuadBlockQuiz.QnA.question(category).correct
+      score = QuadBlockQuiz.QnA.question(category).score
 
       {view, _html} = pause_game(conn)
 
@@ -90,9 +90,9 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
     end
 
     test "points are deducted with scores set on qna if answered wrongly", %{conn: conn} do
-      [category | t] = Quadblockquiz.QnA.categories()
-      right_answer = Quadblockquiz.QnA.question(category).correct
-      score = Quadblockquiz.QnA.question(category).score
+      [category | t] = QuadBlockQuiz.QnA.categories()
+      right_answer = QuadBlockQuiz.QnA.question(category).correct
+      score = QuadBlockQuiz.QnA.question(category).score
 
       {view, _html} = pause_game(conn)
 
@@ -107,8 +107,8 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
       # select next category
       next_category = t |> hd()
 
-      right_answer = Quadblockquiz.QnA.question(next_category).correct
-      next_score = Quadblockquiz.QnA.question(next_category).score
+      right_answer = QuadBlockQuiz.QnA.question(next_category).correct
+      next_score = QuadBlockQuiz.QnA.question(next_category).score
 
       render_click(view, "choose_category", %{"category" => next_category})
 
@@ -126,7 +126,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
     end
 
     test "player remains on the same question when wrongly answered", %{conn: conn} do
-      right_answer = Quadblockquiz.QnA.question("open_c2").correct
+      right_answer = QuadBlockQuiz.QnA.question("open_c2").correct
 
       {view, _html} = pause_game(conn)
 

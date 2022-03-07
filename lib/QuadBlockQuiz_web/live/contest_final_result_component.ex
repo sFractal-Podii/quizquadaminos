@@ -1,7 +1,7 @@
-defmodule QuadblockquizWeb.ContestFinalResultComponent do
-  use QuadblockquizWeb, :live_component
+defmodule QuadBlockQuizWeb.ContestFinalResultComponent do
+  use QuadBlockQuizWeb, :live_component
 
-  alias Quadblockquiz.Contests
+  alias QuadBlockQuiz.Contests
 
   def render(assigns) do
     ~L"""
@@ -88,11 +88,11 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
 
   defp user_name(record) do
     case record do
-      %Quadblockquiz.GameBoard{} ->
+      %QuadBlockQuiz.GameBoard{} ->
         record.user.name
 
       _ ->
-        case Quadblockquiz.Accounts.get_user(record.uid) do
+        case QuadBlockQuiz.Accounts.get_user(record.uid) do
           nil -> "Anonymous"
           user -> user.name
         end

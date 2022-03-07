@@ -1,13 +1,13 @@
-defmodule QuadblockquizWeb.AuthController do
+defmodule QuadBlockQuizWeb.AuthController do
   @moduledoc """
   Auth controller responsible for handling Ueberauth responses
   """
 
-  use QuadblockquizWeb, :controller
+  use QuadBlockQuizWeb, :controller
 
   plug Ueberauth
 
-  alias Quadblockquiz.UserFromAuth
+  alias QuadBlockQuiz.UserFromAuth
 
   def delete(conn, _params) do
     conn
