@@ -1,4 +1,4 @@
-defmodule Quadquizaminos.Repo.Migrations.CreateRsvp do
+defmodule Quadblockquiz.Repo.Migrations.CreateRsvp do
   use Ecto.Migration
 
   def change do

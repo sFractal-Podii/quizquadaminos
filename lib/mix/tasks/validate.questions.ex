@@ -6,7 +6,7 @@ defmodule Mix.Tasks.Validate.Questions do
   def run(_) do
     require Logger
     Logger.info("Validating questions....")
-    Quadquizaminos.QnA.validate_files()
+    Quadblockquiz.QnA.validate_files()
     Logger.info("All Files are valid!")
   end
 end

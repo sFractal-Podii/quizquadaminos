@@ -1,4 +1,4 @@
-defmodule Quadquizaminos.Repo.Migrations.AddContestDateToContests do
+defmodule Quadblockquiz.Repo.Migrations.AddContestDateToContests do
   use Ecto.Migration
 
   def change do

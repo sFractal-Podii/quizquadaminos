@@ -1,9 +1,9 @@
 ExUnit.start()
 
-defmodule Quadquizaminos.Test.Auth do
-  @endpoint QuadquizaminosWeb.Endpoint
+defmodule Quadblockquiz.Test.Auth do
+  @endpoint QuadblockquizWeb.Endpoint
   import Phoenix.ConnTest
-  use QuadquizaminosWeb.ConnCase
+  use QuadblockquizWeb.ConnCase
 
   def login(user \\ "admin")
 
@@ -62,17 +62,17 @@ defmodule Quadquizaminos.Test.Auth do
 
   defp github_login(conn, auth) do
     conn
-    |> bypass_through(QuadquizaminosWeb.Router, [:browser])
+    |> bypass_through(QuadblockquizWeb.Router, [:browser])
     |> get("/auth/github/callback")
     |> assign(:ueberauth_auth, auth)
-    |> QuadquizaminosWeb.AuthController.callback(%{})
+    |> QuadblockquizWeb.AuthController.callback(%{})
   end
 
   defp google_login(conn, auth) do
     conn
-    |> bypass_through(QuadquizaminosWeb.Router, [:browser])
+    |> bypass_through(QuadblockquizWeb.Router, [:browser])
     |> get("/auth/google/callback")
     |> assign(:ueberauth_auth, auth)
-    |> QuadquizaminosWeb.AuthController.callback(%{})
+    |> QuadblockquizWeb.AuthController.callback(%{})
   end
 end

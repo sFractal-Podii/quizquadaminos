@@ -7,7 +7,7 @@
       "name": "sFractal PSIRT",
       "namespace": "https://www.sfractal.com/"
     },
-    "title": "QuadBlockQuiz Not Affected by Log4j exploits",
+    "title": "Quadblockquiz Not Affected by Log4j exploits",
     "tracking": {
       "current_release_date": "2021-12-14T17:00:00.000Z",
       "id": "quadblockquiz_vex_20211214_no_log4j",
