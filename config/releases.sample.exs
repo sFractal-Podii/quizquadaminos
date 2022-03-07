@@ -16,9 +16,9 @@ config :quadblockquiz, Quadblockquiz.Repo,
   pool_size: 10
 
 # use `mix phx.gen.secret` to generate the secret key base.
-# run the command on your terminal under the quadblockquiz directory:
+# run the command on your terminal under the quizquadaminos directory:
 
-# quadblockquiz $ mix phx.gen.secret
+# quizquadaminos$ mix phx.gen.secret
 #    "Thi679jhjhjasfrkf1q23dddd0......................"
 
 #  secret_key_base: "Thi679jhjhjasfrkf1q23dddd0......................"
