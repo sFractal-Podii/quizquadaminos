@@ -68,6 +68,7 @@ defmodule Quadblockquiz.BrickTest do
     |> assert_point({1, 1})
   end
 
+  @tag :individual_test
   test "should convert brick to string" do
     actual = new_brick() |> Quadblockquiz.Brick.to_string()
     expected = "□■□□\n□■□□\n□■□□\n□■□□"
@@ -75,6 +76,7 @@ defmodule Quadblockquiz.BrickTest do
     assert actual == expected
   end
 
+  @tag :individual_test
   test "should inspect bricks" do
     actual = new_brick() |> inspect
 

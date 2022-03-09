@@ -10,7 +10,7 @@ defmodule QuadblockquizWeb.LeaderboardLiveTest do
   test "users can access leaderboard", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/leaderboard")
 
-    assert html =~ "<h1>Leaderboard</h1>"
+    assert html =~ "heading-1\">Leaderboard</div>"
   end
 
   ## This test should propabably go since we are already testing rendering of
@@ -33,11 +33,12 @@ defmodule QuadblockquizWeb.LeaderboardLiveTest do
     end)
 
     {:ok, _view, html} = live(conn, "/leaderboard")
+
     assert row_count(html) == 15
-    assert html =~ "<th>Player</th>"
-    assert html =~ "<th>Start time</th>"
-    assert html =~ "<th>End time</th>"
-    assert html =~ "<th>Date</th>"
+    assert html =~ "\">Player</div>"
+    assert html =~ ">Start time</div"
+    assert html =~ ">End time</div"
+    assert html =~ ">Date</div>"
   end
 
   test "user can be redicted to view player bottom blocks ", %{conn: conn} do
@@ -112,46 +113,45 @@ defmodule QuadblockquizWeb.LeaderboardLiveTest do
 
     test "can navigate to next page", %{conn: conn} do
       {:ok, view, html} = live(conn, "/leaderboard")
-      assert html =~ "<td class=\"score\">97</td>"
+      assert html =~ "md:p-4\">97</div><div class=\"table-cell md:p-4\">1</div><div class=\""
 
       html = view |> element("a[href='/leaderboard?page=2&sort_by=score']") |> render_click()
-      refute html =~ "<td class=\"score\">97</td>"
+      refute html =~ "md:p-4\">1</div><div class=\"table-cell md:p-4\">97</div"
     end
 
     test "maintains sort order", %{conn: conn} do
       {:ok, view, html} = live(conn, "/leaderboard")
-      assert html =~ "<td class=\"score\">97</td><td>1</td>"
+      assert html =~ "md:p-4\">97</div><div class=\"table-cell md:p-4\">1</div><div class=\""
 
       html = render_click(view, "sort", %{param: "dropped_bricks"})
-      assert html =~ "<td class=\"score\">1</td><td>97</td>"
+      assert html =~ "md:p-4\">1</div><div class=\"table-cell md:p-4\">97</div"
 
       html =
         view |> element("a[href='/leaderboard?page=2&sort_by=dropped_bricks']") |> render_click()
 
-      assert html =~ "<td class=\"score\">26</td><td>72</td>"
-      refute html =~ "<td class=\"score\">1</td><td>97</td>"
+      assert html =~ "26</div><div class=\"table-cell md:p-4\">72</div>"
+      refute html =~ "md:p-4\">1</div><div class=\"table-cell md:p-4\">97</div"
     end
 
     test "new sort order returns you to page 1", %{conn: conn} do
       {:ok, view, html} = live(conn, "/leaderboard")
-      assert html =~ "<td class=\"score\">97</td><td>1</td>"
+      assert html =~ "md:p-4\">97</div><div class=\"table-cell md:p-4\">1</div><div class=\""
 
       html = view |> element("a[href='/leaderboard?page=2&sort_by=score']") |> render_click()
-      assert html =~ "<td class=\"score\">72</td><td>26</td>"
+      assert html =~ "md:p-4\">72</div><div class=\"table-cell md:p-4\">26</div>"
       assert html =~ "href=\"/leaderboard?page=7&amp;sort_by=score\""
       html = render_click(view, "sort", %{param: "dropped_bricks"})
-      assert html =~ "<td class=\"score\">1</td><td>97</td>"
+      assert html =~ "md:p-4\">1</div><div class=\"table-cell md:p-4\">97</div"
       refute html =~ "href=\"/leaderboard?page=7&amp;sort_by=dropped_bricks\""
     end
   end
 
   defp row_count(html) do
     row =
-      ~r/<tr>/
+      ~r/md:table-row-group/
       |> Regex.scan(html)
       |> Enum.count()
 
-    # row is deducted by 2 due to the <tr> for table head and also <tr> for footer
-    row - 2
+    row
   end
 end

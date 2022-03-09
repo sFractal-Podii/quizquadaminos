@@ -22,7 +22,7 @@ defmodule Quizquadaminos.ContestsTest do
   test "list_contests/0 lists all the contest created", %{started_contest: started_contest} do
     Contests.create_contest(%{name: "ContestD"})
     {:ok, {:ok, contest2}} = Contests.start_contest("ContestD")
-    assert Contests.list_contests() == [started_contest, contest2]
+    assert Contests.list_contests() == [contest2, started_contest]
   end
 
   test "start_contest/1 starts a contest", %{started_contest: started_contest} do

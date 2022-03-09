@@ -34,7 +34,7 @@ npm-debug.log
 /priv/static/assets/
 /priv/static/cache_manifest.json
 
-**/answers.json
+*/answers.json
 
 # do not include secrets in releases.exs in git/github
 /config/releases.exs
