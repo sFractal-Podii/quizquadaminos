@@ -54,7 +54,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => category})
-      right_answer = Quadblockquiz.QnA.question(category).correct
+      right_answer = Quadblockquiz.QnA.question(["qna"], category).correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
       assert html =~ "Continue"
       assert html =~ "#{categories |> Enum.random() |> Macro.camelize()}"
@@ -64,7 +64,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
   describe "Configuring question scoring points" do
     test "scoring points are displayed on qna", %{conn: conn} do
       [category | _] = Quadblockquiz.QnA.categories()
-      score = Quadblockquiz.QnA.question(category).score
+      score = Quadblockquiz.QnA.question(["qna"], category).score
 
       {view, _html} = pause_game(conn)
       html = render_click(view, "choose_category", %{"category" => category})
@@ -76,8 +76,8 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
     test "points are added with scores set on qna if answered correctly", %{conn: conn} do
       [category | _] = Quadblockquiz.QnA.categories()
-      right_answer = Quadblockquiz.QnA.question(category).correct
-      score = Quadblockquiz.QnA.question(category).score
+      right_answer = Quadblockquiz.QnA.question(["qna"], category).correct
+      score = Quadblockquiz.QnA.question(["qna"], category).score
 
       {view, _html} = pause_game(conn)
 
@@ -91,8 +91,8 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
     test "points are deducted with scores set on qna if answered wrongly", %{conn: conn} do
       [category | t] = Quadblockquiz.QnA.categories()
-      right_answer = Quadblockquiz.QnA.question(category).correct
-      score = Quadblockquiz.QnA.question(category).score
+      right_answer = Quadblockquiz.QnA.question(["qna"], category).correct
+      score = Quadblockquiz.QnA.question(["qna"], category).score
 
       {view, _html} = pause_game(conn)
 
@@ -107,8 +107,8 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
       # select next category
       next_category = t |> hd()
 
-      right_answer = Quadblockquiz.QnA.question(next_category).correct
-      next_score = Quadblockquiz.QnA.question(next_category).score
+      right_answer = Quadblockquiz.QnA.question(["qna"], next_category).correct
+      next_score = Quadblockquiz.QnA.question(["qna"], next_category).score
 
       render_click(view, "choose_category", %{"category" => next_category})
 
@@ -126,7 +126,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
     end
 
     test "player remains on the same question when wrongly answered", %{conn: conn} do
-      right_answer = Quadblockquiz.QnA.question("open_c2").correct
+      right_answer = Quadblockquiz.QnA.question(["qna"], "open_c2").correct
 
       {view, _html} = pause_game(conn)
 

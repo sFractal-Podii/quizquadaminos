@@ -4,9 +4,9 @@ defmodule Quadblockquiz.QnaTest do
   alias Quadblockquiz.QnA
 
   test "answers are determined by hyphen or asterisk in newline" do
-    %{answers: answers} = QnA.question("open_chain_sample")
+    answers = QnA.question(["qna"], "open_chain_sample")
 
-    assert Enum.count(answers) == 2
+    assert Enum.count(answers.choices) == 2
   end
 
   test "question/1 returns the correct answers" do
@@ -18,8 +18,10 @@ defmodule Quadblockquiz.QnaTest do
       {" an impolite term not suitable to repeat here", 4}
     ]
 
-    actual_answer = "2"
-    %{correct: expected_answer} = QnA.question("risk")
+    actual_answer = "0"
+
+    %{correct: expected_answer} = QnA.question(["qna"], "risk")
+
     assert actual_answer == expected_answer
   end
 end

@@ -48,3 +48,5 @@ jobs:
       run: mix deps.get
     - name: Check lints
       run: make header&&  make lint
+    - name: Run tests
+      run: mix test
