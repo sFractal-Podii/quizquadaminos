@@ -16,7 +16,7 @@ defmodule QuadblockquizWeb.ContestRules do
           <div class="contest-rule md:max-w-5xl md:mx-auto md:bg-white md:border md:rounded-lg md:border-gray-200 space-y-4 md:p-6 lg:p-12 md:text-base  text-sm font-normal">
             <p>
               These are the rules for the
-              AT&T Software Symposium Security Workshop
+              RSAC Supply Chain Sandbox
               Quadblockquiz contest.
               Prizes are described at
               <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %> >prizes</a>.
@@ -35,8 +35,7 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be
-              AT&T employees attending the Cybersecurity Workshop
-              at the AT&T Software Symposium.
+              RSAC attendees. Some prizes require being physically present.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be least 21 years of age or older to win prizes.
@@ -47,35 +46,28 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants may use any handle they want,
-              but recognize there are over 500 participants
+              but recognize there are hundreds of participants
               so there is the chance of overlap.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               The game does not check for overlap so pick something unique.
             </p>
             <div class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              <p>
-                Your ATTUID is unique but you probably want to combine it with something
-                e.g. ds_sFractal_6284.
-              </p>
               <ul class="list-disc pl-4">
                 <li> You can play with more than one handle - but one person can only win one prize!</li>
                 <li>The game should prompt you for your email when you first start to play.</li>
                 <li>Once assigned, that handle will stay connected to that email address.</li>
-                <li>If it didn't prompt you for your email, you might have chosen and existing handle.</li>
+                <li>If it didn't prompt you for your email, you might have chosen an existing handle (hopefully yours).</li>
               </ul>
             </div>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Only valid AT&T emails are elibigle to win prizes.
+              Only valid emails are elibigle to win prizes.
               The organizers must be able to
               to communicate with contest organizer about reciving their prize.
-              More importantly, the ATTUID is used to recieve MyRewards.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               The game must be played during eligle times.
-              An eligible games must start and end during times announced during the workshop.
-              The times will be on breaks, during the Q&A,
-              and for 3 hours after the conclusion of the workshop.
+              An eligible games must start and end during times announced during the Sandbox.
               Games spanning timeslots will be ineligible
               (eg if start during first break and finish during second break).
               Make sure to finish your game cleanly so that you have seen the endgame screen with your score.
