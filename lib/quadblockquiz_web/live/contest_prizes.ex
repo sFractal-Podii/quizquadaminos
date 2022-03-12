@@ -8,29 +8,29 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "trophy",
         heading: "High Score",
         content:
-          "One lucky person will win a $25 MyRewards Gift Card. The prize goes to ELIGIBLE person with the highest Score DURING THE CONTEST (see rules).",
-        price: "25"
+          "One lucky person will win a tbd. The prize goes to ELIGIBLE person with the highest Score DURING THE CONTEST (see rules).",
+        price: "tbd"
       },
       %{
         icon: "th",
         heading: "Most Bricks",
         content:
-          " One lucky person will win a $25 MyRewards Gift Card. The prize goes to ELIGIBLE person with the the most bricks in a game DURING THE CONTEST (see rules). ",
-        price: "25"
+          " One lucky person will win a tbd. The prize goes to ELIGIBLE person with the the most bricks in a game DURING THE CONTEST (see rules). ",
+        price: "tbd"
       },
       %{
         icon: "question",
         heading: "Most Questions",
         content:
-          " One lucky person will win a $25 MyRewards Gift Card. The prize goes to ELIGIBLE person who answers the most trivia questions in the game DURING THE CONTEST (see rules). ",
-        price: "25"
+          " One lucky person will win a tbd. The prize goes to ELIGIBLE person who answers the most trivia questions in the game DURING THE CONTEST (see rules). ",
+        price: "tbd"
       },
       %{
         icon: "gift",
         heading: "???????",
         content: """
         One lucky person will win a
-        $25 MyRewards Gift Card.
+        tbd.
         The prize goes to ELIGIBLE person
         who meets a suprise criteria
         DURING THE CONTEST (see rules).
@@ -50,7 +50,9 @@ defmodule QuadblockquizWeb.ContestPrizes do
     ~L"""
     <h1 class="heading-1 mt-7 text-4xl tracking-widest">Contest Prizes</h1>
     <p class="pb-7">
-    This is the prize page for the AT&T Software Symposium Security Workshop Quadblockquiz contest. See
+    This is the prize page for the
+    RSAC Supply Chain Sandbox QuadBlockQuiz contests.
+    See
     <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules) %> > Contest Rules </a>
     for more information on contest rules.
     </p>
