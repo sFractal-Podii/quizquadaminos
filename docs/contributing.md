@@ -2,6 +2,23 @@
 
 This project uses [semantic versioning](https://semver.org/) as much as we can
 
+## Contributing for Non team.
+### Open an issue
+
+Visit github issues (https://github.com/sFractal-Podii/quizquadaminos/issues)  and ensure that the issues you want to create does not exist before creating the issue.
+
+### Open a pull request
+To create a pull request :
+1. Fork the project and clone it locally.https://github.com/sFractal-Podii/quizquadaminos.
+2. Create your branch for your changes. Naming of the branch should be according to the issue you are working on.
+3.  Make the changes and create the pull request. Compare your branch on the fork against the develop branch of the original repo.
+
+### After creating a Pull request.
+- Constantly visit your pull request to see the comments left and work on the comments.
+- Issues are merged once they are approved
+- For clean history of commits, rebase if the PR has more than one commit
+
+
 ## Issue tracking
 
 We use github issues to track issues , checkout [the project board](https://github.com/sFractal-Podii/quizquadaminos/projects/1) for issues
