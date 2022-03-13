@@ -24,7 +24,7 @@ You can specify the image tag by passing `APP_VERSION`
 make docker-image APP_VERSION=v1.0.2
 ```
 
-#### Creating an image and pushing to GCP
+####  
 You can optionally create an image on your laptop and push it up to GCP container registry using the following command
 ```shell
 make push-image-gcp
