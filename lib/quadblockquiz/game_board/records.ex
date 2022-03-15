@@ -19,6 +19,11 @@ defmodule Quadblockquiz.GameBoard.Records do
     |> Repo.all()
   end
 
+  def top_10_games(sort_by \\ "score") do
+    sort_games(sort_by)
+    |> Enum.take(10)
+  end
+
   def contest_game(nil, nil), do: []
 
   def contest_game(start_time, end_time)

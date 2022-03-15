@@ -17,29 +17,28 @@ defmodule QuadblockquizWeb.PowerUpTest do
       categories = Quadblockquiz.QnA.categories()
       {view, _html} = pause_game(conn)
 
-      Enum.each(categories, fn category ->
-        render_click(view, "choose_category", %{"category" => category})
+      html =
+        Enum.map_join(categories, fn category ->
+          render_click(view, "choose_category", %{"category" => category})
+          right_answer = Quadblockquiz.QnA.question(["qna"], category).correct
+          render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+        end)
 
-        right_answer = Quadblockquiz.QnA.question(category).correct
-        render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
-      end)
-
-      html = render_keydown(view, "keydown", %{"key" => " "})
       [html: html]
     end
 
     test "powerup hover display name of respective powerups", %{html: html} do
-      assert html =~ "\"fas fa-plus-square\" title=\"addblock\""
-      assert html =~ "\"fas fa-minus-square\" title=\"deleteblock\""
-      assert html =~ "\"fas fa-file-contract\" title=\"cyberinsurance\""
+      assert html =~ "class=\"fab fa-superpowers\" title=\"superpower\""
+      assert html =~ "class=\"fas fa-file-contract\" title=\"cyberinsurance\""
+      assert html =~ "class=\"fas fa-wrench\" title=\"fixvuln\""
     end
 
     test "respective qna powersups are displayed if questions are answered correctly", %{
       html: html
     } do
-      assert html =~ "<i class=\"fas fa-arrows-alt\""
-      assert html =~ "<i class=\"fas fa-minus-square\""
-      assert html =~ "<i class=\"fas fa-plus-square\""
+      assert html =~ "i class=\"fas fa-file-contract\""
+      assert html =~ "<i class=\"fab fa-superpowers\""
+      assert html =~ "<i class=\"fas fa-wrench\""
     end
 
     test "powers don't display on questions that don't have them if answered correctly", %{
@@ -49,8 +48,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
 
       Enum.each(["open_c2"], fn category ->
         render_click(view, "choose_category", %{"category" => category})
-
-        right_answer = Quadblockquiz.QnA.question(category).correct
+        right_answer = Quadblockquiz.QnA.question(["qna"], category).correct
         render_click(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
       end)
 
@@ -65,8 +63,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => "supply_chain_sample"})
-
-      right_answer = Quadblockquiz.QnA.question("supply_chain_sample").correct
+      right_answer = Quadblockquiz.QnA.question(["qna"], "supply_chain_sample").correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
       [html: html, view: view]
@@ -102,8 +99,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => "open_chain_sample"})
-
-      right_answer = Quadblockquiz.QnA.question("supply_chain_sample").correct
+      right_answer = Quadblockquiz.QnA.question(["qna"], "supply_chain_sample").correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
       [html: html, view: view]
@@ -150,8 +146,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => "sbom_sample"})
-
-      right_answer = Quadblockquiz.QnA.question("sbom_sample").correct
+      right_answer = Quadblockquiz.QnA.question(["qna"], "sbom_sample").correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
       [html: html, view: view]
@@ -205,8 +200,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
       {view, _html} = pause_game(conn)
 
       render_click(view, "choose_category", %{"category" => "phoenix"})
-
-      right_answer = Quadblockquiz.QnA.question("phoenix").correct
+      right_answer = Quadblockquiz.QnA.question(["qna"], "phoenix").correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
       [html: html, view: view, oc_right_answer: right_answer]
@@ -222,7 +216,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
       oc_right_answer: oc_right_answer
     } do
       add_block(view)
-      right_answer = Quadblockquiz.QnA.question("open_c2").correct
+      right_answer = Quadblockquiz.QnA.question(["qna"], "open_c2").correct
 
       wrong_answer =
         Enum.find(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], fn guess ->
@@ -249,8 +243,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
           "color" => "vuln_grey_yellow"
         })
 
-      refute html =~ "vuln_grey_yellow"
-      assert html =~ "purple"
+      assert html =~ "phx-value-color=\"purple\""
     end
   end
 
@@ -265,7 +258,7 @@ defmodule QuadblockquizWeb.PowerUpTest do
   defp add_block(view, x \\ "5", y \\ "20") do
     render_click(view, "choose_category", %{"category" => "supply_chain_sample"})
 
-    right_answer = Quadblockquiz.QnA.question("supply_chain_sample").correct
+    right_answer = Quadblockquiz.QnA.question(["qna"], "supply_chain_sample").correct
     render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
     render_click(view, "powerup", %{"powerup" => "addblock"})

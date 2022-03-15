@@ -13,7 +13,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
 
   test "admin can access the contest page", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/admin/contests")
-    assert html =~ "<h1>Contests</h1>"
+    assert html =~ "class=\"heading-1\">Contests</div>"
   end
 
   test "only admin can see the start, stop button", %{conn: conn} do
@@ -34,7 +34,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
     {:ok, view, _html} = live(conn, "/admin/contests")
     html = render_click(view, :start, %{"contest" => "contestE"})
     contest = Contests.get_contest("contestE")
-    assert html =~ "#{DateTime.truncate(contest.start_time, :second)}</td>"
+    assert html =~ "#{DateTime.truncate(contest.start_time, :second)}</div>"
   end
 
   test "admin can stop a contest", %{conn: conn} do
@@ -44,7 +44,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
     html = render_click(view, :stop, %{"contest" => "contestE"})
     contest = Contests.get_contest("contestE")
     assert html =~ "Final Results"
-    assert html =~ "#{DateTime.truncate(contest.end_time, :second)}</td>"
+    assert html =~ "#{DateTime.truncate(contest.end_time, :second)}</div>"
   end
 
   test "User can see the rsvp button", %{conn: conn} do
@@ -105,7 +105,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
 
     {:ok, _view, html} = live(conn, "/admin/contests")
     contest = Contests.get_contest("ContestD")
-    assert row_count(html) == 2
+    assert row_count(html) == 1
     assert contest.name == "ContestD"
     assert contest.contest_date == ~U[2021-09-16 14:11:00.000000Z]
   end
@@ -151,11 +151,10 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
 
   defp row_count(html) do
     row =
-      ~r/<tr>/
+      ~r/md:table-header-group/
       |> Regex.scan(html)
       |> Enum.count()
 
-    # row is deducted by 2 due to the <tr> for table head and also <tr> for footer
-    row - 2
+    row
   end
 end
