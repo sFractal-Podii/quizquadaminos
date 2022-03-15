@@ -49,6 +49,7 @@ defmodule Quizquadaminos.ContestsTest do
     assert updated_contest.name == "ContestE"
   end
 
+  @tag :individual_test
   test "time_elapsed/1 gets time elapsed " do
     Process.sleep(1000)
     time_elapsed = Contests.time_elapsed("ContestC")
