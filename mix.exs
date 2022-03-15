@@ -4,7 +4,7 @@ defmodule Quadblockquiz.MixProject do
   def project do
     [
       app: :quadblockquiz,
-      version: "0.14.6",
+      version: "0.14.7",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
