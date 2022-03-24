@@ -8,22 +8,25 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
   @impl true
   def render(assigns) do
     ~L"""
-    <div class="container">
-    <div class="row">
-    <div class="column column-50">
-    <%= display_bottom(@record.bottom_blocks, assigns) %>
-    </div>
-    <div class="column column-50 column-offset-25">
-    <p><b>End game status for <%= @record.user.name %></b> </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 md:mt-12">
+    <div><%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive) %></div>
+    <div><%= display_bottom(@record.bottom_blocks, assigns) %></div>
+    <div>
     <ul>
     <li><b>Score:</b><%= @record.score  %></li>
     <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
     <li><b>Questions:</b><%= @record.correctly_answered_qna %></li>
     </ul>
-    <%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive) %>
     </div>
-    </div>
-    </div>
+
+    <table class="table-auto mt-6">
+    <tr>
+    <%= @record.user.name %>
+    <td>
+    <%= @record.score  %>
+    </td>
+    </tr>
+    </table>
 
     """
   end

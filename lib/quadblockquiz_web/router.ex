@@ -42,7 +42,7 @@ defmodule QuadblockquizWeb.Router do
     get "/sbom", PageController, :redirect_to_well_known
     get "/.well-known/sbom", PageController, :sbom
 
-    live "/leaderboard/:board_id", LeaderboardLive.Show
+    # live "/leaderboard/:board_id", LeaderboardLive.Show
     live "/contestboard", ContestboardLive
 
     live "/contests/:id", ContestsLive, :show
@@ -72,6 +72,8 @@ defmodule QuadblockquizWeb.Router do
     live "/leaderboard", LeaderboardLive
     live "/contests", ContestsLive, :index
     live "/contest-prizes", ContestPrizes
+    live "/leaderboard/:board_id", LeaderboardLive.Show
+
 
     pipe_through :authorize
     live "/courses", CourseLive
