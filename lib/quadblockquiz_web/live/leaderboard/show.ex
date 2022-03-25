@@ -5,11 +5,13 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
 
   alias QuadblockquizWeb.SvgBoard
 
+  alias QuadblockquizWeb.LeaderboardLive
+
   @impl true
   def render(assigns) do
     ~L"""
-    <div class="grid grid-cols-1 md:grid-cols-3 md:mt-12">
-    <div><%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive) %></div>
+    <div class="grid grid-cols-2 mt-6 md:grid-cols-3 md:mt-12">
+    <div><%= live_patch "Back to Leaderboard", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded", to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive) %></div>
     <div><%= display_bottom(@record.bottom_blocks, assigns) %></div>
     <div>
     <ul>
@@ -19,15 +21,21 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
     </ul>
     </div>
 
-    <table class="table-auto mt-6">
-    <tr>
-    <%= @record.user.name %>
-    <td>
-    <%= @record.score  %>
-    </td>
-    </tr>
-    </table>
+    <div class="rounded-lg shadow md:hidden">
 
+    <br><ul class="list-decimal py-4 pl-4">
+             <li class="inline-flex">
+               <%= LeaderboardLive.user_avatar(@record.user.avatar, assigns) %>
+               <div class="grid grid-cols-2 gap-x-44 pt-2 px-4">
+                 <div class="grid w-48">
+                   <p class="text-base font-sans tracking-wide"><%= @record.user.name %></p>
+                   <p class="text-gray-400 text-sm"><%= LeaderboardLive.time_taken(@record.start_time, @record.end_time)%></p>
+                 </div>
+                 <p class="tracking-wide text-base font-sans font-bold"><%= @record.score %></p>
+               </div>
+             </li>
+           </ul>
+         </div>
     """
   end
 

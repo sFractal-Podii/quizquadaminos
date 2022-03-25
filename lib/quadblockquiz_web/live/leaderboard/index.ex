@@ -65,21 +65,21 @@ defmodule QuadblockquizWeb.LeaderboardLive do
     """
   end
 
-  defp time_taken(start_time, end_time) when is_nil(start_time) or is_nil(end_time) do
+  def time_taken(start_time, end_time) when is_nil(start_time) or is_nil(end_time) do
     "playing"
   end
 
-  defp time_taken(start_time, end_time) do
+  def time_taken(start_time, end_time) do
     "#{DateTime.diff(end_time, start_time)} sec"
   end
 
-  defp user_avatar(nil, assigns) do
+  def user_avatar(nil, assigns) do
     ~L"""
       <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg") %>" alt="user avatar" />
     """
   end
 
-  defp user_avatar(avatar, assigns) do
+  def user_avatar(avatar, assigns) do
     ~L"""
      <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src="<%= avatar %>" />
     """
