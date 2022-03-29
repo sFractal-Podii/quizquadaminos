@@ -2,8 +2,8 @@
     <%= if @live_action == :show do %>
       <%= live_component @socket, QuadblockquizWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
     <% else %>
+     <div class="heading-1">Contests</div>
     <div class="container max-width: 768px">
-        <div class="heading-1">Contests</div>
       <%= if @current_user.admin? do  %>
         <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :save] %>
           <div class="row">

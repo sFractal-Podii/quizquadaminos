@@ -78,7 +78,7 @@ defmodule QuadblockquizWeb.Router do
   end
 
   scope "/admin", QuadblockquizWeb, as: :admin do
-    pipe_through [:browser, :authorize_admin]
+    pipe_through [:browser, :authorize_admin, :tailwind_layout]
 
     live "/", AdminLive
     live "/contests", ContestsLive, :index
