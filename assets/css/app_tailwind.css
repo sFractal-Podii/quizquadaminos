@@ -2,3 +2,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import "./components/general.css";
+.btn {
+    @apply bg-blue-600 p-2 rounded w-32 text-white;
+}

@@ -92,7 +92,9 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
   test "only admin can see option to create contest and set date", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/admin/contests")
 
-    assert html =~ "<input id=\"contest_name\" name=\"contest[name]\" type=\"text\""
+    assert html =~
+             "<input class=\"w-full\" id=\"grid-contest-name\" type=\"text\" placeholder=\"contest name\"/>"
+
     assert html =~ "type=\"datetime-local\"/></div>"
   end
 
