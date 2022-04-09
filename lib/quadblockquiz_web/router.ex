@@ -74,7 +74,6 @@ defmodule QuadblockquizWeb.Router do
     live "/contest-prizes", ContestPrizes
     live "/leaderboard/:board_id", LeaderboardLive.Show
 
-
     pipe_through :authorize
     live "/courses", CourseLive
   end
