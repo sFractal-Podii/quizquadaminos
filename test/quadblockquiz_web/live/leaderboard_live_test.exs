@@ -64,7 +64,7 @@ defmodule QuadblockquizWeb.LeaderboardLiveTest do
 
     {:ok, record} = Records.record_player_game(true, game_record)
     {:ok, _view, html} = live(conn, "/leaderboard/#{record.id}")
-    assert html =~ "<p><b>End game status for Quiz Block </b>"
+    assert html =~ ">Back to Leaderboard</a>"
   end
 
   describe "pagination" do
