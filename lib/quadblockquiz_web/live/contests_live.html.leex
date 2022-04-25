@@ -6,21 +6,20 @@
     <div class="container max-width: 768px">
       <%= if @current_user.admin? do  %>
         <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :save] %>
-        <div class="md:flex items-center  ">
-            <div class="md:p-5">
+        <div class="md:flex items-center">
+            <div class="md:px-5 mt-2 md:mt-0">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-contest-name">
               Contest
             </label>
-              <input class="appearance-none block w-full bg-gray-200 text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-contest-name" type="text" placeholder="contest name">
+              <input class="w-full" id="grid-contest-name" type="text" placeholder="contest name">
             </div>
-            <div phx-update="ignore" id="contest_date" class="md:p-5">
+            <div phx-update="ignore" id="contest_date" class="md:px-5 mt-2 md:mt-0">
              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="contest_contest_date">
               Date
             </label>
-                <%= datetime_local_input f, :contest_date %>
-                
+              <%= datetime_local_input f, :contest_date, class: "w-full" %>
             </div>
-            <div class="mt-2">
+            <div class="mt-2 md:mt-6">
               <%= submit "Create", class: "btn" %>
             </div>
           </div> <!--closes row-->
