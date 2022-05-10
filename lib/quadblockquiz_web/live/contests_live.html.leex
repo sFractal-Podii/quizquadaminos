@@ -25,7 +25,7 @@
     <%= live_modal @socket, QuadblockquizWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
   <% end %>
   <div class="table">
-    <div class="hidden md:table-header-group md:bg-white md:text-base md:font-bold font-normal">
+    <div class="hidden md:block md:table-header-group md:bg-white md:text-base md:font-bold font-normal">
       <div class="md:table-cell md:p-4"> Contest Name</div><!-- contest name -->
       <%= if @current_user.admin? do %>
         <div class="md:table-cell md:p-4"></div> <!--start pause button-->

@@ -19,7 +19,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   @impl true
   def render(assigns) do
     ~L"""
-    <div class="hidden md:table-row">
+    <div class="hidden md:block md:table-row">
       <div class="md:table-cell md:p-4"><%= @contest.name%></div>
       <%= if @current_user.admin? do %>
         <div class="table-cell md:p-4"> <%= start_or_pause_button(assigns,@contest) %> </div>
