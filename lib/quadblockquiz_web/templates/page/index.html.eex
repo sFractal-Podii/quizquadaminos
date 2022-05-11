@@ -75,7 +75,7 @@
         <%= Quadblockquiz.Meta.version() %>
       </h4>
     </div>
-    <div class="px-56">
+    <div>
       <h2 class="text-center font-semibold text-base">Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game</h2>
       <p class="text-center mt-4 font-light text-base">We proudly present the SupplyChainSandbox edition of Quadblockquiz -
       a reimagined take on tetrominoes where playful spatial negotiations are infused with
