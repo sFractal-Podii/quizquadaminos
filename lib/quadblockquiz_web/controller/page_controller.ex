@@ -21,6 +21,14 @@ defmodule QuadblockquizWeb.PageController do
     render(conn, "how-to-play.html")
   end
 
+  def read_more(conn, _params) do
+    render(conn, "read_more.html")
+  end
+
+  def sign_up(conn, _params) do
+    render(conn, "sign_up.html")
+  end
+
   def redirect_to_well_known(conn, _params) do
     redirect(conn, to: "/.well-known/sbom")
   end

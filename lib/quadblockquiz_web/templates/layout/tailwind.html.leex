@@ -12,27 +12,14 @@
   </head>
   <body>
     <div>
-      <header>
-        <section class="container">
-          <div class="bg-light-blue-300">
-            <a href="https://www.bsideslv.org/">
-              <img class="object-fill w-px w-2" src="<%= Routes.static_path(@conn, "/images/Supply Chain Sandbox logo_dark_draft.png") %>" alt="BsidesLV Logo" />
-            </a>
-          </div>
-
-          <div class="bg-light-blue-300 h-48 w-96">
-            <a> <img class="object-contain " src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" /> </a>
-          </div>
-          <H1>QuadBlockQuiz</H1>
-          <H3>Supply Chain Edition</H3>
-        </section>
-        <%= render(QuadblockquizWeb.LayoutView, "navbar_tailwind.html", assigns) %>
-      </header>
+      <%= render(QuadblockquizWeb.LayoutView, "navbar_tailwind.html", assigns) %>
       <div class="container mx-auto px-4 md:px-20 pb-20">
         <%= @inner_content %>
       </div>
     </div>
-    <footer class="h-64 bg-slate-100">
+
+    <footer>
+    <div class="h-64 bg-slate-100">
     <div class="h-64 container mx-auto grid grid-flow-col  gap-4 place-items-center ">
       <a href="https://sfractal.com/" class="phx-logo">
         <img src="<%= Routes.static_path(@conn, "/images/sFractalConsulting.png") %>" alt="sFractal Logo" class="max-h-32"/>
@@ -50,6 +37,21 @@
           <img src="<%= Routes.static_path(@conn, "/images/google2.0.0.png") %>" alt="Google Logo" class="max-h-32"/>
         </a>
       </div>
-    </footer>
+      </div>
+      <div class="grid grid-cols-3 md:ml-20 text-[#0069D9] md:w-[64rem] mt-6">
+        <div class="w-48"> <a href="/">Home</a> </div>
+        <div class="w-48"> <a href= <%= Routes.page_path(@conn, :how_to_play) %> >How to Play</a></div>
+        <div class="w-48"> <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.LeaderboardLive) %> >Leader board</a></div>
+        <div class="w-48"> <a href= <%= Routes.contests_path(QuadblockquizWeb.Endpoint, :index) %> >Contests</a></div>
+        <div class="w-48"> <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %> >Contest prizes</a></div>
+        <div class="w-48"> <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules) %> >Contest rules</a></div>
+        <div class="w-48"> <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.CourseLive) %> > Courses </a></div>
+        <div class="w-48"> <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive) %> > Terms Of Service </a></div>
+        <div class="w-48"> <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive) %> > Privacy </a></div>
+        <div class="w-48"> <a href= <%= Routes.page_path(@conn, :sbom) %> >SBOM</a></div>
+      </div>
+      </table>
+      <p class="text-center text-neutral-400">© 2022 All rights reserved</p>
+     </footer>
   </body>
 </html>
