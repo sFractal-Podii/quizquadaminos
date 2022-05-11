@@ -2,22 +2,27 @@
     <%= if @live_action == :show do %>
       <%= live_component @socket, QuadblockquizWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
     <% else %>
-    <div class="heading-1">Contests</div>
-    <div class="container">
+     <div class="heading-1">Contests</div>
+    <div class="container max-width: 768px">
       <%= if @current_user.admin? do  %>
         <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :save] %>
-          <div class="row">
-            <div class="column">
-              <%= text_input f, :name %>
-              <%= error_tag f, :name %>
+        <div class="md:flex items-center">
+            <div class="md:px-5 mt-2 md:mt-0">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-contest-name">
+              Contest
+            </label>
+              <input class="w-full" id="grid-contest-name" type="text" placeholder="contest name">
             </div>
-            <div phx-update="ignore" id="contest_date" class="column">
-              <%= datetime_local_input f, :contest_date %>
+            <div phx-update="ignore" id="contest_date" class="md:px-5 mt-2 md:mt-0">
+             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="contest_contest_date">
+              Date
+            </label>
+              <%= datetime_local_input f, :contest_date, class: "w-full" %>
             </div>
-            <div class="column">
-              <%= submit "Save" %>
+            <div class="mt-2 md:mt-6">
+              <%= submit "Create", class: "btn" %>
             </div>
-          </div>
+          </div> <!--closes row-->
         </form>
       <%end%>
     </div>

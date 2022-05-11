@@ -1,5 +1,5 @@
 <%= if @game_available do %>
-<div id="carouselExampleCaptions" class="md:hidden carousel carousel-dark carousel slide relative" data-bs-ride="carousel">
+<div id="carouselExampleCaptions" class="hidden carousel carousel-dark carousel slide relative" data-bs-ride="carousel">
   <div class="flex justify-between mt-10">
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
       <span class="font-normal text-gray-700 text-sm">Previous</span>
@@ -66,7 +66,7 @@
     </div>
   </div>
 </div>
-<div class="hidden md:mx-auto md:max-w-5xl md:items-center md:justify-center md:flex">
+<div class="md:mx-auto md:max-w-5xl md:items-center md:justify-center md:flex">
   <div class="grid space-y-8">
     <div>
       <h1 class="text-center font-normal text-5xl">QuadBlockQuiz</h1>
@@ -75,7 +75,7 @@
         <%= Quadblockquiz.Meta.version() %>
       </h4>
     </div>
-    <div class="px-56">
+    <div>
       <h2 class="text-center font-semibold text-base">Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game</h2>
       <p class="text-center mt-4 font-light text-base">We proudly present the SupplyChainSandbox edition of Quadblockquiz -
       a reimagined take on tetrominoes where playful spatial negotiations are infused with
