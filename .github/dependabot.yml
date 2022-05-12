@@ -2,12 +2,12 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/assets"
-    target-branch: "main"
+    target-branch: "develop"
     schedule:
       interval: "monthly"
 
   - package-ecosystem: "mix"
     directory: "/"
-    target-branch: "main"
+    target-branch: "develop"
     schedule:
       interval: "monthly"
