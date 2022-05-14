@@ -11,6 +11,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     Hints,
     Points,
     QnA,
+    Scoring,
     Speed,
     Tetris,
     Threshold
@@ -306,7 +307,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     value |> Tuple.to_list() |> to_string()
   end
 
-  def drop(:playing, socket, fast) do
+  def drop(:playing, socket) do
     old_brick = socket.assigns.brick
 
     response =
@@ -316,8 +317,6 @@ defmodule QuadblockquizWeb.TetrisLive do
         SvgBoard.color(old_brick),
         socket.assigns.brick_count
       )
-
-    bonus = if fast, do: 2, else: 0
 
     ended_contest? =
       if is_nil(socket.assigns[:contest_id]),
@@ -336,7 +335,17 @@ defmodule QuadblockquizWeb.TetrisLive do
           else: socket.assigns.hint
         )
     )
-    |> assign(score: socket.assigns.score + response.score + bonus)
+    |> assign(
+      score:
+        # previous score
+        socket.assigns.score
+        # add score for each tick
+        # the faster you are playing, the more points per tick
+        + Scoring.tick(socket.assigns.speed)
+        # add score for completing rows, bonus if more questions
+        + Scoring.rows(response.row_count,socket.assigns.correct_answers)
+        # add score for each tick
+    )
     |> assign(
       state:
         if(response.game_over || ended_contest?,
@@ -349,7 +358,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> show
   end
 
-  def drop(_not_playing, socket, _fast), do: socket
+  def drop(_not_playing, socket), do: socket
 
   defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
     socket
@@ -465,7 +474,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
-    {:noreply, drop(socket.assigns.state, socket, true)}
+    {:noreply, drop(socket.assigns.state, socket)}
   end
 
   def handle_event("keydown", %{"key" => " "}, socket) do
@@ -851,7 +860,7 @@ defmodule QuadblockquizWeb.TetrisLive do
           speed: speed
         )
 
-      drop(socket.assigns.state, socket, false)
+      drop(socket.assigns.state, socket)
     end
   end
 
