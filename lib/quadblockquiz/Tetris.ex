@@ -20,6 +20,7 @@ defmodule Quadblockquiz.Tetris do
     )
   end
 
+  # shouldn't maybe_do_drop be private?
   def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color, brick_count) do
     new_brick = Brick.new_random()
 
@@ -36,7 +37,6 @@ defmodule Quadblockquiz.Tetris do
     %{
       brick: new_brick,
       bottom: new_bottom,
-      score: score(count),
       row_count: count,
       # hit bottom so increment brick_count
       brick_count: 1,
@@ -48,19 +48,12 @@ defmodule Quadblockquiz.Tetris do
     %{
       brick: new_block,
       bottom: bottom,
-      score: 1,
       # no rows completed since didn't reach bottom yet
       row_count: 0,
       # didn't hit bottom so do not increment brick_count
       brick_count: 0,
       game_over: false
     }
-  end
-
-  def score(0), do: 0
-
-  def score(count) do
-    100 * round(:math.pow(2, count))
   end
 
   def try_left(brick, bottom), do: try_move(brick, bottom, &Brick.left/1)
