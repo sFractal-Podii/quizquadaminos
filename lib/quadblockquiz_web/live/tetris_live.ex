@@ -338,13 +338,12 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> assign(
       score:
         # previous score
-        socket.assigns.score
-        # add score for each tick
-        # the faster you are playing, the more points per tick
-        + Scoring.tick(socket.assigns.speed)
-        # add score for completing rows, bonus if more questions
-        + Scoring.rows(response.row_count,socket.assigns.correct_answers)
-        # add score for each tick
+        socket.assigns.score +
+          # add score for each tick
+          # the faster you are playing, the more points per tick
+          Scoring.tick(socket.assigns.speed) +
+          # add score for completing rows, bonus if more questions
+          Scoring.rows(response.row_count,socket.assigns.correct_answers)
     )
     |> assign(
       state:
