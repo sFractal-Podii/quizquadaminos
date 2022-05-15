@@ -21,7 +21,7 @@ defmodule Quadblockquiz.Speed do
   end
 
   def speed_tick_count(speed) do
-    Enum.at(@drop_speeds, speed).bonus
+    Enum.at(@drop_speeds, speed).tick_count
   end
 
   def highest_speed do
