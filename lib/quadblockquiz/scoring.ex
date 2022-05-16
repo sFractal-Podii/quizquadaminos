@@ -10,14 +10,12 @@ defmodule Quadblockquiz.Scoring do
     %{name: "lethargic", bonus: 0}
   ]
 
-  @answer_multiplier [
-    %{name: "none", multiplier: 1},
-    %{name: "1 to 9", multiplier: 2},
-    %{name: "10 to 19", multiplier: 3},
-    %{name: "20 to 49", multiplier: 5},
-    %{name: "50 to 99", multiplier: 7},
-    %{name: "100 or more", multiplier: 11}
-  ]
+  @answer_multiplier_none 1
+  @answer_multiplier_1_to_9 2
+  @answer_multiplier_10_to_19 3
+  @answer_multiplier_20_to_49 5
+  @answer_multiplier_50_to_99 7
+  @answer_multiplier_over_100 11
 
   def tick(speed) do
     Enum.at(@drop_speeds, speed).bonus
@@ -37,37 +35,37 @@ defmodule Quadblockquiz.Scoring do
 
   defp row_question_bonus(base, 0) do
     # no answers, no bonus
-    base * Enum.at(@answer_multiplier, 0).multiplier
+    base * @answer_multiplier_none
   end
 
   defp row_question_bonus(base, correct_answers)
     when correct_answers in 1..9 do
       # answered a few so double
-      base * Enum.at(@answer_multiplier, 1).multiplier
+      base * @answer_multiplier_1_to_9
   end
 
   defp row_question_bonus(base, correct_answers)
     when correct_answers in 10..19 do
       # triple for 10-19 answers
-      base * Enum.at(@answer_multiplier, 2).multiplier
+      base * @answer_multiplier_10_to_19
   end
 
   defp row_question_bonus(base, correct_answers)
     when correct_answers in 20..49 do
       # 5x for 20-49 answers
-      base * Enum.at(@answer_multiplier, 3).multiplier
+      base * @answer_multiplier_20_to_49
   end
 
   defp row_question_bonus(base, correct_answers)
     when correct_answers in 50..99 do
       # 5x for 20-49 answers
-      base * Enum.at(@answer_multiplier, 4).multiplier
+      base * @answer_multiplier_50_to_99
   end
 
   defp row_question_bonus(base, correct_answers)
     when correct_answers >= 100 do
       # 5x for 20-49 answers
-      base * Enum.at(@answer_multiplier, 5).multiplier
+      base * @answer_multiplier_over_100
   end
 
 end
