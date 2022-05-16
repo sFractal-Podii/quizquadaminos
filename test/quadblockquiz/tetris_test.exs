@@ -30,7 +30,6 @@ defmodule Quadblockquiz.TetrisTest do
     expected = %{
       brick: Brick.down(brick),
       bottom: %{},
-      score: 1,
       game_over: false,
       brick_count: 0,
       row_count: 0
@@ -49,7 +48,6 @@ defmodule Quadblockquiz.TetrisTest do
     %{score: score, bottom: bottom} = Quadblockquiz.Tetris.drop(brick, bottom, :red, brick_count)
 
     assert Map.get(bottom, {7, 20}) == {7, 20, :red}
-    assert score == 0
   end
 
   test "drops to bottom and compresses" do
@@ -62,9 +60,8 @@ defmodule Quadblockquiz.TetrisTest do
       end
       |> Map.new()
 
-    %{score: score, bottom: bottom} = Quadblockquiz.Tetris.drop(brick, bottom, :red, brick_count)
+    %{bottom: bottom} = Quadblockquiz.Tetris.drop(brick, bottom, :red, brick_count)
 
     assert bottom == %{}
-    assert score == 1600
   end
 end
