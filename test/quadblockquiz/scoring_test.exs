@@ -69,7 +69,7 @@ defmodule Quadblockquiz.ScoringTest do
   test "1 row, 114 questions" do
 
     expected = 2200
-    actual = Scoring.rows(1,0)
+    actual = Scoring.rows(1,114)
 
     assert actual == expected
   end
@@ -92,7 +92,7 @@ defmodule Quadblockquiz.ScoringTest do
 
   test "4 row, 14 questions" do
 
-    expected = 6400
+    expected = 4800
     actual = Scoring.rows(4,14)
 
     assert actual == expected
@@ -108,7 +108,7 @@ defmodule Quadblockquiz.ScoringTest do
 
   test "5 row, 1 questions" do
 
-    expected = 13200
+    expected = 6400
     actual = Scoring.rows(5,1)
 
     assert actual == expected
@@ -116,7 +116,7 @@ defmodule Quadblockquiz.ScoringTest do
 
   test "4 row, 114 questions" do
 
-    expected = 11600
+    expected = 17600
     actual = Scoring.rows(4,114)
 
     assert actual == expected

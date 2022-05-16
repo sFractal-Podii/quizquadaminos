@@ -45,7 +45,7 @@ defmodule Quadblockquiz.TetrisTest do
     bottom = %{}
     brick_count = 1
 
-    %{score: score, bottom: bottom} = Quadblockquiz.Tetris.drop(brick, bottom, :red, brick_count)
+    %{bottom: bottom} = Quadblockquiz.Tetris.drop(brick, bottom, :red, brick_count)
 
     assert Map.get(bottom, {7, 20}) == {7, 20, :red}
   end
