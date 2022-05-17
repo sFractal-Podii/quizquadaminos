@@ -39,5 +39,4 @@ defmodule Quadblockquiz.Speed do
   def decrease_speed(speed) do
     if speed + 1 > lowest_speed(), do: lowest_speed(), else: speed + 1
   end
-
 end
