@@ -63,17 +63,19 @@ defmodule QuadblockquizWeb.TetrisLive do
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Bankruptcy!</h1>
+          <h1>Out of Business!</h1>
             <h2>Your score: <%= @score %></h2>
-            <p>You are bankrupt
+            <p>You are no longer in business.
+            Maybe you are bankrupt
             due to a cyberattack,
             or due to a lawsuit,
             or maybe because you let your supply chain get to long.
             Or maybe you were too busy answering cybersecurity questions
             and not paying attention to business.
-            Or maybe you just hit quit :-).
+            Or maybe you just quit :-).
             </p>
             <hr>
+            <p>Here is what your board looked like:</p>
             <%= raw SvgBoard.svg_head() %>
             <%= for row <- [Map.values(@bottom)] do %>
               <%= for {x, y, color} <- row do %>
