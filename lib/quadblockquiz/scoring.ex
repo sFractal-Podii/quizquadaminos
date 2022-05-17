@@ -28,7 +28,7 @@ defmodule Quadblockquiz.Scoring do
 
   def rows(row_count, correct_answers) do
     # base score is exponential function of number of rows
-    base =  100 * round(:math.pow(2, row_count))
+    base = 100 * round(:math.pow(2, row_count))
     # increase score by a multiple depending on questions answered
     row_question_bonus(base, correct_answers)
   end
@@ -38,34 +38,33 @@ defmodule Quadblockquiz.Scoring do
     base * @answer_multiplier_none
   end
 
+  # answered a few so double
   defp row_question_bonus(base, correct_answers)
-    when correct_answers in 1..9 do
-      # answered a few so double
-      base * @answer_multiplier_1_to_9
+       when correct_answers in 1..9 do
+    base * @answer_multiplier_1_to_9
   end
 
+  # triple for 10-19 answers
   defp row_question_bonus(base, correct_answers)
-    when correct_answers in 10..19 do
-      # triple for 10-19 answers
-      base * @answer_multiplier_10_to_19
+       when correct_answers in 10..19 do
+    base * @answer_multiplier_10_to_19
   end
 
+  # 5x for 20-49 answers
   defp row_question_bonus(base, correct_answers)
-    when correct_answers in 20..49 do
-      # 5x for 20-49 answers
-      base * @answer_multiplier_20_to_49
+       when correct_answers in 20..49 do
+    base * @answer_multiplier_20_to_49
   end
 
+  # 7x for 50-99 answers
   defp row_question_bonus(base, correct_answers)
-    when correct_answers in 50..99 do
-      # 5x for 20-49 answers
-      base * @answer_multiplier_50_to_99
+       when correct_answers in 50..99 do
+    base * @answer_multiplier_50_to_99
   end
 
+  # 11x for over 100 answers
   defp row_question_bonus(base, correct_answers)
-    when correct_answers >= 100 do
-      # 5x for 20-49 answers
-      base * @answer_multiplier_over_100
+       when correct_answers >= 100 do
+    base * @answer_multiplier_over_100
   end
-
 end

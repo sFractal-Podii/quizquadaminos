@@ -20,8 +20,7 @@ defmodule Quadblockquiz.Tetris do
     )
   end
 
-  # shouldn't maybe_do_drop be private?
-  def maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color, brick_count) do
+  defp maybe_do_drop(true = _collided, bottom, old_brick, _new_block, color, brick_count) do
     new_brick = Brick.new_random()
 
     points =
@@ -44,7 +43,7 @@ defmodule Quadblockquiz.Tetris do
     }
   end
 
-  def maybe_do_drop(false = _collided, bottom, _old_block, new_block, _color, _brick_count) do
+  defp maybe_do_drop(false = _collided, bottom, _old_block, new_block, _color, _brick_count) do
     %{
       brick: new_block,
       bottom: bottom,
