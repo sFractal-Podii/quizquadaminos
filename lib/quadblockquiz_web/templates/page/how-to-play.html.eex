@@ -78,6 +78,8 @@
       <li>not only will the game slow down to a snail's pace, but a fresh coat of pesky brown/grey injunctions
         will festoon your existing block arrays. Hit the space bar!</li>
     </ul>
+    <li>answering questions alone won't save you -- vulnerabilities can appear with catastrophic 
+      consequences at any juncture in the game!</li>
   </ol>
 </div>
 <div class="p-6">
@@ -110,7 +112,17 @@
     The best strategy is trading off between the two,
     and investing in areas that reduce the likelihood
     (e.g. SBOM, Automation, OpenChain) of them occuring in the first place.</p>
-  <p>Just a little wisdom for thought for those with the ears to hear it.</p>
+  <p>Nothing lasts forever, even the QuadBlockQuiz. The game will have one of four conclusions:</p>
+  <ol>
+    <li>You reach the maximum time limit of 15 minutes. Note: This includes 
+      time spent in the menu or time spent answering questions, not just gameplay.</li>
+    <li>The vulnerabilities and game play overwhelm you and overflow the top of the game area.</li>
+    <li>You fall victim to vulnerabilities that manifest while you are answering questions and return to discover defeat.</li>
+    <li>You EXIT the game.</li>
+  </ol>
+  <p>Perceptive competitors will notice silent multipliers in play. Questions are worth far more points and row clearing is far more 
+    profitable when there are more blocks on the screen. The game, like real life, rewards performance in high pressure situations.</p>
+  <p>Just a little wisdom for those with the ears to hear it.</p>
 </div>
 <div class="p-6">
   <h2 class="heading-2 tracking-wider">6. RSA 2022 CONTEST</h2>
@@ -137,6 +149,51 @@
   </p>
   <p>
     Participants include:
+  </p>
+  <p>
+    <span class="font-bold">BEAU WOODS: </span>Beau Woods has over 20 years experience advising organizations 
+    on intersectional risk management, cybersecurity, and strategy. He is a Senior Advisor with the US 
+    Cybersecurity and Infrastructure Agency (CISA), Cyber Safety Innovation Fellow with the Atlantic Council, 
+    a leader with the I Am The Cavalry grassroots initiative, Founder/CEO of Stratigos Security, and sits on the 
+    board of several non-profits. His work bridges the gap between the security research and public policy communities, 
+    to ensure connected technology that can impact life and safety is worthy of our trust. He formerly served as 
+    Entrepreneur in Residence with the US FDA, and Managing Principal Consultant at Dell SecureWorks. Over the 
+    past several years in this capacity, he has consulted with the energy, healthcare, automotive, aviation, 
+    rail, and IoT industries, as well as cyber security researchers, US and international policy makers, and the 
+    White House. Beau is a published author, frequent public speaker, often quoted in media, and is often engaged 
+    for public or private speaking venues.
+  </p>
+  <p>
+    <span class="font-bold">SOUNIL YU: </span> Sounil Yu is the CISO & Head of Research at JupiterOne. He created 
+    the Cyber Defense Matrix and the DIE Triad, which are reshaping approaches to cybersecurity. He's a Board 
+    Member of the FAIR Institute; co-chairs Art into Science: A Conference on Defense; is a visiting fellow at 
+    GMU Scalia Law School's National Security Institute; teaches at Yeshiva University; and advises many startups. 
+    Sounil previously served as the CISO-in-Residence at YL Ventures and Chief Security Scientist at Bank of America. 
+    Before Bank of America, he helped improve information security at several Fortune 100 companies and Federal 
+    Government agencies. Sounil has over 20 granted patents and was recognized as one of the most influential 
+    people in security in 2020 by Security Magazine, Influencer of the Year in 2021 by SC Awards, and a 2021 
+    Top 10 CISO by Black Unicorn Awards. He has an MS in Electrical Engineering from Virginia Tech and a BS in 
+    Electrical Engineering and a BA in Economics from Duke University.
+  </p>
+  <p>
+    <span class="font-bold">DEIDRE DIAMOND: </span> Deidre is the Founder and CEO of the national cybersecurity 
+    staffing company Cyber Security Network (CyberSN) and the Founder of not-for-profit thought leadership 
+    platform #brainbabe (brainbabe.org.) Prior to founding CyberSN and #brainbabe, Diamond was the VP of 
+    Sales for the national technical staffing company Motion Recruitment, the first VP of Sales at Rapid7 and 
+    the CEO of Percussion Software. Because Diamond herself was hired as an entry-level employee and trained to 
+    lead technology service organizations and cybersecurity software organizations, she believes the tech community 
+    needs to expand its awareness of what it means “to be in tech” and what it means “to be in cyber.” Diamond 
+    desires to achieve a new way of hiring and retaining women in cybersecurity.
+  </p>
+  <p>
+    <span class="font-bold">ALLAN FRIEDMAN: </span> Allan Friedman is Senior Advisor and Strategist at the 
+    Cybersecurity and Infrastructure Security Agency. He coordinates the global cross-sector community efforts 
+    around software bill of materials (SBOM). He was previously the Director of Cybersecurity Initiatives at 
+    NTIA, leading pioneering work on vulnerability disclosure, SBOM, and other security topics. Prior to 
+    joining the Federal government, Friedman spent over a decade as a noted information security and technology 
+    policy scholar at Harvard’s Computer Science department, the Brookings Institution, and George Washington 
+    University’s Engineering School. He is the co-author of the popular text Cybersecurity and Cyberwar: What 
+    Everyone Needs to Know, has a C.S. degree from Swarthmore College and a Ph.D. from Harvard University.
   </p>
   <p>
     Save the tetrominoes world from supply chain vulnerabilities
