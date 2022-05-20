@@ -11,6 +11,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     Hints,
     Points,
     QnA,
+    Scoring,
     Speed,
     Tetris,
     Threshold
@@ -21,6 +22,8 @@ defmodule QuadblockquizWeb.TetrisLive do
   @debug false
   @box_width 20
   @box_height 20
+  # total gaming time in seconds
+  @game_time 900
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
@@ -34,7 +37,9 @@ defmodule QuadblockquizWeb.TetrisLive do
        active_contests: Contests.active_contests(),
        contest_id: nil,
        choosing_contest: false,
-       has_email?: Accounts.has_email?(current_user)
+       has_email?: Accounts.has_email?(current_user),
+       time_elapsed: 0,
+       remaining_time: Quadblockquiz.Util.to_human_time(@game_time)
      )
      |> init_game
      |> start_game()}
@@ -112,6 +117,8 @@ defmodule QuadblockquizWeb.TetrisLive do
                     <p><%= @row_count %> Rows</p>
                     <p><%= @correct_answers %> Answers</p>
                     <p>Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %></p>
+                    <% {_,_, m, s} = @remaining_time %>
+                    <p><%= m %> mins, <%= s %> sec </p>
                     <hr>
                 </div>
                 <div class="column column-50">
@@ -306,7 +313,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     value |> Tuple.to_list() |> to_string()
   end
 
-  def drop(:playing, socket, fast) do
+  def drop(:playing, socket) do
     old_brick = socket.assigns.brick
 
     response =
@@ -316,8 +323,6 @@ defmodule QuadblockquizWeb.TetrisLive do
         SvgBoard.color(old_brick),
         socket.assigns.brick_count
       )
-
-    bonus = if fast, do: 2, else: 0
 
     ended_contest? =
       if is_nil(socket.assigns[:contest_id]),
@@ -336,7 +341,15 @@ defmodule QuadblockquizWeb.TetrisLive do
           else: socket.assigns.hint
         )
     )
-    |> assign(score: socket.assigns.score + response.score + bonus)
+    |> assign(
+      # new score is previous score plus
+      # score for each tick (faster = more points per tick)
+      # plus score for completing rows (bonus if more answers)
+      score:
+        socket.assigns.score +
+          Scoring.tick(socket.assigns.speed) +
+          Scoring.rows(response.row_count, socket.assigns.correct_answers)
+    )
     |> assign(
       state:
         if(response.game_over || ended_contest?,
@@ -349,7 +362,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> show
   end
 
-  def drop(_not_playing, socket, _fast), do: socket
+  def drop(_not_playing, socket), do: socket
 
   defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
     socket
@@ -449,7 +462,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    {:noreply, socket |> assign(state: :game_over, modal: false) |> maybe_save_game_record()}
+    {:noreply, end_game(socket)}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -465,7 +478,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
-    {:noreply, drop(socket.assigns.state, socket, true)}
+    {:noreply, drop(socket.assigns.state, socket)}
   end
 
   def handle_event("keydown", %{"key" => " "}, socket) do
@@ -484,6 +497,8 @@ defmodule QuadblockquizWeb.TetrisLive do
         {id, _} -> id
         :error -> nil
       end
+
+    :timer.send_interval(1000, self(), :second)
 
     contest = if contest_id, do: Contests.get_contest(contest_id)
 
@@ -778,6 +793,25 @@ defmodule QuadblockquizWeb.TetrisLive do
     {:noreply, assign(socket, assigns)}
   end
 
+  def handle_info(:second, %{assigns: %{state: state}} = socket)
+      when state in [:playing, :paused] do
+    elapsed_time = socket.assigns.time_elapsed + 1
+    remaining_time = Quadblockquiz.Util.to_human_time(@game_time - elapsed_time)
+
+    socket =
+      case remaining_time do
+        {0, 0, 0, 0} ->
+          end_game(socket)
+
+        _ ->
+          socket |> assign(:time_elapsed, elapsed_time) |> assign(:remaining_time, remaining_time)
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_info(:second, socket), do: {:noreply, socket}
+
   defp on_tick(:game_over, socket) do
     QuadblockquizWeb.Endpoint.broadcast(
       "scores",
@@ -851,7 +885,7 @@ defmodule QuadblockquizWeb.TetrisLive do
           speed: speed
         )
 
-      drop(socket.assigns.state, socket, false)
+      drop(socket.assigns.state, socket)
     end
   end
 
@@ -969,5 +1003,9 @@ defmodule QuadblockquizWeb.TetrisLive do
           do: assign(socket, contest: Contests.get_contest(contest.id)),
           else: socket
     end
+  end
+
+  defp end_game(socket) do
+    socket |> assign(state: :game_over, modal: false) |> maybe_save_game_record()
   end
 end
