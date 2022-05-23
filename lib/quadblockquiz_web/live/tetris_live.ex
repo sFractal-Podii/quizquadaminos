@@ -1038,7 +1038,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     if Threshold.reached_threshold?(debt, threshold) do
         # add vuln and reset debt
         bottom = Bottom.add_vulnerability(socket.assigns.bottom)
-        socket.assign(bottom: bottom, tech_vuln_debt: 0)
+        assign(socket, bottom: bottom, tech_vuln_debt: 0)
     else
       socket
     end
@@ -1051,7 +1051,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     if Threshold.reached_threshold?(debt, threshold) do
         # add vuln and reset debt
         bottom = Bottom.add_license_issue(socket.assigns.bottom)
-        socket.assign(bottom: bottom, tech_lic_debt: 0)
+        assign(socket, bottom: bottom, tech_lic_debt: 0)
     else
       socket
     end
@@ -1079,7 +1079,7 @@ defmodule QuadblockquizWeb.TetrisLive do
         being_sued?
       )
 
-    socket.assign(bottom: bottom_out, speed: speed, score: score)
+    assign(socket, bottom: bottom_out, speed: speed, score: score)
   end
 
 end
