@@ -93,55 +93,18 @@ defmodule Quadblockquiz.Bottom do
     )
   end
 
-  def add_vulnerability(bottom) when %{} == bottom do
-    ## empty input map, so stick one in anyway
-    %{{1, 20} => {1, 20, :vuln_grey_yellow}}
-  end
-
   def add_vulnerability(bottom) do
-    ## pick random bottom block and change to add_vulnerability
-    ## only pick blocks that are not already marked with some 'trouble'
-    pure_bottom = bottom |> remove_trouble_blocks()
-
-    if pure_bottom |> Enum.empty?() do
-      bottom
+    ## don't put on top of existing issue
+    clean = remove_trouble_blocks(bottom)
+    if clean != %{} do
+      # some clean blocks in bottom, pick random one and add issue
+      {{x, y}, _} = Enum.random(clean)
+      add_trouble_block(x, y, :vuln_grey_yellow, bottom)
     else
-      {{x, y}, _} =
-        pure_bottom
-        |> Enum.random()
-
-      bottom
-      |> Map.merge(
-        %{{x, y} => {x, y, :vuln_grey_yellow}},
-        fn _k, _prev_value, vuln_value ->
-          vuln_value
-        end
-      )
+      # bottom is empty or only has vulns/issues
+      {x, y} = find_empty_block(bottom)
+      add_trouble_block(x, y, :vuln_grey_yellow, bottom)
     end
-  end
-
-  def add_license_issue(bottom) when %{} == bottom do
-    ## if no blocks to have issue, add one anyway
-    %{{1, 20} => {10, 20, :license_grey_brown}}
-  end
-
-  def add_license_issue(bottom) do
-    ## pick random bottom block and change to license issue
-    ## only pick blocks that are not already marked with some 'trouble'
-    {{x, y}, _} =
-      bottom
-      |> remove_trouble_blocks
-      |> Enum.random()
-
-    bottom
-    |> Map.merge(
-      # block to be added
-      %{{x, y} => {x, y, :license_grey_brown}},
-      # if occupied, use licence issue color
-      fn _k, _prev_value, ls_value ->
-        ls_value
-      end
-    )
   end
 
   def add_license_issue(bottom) do
