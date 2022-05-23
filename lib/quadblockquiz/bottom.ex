@@ -144,6 +144,20 @@ defmodule Quadblockquiz.Bottom do
     )
   end
 
+  def add_license_issue(bottom) do
+    ## don't put on top of existing issue
+    clean = remove_trouble_blocks(bottom)
+    if clean != %{} do
+      # some clean blocks in bottom, pick random one and add issue
+      {{x, y}, _} = Enum.random(clean)
+      add_trouble_block(x, y, :license_grey_brown, bottom)
+    else
+      # bottom is empty or only has vulns/issues
+      {x, y} = find_empty_block(bottom)
+      add_trouble_block(x, y, :license_grey_brown, bottom)
+    end
+  end
+
   def remove_all_vulnerabilities(bottom) when %{} == bottom do
     ## if no blocks just return empty
     bottom
@@ -238,5 +252,26 @@ defmodule Quadblockquiz.Bottom do
     |> remove_all_license_issues
     |> remove_attacks
     |> remove_lawsuits
+  end
+
+  defp find_empty_block(bottom) do
+    # make list of empty blocks in bottom row
+    used = Map.keys(bottom)
+    possible = for i <- 1..11, do: {i, 20}
+    unused = possible -- used
+    # pick a random empty block
+    {x, y} = Enum.random(unused)
+  end
+
+  defp add_trouble_block(x, y, color, bottom) do
+    bottom
+    |> Map.merge(
+      # block to be added
+      %{{x, y} => {x, y, color}},
+      # if occupied, use licence issue color
+      fn _k, _prev_value, ls_value ->
+        ls_value
+      end
+    )
   end
 end
