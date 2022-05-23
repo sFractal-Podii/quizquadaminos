@@ -1039,7 +1039,6 @@ defmodule QuadblockquizWeb.TetrisLive do
         # add vuln and reset debt
         bottom = Bottom.add_vulnerability(socket.assigns.bottom)
         socket.assign(bottom: bottom, tech_vuln_debt: 0)
-      end
     else
       socket
     end
@@ -1053,10 +1052,10 @@ defmodule QuadblockquizWeb.TetrisLive do
         # add vuln and reset debt
         bottom = Bottom.add_license_issue(socket.assigns.bottom)
         socket.assign(bottom: bottom, tech_lic_debt: 0)
-      end
     else
       socket
     end
+
   end
 
   defp process_impact(socket) do
