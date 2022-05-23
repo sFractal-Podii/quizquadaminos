@@ -24,6 +24,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   @box_height 20
   # total gaming time in seconds
   @game_time 900
+  @qna_penalty 30
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
@@ -454,10 +455,6 @@ defmodule QuadblockquizWeb.TetrisLive do
      )}
   end
 
-  def handle_event("skip-question", _, socket) do
-    {:noreply, assign(socket, category: nil)}
-  end
-
   def handle_event("unpause", _, socket) do
     {:noreply, socket |> assign(state: :playing, modal: false)}
   end
@@ -506,6 +503,13 @@ defmodule QuadblockquizWeb.TetrisLive do
     {:noreply, socket |> new_game() |> assign(contest_id: contest_id, contest: contest)}
   end
 
+  def handle_event("skip-question", _, socket) do
+    {:noreply,
+     socket
+     |> assign(category: nil)
+     |> process_debt(@qna_penalty, @qna_penalty)}
+  end
+
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
     socket =
       if correct_answer?(socket.assigns.qna, guess) do
@@ -520,9 +524,13 @@ defmodule QuadblockquizWeb.TetrisLive do
         score = if score < 0, do: 0, else: score
         bottom_with_vuln = Bottom.add_vulnerability(socket.assigns.bottom)
         assign(socket, score: score, bottom: bottom_with_vuln)
+        socket
+        |> assign(score: score)
+        |> assign(bottom: bottom_with_vuln)
       end
 
-    {:noreply, socket}
+    # add tech debt for each question (right, wrong, or skipped)
+    {:noreply, process_debt(socket, @qna_penalty, @qna_penalty)}
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
@@ -1009,4 +1017,70 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp end_game(socket) do
     socket |> assign(state: :game_over, modal: false) |> maybe_save_game_record()
   end
+
+  defp process_debt(socket, vuln_inc, lic_inc) do
+    new_tech_vuln_debt = socket.assigns.tech_vuln_debt + vuln_inc
+    new_tech_lic_debt = socket.assigns.tech_lic_debt + lic_inc
+
+    socket
+    |> assign(tech_vuln_debt: new_tech_vuln_debt)
+    |> process_vuln_debt()
+    |> assign(tech_lic_debt: new_tech_lic_debt)
+    |> process_lic_debt()
+    |> process_impact()
+
+  end
+
+  defp process_vuln_debt(socket) do
+    debt = socket.assigns.tech_vuln_debt
+    threshold = socket.assigns.vuln_threshold
+    # if reach threshold, add vuln
+    if Threshold.reached_threshold?(debt, threshold) do
+        # add vuln and reset debt
+        bottom = Bottom.add_vulnerability(socket.assigns.bottom)
+        socket.assign(bottom: bottom, tech_vuln_debt: 0)
+      end
+    else
+      socket
+    end
+  end
+
+  defp process_lic_debt(socket) do
+    # if reach threshold, add lic error
+    debt = socket.assigns.tech_lic_debt
+    threshold = socket.assigns.lic_threshold
+    if Threshold.reached_threshold?(debt, threshold) do
+        # add vuln and reset debt
+        bottom = Bottom.add_license_issue(socket.assigns.bottom)
+        socket.assign(bottom: bottom, tech_lic_debt: 0)
+      end
+    else
+      socket
+    end
+  end
+
+  defp process_impact(socket) do
+    bottom_in = socket.assigns.bottom
+    attack_thres = socket.assigns.attack_threshold
+    lawsuit_thres = socket.assigns.lawsuit_threshold
+
+    # see if attack happening
+    under_attack? = Bottom.attacked?(bottom_in, attack_thres)
+
+    # see if lawsuit happening
+    being_sued? = Bottom.attacked?(bottom_in, lawsuit_thres)
+
+    # change board, score, speed if bad things
+    {bottom_out, speed, score} =
+      Threshold.bad_happen(
+        bottom_in,
+        socket.assigns.speed,
+        socket.assigns.score,
+        under_attack?,
+        being_sued?
+      )
+
+    socket.assign(bottom: bottom_out, speed: speed, score: score)
+  end
+
 end

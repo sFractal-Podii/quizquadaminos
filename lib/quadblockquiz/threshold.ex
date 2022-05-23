@@ -2,6 +2,7 @@ defmodule Quadblockquiz.Threshold do
   alias Quadblockquiz.Bottom
 
   ## used for either tech_vuln_debt or tech_lic_debt
+  # eventually refactor so calling code uses reached_threshold?
   def reached_threshold(debt, threshold) do
     if debt + 1 < threshold do
       ## return new debt and add_vuln?=false
@@ -10,6 +11,10 @@ defmodule Quadblockquiz.Threshold do
       ## set reached threshold and reset debt
       {0, true}
     end
+  end
+
+  def reached_threshold?(debt, threshold) do
+    if debt > threshold, do: true, else: false
   end
 
   def bad_happen(bottom, speed, score, under_attack?, being_sued?) do
