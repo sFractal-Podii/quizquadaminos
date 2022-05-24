@@ -1024,7 +1024,6 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> assign(tech_lic_debt: new_tech_lic_debt)
     |> process_lic_debt()
     |> process_impact()
-
   end
 
   defp process_vuln_debt(socket) do
@@ -1032,9 +1031,9 @@ defmodule QuadblockquizWeb.TetrisLive do
     threshold = socket.assigns.vuln_threshold
     # if reach threshold, add vuln
     if Threshold.reached_threshold?(debt, threshold) do
-        # add vuln and reset debt
-        bottom = Bottom.add_vulnerability(socket.assigns.bottom)
-        assign(socket, bottom: bottom, tech_vuln_debt: 0)
+      # add vuln and reset debt
+      bottom = Bottom.add_vulnerability(socket.assigns.bottom)
+      assign(socket, bottom: bottom, tech_vuln_debt: 0)
     else
       socket
     end
@@ -1044,14 +1043,14 @@ defmodule QuadblockquizWeb.TetrisLive do
     # if reach threshold, add lic error
     debt = socket.assigns.tech_lic_debt
     threshold = socket.assigns.lic_threshold
+
     if Threshold.reached_threshold?(debt, threshold) do
-        # add vuln and reset debt
-        bottom = Bottom.add_license_issue(socket.assigns.bottom)
-        assign(socket, bottom: bottom, tech_lic_debt: 0)
+      # add vuln and reset debt
+      bottom = Bottom.add_license_issue(socket.assigns.bottom)
+      assign(socket, bottom: bottom, tech_lic_debt: 0)
     else
       socket
     end
-
   end
 
   defp process_impact(socket) do
@@ -1077,5 +1076,4 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     assign(socket, bottom: bottom_out, speed: speed, score: score)
   end
-
 end
