@@ -96,7 +96,7 @@ defmodule QuadblockquizWeb.TetrisLive do
         <p><%= @brick_count %> QuadBlocks dropped</p>
         <p><%= @row_count %> rows cleard</p>
         <p><%= @correct_answers %> questions answered correctly</p>
-        <p>Tech Debt: <%= @tech_vuln_debt %> | <%= @tech_lic_debt %></p>
+        <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@ defmodule QuadblockquizWeb.TetrisLive do
                     <p><%= @brick_count %> QuadBlocks</p>
                     <p><%= @row_count %> Rows</p>
                     <p><%= @correct_answers %> Answers</p>
-                    <p>Tech Debt: <%= @tech_vuln_debt %> | <%= @tech_lic_debt %></p>
+                    <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
                     <% {_,_, m, s} = @remaining_time %>
                     <p><%= m %> mins, <%= s %> sec </p>
                     <hr>
