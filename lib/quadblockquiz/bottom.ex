@@ -111,7 +111,7 @@ defmodule Quadblockquiz.Bottom do
   def add_license_issue(bottom) do
     ## don't put on top of existing issue
     clean = remove_trouble_blocks(bottom)
-    
+
     if clean != %{} do
       # some clean blocks in bottom, pick random one and add issue
       {{x, y}, _} = Enum.random(clean)
