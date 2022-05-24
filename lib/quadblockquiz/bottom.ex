@@ -223,7 +223,7 @@ defmodule Quadblockquiz.Bottom do
     possible = for i <- 1..10, do: {i, 20}
     unused = possible -- used
     # pick a random empty block
-    {x, y} = Enum.random(unused)
+    Enum.random(unused)
   end
 
   defp add_trouble_block(x, y, color, bottom) do
