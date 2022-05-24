@@ -220,7 +220,7 @@ defmodule Quadblockquiz.Bottom do
   defp find_empty_block(bottom) do
     # make list of empty blocks in bottom row
     used = Map.keys(bottom)
-    possible = for i <- 1..11, do: {i, 20}
+    possible = for i <- 1..10, do: {i, 20}
     unused = possible -- used
     # pick a random empty block
     {x, y} = Enum.random(unused)

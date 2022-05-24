@@ -96,7 +96,7 @@ defmodule QuadblockquizWeb.TetrisLive do
         <p><%= @brick_count %> QuadBlocks dropped</p>
         <p><%= @row_count %> rows cleard</p>
         <p><%= @correct_answers %> questions answered correctly</p>
-        <p>Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %></p>
+        <p>Tech Debt: <%= @tech_vuln_debt %> / <%= @tech_vuln_debt %></p>
         </div>
       </div>
     </div>
@@ -522,11 +522,7 @@ defmodule QuadblockquizWeb.TetrisLive do
         points = wrong_points(socket)
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
-        bottom_with_vuln = Bottom.add_vulnerability(socket.assigns.bottom)
-        assign(socket, score: score, bottom: bottom_with_vuln)
-        socket
-        |> assign(score: score)
-        |> assign(bottom: bottom_with_vuln)
+        assign(socket, score: score)
       end
 
     # add tech debt for each question (right, wrong, or skipped)
