@@ -33,6 +33,36 @@ defmodule Quadblockquiz.Scoring do
     row_question_bonus(base, correct_answers)
   end
 
+  # multiplier = 1 if no blocks reached bottom
+  def question_block_multiplier(blocks) when blocks < 2 do
+    1
+  end
+
+  # multiplier = 2
+  def question_block_multiplier(blocks) when blocks in 2..9 do
+    2
+  end
+
+  # multiplier = 3
+  def question_block_multiplier(blocks) when blocks in 10..49 do
+    3
+  end
+
+  # multiplier = 5
+  def question_block_multiplier(blocks) when blocks in 50..99 do
+    5
+  end
+
+  # multiplier = 7
+  def question_block_multiplier(blocks) when blocks in 100..299 do
+    7
+  end
+
+  # multiplier = 11
+  def question_block_multiplier(blocks) when blocks > 300 do
+    11
+  end
+
   defp row_question_bonus(base, 0) do
     # no answers, no bonus
     base * @answer_multiplier_none

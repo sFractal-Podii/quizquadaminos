@@ -739,6 +739,19 @@ defmodule QuadblockquizWeb.TetrisLive do
     {:noreply, socket}
   end
 
+  def debug(assigns), do: debug(assigns, @debug, Mix.env())
+
+  def debug(assigns, true, :dev) do
+    ~L"""
+    <pre>
+    <%= raw( @tetromino |> inspect) %>
+    <%= raw( @bottom |> inspect) %>
+    </pre>
+    """
+  end
+
+  def debug(_assigns, _, _), do: ""
+
   defp super_helper(socket, power) do
     powers = socket.assigns.powers ++ [power]
 
@@ -939,24 +952,17 @@ defmodule QuadblockquizWeb.TetrisLive do
     points
   end
 
+  # right points is answer times multiplier
   defp right_points(socket) do
+    # points for right answer
     %{"Right" => points} = socket.assigns.qna.score
     {points, _} = Integer.parse(points)
-    points
+    # multiplier for # blocks
+    correct_answers = socket.assigns.correct_answers
+    mult = Scoring.question_block_multiplier(correct_answers)
+    # multiply points by multipler
+    points * mult
   end
-
-  def debug(assigns), do: debug(assigns, @debug, Mix.env())
-
-  def debug(assigns, true, :dev) do
-    ~L"""
-    <pre>
-    <%= raw( @tetromino |> inspect) %>
-    <%= raw( @bottom |> inspect) %>
-    </pre>
-    """
-  end
-
-  def debug(_assigns, _, _), do: ""
 
   defp init_categories(socket) do
     categories =
