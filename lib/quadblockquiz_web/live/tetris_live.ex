@@ -24,7 +24,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   @box_height 20
   # total gaming time in seconds
   @game_time 900
-  @qna_penalty 30
+  @qna_penalty 20
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
