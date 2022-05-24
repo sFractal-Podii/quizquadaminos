@@ -137,6 +137,19 @@ defmodule Quadblockquiz.Contests do
   end
 
   @doc """
+  Check if contest is pin enable
+  """
+  def pin_enabled_contests do
+    pin_contests =
+      Application.get_env(:quadblockquiz, :contest_pins, tester: "1234")
+      |> Keyword.keys()
+      |> IO.inspect()
+    IO.puts("=======")
+
+    active_contests_names |> IO.inspect()
+  end
+
+  @doc """
   Restarts the game, i.e new start time and timer restarted
   """
   def restart_contest(name) do
