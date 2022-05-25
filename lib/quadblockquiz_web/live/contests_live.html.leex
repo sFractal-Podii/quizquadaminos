@@ -2,16 +2,16 @@
     <%= if @live_action == :show do %>
       <%= live_component @socket, QuadblockquizWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
     <% else %>
-     <div class="heading-1">Contests</div>
+    <div class="heading-1">Contests</div>
     <div class="container max-width: 768px">
       <%= if @current_user.admin? do  %>
         <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :save] %>
         <div class="md:flex items-center">
             <div class="md:px-5 mt-2 md:mt-0">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-contest-name">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">
               Contest
             </label>
-              <input class="w-full" id="grid-contest-name" type="text" placeholder="contest name">
+              <%= text_input f, :name, placeholder: "contest-name" %>
             </div>
             <div phx-update="ignore" id="contest_date" class="md:px-5 mt-2 md:mt-0">
              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="contest_contest_date">
