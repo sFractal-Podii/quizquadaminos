@@ -43,6 +43,7 @@ defmodule QuadblockquizWeb.TetrisLive do
        remaining_time: Quadblockquiz.Util.to_human_time(@game_time)
      )
      |> init_game
+     |> check_contest_password
      |> start_game()}
   end
 
@@ -196,6 +197,16 @@ defmodule QuadblockquizWeb.TetrisLive do
        <button phx-click="start" phx-value-contest="" class="button button-outline">Yes, I am Just playing</button>
     <% end %>
     """
+  end
+
+  defp check_contest_password(socket) do
+    contests = Enum.map(socket.assigns.active_contests, fn x -> Map.get(x, :name) end)
+    IO.inspect(contests)
+    pin_contests =
+      Application.get_env(:quadblockquiz, :contest_pins, tester: "1234")
+      |> Keyword.keys()
+    con  = Enum.map(pin_contests, fn pin_contest -> Atom.to_string(pin_contest) end )
+    IO.inspect(con)
   end
 
   defp pause_game(socket) do
