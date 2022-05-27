@@ -83,10 +83,10 @@ defmodule QuadblockquizWeb.ContestsLive do
 
   def handle_event(
         "save",
-        %{"contest" => %{"name" => name, "contest_date" => contest_date}},
+        %{"contest" => %{"name" => name, "contest_date" => contest_date, "pin" => pin}},
         socket
       ) do
-    socket = socket |> _create_contest(name, contest_date)
+    socket = socket |> _create_contest(name, contest_date, pin)
     {:noreply, socket |> redirect(to: Routes.admin_contests_path(socket, :index))}
   end
 
@@ -189,10 +189,10 @@ defmodule QuadblockquizWeb.ContestsLive do
     {:noreply, socket |> assign(current_user: current_user, current_uri: uri)}
   end
 
-  defp _create_contest(socket, contest_name, "") do
+  defp _create_contest(socket, contest_name, "", pin) do
     contests = socket.assigns.contests
 
-    case Contests.create_contest(%{name: contest_name, contest_date: nil}) do
+    case Contests.create_contest(%{name: contest_name, contest_date: nil, pin: pin}) do
       {:ok, contest} ->
         assign(socket,
           contests: contests ++ [contest],
@@ -204,11 +204,11 @@ defmodule QuadblockquizWeb.ContestsLive do
     end
   end
 
-  defp _create_contest(socket, contest_name, contest_date) do
+  defp _create_contest(socket, contest_name, contest_date, pin) do
     contests = socket.assigns.contests
     {:ok, contest_date, 0} = DateTime.from_iso8601(contest_date <> ":00Z")
 
-    case Contests.create_contest(%{name: contest_name, contest_date: contest_date}) do
+    case Contests.create_contest(%{name: contest_name, contest_date: contest_date, pin: pin}) do
       {:ok, contest} ->
         assign(socket,
           contests: contests ++ [contest],

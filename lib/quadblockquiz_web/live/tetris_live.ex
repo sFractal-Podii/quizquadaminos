@@ -43,7 +43,6 @@ defmodule QuadblockquizWeb.TetrisLive do
        remaining_time: Quadblockquiz.Util.to_human_time(@game_time)
      )
      |> init_game
-     |> check_contest_password
      |> start_game()}
   end
 
@@ -189,7 +188,7 @@ defmodule QuadblockquizWeb.TetrisLive do
        <h2> Join a contest? </h2>
        <p> Click on the contest below to join </p>
        <%= for contest <- @active_contests do %>
-         <button phx-click="start" phx-value-contest="<%= contest.id %>" ><%= contest.name %></button>
+         <button phx-click=<%= if contest.pin, do: "request_pin", else: "start" %> phx-value-contest="<%= contest.id %>" ><%= contest.name %></button>
        <% end %>
        <br />
        <br />
@@ -199,15 +198,6 @@ defmodule QuadblockquizWeb.TetrisLive do
     """
   end
 
-  defp check_contest_password(socket) do
-    contests = Enum.map(socket.assigns.active_contests, fn x -> Map.get(x, :name) end)
-    IO.inspect(contests)
-    pin_contests =
-      Application.get_env(:quadblockquiz, :contest_pins, tester: "1234")
-      |> Keyword.keys()
-    con  = Enum.map(pin_contests, fn pin_contest -> Atom.to_string(pin_contest) end )
-    IO.inspect(con)
-  end
 
   defp pause_game(socket) do
     assign(socket, state: :paused, modal: true)
@@ -434,7 +424,9 @@ defmodule QuadblockquizWeb.TetrisLive do
   def handle_params(_unsigned_params, uri, socket) do
     {:noreply, socket |> assign(current_uri: uri, file_path: ["qna"]) |> init_categories()}
   end
-
+  def handle_event("request_pin" )do
+    
+  end 
   def handle_event("validate", %{"user" => params}, socket) do
     changeset =
       %Accounts.User{}
