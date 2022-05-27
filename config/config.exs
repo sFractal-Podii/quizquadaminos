@@ -61,7 +61,6 @@ config :quadblockquiz,
   # add github_id of authorized users
   github_ids: [1, 2],
   conference_date: ~U[2021-10-03 16:00:00Z],
-  contest_pins: [contest1: "5678", contest2: "3456"],
 
   # set bottom vulnerability defaulting value
   bottom_vulnerability_value: 77,
