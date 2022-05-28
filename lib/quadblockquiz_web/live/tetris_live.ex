@@ -39,6 +39,7 @@ defmodule QuadblockquizWeb.TetrisLive do
        contest_id: nil,
        choosing_contest: false,
        has_email?: Accounts.has_email?(current_user),
+       request_pin?: false,
        time_elapsed: 0,
        remaining_time: Quadblockquiz.Util.to_human_time(@game_time)
      )
@@ -53,9 +54,9 @@ defmodule QuadblockquizWeb.TetrisLive do
             <div class="column column-50 column-offset-25">
               <h1>Welcome to QuadBlockQuiz!</h1>
               <%= if @has_email? do %>
-              <%= join_contest(assigns) %>
+                <%= join_contest(assigns) %>
               <% else %>
-              <%= ask_for_email(assigns) %>
+                <%= ask_for_email(assigns) %>
               <% end %>
             </div>
         </div>
@@ -173,6 +174,12 @@ defmodule QuadblockquizWeb.TetrisLive do
     """
   end
 
+  defp join_contest(%{request_pin?: true} = assigns) do
+    ~L"""
+    <%= live_component @socket,  QuadblockquizWeb.SharedLive.ValidatePinComponent, id: 1, redirect_to: @current_uri, pin: @contest.pin %>
+    """
+  end
+
   defp join_contest(%{active_contests: []} = assigns) do
     ~L"""
     <button phx-click="start" phx-value-contest="" >Start</button>
@@ -197,7 +204,6 @@ defmodule QuadblockquizWeb.TetrisLive do
     <% end %>
     """
   end
-
 
   defp pause_game(socket) do
     assign(socket, state: :paused, modal: true)
@@ -424,9 +430,18 @@ defmodule QuadblockquizWeb.TetrisLive do
   def handle_params(_unsigned_params, uri, socket) do
     {:noreply, socket |> assign(current_uri: uri, file_path: ["qna"]) |> init_categories()}
   end
-  def handle_event("request_pin" )do
-    
-  end 
+
+  def handle_event("request_pin", %{"contest" => id}, socket) do
+    id =
+      case Integer.parse(id) do
+        {id, _} -> id
+        :error -> nil
+      end
+
+    contest = if id, do: Contests.get_contest(id)
+    {:noreply, socket |> assign(request_pin?: true) |> assign(contest_id: id, contest: contest)}
+  end
+
   def handle_event("validate", %{"user" => params}, socket) do
     changeset =
       %Accounts.User{}
@@ -799,6 +814,11 @@ defmodule QuadblockquizWeb.TetrisLive do
 
   def handle_info({:update_user, assigns}, socket) do
     {:noreply, assign(socket, assigns)}
+  end
+
+  def handle_info({:update_pin_status, assigns}, socket) do
+    :timer.send_interval(1000, self(), :second)
+    {:noreply, socket |> new_game() |> assign(assigns)}
   end
 
   def handle_info(:second, %{assigns: %{state: state}} = socket)
