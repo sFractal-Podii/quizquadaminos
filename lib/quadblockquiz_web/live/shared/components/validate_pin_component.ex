@@ -1,49 +1,33 @@
 defmodule QuadblockquizWeb.SharedLive.ValidatePinComponent do
-    use QuadblockquizWeb, :live_component
-    alias Quadblockquiz.Accounts
-  
-    def update(assigns, socket) do
-      changeset = Accounts.change_user(assigns.current_user)
-      {:ok, socket |> assign(changeset: changeset, redirect_to: assigns.redirect_to)}
-    end
-  
-    def render(assigns) do
-      ~L"""
-      <h3> What's your email address? </h3>
-      <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :update_email, phx_target: @myself] %>
-      <%= label f, :email %>
-      <%= text_input f, :email, type: :email %>
-      <%= error_tag f, :email %>
-      <%= text_input f, :uid, type: :hidden %>
-      <button> Update Email </button>
-      </form>
-      """
-    end
-  
-    def handle_event("validate", %{"user" => params}, socket) do
-      changeset =
-        %Accounts.User{}
-        |> Accounts.change_user(params)
-        |> Map.put(:action, :insert)
-  
-      {:noreply, socket |> assign(changeset: changeset)}
-    end
-  
-    def handle_event("update_email", %{"user" => params}, socket) do
-      redirect_path = URI.parse(socket.assigns.redirect_to).path
-  
-      case Accounts.update_email(params) do
-        {:ok, user} ->
-          send(self(), {:update_user, current_user: user, has_email?: true})
-  
-          {:noreply,
-           socket
-           |> assign(current_user: user, has_email?: true)
-           |> push_patch(to: redirect_path)}
-  
-        {:error, changeset} ->
-          {:noreply, socket |> assign(changeset: changeset)}
-      end
+  use QuadblockquizWeb, :live_component
+
+  def update(assigns, socket) do
+    {:ok, socket |> assign(redirect_to: assigns.redirect_to, pin: assigns.pin)}
+  end
+
+  def render(assigns) do
+    ~L"""
+    <h3> Enter PIN </h3>
+    <%= f = form_for :contest, "#", [phx_submit: :validate, phx_target: @myself] %>
+    <%= label f, :pin %>
+    <%= text_input f, :pin, type: :text %>
+    <%= error_tag f, :pin %>
+    <button> Start </button>
+    </form>
+    """
+  end
+
+  def handle_event("validate", %{"contest" => %{"pin" => pin}}, socket) do
+    redirect_path = URI.parse(socket.assigns.redirect_to).path
+
+    if pin == socket.assigns.pin do
+      send(self(), {:update_pin_status, request_pin?: false})
+
+      {:noreply,
+       socket
+       |> push_patch(to: redirect_path)}
+    else
+      {:noreply, socket}
     end
   end
-  
+end
