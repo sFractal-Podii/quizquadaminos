@@ -1,0 +1,128 @@
+%{
+ type: "multi-choice"
+}
+
+---
+## Scoring
+
+Points get added and subtracted for a variety of reasons.
+
+### QuadBlocks
+Unless you are under attack, or is a lawsuit,
+each tick (ie a block dropping one position)
+will add the following points depending on
+the speed you are playing at:
+- full throttle: 10
+- high speed: 5
+- fast: 2
+- moderate: 1
+- leisurely: 0
+- sedate: 0
+- lethargic: 0
+Note this is per tick, and note the tics occur more quickly,
+so there is a multipliciative effect.
+
+### Clearing rows
+
+Clearing a row adds points,
+potentially a really lot of points,
+depending on several factors.
+
+You can clear more than one row at a time.
+Row clearing is checked each time a new block
+drops into to the brickyard at the bottom of the screen.
+One method of clearing multiple rows is
+a block that fits into several rows filling
+more than one a once.
+Another method of filling more than one row
+is you use your powerups.
+If you fill a row with an 'add block' powerup,
+it doesn't score until the next dropping block
+hits the brickyard.
+This allows you to fill more than one row with powerups
+and they all score a the same time.
+The base score for filling rows is
+100 points multiplies by 2 to the R,
+where R is the number of rows filled.
+So filling 5 rows at once yields
+100 * 2**5 = 100 * 32 = 3,200.
+
+How many questions have been correctly answered is
+the second factor in how many points are scored on completing a row.
+If you haven't answered any questions,
+you get the number mentioned above based on the number of rows.
+E.g. 200 for one row.
+
+If you have answered between 1 and 9 questions,
+you multiply by 2.
+E.g. 400 for one row.
+
+If you have answered between
+10 and 19 questions,
+you multiply by 3.
+Eg.g 600 for one row.
+
+If you have answered between
+20 and 49 questions,
+you multiply by 5.
+Eg.g 1,00 for one row.
+
+If you have answered between
+50 and 99 questions,
+you multiply by 7.
+Eg.g 1,400 for one row.
+
+If you have answered
+pver 100 questions,
+you multiply by 11.
+Eg.g 2,200 for one row.
+
+### Answering Questions
+Correctly answering a question
+gives both points and a powerup.
+
+The number of points tends to increase
+as you move deeper into a category.
+Repeat questions, without the explanatory text,
+tend to be worth more (so remember your answers!).
+
+You are encouraged to switch back and play QuadBlocks
+because the points for answering increases by
+the number of blocks played in QuadBlocks
+using the following multiplier:
+- first block (ie you switched to Quiz as soon as you started), you get the number of points shown (e.g. shows "25", you get 25)
+- 2 to 9 blocks, multiply by 2 (e.g. shows "25", you get 50)
+- 10 to 49 blocks, multiply by 3 (e.g. shows "25", you get 75)
+- 50 to 99 blocks, multiply by 5 (e.g. shows "25", you get 125)
+- 100 to 299 blocks, multiply by 7 (e.g. shows "50", you get 350)
+- 300 or more blocks, multiply by 11 (e.g. shows "100", you get 1,100)
+
+### Attacks and Lawsuits
+
+When you get attacked, half of your points disappear because you now need
+to pay lots of other firms to help you.
+Your points continue to leak away the longer you are under attack.
+
+Similarly with lawsuits. Half your points disappear because you need to
+pay outside counsel.
+Your points continue to leak away the longer the lawsuit continues.
+
+
+# Question:
+A block drops into place completing 5 rows.
+You have answered 55 questions and have 305 blocks.
+How many points will completing those 5 rows add?
+
+## Answers
+- 5 rows * 200 pts = 1,000 points
+- 5 rows = 2**5 = 32, so 100 * 32 = 3,200
+- 5 rows = 2**5 = 32, 55 question = 7x muliplier; so 100 * 32 * 7 = 22,400
+- 5 rows = 2**5 = 32, 305 blocks = 11x muliplier; so 100 * 32 * 11 = 35,200
+- I can't count that high
+
+## Score
+- Right:25
+- Wrong:5
+
+## Powerup
+MoveBlock
