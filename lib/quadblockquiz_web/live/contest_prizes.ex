@@ -56,6 +56,41 @@ defmodule QuadblockquizWeb.ContestPrizes do
     <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules) %> > Contest Rules </a>
     for more information on contest rules.
     </p>
+    <p class="pb-7">
+    Kicking off the contests will be the
+    QuadBlockQuiz Celebrity Challenge
+    live in the Sandbox.
+    See supply chain cybersecurity celebrities like
+    Beau Woods, Allan Freidman, and Sounil Yu
+    compete for bragging rights.
+    Or will they all be upstaged by last year's returning
+    overall QuadBlockQuiz champion?
+    Come to the Sandbox 3PM PDT on Tuesday June 7th to
+    cheer on your favorite.
+    </p>
+    <p class="pb-7">
+    As soon as the Celebrity Challenge ends,
+    (i.e. 3:30 Pacific on Tues)
+    the RSAC QuadBlockQuiz Open starts.
+    There will be both a physical (i.e. in the Sandbox)
+    and virtual contest.
+    Contestants from either become eligible for the
+    RSAC QuadBlockQuiz Finals in the Sandbox
+    on Thursday June at 2PM Pacific.
+    </p>
+    <p class="pb-7">
+    Prizes include signed copies of Souni Yu's new book.
+    The grand prize is a private Cocktail Session via Zoom with
+    Mixologist/Sommelier Chantal Tseng.
+    This will include an in depth demo of three recipes catered to your favorite novel
+    or other source of group inspiration. Chantal will provide advance recipes
+    and a tool list for your unlimited number of guests
+    who are then encouraged to make the drinks alongside and ask questions along the way.
+    Class runs usually one to one and half hours long.
+    Note the prize includes the recipes and the instruction but participants
+    must purchase their own alcohol and ingredients.
+    </p>
+
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-4 gap-4 place-items-center">
     <%= for price <- prices do %>
