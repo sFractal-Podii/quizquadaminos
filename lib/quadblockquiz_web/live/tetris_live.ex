@@ -200,7 +200,7 @@ defmodule QuadblockquizWeb.TetrisLive do
        <br />
        <br />
        <p> Not joining a contest? </p>
-       <button phx-click="start" phx-value-contest="" class="button button-outline">Yes, I am Just playing</button>
+       <button phx-click="start" phx-value-contest="" class="button button-outline">No contest, just playing</button>
     <% end %>
     """
   end
