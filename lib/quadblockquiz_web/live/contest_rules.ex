@@ -35,7 +35,7 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be
-              RSAC attendees. Some prizes require being physically present.
+              RSAC attendees. Prizes will be awarded at QBQ Finals (Thurs 2PM Pacific) and require being physically present in the RSAC Sandbox.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be least 21 years of age or older to win prizes.
@@ -68,24 +68,51 @@ defmodule QuadblockquizWeb.ContestRules do
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               The game must be played during eligle times.
               An eligible games must start and end during times announced during the Sandbox.
-              Games spanning timeslots will be ineligible
-              (eg if start during first break and finish during second break).
               Make sure to finish your game cleanly so that you have seen the endgame screen with your score.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Contestants may submit more than one game (the contest scoreboard will automatically do this for you),
+              Contestants may submit more than one game,
               but only one prize per person.
+              The contest scoreboard will automatically do,
+              but note the leaderboard only shows games in progress.
+              The final tally (including the finished games)
+              doesn't show until the contest is over.
             </p>
             <div class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               <p>
                 You must enter the contest to win!!!!
                 When you start to play each game, it will ask whether you want to be part of this contest.
-                You must enter the contest to be on the Contest Scoreboard.
+                You must enter the contest to be on the Contest Scoreboard. Note some contests (Celebrity, Sandbox,
+                Finals) require you to be in the Sandbox and will
+                require a pin. Virtual is open to all without a pin.
               </p>
               <ul class="list-disc pl-4">
                 <li>
                   Winners will be chosen based on their positions on the Contest Scoreboards.
                   Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
+                </li>
+                <li>
+                Finalists will be chosen from Celebrity, Sandbox, and Virtual contests. You must be present at Finals to be eligible for Finals.
+                </li>
+                <li>
+                Seat 1 at Finals is to winner of Celebrity Contest
+                </li>
+                <li>Seat 2 at Finals is to winner of Sandbox Contest by Points
+                </li>
+                <li>Seat 3 at Finals is to winner of Virtual
+                Contest by Points
+                </li>
+                <li>Seat 4 at Finals is to winner of Sandbox
+                Contest by Questions
+                </li>
+                <li>Seat 5 at Finals is to winner of Sandbox
+                Contest by Blocks
+                </li>
+                <li>Seat 6 at Finals is to winner of Virtual
+                Contest by Questions
+                </li>
+                <li>If winner for a seat is not present, it goes 
+                to next eligible person (eg next highest points) that is present
                 </li>
                 <li>
                   The "most points" prize will be awarded to the eligible
@@ -108,7 +135,7 @@ defmodule QuadblockquizWeb.ContestRules do
                   after the conclusion of the contest.
                 </li>
                 <li>
-                  A person is only elegible to receive one prize per contest,
+                  A person is only elegible to receive one prize,
                   (e.g first on points and first on bricks would only receive one prize
                   for points, and then 'runner up' on bricks would win that prize).
                 </li>
