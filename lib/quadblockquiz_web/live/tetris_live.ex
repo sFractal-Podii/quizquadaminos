@@ -786,6 +786,7 @@ defmodule QuadblockquizWeb.TetrisLive do
       assign(socket,
         bottom: bottom,
         powers: powers,
+        block_coordinates: nil,
         adding_block: false,
         moving_block: false
       )
@@ -806,8 +807,8 @@ defmodule QuadblockquizWeb.TetrisLive do
 
   defp add_block(socket, x, y, true = _adding_block) do
     {x, y} = parse_to_integer(x, y)
-    powers = socket.assigns.powers -- [:addblock]
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
+    powers = socket.assigns.powers -- [:addblock]
     socket |> assign(bottom: bottom, adding_block: false, powers: powers)
   end
 
