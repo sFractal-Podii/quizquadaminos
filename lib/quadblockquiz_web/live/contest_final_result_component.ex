@@ -8,8 +8,8 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
     <h1>Contestboard</h1>
       <table>
       <tr>
-      <th>Player</th>
-      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">Score</th>
+      <th>____Player____</th>
+      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">____Score____</th>
       <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
       <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
       <th>Start time</th>
@@ -19,11 +19,11 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <%= for record <- @contest_records do %>
        <tr>
       <td><%= user_name(record) %></td>
-      <td><%= record.score %></td>
-      <td><%= record.dropped_bricks %></td>
-      <td><%= record.correctly_answered_qna %></td>
-      <td><%= truncate_date(record.start_time) %></td>
-      <td><%= truncate_date(record.end_time) %></td>
+      <td align="right"><%= record.score %></td>
+      <td align="center"><%= record.dropped_bricks %></td>
+      <td align="center"><%= record.correctly_answered_qna %></td>
+      <td> <%= truncate_date(record.start_time) %></td>
+      <td> <%= truncate_date(record.end_time) %></td>
 
       </tr>
       <% end %>
@@ -33,6 +33,7 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <%= live_patch i, class: "button button-outline", to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)%>
        <% end %>
        <% end %>
+       <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, contest)%></button>
     """
   end
 

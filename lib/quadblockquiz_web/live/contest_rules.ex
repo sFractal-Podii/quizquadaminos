@@ -47,7 +47,7 @@ defmodule QuadblockquizWeb.ContestRules do
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants may use any handle they want,
               but recognize there are hundreds of participants
-              so there is the chance of overlap.
+              so there is the chance of overlap. And don't use 'anonymous'!
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               The game does not check for overlap so pick something unique.
@@ -95,33 +95,28 @@ defmodule QuadblockquizWeb.ContestRules do
                 Finalists will be chosen from Celebrity, Sandbox, and Virtual contests. You must be present at Finals to be eligible for Finals.
                 </li>
                 <li>
-                Seat 1 at Finals is to winner of Celebrity Contest
+                Seat 1 at Finals goes to the winning points score (17,294) at the Celebrity Contest. Note she won overall last year and is the person to beat!
                 </li>
-                <li>Seat 2 at Finals is to winner of Sandbox Contest by Points
+                <li>Seat 2 at Finals is to winning Questions score (32) at the Celebrity Contest. This is the author whose book is one of the prizes - so he has to go for the cocktail party.
                 </li>
-                <li>Seat 3 at Finals is to winner of Virtual
-                Contest by Points
+                <li>Seat 3 at Finals will go to points-winner of the Sandbox
+                Contest
                 </li>
-                <li>Seat 4 at Finals is to winner of Sandbox
-                Contest by Questions
+                <li>Seat 4 at Finals will go to questions-winner of the Sandbox
+                Contest
                 </li>
-                <li>Seat 5 at Finals is to winner of Sandbox
-                Contest by Blocks
+                <li>Seat 5 at Finals will go to bricks-winner of the Sandbox
+                Contest
                 </li>
-                <li>Seat 6 at Finals is to winner of Virtual
-                Contest by Questions
+                <li>Seat 6 at Finals will go to points-winner of the Virtual
+                Contest
                 </li>
-                <li>If winner for a seat is not present, it goes 
-                to next eligible person (eg next highest points) that is present
+                <li>If winner for a seat is not present, it goes
+                to next eligible person (eg next highest points) that is present. So show up! Even low scores might be elegible.
                 </li>
                 <li>
                   The "most points" prize will be awarded to the eligible
                   contest contestant with the highest points,
-                  who will then be ineligible for the other Contest prizes.
-                </li>
-                <li>
-                  The "most bricks" prize will be awarded to the eligible
-                  contest contestant with the most number of bricks in one game,
                   who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
@@ -130,14 +125,18 @@ defmodule QuadblockquizWeb.ContestRules do
                   who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
+                  The "most bricks" prize will be awarded to the eligible
+                  contest contestant with the most number of bricks(quadblocks) in one game,
+                  who will then be ineligible for the other Contest prizes.
+                </li>
+                <li>
                   The "????" prize will be awarded to the eligible
                   contest contestant based on surpise criteria announced
-                  after the conclusion of the contest.
+                  by the moderator at the contest.
                 </li>
                 <li>
                   A person is only elegible to receive one prize,
-                  (e.g first on points and first on bricks would only receive one prize
-                  for points, and then 'runner up' on bricks would win that prize).
+                  (e.g first on points and first on bricks would only receive one prize for points, and then 'runner up' on bricks would win that prize).
                 </li>
                 <li>
                   The organizers retain the right to adjust or shutdown the contest
