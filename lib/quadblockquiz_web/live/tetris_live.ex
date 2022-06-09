@@ -1043,7 +1043,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp end_game(socket) do
     socket
     |> assign(state: :game_over, modal: false, end_time: DateTime.utc_now())
-    |> game_record()
+    |> maybe_save_game_record()
   end
 
   defp process_debt(socket, vuln_inc, lic_inc) do
