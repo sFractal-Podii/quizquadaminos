@@ -56,26 +56,22 @@ defmodule QuadblockquizWeb.ContestPrizes do
     for more information on contest rules.
     </p>
     <p class="pb-7">
-    Kicking off the contests will be the
-    QuadBlockQuiz Celebrity Challenge
-    live in the Sandbox.
-    See supply chain cybersecurity celebrities like
-    Beau Woods, Allan Freidman, and Sounil Yu
-    compete for bragging rights.
-    Or will they all be upstaged by last year's returning
-    overall QuadBlockQuiz champion?
-    Come to the Sandbox 3PM PDT on Tuesday June 7th to
-    cheer on your favorite.
+    The contest was kicked off live in the Sandbox with the
+    QuadBlockQuiz Celebrity Challenge.
+    Two Celebrities moved on to the Finals:
+    last year's champion ("anonymous" which turns out
+    is not a unique handle and shouldn't be used in future since it won't show on final results) with a score of 17,294,
+    and famous author Yoogies with a score of 11,736.
     </p>
     <p class="pb-7">
-    As soon as the Celebrity Challenge ends,
-    (i.e. 3:30 Pacific on Tues)
-    the RSAC QuadBlockQuiz Open starts.
-    There will be both a physical (i.e. in the Sandbox)
+    The RSAC QuadBlockQuiz Open is now in progress.
+    There is both a physical (i.e. in the Sandbox)
     and virtual contest.
     Contestants from either become eligible for the
     RSAC QuadBlockQuiz Finals in the Sandbox
     on Thursday June at 2PM Pacific.
+    But more slots for Sandbox so stop by
+    Moscone South 203 and play in the Sandbox.
     </p>
     <p class="pb-7">
     Prizes include signed copies of Souni Yu's new book.
