@@ -5,7 +5,7 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
 
   def render(assigns) do
     ~L"""
-    <h1>Contestboard</h1>
+    <h1><%= @contest.name %> Contestboard</h1>
       <table>
       <tr>
       <th>    Player    </th>

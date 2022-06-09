@@ -382,8 +382,13 @@ defmodule QuadblockquizWeb.TetrisLive do
     contest_name = String.to_atom(socket.assigns.contest.name)
     current_user = socket.assigns.current_user
 
-    if :ets.whereis(contest_name) != :undefined do
-      :ets.insert(contest_name, {current_user.uid, game_record, current_user.name})
+    ongoing_contest? = :ets.whereis(contest_name) != :undefined
+    game_not_over? = socket.assigns.state != :game_over
+
+    case {ongoing_contest?, game_not_over?} do
+      {true, true} -> :ets.insert(contest_name,
+            {current_user.uid, game_record, current_user.name})
+      {true, false} -> :ets.delete(contest_name, current_user.uid)
     end
 
     socket
