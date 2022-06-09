@@ -8,8 +8,8 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
     <h1>Contestboard</h1>
       <table>
       <tr>
-      <th>____Player____</th>
-      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">____Score____</th>
+      <th>    Player    </th>
+      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">    Score    </th>
       <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
       <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
       <th>Start time</th>
@@ -33,7 +33,6 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <%= live_patch i, class: "button button-outline", to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)%>
        <% end %>
        <% end %>
-       <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, @contest)%></button>
     """
   end
 
