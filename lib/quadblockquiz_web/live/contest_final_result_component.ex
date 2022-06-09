@@ -33,7 +33,6 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <%= live_patch i, class: "button button-outline", to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)%>
        <% end %>
        <% end %>
-       <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, contest)%></button>
     """
   end
 
