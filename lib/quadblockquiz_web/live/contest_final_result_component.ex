@@ -18,7 +18,12 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
 
       <%= for record <- @contest_records do %>
        <tr>
-      <td><%= user_name(record) %></td>
+      <td>
+      <%= unless record.end_time do %>
+        <svg height="10" width="10"> <circle cx="5" cy="5" r="5" fill="green" /> Playing </svg>
+        <% end %>
+        <%= user_name(record) %>
+      </td>
       <td align="right"><%= record.score %></td>
       <td align="center"><%= record.dropped_bricks %></td>
       <td align="center"><%= record.correctly_answered_qna %></td>
@@ -39,7 +44,9 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
   def update(assigns, socket) do
     records =
       if active_contest?(assigns.contest.name) do
-        assigns.contest_records
+        (assigns.contest_records ++ Contests.contest_game_records(assigns.contest))
+        |> Enum.sort_by(&(&1.score), :desc)
+        |> Enum.uniq_by(fn %{score: score, uid: uid, dropped_bricks: bricks} -> %{score: score, uid: uid, dropped_bricks: bricks}  end)
       else
         Contests.contest_game_records(assigns.contest, assigns.page, assigns.sort_by)
       end
