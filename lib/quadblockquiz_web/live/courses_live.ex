@@ -162,7 +162,7 @@ defmodule QuadblockquizWeb.CourseLive do
   defp ask_for_email(assigns) do
     ~L"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <%= live_component @socket,  QuadblockquizWeb.SharedLive.AskEmailComponent, id: 2, current_user: @current_user, redirect_to: @current_uri %>
+    <%= live_component  QuadblockquizWeb.SharedLive.AskEmailComponent, id: 2, current_user: @current_user, redirect_to: @current_uri %>
     <% end %>
     """
   end

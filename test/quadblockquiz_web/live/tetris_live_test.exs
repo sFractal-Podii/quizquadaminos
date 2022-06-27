@@ -26,7 +26,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
       Enum.each(categories, fn category ->
         category = category |> Macro.camelize()
-        assert html =~ "#{category}</button>"
+        assert html =~ "#{category}"
       end)
     end
 
@@ -122,7 +122,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
       total_score =
         (score["Right"] |> String.to_integer()) - (next_score["Wrong"] |> String.to_integer())
 
-      assert pause_html =~ "<h1>#{total_score}</h1><h2>Score</h2>"
+      assert pause_html =~ ~r/#{total_score}\s*<\/h1>/
     end
 
     test "player remains on the same question when wrongly answered", %{conn: conn} do
@@ -138,8 +138,8 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
         end)
 
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => wrong_answer}})
-      assert html =~ "<h1>\nQuestion:"
-      assert html =~ "<h2> Answer </h2>"
+      assert html =~ ~r/<h1>\s+Question:/
+      assert html =~ ~r/<h2>\s*Answer/
     end
   end
 
@@ -149,9 +149,9 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
       render_click(view, "choose_category", %{"category" => "bonus"})
       html = render_click(view, "skip-question", %{})
 
-      assert html =~ "Continue</button>"
-      assert html =~ "End Game</button>"
-      assert html =~ "Bonus</button>"
+      assert html =~ ~r/Continue\s*<\/button>/
+      assert html =~ ~r/End Game\s*<\/button>/
+      assert html =~ ~r/Bonus\s*<\/button>/
     end
 
     test "category disappears if questions are exhausted", %{conn: conn} do
