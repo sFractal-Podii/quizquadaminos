@@ -112,7 +112,7 @@ defmodule QuadblockquizWeb.TetrisLive do
               <div class="row">
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
-                    <h2>Pollet</h2>
+                    <h2>Score</h2>
                     <hr><p>Speed: <%= Speed.speed_name(@speed) %></p>
                     <p><%= @brick_count %> QuadBlocks</p>
                     <p><%= @row_count %> Rows</p>
