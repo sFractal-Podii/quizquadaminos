@@ -1,8 +1,8 @@
 defmodule QuadblockquizWeb.TermsOfServiceLive do
-  use Phoenix.LiveView
+  use QuadblockquizWeb, :live_view
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <h1 class="heading-1 text-center mt-6">Terms and Conditions</h1>
     <p class="font-bold text-center">Last updated: May 04, 2021</p>
     <p class="mt-6">Please read these terms and conditions carefully before using Our Service.</p>
@@ -78,7 +78,6 @@ defmodule QuadblockquizWeb.TermsOfServiceLive do
       <li>that the Service, its servers, the content, or e-mails sent from or on behalf of the Company are free of viruses, scripts, trojan horses, worms, malware, timebombs or other harmful components.</li>
       </ul>
     </div>
-    </p>
     <p class="mt-6">Some jurisdictions do not allow the exclusion of certain types of warranties or limitations on applicable statutory rights of a consumer, so some or all of the above exclusions and limitations may not apply to You. But in such a case the exclusions and limitations set forth in this section shall be applied to the greatest extent enforceable under applicable law.</p>
     <h2 class="heading-2 mt-6">Governing Law</h2>
     <p class="mt-6">The laws of the Country, excluding its conflicts of law rules, shall govern this Terms and Your use of the Service. Your use of the Application may also be subject to other local, state, national, or international laws.</p>
@@ -92,7 +91,7 @@ defmodule QuadblockquizWeb.TermsOfServiceLive do
     <h3 class="heading-3 mt-6">Severability</h3>
     <p class="mt-6">If any provision of these Terms is held to be unenforceable or invalid, such provision will be changed and interpreted to accomplish the objectives of such provision to the greatest extent possible under applicable law and the remaining provisions will continue in full force and effect.</p>
     <h3 class="heading-3 mt-6">Waiver</h3>
-    <p class=mt-6>Except as provided herein, the failure to exercise a right or to require performance of an obligation under this Terms shall not effect a party's ability to exercise such right or require such performance at any time thereafter nor shall be the waiver of a breach constitute a waiver of any subsequent breach.</p>
+    <p class="mt-6">Except as provided herein, the failure to exercise a right or to require performance of an obligation under this Terms shall not effect a party's ability to exercise such right or require such performance at any time thereafter nor shall be the waiver of a breach constitute a waiver of any subsequent breach.</p>
     <h2 class="heading-2 mt-6">Translation Interpretation</h2>
     <p class="mt-6">These Terms and Conditions may have been translated if We have made them available to You on our Service.
     You agree that the original English text shall prevail in the case of a dispute.</p>

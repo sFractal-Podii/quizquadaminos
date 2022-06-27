@@ -7,7 +7,7 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
 
   @impl true
   def render(assigns) do
-    ~L"""
+    ~H"""
     <div class="container">
     <div class="row">
     <div class="column column-50">
@@ -38,7 +38,7 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
   end
 
   def display_bottom(bottom_blocks, assigns) do
-    ~L"""
+    ~H"""
     <%= raw SvgBoard.svg_head() %>
       <%= for row <- [bottom_values(bottom_blocks)] do %>
         <%= for {x, y, color} <- row do %>

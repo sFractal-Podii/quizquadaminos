@@ -3,7 +3,7 @@ defmodule QuadblockquizWeb.ContestRules do
   alias QuadblockquizWeb.Router.Helpers, as: Routes
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <div class="">
       <div class="md:flex md:items-center md:justify-center">
         <div class="space-y-8">
@@ -19,7 +19,7 @@ defmodule QuadblockquizWeb.ContestRules do
               RSAC Supply Chain Sandbox
               Quadblockquiz contest.
               Prizes are described at
-              <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %> >prizes</a>.
+              <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes)}>prizes</a>.
               This contests was organized by sFractal Consulting
               to increase awarenessa and adoption of supply chain cybersecurity.
             </p>
@@ -147,8 +147,8 @@ defmodule QuadblockquizWeb.ContestRules do
             </div>
             <p>
               See our
-              <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive) %> > Privacy </a>
-              policy and our <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive) %> > Terms Of Service </a>.
+              <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive)}> Privacy </a>
+              policy and our <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive)}> Terms Of Service </a>.
               The TL;DR version is
               we only use your handle on the
               Leaderboard and Contest Scoreboard, and your email
