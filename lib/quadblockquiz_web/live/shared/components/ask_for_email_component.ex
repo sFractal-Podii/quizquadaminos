@@ -8,15 +8,17 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
+    <div>
     <h3> What's your email address? </h3>
-    <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :update_email, phx_target: @myself] %>
+    <.form let={f} for={@changeset} phx-change="validate" phx-submit="update_email" phx-target={@myself}>
     <%= label f, :email %>
     <%= text_input f, :email, type: :email %>
     <%= error_tag f, :email %>
     <%= text_input f, :uid, type: :hidden %>
     <button> Update Email </button>
-    </form>
+    </.form>
+    </div>
     """
   end
 

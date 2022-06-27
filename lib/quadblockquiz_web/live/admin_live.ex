@@ -1,7 +1,6 @@
 defmodule QuadblockquizWeb.AdminLive do
-  use Phoenix.LiveView
+  use QuadblockquizWeb, :live_view
   alias Quadblockquiz.Accounts
-  import Phoenix.HTML, only: [raw: 1]
 
   def mount(_param, _session, socket) do
     {:ok,
@@ -16,7 +15,7 @@ defmodule QuadblockquizWeb.AdminLive do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <div class="container">
     <h1>users level of login</h1>
     <section class="phx-hero">
@@ -24,13 +23,13 @@ defmodule QuadblockquizWeb.AdminLive do
     </section>
      <form  phx-change="login_levels">
      <label>
-    <input type="radio" id="by_config" name="login_levels" value="by_config" <%= if @by_config, do: 'checked' %>> by_config
+    <input type="radio" id="by_config" name="login_levels" value="by_config" checked={@by_config}> by_config
     </label>
     <label>
-    <input type="radio" id="oauth_login" name="login_levels" value="oauth_login" <%= if @oauth_login, do: 'checked' %>> oauth_login
+    <input type="radio" id="oauth_login" name="login_levels" value="oauth_login" checked={@oauth_login}> oauth_login
     </label>
     <label>
-    <input type="radio" id="anonymous_login" name="login_levels" value="anonymous_login" <%= if @anonymous_login, do: 'checked' %>>anonymous_login
+    <input type="radio" id="anonymous_login" name="login_levels" value="anonymous_login" checked={@anonymous_login}>anonymous_login
     </label>
     </form>
 
@@ -75,7 +74,7 @@ defmodule QuadblockquizWeb.AdminLive do
   end
 
   defp notification(assigns) do
-    ~L"""
+    ~H"""
       <%= if @by_config, do: "by_config is active" %>
       <%= if @oauth_login, do: "oauth_login  is active" %>
       <%= if @anonymous_login, do: "anonymous_login is active" %>

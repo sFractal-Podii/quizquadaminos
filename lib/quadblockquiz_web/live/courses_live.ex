@@ -1,10 +1,10 @@
 defmodule QuadblockquizWeb.CourseLive do
-  use Phoenix.LiveView
-  import Phoenix.HTML
-  import Phoenix.HTML.Form
+  use QuadblockquizWeb, :live_view
+
   alias Quadblockquiz.Accounts
   alias Quadblockquiz.Courses
   alias QuadblockquizWeb.Router.Helpers, as: Routes
+
   @impl true
   def mount(_arg0, %{"uid" => user_id}, socket) do
     current_user = user_id |> Accounts.current_user()
@@ -25,12 +25,12 @@ defmodule QuadblockquizWeb.CourseLive do
 
   @impl true
   def render(%{live_action: :questions} = assigns) do
-    ~L"""
+    ~H"""
     <div class="container">
     <table>
     <th>
     <h1> Questions </h1>
-    <th>
+    </th>
 
     <%= for content <- Courses.questions(@chapter,@course) do %>
     <tr>
@@ -53,7 +53,7 @@ defmodule QuadblockquizWeb.CourseLive do
 
   @impl true
   def render(%{live_action: :show} = assigns) do
-    ~L"""
+    ~H"""
     <div class="container">
     <div class="row">
       <div class="column column-25">
@@ -68,7 +68,7 @@ defmodule QuadblockquizWeb.CourseLive do
       <div class="column">
       <%= for file <- @chapter_files do %>
       <ul>
-       <a href="#" phx-click="go-to-question" phx-value-question="<%= file %>" > <%= file %> </a> <br />
+       <a href="#" phx-click="go-to-question" phx-value-question={file} > <%= file %> </a> <br />
        </ul>
       <% end %>
       </div> <!-- column -->
@@ -84,14 +84,14 @@ defmodule QuadblockquizWeb.CourseLive do
 
   @impl true
   def render(assigns) do
-    ~L"""
+    ~H"""
     <%= if @has_email? do %>
     <h1 class="pt-10 text-5xl font-normal"> Courses </h1>
     <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 md:pt-10 ">
       <%= for course <- Courses.courses_list() do %>
         <div class="pt-4 md:pt-0 shadow md:shadow-none flex flex-row md:flex-col border-t-0 md:border border-grey-200 rounded-xl">
           <div class="pt-4 pb-0 md:pt-0">
-            <img class="rounded-lg h-20 w-64 md:w-full md:h-52" src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/Supply_Chain_Sandbox_logo_dark_draft.png") %>" alt="course chapter" />
+            <img class="rounded-lg h-20 w-64 md:w-full md:h-52" src={Routes.static_path(QuadblockquizWeb.Endpoint, "/images/Supply_Chain_Sandbox_logo_dark_draft.png")} alt="course chapter" />
           </div>
           <div class="p-2 md:p-4 md:space-y-4">
             <div>
@@ -104,7 +104,7 @@ defmodule QuadblockquizWeb.CourseLive do
             <div class="hidden md:flex md:justify-between">
               <div>
                 <h2 class="text-xl font-normal  ">Mentor</h2>
-                <img class="rounded-full h-12 w-12 flex items-center justify-center " src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg") %>" alt="user avatar" />
+                <img class="rounded-full h-12 w-12 flex items-center justify-center " src={Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg")} alt="user avatar" />
               </div>
               <div class="pt-7">
                 <button class="rounded-sm bg-blue-600 text-white flex items-center justify-center text-base font-normal h-12 w-40"><%= live_patch "start course", to: Routes.course_path(@socket, :show , course) %></button>
@@ -160,9 +160,9 @@ defmodule QuadblockquizWeb.CourseLive do
   end
 
   defp ask_for_email(assigns) do
-    ~L"""
+    ~H"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <%= live_component @socket,  QuadblockquizWeb.SharedLive.AskEmailComponent, id: 2, current_user: @current_user, redirect_to: @current_uri %>
+    <.live_component  module={QuadblockquizWeb.SharedLive.AskEmailComponent} id={2} current_user={@current_user} redirect_to={@current_uri} />
     <% end %>
     """
   end
