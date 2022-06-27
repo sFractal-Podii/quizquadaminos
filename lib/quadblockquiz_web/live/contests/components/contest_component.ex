@@ -18,51 +18,63 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   @impl true
   def render(assigns) do
-    ~L"""
+    ~H"""
     <div class="hidden md:table-row">
-      <div class="md:table-cell md:p-4"><%= @contest.name%></div>
+      <div class="md:table-cell md:p-4"><%= @contest.name %></div>
       <%= if @current_user.admin? do %>
-        <div class="table-cell md:p-4"> <%= start_or_pause_button(assigns,@contest) %> </div>
+        <div class="table-cell md:p-4"><%= start_or_pause_button(assigns, @contest) %></div>
         <div class="table-cell md:p-4">
-          <button class="<%= maybe_disable_button(@contest) %> <%= if contest_running?(@contest), do: "red" %> icon-button" phx-click="stop" phx-value-contest='<%= @contest.name %>' <%= maybe_disable_button(@contest) %>><i class="fas fa-stop-circle fa-2x"></i></button>
+          <button
+            class={
+              "#{maybe_disable_button(@contest)} #{if contest_running?(@contest), do: "red"} icon-button"
+            }
+            phx-click="stop"
+            phx-value-contest={@contest.name}
+            disabled={maybe_disable_button(@contest)}
+          >
+            <i class="fas fa-stop-circle fa-2x"></i>
+          </button>
         </div>
       <% end %>
       <div class="md:table-cell md:p-4"><%= timer_or_final_result(assigns, @contest) %></div>
-      <div class="md:table-cell md:p-4"><%= contest_date(assigns, @contest)%></div>
+      <div class="md:table-cell md:p-4"><%= contest_date(assigns, @contest) %></div>
       <div class="md:table-cell md:p-4"><%= truncate_date(@contest.start_time) %></div>
       <div class="md:table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
       <div class="md:table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
-    </div>
-    <div class="flex rounded-lg flex-row shadow md:hidden justify-center p-4 gap-x-12 border border-t-0 mb-4">
-      <div class="flex flex-col space-y-2">
-        <div class="heading-3 text-blue-500 text-lg font-normal tracking-wide">
-          <%= @contest.name%>
-        </div>
-        <div class="inline-flex space-x-4">
-          <p class="text-gray-400 font-normal text-xs">Date:</p>
-          <p class="text-sm font-light tracking-wide"><%=contest_date(assigns, @contest)%></p>
-        </div>
-        <div class="inline-flex space-x-4">
-          <p class="text-gray-400 font-normal text-xs">Start:</p>
-          <p class="text-sm font-light tracking-wide"><%= truncate_date(@contest.start_time) %></p>
-        </div>
-        <div class="inline-flex space-x-4">
-          <p class="text-gray-400 font-normal text-xs">End:</p>
-          <p class="pl-1 text-sm font-light tracking-wide"><%= truncate_date(@contest.end_time) %></p>
+      <div class="flex rounded-lg flex-row shadow md:hidden justify-center p-4 gap-x-12 border border-t-0 mb-4">
+        <div class="flex flex-col space-y-2">
+          <div class="heading-3 text-blue-500 text-lg font-normal tracking-wide">
+            <%= @contest.name %>
+          </div>
+          <div class="inline-flex space-x-4">
+            <p class="text-gray-400 font-normal text-xs">Date:</p>
+            <p class="text-sm font-light tracking-wide"><%= contest_date(assigns, @contest) %></p>
+          </div>
+          <div class="inline-flex space-x-4">
+            <p class="text-gray-400 font-normal text-xs">Start:</p>
+            <p class="text-sm font-light tracking-wide"><%= truncate_date(@contest.start_time) %></p>
+          </div>
+          <div class="inline-flex space-x-4">
+            <p class="text-gray-400 font-normal text-xs">End:</p>
+            <p class="pl-1 text-sm font-light tracking-wide">
+              <%= truncate_date(@contest.end_time) %>
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-light tracking-wide">
+              <%= timer_or_final_result(assigns, @contest) %>
+            </p>
+          </div>
         </div>
         <div>
-          <p class="text-sm font-light tracking-wide"><%= timer_or_final_result(assigns, @contest) %></p>
+          <%= if @contest.status == :stopped do %>
+            <i class="fas fa-medal fa-3x text-blue-400"></i>
+          <% else %>
+            <i class="far fa-envelope fa-3x text-blue-400"></i>
+          <% end %>
         </div>
       </div>
-      <div>
-        <%= if @contest.status == :stopped do %>
-          <i class="fas fa-medal fa-3x text-blue-400"></i>
-        <% else %>
-          <i class="far fa-envelope fa-3x text-blue-400"></i>
-        <% end %>
-      </div>
     </div>
-
     """
   end
 

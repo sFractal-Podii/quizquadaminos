@@ -48,73 +48,71 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def render(%{state: :starting} = assigns) do
-    ~L"""
-      <div class ="container">
-        <div class="row">
-            <div class="column column-50 column-offset-25">
-              <h1>Welcome to QuadBlockQuiz!</h1>
-              <%= if @has_email? do %>
-                <%= join_contest(assigns) %>
-              <% else %>
-                <%= ask_for_email(assigns) %>
-              <% end %>
-            </div>
+    ~H"""
+    <div class="container">
+      <div class="row">
+        <div class="column column-50 column-offset-25">
+          <h1>Welcome to QuadBlockQuiz!</h1>
+          <%= if @has_email? do %>
+            <%= join_contest(assigns) %>
+          <% else %>
+            <%= ask_for_email(assigns) %>
+          <% end %>
         </div>
       </div>
+    </div>
     """
   end
 
   def render(%{state: :game_over} = assigns) do
-    ~L"""
+    ~H"""
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
           <h1>Game Over!</h1>
-            <h2>Your score: <%= @score %></h2>
-            <p>You are no longer in business.
+          <h2>Your score: <%= @score %></h2>
+          <p>You are no longer in business.
             Maybe you are bankrupt
             due to a cyberattack,
             or due to a lawsuit,
             or maybe because you let your supply chain get to long.
             Or maybe you were too busy answering cybersecurity questions
             and not paying attention to business.
-            Or maybe you just hit quit :-).
-            </p>
-            <hr>
-            <%= raw SvgBoard.svg_head() %>
-            <%= for row <- [Map.values(@bottom)] do %>
-              <%= for {x, y, color} <- row do %>
+            Or maybe you just hit quit :-).</p>
+          <hr />
+          <%= raw(SvgBoard.svg_head()) %>
+          <%= for row <- [Map.values(@bottom)] do %>
+            <%= for {x, y, color} <- row do %>
               <svg>
-               <%= raw SvgBoard.box({x, y}, color)%>
-               </svg>
-                <% end %>
+                <%= raw(SvgBoard.box({x, y}, color)) %>
+              </svg>
             <% end %>
-            <%= raw SvgBoard.svg_foot() %>
-            <hr>
-            <%= live_redirect "Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button" %>
-              </div>
+          <% end %>
+          <%= raw(SvgBoard.svg_foot()) %>
+          <hr />
+          <%= live_redirect("Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button") %>
+        </div>
         <div class="column column-25 column-offset-25">
-        <p><%= @brick_count %> QuadBlocks dropped</p>
-        <p><%= @row_count %> rows cleard</p>
-        <p><%= @correct_answers %> questions answered correctly</p>
-        <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
+          <p><%= @brick_count %> QuadBlocks dropped</p>
+          <p><%= @row_count %> rows cleard</p>
+          <p><%= @correct_answers %> questions answered correctly</p>
+          <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
         </div>
       </div>
     </div>
-     <%= debug(assigns) %>
-
+    <%= debug(assigns) %>
     """
   end
 
   def render(assigns) do
-    ~L"""
-      <div class="container" id="gamearea" phx-hook="DisableArrow">
+    ~H"""
+      <div class="container" id="gamearea" phx-hook="DisableArrow" phx-no-format>
         <div class="row">
           <div class="column column-75">
               <div class="row">
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
-                    <h2>Score</h2>
+                    <h2>Pollet</h2>
                     <hr><p>Speed: <%= Speed.speed_name(@speed) %></p>
                     <p><%= @brick_count %> QuadBlocks</p>
                     <p><%= @row_count %> Rows</p>
@@ -135,18 +133,15 @@ defmodule QuadblockquizWeb.TetrisLive do
                     <%= raw SvgBoard.svg_head() %>
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
                     <% {x, y} = SvgBoard.to_pixels( {x1, y1}, @box_width, @box_height ) %>
-                    <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
-                    x="<%= x + 1 %>" y="<%= y + 1 %>"
-                    class="position-block <%= if @adding_block and block_in_bottom?(@block_coordinates, @bottom), do: "hover-block" %>"
-                    width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                      <rect phx-click="add_block" phx-value-x={x1}  phx-value-y={y1} x={x + 1} y={y + 1} class={"position-block " <> if @adding_block and block_in_bottom?(@block_coordinates, @bottom), do: "hover-block", else: ""} width={@box_width - 2} height={@box_height - 1} />
                     <% end %>
 
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
                       <%= for {x, y, color} <- row do %>
-                      <svg phx-click="transform_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
+                      <svg phx-click="transform_block" phx-value-x={x} phx-value-y={y} phx-value-color={color} >
                        <%= raw SvgBoard.box({x, y}, color)%>
-                          <%= raw deleting_title({x, y}, @deleting_block, block_in_bottom?(x, y, @bottom)) %>
-                           <%= raw moving_title(@moving_block, block_in_bottom?(x, y, @bottom))  %>
+                      <%= raw deleting_title({x, y}, @deleting_block, block_in_bottom?(x, y, @bottom)) %>
+                      <%= raw moving_title(@moving_block, block_in_bottom?(x, y, @bottom))  %>
                        </svg>
                         <% end %>
                     <% end %>
@@ -162,45 +157,59 @@ defmodule QuadblockquizWeb.TetrisLive do
           <br/>
         </div>
     </div>
-    <%= debug(assigns) %>
     """
   end
 
   defp ask_for_email(assigns) do
-    ~L"""
+    ~H"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <%= live_component @socket,  QuadblockquizWeb.SharedLive.AskEmailComponent, id: 1, current_user: @current_user, redirect_to: @current_uri %>
+      <%= live_component(QuadblockquizWeb.SharedLive.AskEmailComponent,
+        id: 1,
+        current_user: @current_user,
+        redirect_to: @current_uri
+      ) %>
     <% end %>
     """
   end
 
   defp join_contest(%{request_pin?: true} = assigns) do
-    ~L"""
-    <%= live_component @socket,  QuadblockquizWeb.SharedLive.ValidatePinComponent, id: 1, redirect_to: @current_uri, pin: @contest.pin %>
+    ~H"""
+    <%= live_component(QuadblockquizWeb.SharedLive.ValidatePinComponent,
+      id: 1,
+      redirect_to: @current_uri,
+      pin: @contest.pin
+    ) %>
     """
   end
 
   defp join_contest(%{active_contests: []} = assigns) do
-    ~L"""
-    <button phx-click="start" phx-value-contest="" >Start</button>
+    ~H"""
+    <button phx-click="start" phx-value-contest="">Start</button>
     """
   end
 
   defp join_contest(assigns) do
-    ~L"""
+    ~H"""
     <%= if not @choosing_contest do %>
-       <button phx-click="choose_contest">Start</button>
+      <button phx-click="choose_contest">Start</button>
     <% else %>
-     <br />
-       <h2> Join a contest? </h2>
-       <p> Click on the contest below to join </p>
-       <%= for contest <- @active_contests do %>
-         <button phx-click=<%= if contest.pin, do: "request_pin", else: "start" %> phx-value-contest="<%= contest.id %>" ><%= contest.name %></button>
-       <% end %>
-       <br />
-       <br />
-       <p> Not joining a contest? </p>
-       <button phx-click="start" phx-value-contest="" class="button button-outline">No contest, just playing</button>
+      <br />
+      <h2>Join a contest?</h2>
+      <p>Click on the contest below to join</p>
+      <%= for contest <- @active_contests do %>
+        <button
+          phx-click={if contest.pin, do: "request_pin", else: "start"}
+          phx-value-contest={contest.id}
+        >
+          <%= contest.name %>
+        </button>
+      <% end %>
+      <br />
+      <br />
+      <p>Not joining a contest?</p>
+      <button phx-click="start" phx-value-contest="" class="button button-outline">
+        No contest, just playing
+      </button>
     <% end %>
     """
   end
@@ -742,10 +751,10 @@ defmodule QuadblockquizWeb.TetrisLive do
   def debug(assigns), do: debug(assigns, @debug, Mix.env())
 
   def debug(assigns, true, :dev) do
-    ~L"""
+    ~H"""
     <pre>
-    <%= raw( @tetromino |> inspect) %>
-    <%= raw( @bottom |> inspect) %>
+    <%= raw(@tetromino |> inspect) %>
+    <%= raw(@bottom |> inspect) %>
     </pre>
     """
   end
