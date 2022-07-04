@@ -4,10 +4,10 @@ updates:
     directory: "/assets"
     target-branch: "develop"
     schedule:
-      interval: "daily"
+      interval: "monthly"
 
   - package-ecosystem: "mix"
     directory: "/"
     target-branch: "develop"
     schedule:
-      interval: "daily"
+      interval: "monthly"

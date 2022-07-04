@@ -91,7 +91,7 @@ defmodule QuadblockquizWeb.CourseLive do
       <%= for course <- Courses.courses_list() do %>
         <div class="pt-4 md:pt-0 shadow md:shadow-none flex flex-row md:flex-col border-t-0 md:border border-grey-200 rounded-xl">
           <div class="pt-4 pb-0 md:pt-0">
-            <img class="rounded-lg h-20 w-64 md:w-full md:h-52" src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/Supply Chain Sandbox logo_dark_draft.png") %>" alt="course chapter" />
+            <img class="rounded-lg h-20 w-64 md:w-full md:h-52" src="<%= Routes.static_path(QuadblockquizWeb.Endpoint, "/images/Supply_Chain_Sandbox_logo_dark_draft.png") %>" alt="course chapter" />
           </div>
           <div class="p-2 md:p-4 md:space-y-4">
             <div>

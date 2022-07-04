@@ -35,7 +35,7 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be
-              RSAC attendees. Some prizes require being physically present.
+              RSAC attendees. Prizes will be awarded at QBQ Finals (Thurs 2PM Pacific) and require being physically present in the RSAC Sandbox.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be least 21 years of age or older to win prizes.
@@ -47,7 +47,7 @@ defmodule QuadblockquizWeb.ContestRules do
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants may use any handle they want,
               but recognize there are hundreds of participants
-              so there is the chance of overlap.
+              so there is the chance of overlap. And don't use 'anonymous'!
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               The game does not check for overlap so pick something unique.
@@ -68,19 +68,23 @@ defmodule QuadblockquizWeb.ContestRules do
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               The game must be played during eligle times.
               An eligible games must start and end during times announced during the Sandbox.
-              Games spanning timeslots will be ineligible
-              (eg if start during first break and finish during second break).
               Make sure to finish your game cleanly so that you have seen the endgame screen with your score.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Contestants may submit more than one game (the contest scoreboard will automatically do this for you),
+              Contestants may submit more than one game,
               but only one prize per person.
+              The contest scoreboard will automatically do,
+              but note the leaderboard only shows games in progress.
+              The final tally (including the finished games)
+              doesn't show until the contest is over.
             </p>
             <div class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               <p>
                 You must enter the contest to win!!!!
                 When you start to play each game, it will ask whether you want to be part of this contest.
-                You must enter the contest to be on the Contest Scoreboard.
+                You must enter the contest to be on the Contest Scoreboard. Note some contests (Celebrity, Sandbox,
+                Finals) require you to be in the Sandbox and will
+                require a pin. Virtual is open to all without a pin.
               </p>
               <ul class="list-disc pl-4">
                 <li>
@@ -88,13 +92,31 @@ defmodule QuadblockquizWeb.ContestRules do
                   Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
                 </li>
                 <li>
-                  The "most points" prize will be awarded to the eligible
-                  contest contestant with the highest points,
-                  who will then be ineligible for the other Contest prizes.
+                Finalists will be chosen from Celebrity, Sandbox, and Virtual contests. You must be present at Finals to be eligible for Finals.
                 </li>
                 <li>
-                  The "most bricks" prize will be awarded to the eligible
-                  contest contestant with the most number of bricks in one game,
+                Seat 1 at Finals goes to the winning points score (17,294) at the Celebrity Contest. Note she won overall last year and is the person to beat!
+                </li>
+                <li>Seat 2 at Finals is to winning Questions score (32) at the Celebrity Contest. This is the author whose book is one of the prizes - so he has to go for the cocktail party.
+                </li>
+                <li>Seat 3 at Finals will go to points-winner of the Sandbox
+                Contest
+                </li>
+                <li>Seat 4 at Finals will go to questions-winner of the Sandbox
+                Contest
+                </li>
+                <li>Seat 5 at Finals will go to bricks-winner of the Sandbox
+                Contest
+                </li>
+                <li>Seat 6 at Finals will go to points-winner of the Virtual
+                Contest
+                </li>
+                <li>If winner for a seat is not present, it goes
+                to next eligible person (eg next highest points) that is present. So show up! Even low scores might be elegible.
+                </li>
+                <li>
+                  The "most points" prize will be awarded to the eligible
+                  contest contestant with the highest points,
                   who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
@@ -103,14 +125,18 @@ defmodule QuadblockquizWeb.ContestRules do
                   who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
-                  The "????" prize will be awarded to the eligible
-                  contest contestant based on surpise criteria announced
-                  after the conclusion of the contest.
+                  The "most bricks" prize will be awarded to the eligible
+                  contest contestant with the most number of bricks(quadblocks) in one game,
+                  who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
-                  A person is only elegible to receive one prize per contest,
-                  (e.g first on points and first on bricks would only receive one prize
-                  for points, and then 'runner up' on bricks would win that prize).
+                  The "????" prize will be awarded to the eligible
+                  contest contestant based on surpise criteria announced
+                  by the moderator at the contest.
+                </li>
+                <li>
+                  A person is only elegible to receive one prize,
+                  (e.g first on points and first on bricks would only receive one prize for points, and then 'runner up' on bricks would win that prize).
                 </li>
                 <li>
                   The organizers retain the right to adjust or shutdown the contest

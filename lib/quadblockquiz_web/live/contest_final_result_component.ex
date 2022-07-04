@@ -5,11 +5,11 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
 
   def render(assigns) do
     ~L"""
-    <h1>Contestboard</h1>
+    <h1><%= @contest.name %> Contestboard</h1>
       <table>
       <tr>
-      <th>Player</th>
-      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">Score</th>
+      <th>    Player    </th>
+      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">    Score    </th>
       <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
       <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
       <th>Start time</th>
@@ -19,11 +19,11 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <%= for record <- @contest_records do %>
        <tr>
       <td><%= user_name(record) %></td>
-      <td><%= record.score %></td>
-      <td><%= record.dropped_bricks %></td>
-      <td><%= record.correctly_answered_qna %></td>
-      <td><%= truncate_date(record.start_time) %></td>
-      <td><%= truncate_date(record.end_time) %></td>
+      <td align="right"><%= record.score %></td>
+      <td align="center"><%= record.dropped_bricks %></td>
+      <td align="center"><%= record.correctly_answered_qna %></td>
+      <td> <%= truncate_date(record.start_time) %></td>
+      <td> <%= truncate_date(record.end_time) %></td>
 
       </tr>
       <% end %>
