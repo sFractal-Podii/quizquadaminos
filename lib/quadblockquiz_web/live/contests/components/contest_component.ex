@@ -3,7 +3,6 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   Component to compatmentalize contests
   """
   use QuadblockquizWeb, :live_component
-  import Phoenix.HTML.Form
 
   alias Quadblockquiz.Accounts.User
   alias Quadblockquiz.Contests
@@ -106,15 +105,15 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   defp start_or_pause_button(assigns, contest) do
-    if contest.status == :running do
-      ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %> icon-button" phx-click="restart" phx-value-contest='<%= contest.name  %>' <%= if contest.end_time, do: 'disabled' %> ><i class="fas fa-undo fa-2x"></i></button>
-      """
-    else
-      ~L"""
-      <button class= "<%= if contest.end_time, do: 'disabled' %>  icon-button" phx-click="start" phx-value-contest='<%= contest.name %>' <%= if contest.end_time, do: 'disabled' %>><i class="fas fa-play-circle fa-2x"></i></button>
-      """
-    end
+    ~H"""
+    <%= if contest.status == :running do%>
+
+    <button class= "{if contest.end_time, do: 'disabled' }  icon-button" phx-click="restart" phx-value-contest={contest.name} {if contest.end_time, do: [{'disabled', true}], else: [] } ><i class="fas fa-undo fa-2x"></i></button>
+    <% else %>
+    <button class= "{if contest.end_time, do: 'disabled' }  icon-button" phx-click="start" phx-value-contest={contest.name} {if contest.end_time, do: [{'disabled', true}], else: [] } ><i class="fas fa-play-circle fa-2x"></i></button>
+
+    <% end %>
+    """
   end
 
   def contest_running?(contest) do
@@ -128,14 +127,14 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   defp timer_or_final_result(assigns, %Contest{status: :running}) do
-    ~L"""
+    ~H"""
     <% {hours, minutes, seconds} = @contest.time_elapsed |> to_human_time() %>
     <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
     """
   end
 
   defp timer_or_final_result(assigns, %Contest{status: :future}) do
-    ~L"""
+    ~H"""
     <%= if @time_remaining do %>
     <% {days, hours, minutes, seconds} = @time_remaining |> Util.to_human_time() %>
     <p><%= Util.count_display(days) %> days <%= Util.count_display(hours) %>h <%= Util.count_display(minutes) %>m <%= Util.count_display(seconds) %>s</p>
@@ -147,7 +146,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
-      ~L"""
+      ~H"""
       <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, contest)%></button>
       """
     end
@@ -157,42 +156,42 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
         %{current_user: %{admin?: true}, editing_date?: false} = assigns,
         %Contest{contest_date: nil} = contest
       ) do
-    ~L"""
-    <button phx-click="add_contest_date" phx-value-contest='<%= contest.name%>' phx-target="<%= @myself%>">Add</button>
+    ~H"""
+    <button phx-click="add_contest_date" phx-value-contest={contest.name} phx-target={@myself}>Add</button>
     """
   end
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: true} = assigns, _contest) do
-    ~L"""
-      <%= form_for :count, "#", [phx_submit: :save_date, phx_target: @myself] %>
+    ~H"""
+      <.form let={_f} for={:count} phx-submit={:save_date} phx-target={@myself} >
         <input type="datetime-local" id="contest_date" name="contest_date">
         <button>Save</button>
-      </form>
+      </.form>
     """
   end
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: false} = assigns, contest) do
-    ~L"""
+    ~H"""
     <%= truncate_date(contest.contest_date) %>
-    <button class="button-clear" phx-click="edit_contest_date" phx-value-contest='<%= contest.name%>' phx-target="<%= @myself%>"><i class="fas fa-edit fa-2x"></i></button>
+    <button class="button-clear" phx-click="edit_contest_date" phx-value-contest={contest.name} phx-target={@myself} ><i class="fas fa-edit fa-2x"></i></button>
     """
   end
 
   def contest_date(assigns, contest) do
-    ~L"""
+    ~H"""
     <%= truncate_date(contest.contest_date) %>
     """
   end
 
   defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
-    ~L"""
+    ~H"""
     <%= live_redirect "Live Results", class: "md:bg-blue-600 md:flex md:items-center md:justify-center md:rounded md:w-32 md:h-10 md:text-white",  to: Routes.contests_path(@socket, :show, contest)%>
     """
   end
 
   defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
        when id in [nil, "anonymous"] do
-    ~L"""
+    ~H"""
     <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white md:opacity-60 md:cursor-not-allowed">  RSVP </button>
     """
   end
@@ -200,23 +199,23 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   defp rsvp_or_results_button(%{current_user: %User{email: nil}} = assigns, %Contest{
          status: :future
        }) do
-    ~L"""
+    ~H"""
     <button phx-click="ask-for-email"> RSVP </button>
     """
   end
 
   defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
-    ~L"""
+    ~H"""
     <%= if @rsvped? do %>
-      <button class="md:bg-red-600 md:p-2 md:rounded md:w-40  md:text-white" phx-click="cancel_rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>"> CANCEL RSVP </button>
+      <button class="md:bg-red-600 md:p-2 md:rounded md:w-40  md:text-white" phx-click="cancel_rsvp" phx-target={@myself} phx-value-contest_id={contest.id}> CANCEL RSVP </button>
     <% else %>
-      <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white" phx-click="rsvp" phx-target="<%= @myself %>" phx-value-contest_id="<%= contest.id %>" > RSVP </button>
+      <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white" phx-click="rsvp" phx-target={@myself} phx-value-contest_id={contest.id} > RSVP </button>
     <% end %>
     """
   end
 
   defp rsvp_or_results_button(assigns, %Contest{}) do
-    ~L"""
+    ~H"""
     """
   end
 

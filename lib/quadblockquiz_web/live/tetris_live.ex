@@ -163,22 +163,14 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp ask_for_email(assigns) do
     ~H"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-      <%= live_component(QuadblockquizWeb.SharedLive.AskEmailComponent,
-        id: 1,
-        current_user: @current_user,
-        redirect_to: @current_uri
-      ) %>
+    <.live_component module={QuadblockquizWeb.SharedLive.AskEmailComponent} id={1} current_user={@current_user} redirect_to={@current_uri} />
     <% end %>
     """
   end
 
   defp join_contest(%{request_pin?: true} = assigns) do
     ~H"""
-    <%= live_component(QuadblockquizWeb.SharedLive.ValidatePinComponent,
-      id: 1,
-      redirect_to: @current_uri,
-      pin: @contest.pin
-    ) %>
+    <.live_component module={QuadblockquizWeb.SharedLive.ValidatePinComponent} id={1} redirect_to={@current_uri} pin={@contest.pin} />
     """
   end
 
@@ -190,6 +182,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
   defp join_contest(assigns) do
     ~H"""
+    <div>
     <%= if not @choosing_contest do %>
       <button phx-click="choose_contest">Start</button>
     <% else %>
@@ -211,6 +204,7 @@ defmodule QuadblockquizWeb.TetrisLive do
         No contest, just playing
       </button>
     <% end %>
+    </div>
     """
   end
 
