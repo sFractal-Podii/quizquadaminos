@@ -60,6 +60,11 @@ defmodule Quadblockquiz.GameBoard do
       order_by: [asc: r.end_time - r.start_time]
   end
 
+  def by_start_and_end_time(start_time, nil) do
+    from r in __MODULE__,
+      where: r.start_time >= ^start_time
+  end
+
   def by_start_and_end_time(start_time, end_time) do
     from r in __MODULE__,
       where:
