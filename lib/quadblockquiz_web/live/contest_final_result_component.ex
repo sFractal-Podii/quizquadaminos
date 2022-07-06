@@ -12,6 +12,7 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">    Score    </th>
       <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
       <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
+      <th>Powerups(used|available)</th>
       <th>Start time</th>
       <th>End time</th>
       </tr>
@@ -27,6 +28,7 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <td align="right"><%= record.score %></td>
       <td align="center"><%= record.dropped_bricks %></td>
       <td align="center"><%= record.correctly_answered_qna %></td>
+      <td><%= record.powerups %></td>
       <td> <%= truncate_date(record.start_time) %></td>
       <td> <%= truncate_date(record.end_time) %></td>
 

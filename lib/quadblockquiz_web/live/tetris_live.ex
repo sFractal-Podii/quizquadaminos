@@ -120,6 +120,8 @@ defmodule QuadblockquizWeb.TetrisLive do
                     <br><%= @row_count %> Rows
                     <br><%= @correct_answers %> Answers
                     <br>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %>
+                     <br>Powerups:<%= @used_powers_count %>|<%= @available_powers_count %>
+
                     <% {_,_, m, s} = @remaining_time %>
                     <br><%= m %> mins, <%= s %> sec </p>
                 </div>
@@ -271,6 +273,8 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> assign(tech_lic_debt: 0)
     |> assign(tech_vuln_debt: 65)
     |> assign(vuln_threshold: 143)
+    |> assign(available_powers_count: 0)
+    |> assign(used_powers_count: 0)
   end
 
   defp game_record(socket) do
@@ -308,7 +312,9 @@ defmodule QuadblockquizWeb.TetrisLive do
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
       contest_id: socket.assigns.contest_id,
-      correctly_answered_qna: socket.assigns.correct_answers
+      correctly_answered_qna: socket.assigns.correct_answers,
+      powerups:
+        "#{socket.assigns.used_powers_count}" <> "|" <> "#{socket.assigns.available_powers_count}"
     }
   end
 
@@ -562,7 +568,14 @@ defmodule QuadblockquizWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "clearblocks"}, socket) do
     powers = socket.assigns.powers -- [:clearblocks]
-    {:noreply, socket |> assign(bottom: %{}, powers: powers)}
+
+    {:noreply,
+     socket
+     |> assign(
+       bottom: %{},
+       powers: powers,
+       used_powers_count: socket.assigns.used_powers_count + 1
+     )}
   end
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
@@ -572,6 +585,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
@@ -584,6 +598,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
@@ -592,13 +607,29 @@ defmodule QuadblockquizWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
     ## more to do?
     powers = socket.assigns.powers -- [:fixvuln]
-    {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
+
+    {:noreply,
+     socket
+     |> assign(
+       modal: false,
+       powers: powers,
+       fix_vuln_or_license: true,
+       used_powers_count: socket.assigns.used_powers_count + 1
+     )}
   end
 
   def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
     ## more to do?
     powers = socket.assigns.powers -- [:fixlicense]
-    {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
+
+    {:noreply,
+     socket
+     |> assign(
+       modal: false,
+       powers: powers,
+       fix_vuln_or_license: true,
+       used_powers_count: socket.assigns.used_powers_count + 1
+     )}
   end
 
   def handle_event("powerup", %{"powerup" => "rm_all_vulns"}, socket) do
@@ -607,6 +638,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
      |> assign(bottom: bottom)}
   end
@@ -617,6 +649,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
      |> assign(bottom: bottom)}
   end
@@ -630,7 +663,8 @@ defmodule QuadblockquizWeb.TetrisLive do
      |> assign(state: :paused)
      |> assign(super_modal: true)
      |> assign(modal: false)
-     |> assign(powers: powers)}
+     |> assign(powers: powers)
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)}
   end
 
   def handle_event("powerup", _, socket) do
@@ -787,10 +821,14 @@ defmodule QuadblockquizWeb.TetrisLive do
         powers: powers,
         block_coordinates: nil,
         adding_block: false,
-        moving_block: false
+        moving_block: false,
+        used_powers_count: socket.assigns.used_powers_count + 1
       )
     else
-      assign(socket, moving_block: false, adding_block: false)
+      assign(socket,
+        moving_block: false,
+        adding_block: false
+      )
     end
   end
 
@@ -801,14 +839,28 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp delete_block(socket, x, y) do
     bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
     powers = socket.assigns.powers -- [:deleteblock]
-    socket |> assign(bottom: bottom, deleting_block: false, powers: powers)
+
+    socket
+    |> assign(
+      bottom: bottom,
+      deleting_block: false,
+      powers: powers,
+      used_powers_count: socket.assigns.used_powers_count + 1
+    )
   end
 
   defp add_block(socket, x, y, true = _adding_block) do
     {x, y} = parse_to_integer(x, y)
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
     powers = socket.assigns.powers -- [:addblock]
-    socket |> assign(bottom: bottom, adding_block: false, powers: powers)
+
+    socket
+    |> assign(
+      bottom: bottom,
+      adding_block: false,
+      powers: powers,
+      used_powers_count: socket.assigns.used_powers_count + 1
+    )
   end
 
   defp add_block(socket, _x, _y, false = _adding_block) do
@@ -931,7 +983,9 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   defp on_tick(:paused, socket) do
-    socket |> cache_contest_game()
+    socket
+    |> cache_contest_game()
+    |> assign(available_powers_count: Enum.count(socket.assigns.powers))
   end
 
   defp on_tick(_state, socket) do
