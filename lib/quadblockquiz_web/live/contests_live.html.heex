@@ -1,6 +1,6 @@
 <div class="grid items-center justify-center md:space-y-12">
     <%= if @live_action == :show do %>
-      <%= live_component QuadblockquizWeb.ContestFinalResultComponent, contest_records: @contest_records, contest: @contest, page: @page, sort_by: @sort_by,  id: "final_result" %>
+        <.live_component module={QuadblockquizWeb.ContestFinalResultComponent} id={"final_result"} contest_records={@contest_records} contest={@contest} page={@page} sort_by={@sort_by}/>
     <% else %>
     <div class="heading-1">Contests</div>
     <div class="container max-width: 768px">
@@ -60,7 +60,7 @@
         <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
       </div>
       <%= for contest <- contests do %>
-        <%= live_component QuadblockquizWeb.ContestsLive.ContestComponent, id: contest.id, current_user: @current_user %>
+        <.live_component module={QuadblockquizWeb.ContestsLive.ContestComponent} id={contest.id} current_user={@current_user}/>
       <% end %>
     <% end %>
   </div>
