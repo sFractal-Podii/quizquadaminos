@@ -112,15 +112,14 @@ defmodule QuadblockquizWeb.TetrisLive do
               <div class="row">
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
-                    <h2>Score</h2>
-                    <hr><p>Speed: <%= Speed.speed_name(@speed) %></p>
-                    <p><%= @brick_count %> QuadBlocks</p>
-                    <p><%= @row_count %> Rows</p>
-                    <p><%= @correct_answers %> Answers</p>
-                    <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
+                    <h3>Score Board</h3>
+                    <p>Speed: <%= Speed.speed_name(@speed) %>
+                    <br><%= @brick_count %> QuadBlocks
+                    <br><%= @row_count %> Rows
+                    <br><%= @correct_answers %> Answers
+                    <br>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %>
                     <% {_,_, m, s} = @remaining_time %>
-                    <p><%= m %> mins, <%= s %> sec </p>
-                    <hr>
+                    <br><%= m %> mins, <%= s %> sec </p>
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>

@@ -37,7 +37,12 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
 
           <%= for record <- @contest_records do %>
             <tr>
-              <td><%= user_name(record) %></td>
+              <td>
+                <%= unless record.end_time do %>
+                  <svg height="10" width="10"> <circle cx="5" cy="5" r="5" fill="green" /> Playing </svg>
+                <% end %>
+                <%= user_name(record) %>
+              </td>
               <td align="right"><%= record.score %></td>
               <td align="center"><%= record.dropped_bricks %></td>
               <td align="center"><%= record.correctly_answered_qna %></td>
