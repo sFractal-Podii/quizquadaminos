@@ -1,0 +1,225 @@
+<%= if @game_available do %>
+  <div
+    id="carouselExampleCaptions"
+    class="hidden carousel carousel-dark carousel slide relative"
+    data-bs-ride="carousel"
+  >
+    <div class="flex justify-between mt-10">
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="font-normal text-gray-700 text-sm">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="font-normal text-gray-700 text-sm">Skip</span>
+      </button>
+    </div>
+    <div class="carousel-indicators  absolute right-0 bottom-0 left-0 flex justify-center p-0 mb-4">
+      <button
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="0"
+        class="active bg-gray-900"
+        aria-current="true"
+        aria-label="Slide 1"
+      >
+      </button>
+      <button
+        class="bg-gray-900"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="1"
+        aria-label="Slide 2"
+      >
+      </button>
+      <button
+        class="bg-gray-900"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="2"
+        aria-label="Slide 3"
+      >
+      </button>
+      <button
+        class="bg-gray-900"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="3"
+        aria-label="Slide 4"
+      >
+      </button>
+    </div>
+    <div class="carousel-inner relative w-full overflow-hidden">
+      <div class="carousel-item active relative top-10 float-left w-full grid space-y-8">
+        <div class="flex items-center justify-center">
+          <img
+            src={Routes.static_path(@conn, "/images/amico.png")}
+            alt="cyber-attack Logo"
+            class="h-60 w-60 block"
+          />
+        </div>
+        <div class="carousel-caption text-center h-96 text-base tracking-wide">
+          <p class="font-bold">
+            Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game
+          </p>
+          <p class="font-normal">
+            We proudly present the SupplyChainSandbox edition of Quadblockquiz-a reimagined take on tetrominoes where playful spatial negotiations are infused with real-life Trivia challenges from the world of supply chain security
+          </p>
+        </div>
+      </div>
+      <div class="carousel-item relative top-10 grid space-y-8 float-left w-full">
+        <div class="flex items-center justify-center">
+          <img
+            src={Routes.static_path(@conn, "/images/bro.png")}
+            alt="cyber-attack Logo"
+            class="h-60 w-60 block"
+          />
+        </div>
+        <div class="carousel-caption h-96 text-center p-2 font-normal text-base tracking-wide">
+          <h2 class="font-bold">Why Play?</h2>
+          <p>
+            Whether you're attending RSAC because you "sell security" or "buy security," you can't afford to pass on this love child of tetrominoes and Trivia. More than abstract configurations of digital blocks,our tetrominoes spin-off envisions the classic arcade game as a potent metaphor for supply chain cyber security.
+          </p>
+        </div>
+      </div>
+      <div class="carousel-item relative float-left w-full top-10 grid space-y-8">
+        <div class="flex items-center justify-center">
+          <img
+            src={Routes.static_path(@conn, "/images/rafiki.png")}
+            alt="cyber-attack Logo"
+            class="h-60 w-60 block"
+          />
+        </div>
+        <div class="carousel-caption h-96 text-center p-2 font-normal text-base tracking-wide">
+          <p class="text-black">
+            You can choose to let the blocks fall as they may and scramble to cope with the accumulated consequences at a later point in time, or you can utilize savvy forecasting and informational superiority to address each
+            element as it appears on the horizon.
+          </p>
+          <p>
+            As recent events have shown, you are only as protected as the weakest link in your supply chain.
+          </p>
+        </div>
+      </div>
+      <div class="carousel-item relative float-left w-full top-10 grid space-y-8">
+        <div class="flex items-center justify-center">
+          <img
+            src={Routes.static_path(@conn, "/images/fingerprint.png")}
+            alt="cyber-attack Logo"
+            class="h-60 w-60 block"
+          />
+        </div>
+        <div class="carousel-caption h-96 p-2">
+          <p class="text-black text-center  font-normal text-base tracking-wide">
+            Guarding your organization’s information in a digitally-connected world
+            means understanding not only your organization’s immediate supply chain,
+            but also the security of the extended ecosystem and all entities involved.
+          </p>
+          <div class="flex justify-between items-center mt-5">
+            <%= link("Read More",
+              to: Routes.page_path(QuadblockquizWeb.Endpoint, :read_more),
+              class: "font-normal text-gray-700 text-sm"
+            ) %>
+            <%= link("Sign Up",
+              to: Routes.page_path(QuadblockquizWeb.Endpoint, :sign_up),
+              class:
+                "font-normal text-white bg-blue-500 flex items-center justify-center w-20 h-9 text-sm"
+            ) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="md:mx-auto md:max-w-5xl md:items-center md:justify-center md:flex">
+    <div class="grid space-y-8">
+      <div>
+        <h1 class="text-center font-normal text-5xl">QuadBlockQuiz</h1>
+        <h3 class="text-center font-normal text-3xl">Supply Chain Edition</h3>
+        <h4 class="text-center font-light text-xl">
+          Version <%= Quadblockquiz.Meta.version() %>
+        </h4>
+      </div>
+      <div>
+        <h2 class="text-center font-semibold text-base">
+          Explore Cyber Security's Most Important Emerging Strategic Focus with the Digital Era's Most Beloved Game
+        </h2>
+        <p class="text-center mt-4 font-light text-base">
+          We proudly present the SupplyChainSandbox edition of Quadblockquiz -
+          a reimagined take on tetrominoes where playful spatial negotiations are infused with
+          real-life Trivia challenges from the world of supply chain security.
+        </p>
+        <div class="mt-8 bg-red-900">
+          <img
+            src={Routes.static_path(@conn, "/images/Supply_Chain_Sandbox_logo_dark_draft.png")}
+            alt="supply chain Logo"
+            class="h-72 w-full"
+          />
+        </div>
+      </div>
+      <div class="text-center px-4 space-y-4">
+        <h2 class="font-normal text-4xl">Why Play?</h2>
+        <p class="font-light text-lg">
+          Whether you're attending RSAC because you "sell security" or "buy security," you can't afford
+          to pass on this love child of tetrominoes and Trivia. More than abstract configurations of digital blocks,
+          our tetrominoes spin-off envisions the classic arcade game as a potent metaphor for supply chain cyber security.
+          You can choose to let the blocks fall as they may and scramble to cope with the accumulated consequences at a later point in time, or you can utilize savvy forecasting and informational superiority to address each element as it appears on the horizon.
+        </p>
+        <p class="font-light text-lg">
+          As recent events have shown, you are only as protected as the weakest link in your supply chain.
+          Guarding your organization’s information in a digitally-connected world
+          means understanding not only your organization’s immediate supply chain,
+          but also the security of the extended ecosystem and all entities involved.
+          Besides the obvious enterprise advantage of robust supply chain security knowledge,
+          the tidbits offered up here will reappear as in-game trivia challenges.
+        </p>
+      </div>
+      <div class="text-center px-4 space-y-4">
+        <h2 class="font-normal text-4xl">Power Up!</h2>
+        <p class="font-light text-lg">
+          You don't need to be a supply chain expert - this game assumes you are a novice
+          and it teaches you what you need to know. You gain points by clearing rows as in a typical tetrominoes game.
+          Here's the twist - you can answer quiz questions about supply chain both to gain points and to gain powerups.
+        </p>
+        <p class="font-light text-lg">
+          Powerups help with classic tetrominoes strategy but also are needed to combat:
+        </p>
+        <ul class="font-light text-lg">
+          <li>
+            vulnerabilities (unfortunate gaps in an otherwise functioning security paradigm)
+          </li>
+          <li>licensing issues (extraneous blocks that gunk up the works)</li>
+          <li>
+            cyber attacks(rapid changes in operating conditions that take over entire sections of the gameboard and speed the game up uncontrollably)
+          </li>
+          <li>
+            licensing lawsuits (tiresome procedures that gum up entire sections of the game board and slow the game to a snail's pace)
+          </li>
+        </ul>
+        <p class="font-light text-lg">
+          Just like in real life, information powerups can prevent attacks and address emerging vulnerabilities as the operational environment speeds up and slows down around us.Play the game and find out!
+        </p>
+      </div>
+      <div class="mx-auto space-y-4">
+        <%= if @current_user  do %>
+          <.display_name_and_avatar current_user={@current_user} />
+          <%= link("Play Game",
+            to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris),
+            class:
+              "font-normal text-white bg-blue-500 flex items-center justify-center w-24 h-9 text-base"
+          ) %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="mx-auto max-w-5xl bg-gray-100 items-center justify-center flex h-24">
+    <h1 class="font-semibold text-lg">Game not available until RSAC starts</h1>
+  </div>
+<% end %>

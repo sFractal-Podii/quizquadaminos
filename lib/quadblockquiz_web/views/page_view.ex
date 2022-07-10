@@ -4,7 +4,7 @@ defmodule QuadblockquizWeb.PageView do
 
   @button "bg-blue-700 font-normal text-white text-sm w-60 h-9 flex items-center justify-center"
 
-  def render("sbom.html", _params) do
+  def render("sbom.html", assigns) do
     files =
       :quadblockquiz
       |> Application.app_dir("/priv/static/.well-known/sbom")
@@ -15,12 +15,12 @@ defmodule QuadblockquizWeb.PageView do
         Map.put(acc, filter, filter_files(files, filter))
       end)
 
-    ~E"""
-    <p>SBOMs for this site are available in several formats and serializations. </p>
+    ~H"""
+    <p>SBOMs for this site are available in several formats and serializations.</p>
     <%= for {k, v} <- sbom_files do %>
-      <ol> <%= k %> </ol>
+      <ol><%= k %></ol>
       <%= for file <- v do %>
-          <li> <%= link file,  to: ["sbom/",file] %> </li>
+        <li><%= link(file, to: ["sbom/", file]) %></li>
       <% end %>
     <% end %>
     """
@@ -31,14 +31,18 @@ defmodule QuadblockquizWeb.PageView do
     files |> Enum.filter(fn file -> Regex.match?(regex, file) end)
   end
 
-  def display_name_and_avatar("anonymous" = _current_user), do: ""
+  def display_name_and_avatar(%{current_user: %{name: "anonymous"}} = assigns) do
+    ~H"""
+    Anonymous
+    """
+  end
 
-  def display_name_and_avatar(current_user) do
-    ~E"""
-     <h2>Welcome, <%= current_user.name %>!</h2>
-     <div>
-       <img src="<%= current_user.avatar %>"class="h-44 w-44"/>
-     </div>
+  def display_name_and_avatar(assigns) do
+    ~H"""
+    <h2>Welcome, <%= @current_user.name %>!</h2>
+    <div>
+      <img src={@current_user.avatar} class="h-44 w-44" />
+    </div>
     """
   end
 
