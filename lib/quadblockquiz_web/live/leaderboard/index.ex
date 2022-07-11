@@ -23,6 +23,7 @@ defmodule QuadblockquizWeb.LeaderboardLive do
               <div class="md:cursor-pointer text-left table-cell md:p-4" phx-click="sort" phx-value-param="score">Score</div>
               <div class="md:cursor-pointer text-left table-cell md:p-4" phx-click="sort" phx-value-param="dropped_bricks">Bricks</div>
               <div class="md:cursor-pointer text-left table-cell md:p-4" phx-click="sort" phx-value-param="correctly_answered_qna">Questions</div>
+             <div class=" text-lef table-cell md:p-4">Powerups(used|available)</div>
               <div class=" text-lef table-cell md:p-4">Start time</div>
               <div class="table-cell text-left md:p-4">End time</div>
               <div class="table-cell text-left  md:p-4">Date</div>
@@ -36,6 +37,7 @@ defmodule QuadblockquizWeb.LeaderboardLive do
             <div class="table-cell <%= cell_style() %> "><%= record.score %></div>
             <div class="table-cell <%= cell_style() %>  "><%= record.dropped_bricks %></div>
             <div class="table-cell <%= cell_style() %>  "><%= record.correctly_answered_qna %></div>
+            <div class="table-cell <%= cell_style() %>  "><%= record.powerups %></div>
             <div class="table-cell <%= cell_style() %>  "><%= Util.datetime_to_time(record.start_time) %></div>
             <div class="table-cell <%= cell_style() %>  "><%= Util.datetime_to_time(record.end_time) %></div>
             <div class="table-cell <%= cell_style() %>  "><%= Util.datetime_to_date(record.start_time) %></div>
