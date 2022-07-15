@@ -1,8 +1,8 @@
 defmodule QuadblockquizWeb.PrivacyLive do
-  use Phoenix.LiveView
+  use QuadblockquizWeb, :live_view
 
   def render(assigns) do
-    ~L"""
+    ~H"""
             <h1 class="heading-1 text-center mt-6">Privacy Policy</h1>
             <p class="font-bold text-center">Version 1.0.0 (last updated 6-May-2021)</p>
 
