@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "Quadblockquiz: ", suffix: " · SupplyChain Edition" %>
-    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/assets/app_tailwind.css") %>"/>
-    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/app_tailwind.js") %>"></script>
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app_tailwind.css")} />
+    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app_tailwind.js")}></script>
   </head>
   <body>
     <header>
@@ -15,12 +15,12 @@
           <div class="flex flex-row">
               <div class="basis-1/2">
                 <a>
-                  <img class="object-contain h-32" src="<%= Routes.static_path(@conn, "/images/quad-block-logo.png") %>" alt="game Logo" />
+                  <img class="object-contain h-32" src={Routes.static_path(@conn, "/images/quad-block-logo.png")} alt="game Logo" />
                 </a>
               </div>
               <div class="basis-1/2">
                 <a href="https://supplychainsandbox.org/">
-                  <img class="object-scale-down h-32" src="<%= Routes.static_path(@conn, "/images/scs-logo.png") %>" alt="supplychainsandbox Logo" />
+                  <img class="object-scale-down h-32" src={Routes.static_path(@conn, "/images/scs-logo.png")} alt="supplychainsandbox Logo" />
                 </a>
               </div>
           </div>
