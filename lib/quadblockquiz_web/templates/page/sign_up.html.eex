@@ -1,8 +1,0 @@
-<div class="md:hidden grid space-y-8 items-center justify-center">
-  <img src="<%= Routes.static_path(@conn, "/images/sign_up_logo.png") %>" alt="cyber-attack Logo" class="h-60 w-60 block"/>   
-  <div class="grid">
-    <%= if !@current_user do %>
-      <%= hide_or_show_sign_up_button() %>
-    <% end %>
-  </div>
-</div>
