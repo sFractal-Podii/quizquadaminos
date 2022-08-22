@@ -32,6 +32,12 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
 config :quadblockquiz,
   base_questions_directory: Path.dirname(__DIR__)
 
+config :sbom,
+  cyclone_cli: "0.24.0",
+  cyclone_npm: "3.10.4",
+  cd: Path.expand("../assets", __DIR__),
+  bom_location: Path.expand("../priv/static/.well-known/sbom", __DIR__)
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
