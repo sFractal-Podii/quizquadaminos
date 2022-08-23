@@ -38,7 +38,7 @@ defmodule QuadblockquizWeb.Router do
   scope "/", QuadblockquizWeb do
     pipe_through [:browser]
 
-    get "/", PageController, :index
+    # get "/", PageController, :index
     get "/sbom", PageController, :redirect_to_well_known
     get "/.well-known/sbom", PageController, :sbom
 
@@ -68,17 +68,20 @@ defmodule QuadblockquizWeb.Router do
     pipe_through [:browser, :tailwind_layout]
 
     get "/how-to-play", PageController, :how_to_play
+    get "/read_more", PageController, :read_more
+    get "/sign_up", PageController, :sign_up
     live "/contest_rules", ContestRules
     live "/leaderboard", LeaderboardLive
     live "/contests", ContestsLive, :index
     live "/contest-prizes", ContestPrizes
+    get "/", PageController, :index
 
     pipe_through :authorize
     live "/courses", CourseLive
   end
 
   scope "/admin", QuadblockquizWeb, as: :admin do
-    pipe_through [:browser, :authorize_admin]
+    pipe_through [:browser, :authorize_admin, :tailwind_layout]
 
     live "/", AdminLive
     live "/contests", ContestsLive, :index

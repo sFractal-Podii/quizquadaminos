@@ -15,6 +15,7 @@ defmodule Quadblockquiz.GameBoard do
     field :dropped_bricks, :integer
     field :bottom_blocks, :map
     field :correctly_answered_qna, :integer
+    field :powerups, :string
     belongs_to :contest, Quadblockquiz.Contests.Contest
   end
 
@@ -28,6 +29,7 @@ defmodule Quadblockquiz.GameBoard do
       :score,
       :bottom_blocks,
       :dropped_bricks,
+      :powerups,
       :correctly_answered_qna
     ])
   end
@@ -58,6 +60,11 @@ defmodule Quadblockquiz.GameBoard do
     from r in query,
       order_by: [desc: ^(sorter |> String.to_atom())],
       order_by: [asc: r.end_time - r.start_time]
+  end
+
+  def by_start_and_end_time(start_time, nil) do
+    from r in __MODULE__,
+      where: r.start_time >= ^start_time
   end
 
   def by_start_and_end_time(start_time, end_time) do

@@ -4,42 +4,77 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
   alias Quadblockquiz.Contests
 
   def render(assigns) do
-    ~L"""
-    <h1>Contestboard</h1>
-      <table>
-      <tr>
-      <th>Player</th>
-      <th class="pointer" phx-click="sort" phx-value-param="score" phx-target="<%= @myself %>">Score</th>
-      <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks" phx-target="<%= @myself %>">Bricks</th>
-      <th class="pointer" phx-click="sort" phx-value-param="correctly_answered_qna" phx-target="<%= @myself %>">Questions</th>
-      <th>Start time</th>
-      <th>End time</th>
-      </tr>
+    ~H"""
+    <div>
+      <h1>Contestboard for <%= @contest.name %></h1>
+      <%= if @contest_records == []  do %>
+        <h2>No records for this contest</h2>
+        <%= live_patch("Back to contest listing",
+          class: "button button-outline",
+          to: Routes.contests_path(@socket, :index)
+        ) %>
+      <% else %>
+        <table>
+          <tr>
+            <th>Player</th>
+            <th class="pointer" phx-click="sort" phx-value-param="score" phx-target={@myself}>
+              Score
+            </th>
+            <th class="pointer" phx-click="sort" phx-value-param="dropped_bricks" phx-target={@myself}>
+              Bricks
+            </th>
+            <th
+              class="pointer"
+              phx-click="sort"
+              phx-value-param="correctly_answered_qna"
+              phx-target={@myself}
+            >
+              Questions
+            </th>
+            <th>Start time</th>
+            <th>End time</th>
+          </tr>
 
-      <%= for record <- @contest_records do %>
-       <tr>
-      <td><%= user_name(record) %></td>
-      <td><%= record.score %></td>
-      <td><%= record.dropped_bricks %></td>
-      <td><%= record.correctly_answered_qna %></td>
-      <td><%= truncate_date(record.start_time) %></td>
-      <td><%= truncate_date(record.end_time) %></td>
-
-      </tr>
+          <%= for record <- @contest_records do %>
+            <tr>
+              <td>
+                <%= unless record.end_time do %>
+                  <svg height="10" width="10">
+                    <circle cx="5" cy="5" r="5" fill="green" /> Playing
+                  </svg>
+                <% end %>
+                <%= user_name(record) %>
+              </td>
+              <td align="right"><%= record.score %></td>
+              <td align="center"><%= record.dropped_bricks %></td>
+              <td align="center"><%= record.correctly_answered_qna %></td>
+              <td><%= truncate_date(record.start_time) %></td>
+              <td><%= truncate_date(record.end_time) %></td>
+            </tr>
+          <% end %>
+        </table>
+        <%= unless active_contest?(@contest.name) do %>
+          <%= for i <- (@page - 5)..(@page + 5), i >0 do %>
+            <%= live_patch(i,
+              class: "button button-outline",
+              to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)
+            ) %>
+          <% end %>
+        <% end %>
       <% end %>
-      </table>
-      <%= unless active_contest?(@contest.name) do %>
-      <%= for i <- (@page - 5)..(@page + 5), i >0 do %>
-      <%= live_patch i, class: "button button-outline", to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)%>
-       <% end %>
-       <% end %>
+      <!-- end else for checking records -->
+    </div>
     """
   end
 
   def update(assigns, socket) do
     records =
       if active_contest?(assigns.contest.name) do
-        assigns.contest_records
+        (assigns.contest_records ++ Contests.contest_game_records(assigns.contest))
+        |> Enum.sort_by(& &1.score, :desc)
+        |> Enum.uniq_by(fn %{score: score, uid: uid, dropped_bricks: bricks} ->
+          %{score: score, uid: uid, dropped_bricks: bricks}
+        end)
       else
         Contests.contest_game_records(assigns.contest, assigns.page, assigns.sort_by)
       end

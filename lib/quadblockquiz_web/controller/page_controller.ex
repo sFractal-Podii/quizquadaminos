@@ -2,8 +2,9 @@ defmodule QuadblockquizWeb.PageController do
   @moduledoc """
   Static page controller
   """
-
   use QuadblockquizWeb, :controller
+  import Phoenix.LiveView.Controller
+
   alias Quadblockquiz.Accounts
   alias Quadblockquiz.GameBoard.Records
 
@@ -26,7 +27,7 @@ defmodule QuadblockquizWeb.PageController do
   end
 
   def sbom(conn, _params) do
-    render(conn, "sbom.html")
+    live_render(conn, QuadblockquizWeb.SbomLive)
   end
 
   defp current_user(nil), do: nil

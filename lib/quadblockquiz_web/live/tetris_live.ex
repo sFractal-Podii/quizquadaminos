@@ -11,6 +11,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     Hints,
     Points,
     QnA,
+    Scoring,
     Speed,
     Tetris,
     Threshold
@@ -21,6 +22,9 @@ defmodule QuadblockquizWeb.TetrisLive do
   @debug false
   @box_width 20
   @box_height 20
+  # total gaming time in seconds
+  @game_time 900
+  @qna_penalty 20
 
   def mount(_param, %{"uid" => user_id}, socket) do
     :timer.send_interval(50, self(), :tick)
@@ -34,85 +38,90 @@ defmodule QuadblockquizWeb.TetrisLive do
        active_contests: Contests.active_contests(),
        contest_id: nil,
        choosing_contest: false,
-       has_email?: Accounts.has_email?(current_user)
+       has_email?: Accounts.has_email?(current_user),
+       request_pin?: false,
+       time_elapsed: 0,
+       remaining_time: Quadblockquiz.Util.to_human_time(@game_time)
      )
      |> init_game
      |> start_game()}
   end
 
   def render(%{state: :starting} = assigns) do
-    ~L"""
-      <div class ="container">
-        <div class="row">
-            <div class="column column-50 column-offset-25">
-              <h1>Welcome to QuadBlockQuiz!</h1>
-              <%= if @has_email? do %>
-              <%= join_contest(assigns) %>
-              <% else %>
-              <%= ask_for_email(assigns) %>
-              <% end %>
-            </div>
+    ~H"""
+    <div class="container">
+      <div class="row">
+        <div class="column column-50 column-offset-25">
+          <h1>Welcome to QuadBlockQuiz!</h1>
+          <%= if @has_email? do %>
+            <%= join_contest(assigns) %>
+          <% else %>
+            <%= ask_for_email(assigns) %>
+          <% end %>
         </div>
       </div>
+    </div>
     """
   end
 
   def render(%{state: :game_over} = assigns) do
-    ~L"""
+    ~H"""
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Bankruptcy!</h1>
-            <h2>Your score: <%= @score %></h2>
-            <p>You are bankrupt
+          <h1>Game Over!</h1>
+          <h2>Your score: <%= @score %></h2>
+          <p>You are no longer in business.
+            Maybe you are bankrupt
             due to a cyberattack,
             or due to a lawsuit,
             or maybe because you let your supply chain get to long.
             Or maybe you were too busy answering cybersecurity questions
             and not paying attention to business.
-            Or maybe you just hit quit :-).
-            </p>
-            <hr>
-            <%= raw SvgBoard.svg_head() %>
-            <%= for row <- [Map.values(@bottom)] do %>
-              <%= for {x, y, color} <- row do %>
+            Or maybe you just hit quit :-).</p>
+          <hr />
+          <%= raw(SvgBoard.svg_head()) %>
+          <%= for row <- [Map.values(@bottom)] do %>
+            <%= for {x, y, color} <- row do %>
               <svg>
-               <%= raw SvgBoard.box({x, y}, color)%>
-               </svg>
-                <% end %>
+                <%= raw(SvgBoard.box({x, y}, color)) %>
+              </svg>
             <% end %>
-            <%= raw SvgBoard.svg_foot() %>
-            <hr>
-            <%= live_redirect "Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button" %>
-              </div>
+          <% end %>
+          <%= raw(SvgBoard.svg_foot()) %>
+          <hr />
+          <%= live_redirect("Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button") %>
+        </div>
         <div class="column column-25 column-offset-25">
-        <p><%= @brick_count %> QuadBlocks dropped</p>
-        <p><%= @row_count %> rows cleard</p>
-        <p><%= @correct_answers %> questions answered correctly</p>
-        <p>Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %></p>
+          <p><%= @brick_count %> QuadBlocks dropped</p>
+          <p><%= @row_count %> rows cleard</p>
+          <p><%= @correct_answers %> questions answered correctly</p>
+          <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
         </div>
       </div>
     </div>
-     <%= debug(assigns) %>
-
+    <%= debug(assigns) %>
     """
   end
 
   def render(assigns) do
-    ~L"""
-      <div class="container" id="gamearea" phx-hook="DisableArrow">
+    ~H"""
+      <div class="container" id="gamearea" phx-hook="DisableArrow" phx-no-format>
         <div class="row">
           <div class="column column-75">
               <div class="row">
                 <div class="column column-25 column-offset-25">
                     <h1><%= @score %></h1>
-                    <h2>Score</h2>
-                    <hr><p>Speed: <%= Speed.speed_name(@speed) %></p>
-                    <p><%= @brick_count %> QuadBlocks</p>
-                    <p><%= @row_count %> Rows</p>
-                    <p><%= @correct_answers %> Answers</p>
-                    <p>Tech Debt: <%= @tech_vuln_debt + @tech_lic_debt %></p>
-                    <hr>
+                    <h3>Score Board</h3>
+                    <p>Speed: <%= Speed.speed_name(@speed) %>
+                    <br><%= @brick_count %> QuadBlocks
+                    <br><%= @row_count %> Rows
+                    <br><%= @correct_answers %> Answers
+                    <br>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %>
+                     <br>Powerups:<%= @used_powers_count %>|<%= @available_powers_count %>
+
+                    <% {_,_, m, s} = @remaining_time %>
+                    <br><%= m %> mins, <%= s %> sec </p>
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
@@ -125,18 +134,15 @@ defmodule QuadblockquizWeb.TetrisLive do
                     <%= raw SvgBoard.svg_head() %>
                     <%= for x1 <- 1..10, y1 <- 1..20 do %>
                     <% {x, y} = SvgBoard.to_pixels( {x1, y1}, @box_width, @box_height ) %>
-                    <rect phx-click="add_block" phx-value-x=<%= x1 %> phx-value-y=<%= y1 %>
-                    x="<%= x + 1 %>" y="<%= y + 1 %>"
-                    class="position-block <%= if @adding_block and block_in_bottom?(@block_coordinates, @bottom), do: "hover-block" %>"
-                    width="<%= @box_width - 2 %>" height="<%= @box_height - 1 %>"/>
+                      <rect phx-click="add_block" phx-value-x={x1}  phx-value-y={y1} x={x + 1} y={y + 1} class={"position-block " <> if @adding_block and block_in_bottom?(@block_coordinates, @bottom), do: "hover-block", else: ""} width={@box_width - 2} height={@box_height - 1} />
                     <% end %>
 
                     <%= for row <- [@tetromino, Map.values(@bottom)] do %>
                       <%= for {x, y, color} <- row do %>
-                      <svg phx-click="transform_block" phx-value-x= <%= x %> phx-value-y=<%= y %> phx-value-color= <%= color %>>
+                      <svg phx-click="transform_block" phx-value-x={x} phx-value-y={y} phx-value-color={color} >
                        <%= raw SvgBoard.box({x, y}, color)%>
-                          <%= raw deleting_title({x, y}, @deleting_block, block_in_bottom?(x, y, @bottom)) %>
-                           <%= raw moving_title(@moving_block, block_in_bottom?(x, y, @bottom))  %>
+                      <%= raw deleting_title({x, y}, @deleting_block, block_in_bottom?(x, y, @bottom)) %>
+                      <%= raw moving_title(@moving_block, block_in_bottom?(x, y, @bottom))  %>
                        </svg>
                         <% end %>
                     <% end %>
@@ -152,40 +158,54 @@ defmodule QuadblockquizWeb.TetrisLive do
           <br/>
         </div>
     </div>
-    <%= debug(assigns) %>
     """
   end
 
   defp ask_for_email(assigns) do
-    ~L"""
+    ~H"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <%= live_component @socket,  QuadblockquizWeb.SharedLive.AskEmailComponent, id: 1, current_user: @current_user, redirect_to: @current_uri %>
+    <.live_component module={QuadblockquizWeb.SharedLive.AskEmailComponent} id={1} current_user={@current_user} redirect_to={@current_uri} />
     <% end %>
+    """
+  end
+
+  defp join_contest(%{request_pin?: true} = assigns) do
+    ~H"""
+    <.live_component module={QuadblockquizWeb.SharedLive.ValidatePinComponent} id={1} redirect_to={@current_uri} pin={@contest.pin} />
     """
   end
 
   defp join_contest(%{active_contests: []} = assigns) do
-    ~L"""
-    <button phx-click="start" phx-value-contest="" >Start</button>
+    ~H"""
+    <button phx-click="start" phx-value-contest="">Start</button>
     """
   end
 
   defp join_contest(assigns) do
-    ~L"""
+    ~H"""
+    <div>
     <%= if not @choosing_contest do %>
-       <button phx-click="choose_contest">Start</button>
+      <button phx-click="choose_contest">Start</button>
     <% else %>
-     <br />
-       <h2> Join a contest? </h2>
-       <p> Click on the contest below to join </p>
-       <%= for contest <- @active_contests do %>
-         <button phx-click="start" phx-value-contest="<%= contest.id %>" ><%= contest.name %></button>
-       <% end %>
-       <br />
-       <br />
-       <p> Not joining a contest? </p>
-       <button phx-click="start" phx-value-contest="" class="button button-outline">Yes, I am Just playing</button>
+      <br />
+      <h2>Join a contest?</h2>
+      <p>Click on the contest below to join</p>
+      <%= for contest <- @active_contests do %>
+        <button
+          phx-click={if contest.pin, do: "request_pin", else: "start"}
+          phx-value-contest={contest.id}
+        >
+          <%= contest.name %>
+        </button>
+      <% end %>
+      <br />
+      <br />
+      <p>Not joining a contest?</p>
+      <button phx-click="start" phx-value-contest="" class="button button-outline">
+        No contest, just playing
+      </button>
     <% end %>
+    </div>
     """
   end
 
@@ -256,6 +276,8 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> assign(tech_lic_debt: 0)
     |> assign(tech_vuln_debt: 65)
     |> assign(vuln_threshold: 143)
+    |> assign(available_powers_count: 0)
+    |> assign(used_powers_count: 0)
   end
 
   defp game_record(socket) do
@@ -293,7 +315,9 @@ defmodule QuadblockquizWeb.TetrisLive do
       dropped_bricks: socket.assigns.brick_count,
       bottom_blocks: bottom_block,
       contest_id: socket.assigns.contest_id,
-      correctly_answered_qna: socket.assigns.correct_answers
+      correctly_answered_qna: socket.assigns.correct_answers,
+      powerups:
+        "#{socket.assigns.used_powers_count}" <> "|" <> "#{socket.assigns.available_powers_count}"
     }
   end
 
@@ -306,7 +330,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     value |> Tuple.to_list() |> to_string()
   end
 
-  def drop(:playing, socket, fast) do
+  def drop(:playing, socket) do
     old_brick = socket.assigns.brick
 
     response =
@@ -316,8 +340,6 @@ defmodule QuadblockquizWeb.TetrisLive do
         SvgBoard.color(old_brick),
         socket.assigns.brick_count
       )
-
-    bonus = if fast, do: 2, else: 0
 
     ended_contest? =
       if is_nil(socket.assigns[:contest_id]),
@@ -336,7 +358,15 @@ defmodule QuadblockquizWeb.TetrisLive do
           else: socket.assigns.hint
         )
     )
-    |> assign(score: socket.assigns.score + response.score + bonus)
+    |> assign(
+      # new score is previous score plus
+      # score for each tick (faster = more points per tick)
+      # plus score for completing rows (bonus if more answers)
+      score:
+        socket.assigns.score +
+          Scoring.tick(socket.assigns.speed) +
+          Scoring.rows(response.row_count, socket.assigns.correct_answers)
+    )
     |> assign(
       state:
         if(response.game_over || ended_contest?,
@@ -349,7 +379,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> show
   end
 
-  def drop(_not_playing, socket, _fast), do: socket
+  def drop(_not_playing, socket), do: socket
 
   defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
     socket
@@ -409,6 +439,17 @@ defmodule QuadblockquizWeb.TetrisLive do
     {:noreply, socket |> assign(current_uri: uri, file_path: ["qna"]) |> init_categories()}
   end
 
+  def handle_event("request_pin", %{"contest" => id}, socket) do
+    id =
+      case Integer.parse(id) do
+        {id, _} -> id
+        :error -> nil
+      end
+
+    contest = if id, do: Contests.get_contest(id)
+    {:noreply, socket |> assign(request_pin?: true) |> assign(contest_id: id, contest: contest)}
+  end
+
   def handle_event("validate", %{"user" => params}, socket) do
     changeset =
       %Accounts.User{}
@@ -440,16 +481,12 @@ defmodule QuadblockquizWeb.TetrisLive do
      )}
   end
 
-  def handle_event("skip-question", _, socket) do
-    {:noreply, assign(socket, category: nil)}
-  end
-
   def handle_event("unpause", _, socket) do
     {:noreply, socket |> assign(state: :playing, modal: false)}
   end
 
   def handle_event("endgame", _, socket) do
-    {:noreply, socket |> assign(state: :game_over, modal: false) |> maybe_save_game_record()}
+    {:noreply, end_game(socket)}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -465,7 +502,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
-    {:noreply, drop(socket.assigns.state, socket, true)}
+    {:noreply, drop(socket.assigns.state, socket)}
   end
 
   def handle_event("keydown", %{"key" => " "}, socket) do
@@ -485,9 +522,18 @@ defmodule QuadblockquizWeb.TetrisLive do
         :error -> nil
       end
 
+    :timer.send_interval(1000, self(), :second)
+
     contest = if contest_id, do: Contests.get_contest(contest_id)
 
     {:noreply, socket |> new_game() |> assign(contest_id: contest_id, contest: contest)}
+  end
+
+  def handle_event("skip-question", _, socket) do
+    {:noreply,
+     socket
+     |> assign(category: nil)
+     |> process_debt(@qna_penalty, @qna_penalty)}
   end
 
   def handle_event("check_answer", %{"quiz" => %{"guess" => guess}}, socket) do
@@ -502,11 +548,11 @@ defmodule QuadblockquizWeb.TetrisLive do
         points = wrong_points(socket)
         score = socket.assigns.score - points
         score = if score < 0, do: 0, else: score
-        bottom_with_vuln = Bottom.add_vulnerability(socket.assigns.bottom)
-        assign(socket, score: score, bottom: bottom_with_vuln)
+        assign(socket, score: score)
       end
 
-    {:noreply, socket}
+    # add tech debt for each question (right, wrong, or skipped)
+    {:noreply, process_debt(socket, @qna_penalty, @qna_penalty)}
   end
 
   def handle_event("check_answer", _params, socket), do: {:noreply, socket}
@@ -525,7 +571,14 @@ defmodule QuadblockquizWeb.TetrisLive do
 
   def handle_event("powerup", %{"powerup" => "clearblocks"}, socket) do
     powers = socket.assigns.powers -- [:clearblocks]
-    {:noreply, socket |> assign(bottom: %{}, powers: powers)}
+
+    {:noreply,
+     socket
+     |> assign(
+       bottom: %{},
+       powers: powers,
+       used_powers_count: socket.assigns.used_powers_count + 1
+     )}
   end
 
   def handle_event("powerup", %{"powerup" => "speedup"}, socket) do
@@ -535,6 +588,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
@@ -547,6 +601,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
@@ -555,13 +610,29 @@ defmodule QuadblockquizWeb.TetrisLive do
   def handle_event("powerup", %{"powerup" => "fixvuln"}, socket) do
     ## more to do?
     powers = socket.assigns.powers -- [:fixvuln]
-    {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
+
+    {:noreply,
+     socket
+     |> assign(
+       modal: false,
+       powers: powers,
+       fix_vuln_or_license: true,
+       used_powers_count: socket.assigns.used_powers_count + 1
+     )}
   end
 
   def handle_event("powerup", %{"powerup" => "fixlicense"}, socket) do
     ## more to do?
     powers = socket.assigns.powers -- [:fixlicense]
-    {:noreply, socket |> assign(modal: false, powers: powers, fix_vuln_or_license: true)}
+
+    {:noreply,
+     socket
+     |> assign(
+       modal: false,
+       powers: powers,
+       fix_vuln_or_license: true,
+       used_powers_count: socket.assigns.used_powers_count + 1
+     )}
   end
 
   def handle_event("powerup", %{"powerup" => "rm_all_vulns"}, socket) do
@@ -570,6 +641,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
      |> assign(bottom: bottom)}
   end
@@ -580,6 +652,7 @@ defmodule QuadblockquizWeb.TetrisLive do
 
     {:noreply,
      socket
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
      |> assign(bottom: bottom)}
   end
@@ -593,7 +666,8 @@ defmodule QuadblockquizWeb.TetrisLive do
      |> assign(state: :paused)
      |> assign(super_modal: true)
      |> assign(modal: false)
-     |> assign(powers: powers)}
+     |> assign(powers: powers)
+     |> assign(used_powers_count: socket.assigns.used_powers_count + 1)}
   end
 
   def handle_event("powerup", _, socket) do
@@ -701,6 +775,19 @@ defmodule QuadblockquizWeb.TetrisLive do
     {:noreply, socket}
   end
 
+  def debug(assigns), do: debug(assigns, @debug, Mix.env())
+
+  def debug(assigns, true, :dev) do
+    ~H"""
+    <pre>
+    <%= raw(@tetromino |> inspect) %>
+    <%= raw(@bottom |> inspect) %>
+    </pre>
+    """
+  end
+
+  def debug(_assigns, _, _), do: ""
+
   defp super_helper(socket, power) do
     powers = socket.assigns.powers ++ [power]
 
@@ -735,11 +822,16 @@ defmodule QuadblockquizWeb.TetrisLive do
       assign(socket,
         bottom: bottom,
         powers: powers,
+        block_coordinates: nil,
         adding_block: false,
-        moving_block: false
+        moving_block: false,
+        used_powers_count: socket.assigns.used_powers_count + 1
       )
     else
-      assign(socket, moving_block: false, adding_block: false)
+      assign(socket,
+        moving_block: false,
+        adding_block: false
+      )
     end
   end
 
@@ -750,14 +842,28 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp delete_block(socket, x, y) do
     bottom = socket.assigns.bottom |> Map.delete(parse_to_integer(x, y))
     powers = socket.assigns.powers -- [:deleteblock]
-    socket |> assign(bottom: bottom, deleting_block: false, powers: powers)
+
+    socket
+    |> assign(
+      bottom: bottom,
+      deleting_block: false,
+      powers: powers,
+      used_powers_count: socket.assigns.used_powers_count + 1
+    )
   end
 
   defp add_block(socket, x, y, true = _adding_block) do
     {x, y} = parse_to_integer(x, y)
-    powers = socket.assigns.powers -- [:addblock]
     bottom = socket.assigns.bottom |> Map.merge(%{{x, y} => {x, y, :purple}})
-    socket |> assign(bottom: bottom, adding_block: false, powers: powers)
+    powers = socket.assigns.powers -- [:addblock]
+
+    socket
+    |> assign(
+      bottom: bottom,
+      adding_block: false,
+      powers: powers,
+      used_powers_count: socket.assigns.used_powers_count + 1
+    )
   end
 
   defp add_block(socket, _x, _y, false = _adding_block) do
@@ -777,6 +883,30 @@ defmodule QuadblockquizWeb.TetrisLive do
   def handle_info({:update_user, assigns}, socket) do
     {:noreply, assign(socket, assigns)}
   end
+
+  def handle_info({:update_pin_status, assigns}, socket) do
+    :timer.send_interval(1000, self(), :second)
+    {:noreply, socket |> new_game() |> assign(assigns)}
+  end
+
+  def handle_info(:second, %{assigns: %{state: state}} = socket)
+      when state in [:playing, :paused] do
+    elapsed_time = socket.assigns.time_elapsed + 1
+    remaining_time = Quadblockquiz.Util.to_human_time(@game_time - elapsed_time)
+
+    socket =
+      case remaining_time do
+        {0, 0, 0, 0} ->
+          end_game(socket)
+
+        _ ->
+          socket |> assign(:time_elapsed, elapsed_time) |> assign(:remaining_time, remaining_time)
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_info(:second, socket), do: {:noreply, socket}
 
   defp on_tick(:game_over, socket) do
     QuadblockquizWeb.Endpoint.broadcast(
@@ -851,12 +981,14 @@ defmodule QuadblockquizWeb.TetrisLive do
           speed: speed
         )
 
-      drop(socket.assigns.state, socket, false)
+      drop(socket.assigns.state, socket)
     end
   end
 
   defp on_tick(:paused, socket) do
-    socket |> cache_contest_game()
+    socket
+    |> cache_contest_game()
+    |> assign(available_powers_count: Enum.count(socket.assigns.powers))
   end
 
   defp on_tick(_state, socket) do
@@ -877,24 +1009,17 @@ defmodule QuadblockquizWeb.TetrisLive do
     points
   end
 
+  # right points is answer times multiplier
   defp right_points(socket) do
+    # points for right answer
     %{"Right" => points} = socket.assigns.qna.score
     {points, _} = Integer.parse(points)
-    points
+    # multiplier for # blocks
+    correct_answers = socket.assigns.correct_answers
+    mult = Scoring.question_block_multiplier(correct_answers)
+    # multiply points by multipler
+    points * mult
   end
-
-  def debug(assigns), do: debug(assigns, @debug, Mix.env())
-
-  def debug(assigns, true, :dev) do
-    ~L"""
-    <pre>
-    <%= raw( @tetromino |> inspect) %>
-    <%= raw( @bottom |> inspect) %>
-    </pre>
-    """
-  end
-
-  def debug(_assigns, _, _), do: ""
 
   defp init_categories(socket) do
     categories =
@@ -969,5 +1094,76 @@ defmodule QuadblockquizWeb.TetrisLive do
           do: assign(socket, contest: Contests.get_contest(contest.id)),
           else: socket
     end
+  end
+
+  defp end_game(socket) do
+    socket
+    |> assign(end_time: DateTime.utc_now())
+    |> cache_contest_game()
+    |> assign(state: :game_over, modal: false)
+    |> maybe_save_game_record()
+  end
+
+  defp process_debt(socket, vuln_inc, lic_inc) do
+    new_tech_vuln_debt = socket.assigns.tech_vuln_debt + vuln_inc
+    new_tech_lic_debt = socket.assigns.tech_lic_debt + lic_inc
+
+    socket
+    |> assign(tech_vuln_debt: new_tech_vuln_debt)
+    |> process_vuln_debt()
+    |> assign(tech_lic_debt: new_tech_lic_debt)
+    |> process_lic_debt()
+    |> process_impact()
+  end
+
+  defp process_vuln_debt(socket) do
+    debt = socket.assigns.tech_vuln_debt
+    threshold = socket.assigns.vuln_threshold
+    # if reach threshold, add vuln
+    if Threshold.reached_threshold?(debt, threshold) do
+      # add vuln and reset debt
+      bottom = Bottom.add_vulnerability(socket.assigns.bottom)
+      assign(socket, bottom: bottom, tech_vuln_debt: 0)
+    else
+      socket
+    end
+  end
+
+  defp process_lic_debt(socket) do
+    # if reach threshold, add lic error
+    debt = socket.assigns.tech_lic_debt
+    threshold = socket.assigns.lic_threshold
+
+    if Threshold.reached_threshold?(debt, threshold) do
+      # add vuln and reset debt
+      bottom = Bottom.add_license_issue(socket.assigns.bottom)
+      assign(socket, bottom: bottom, tech_lic_debt: 0)
+    else
+      socket
+    end
+  end
+
+  defp process_impact(socket) do
+    bottom_in = socket.assigns.bottom
+    attack_thres = socket.assigns.attack_threshold
+    lawsuit_thres = socket.assigns.lawsuit_threshold
+
+    # see if attack happening
+    under_attack? = Bottom.attacked?(bottom_in, attack_thres)
+
+    # see if lawsuit happening
+    being_sued? = Bottom.attacked?(bottom_in, lawsuit_thres)
+
+    # change board, score, speed if bad things
+    {bottom_out, speed, score} =
+      Threshold.bad_happen(
+        bottom_in,
+        socket.assigns.speed,
+        socket.assigns.score,
+        under_attack?,
+        being_sued?
+      )
+
+    assign(socket, bottom: bottom_out, speed: speed, score: score)
   end
 end

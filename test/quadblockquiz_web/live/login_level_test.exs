@@ -8,9 +8,9 @@ defmodule QuadblockquizWeb.LoginLevelTest do
 
   test "all sign up button is displayed when there is no login level selected", %{conn: conn} do
     conn = get(conn, "/")
-    assert conn.resp_body =~ "Sign in with GitHub"
+    assert conn.resp_body =~ "\n   GitHub\n"
     assert conn.resp_body =~ "Sign in anonymously"
-    assert conn.resp_body =~ "Sign in with Google"
+    assert conn.resp_body =~ "\n   Google\n"
   end
 
   describe "by_config when selected:" do
@@ -31,15 +31,17 @@ defmodule QuadblockquizWeb.LoginLevelTest do
 
     test "only github sign up button is displayed", %{conn: conn} do
       conn = get(conn, "/")
-      assert conn.resp_body =~ "Sign in with GitHub"
+      assert conn.resp_body =~ "Github Sign In"
       refute conn.resp_body =~ "Sign in anonymously"
-      refute conn.resp_body =~ "Sign in with Google"
+      refute conn.resp_body =~ "\n   Google\n"
     end
 
     test "if users logs in as player with github option they are displayed with a message to indicate game not available" do
       conn = Auth.login("github:player")
       conn = get(conn, "/")
-      assert conn.resp_body =~ "<h1>Game not available until RSAC starts</h1>"
+
+      assert conn.resp_body =~
+               "<h1 class=\"font-semibold text-lg\">Game not available until RSAC starts</h1>"
     end
 
     test "if users were logged in via other oauth option other than github, they are displayed with a message to indicate game not available",
@@ -49,14 +51,18 @@ defmodule QuadblockquizWeb.LoginLevelTest do
 
       conn = assign(conn, :current_user, "12345678")
       conn = get(conn, "/")
-      assert conn.resp_body =~ "<h1>Game not available until RSAC starts</h1>"
+
+      assert conn.resp_body =~
+               "<h1 class=\"font-semibold text-lg\">Game not available until RSAC starts</h1>"
     end
 
     test "if users were logged in anonymously, they are displayed with a message to indicate game not available",
          %{conn: conn} do
       conn = assign(conn, :current_user, "anonymous")
       conn = get(conn, "/")
-      assert conn.resp_body =~ "<h1>Game not available until RSAC starts</h1>"
+
+      assert conn.resp_body =~
+               "<h1 class=\"font-semibold text-lg\">Game not available until RSAC starts</h1>"
     end
   end
 
@@ -71,8 +77,8 @@ defmodule QuadblockquizWeb.LoginLevelTest do
 
     test "anonymous sign up button is hidden", %{conn: conn} do
       conn = get(conn, "/")
-      assert conn.resp_body =~ "Sign in with GitHub"
-      assert conn.resp_body =~ "Sign in with Google"
+      assert conn.resp_body =~ "\n   GitHub"
+      assert conn.resp_body =~ "\n   Google\n"
       refute conn.resp_body =~ "Sign in anonymously"
     end
 
@@ -92,7 +98,8 @@ defmodule QuadblockquizWeb.LoginLevelTest do
       conn = Auth.login("anonymously")
       conn = get(conn, "/")
 
-      assert conn.resp_body =~ "<h1>Game not available until RSAC starts</h1>"
+      assert conn.resp_body =~
+               "<h1 class=\"font-semibold text-lg\">Game not available until RSAC starts</h1>"
     end
   end
 
@@ -107,8 +114,8 @@ defmodule QuadblockquizWeb.LoginLevelTest do
 
     test "all sign up button is shown", %{conn: conn} do
       conn = get(conn, "/")
-      assert conn.resp_body =~ "Sign in with GitHub"
-      assert conn.resp_body =~ "Sign in with Google"
+      assert conn.resp_body =~ "\n   GitHub\n"
+      assert conn.resp_body =~ "\n   Google\n"
       assert conn.resp_body =~ "Sign in anonymously"
     end
 

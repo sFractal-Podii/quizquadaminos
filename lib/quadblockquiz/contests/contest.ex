@@ -23,6 +23,7 @@ defmodule Quadblockquiz.Contests.Contest do
     field :edit_contest_date, :boolean, virtual: true, default: false
     field :time_remaining, :integer, virtual: true, default: 0
     field :name, :string
+    field :pin, :string
     field :contest_date, :utc_datetime_usec
     field :rsvped?, :boolean, virtual: true, default: false
     has_many :game_records, Quadblockquiz.GameBoard
@@ -34,7 +35,8 @@ defmodule Quadblockquiz.Contests.Contest do
       :start_time,
       :end_time,
       :name,
-      :contest_date
+      :contest_date,
+      :pin
     ])
     |> validate_required([:name])
     |> validate_length(:name, min: 3)

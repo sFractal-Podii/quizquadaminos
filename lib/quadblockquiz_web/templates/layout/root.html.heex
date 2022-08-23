@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "Quadblockquiz: ", suffix: " · SupplyChain Edition" %>
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
+  </head>
+  <body>
+    <div id="content">
+    <header>
+      <section class="container">
+        <a href="https://www.bsideslv.org/" class="phx-logo">
+          <img src={Routes.static_path(@conn, "/images/Supply_Chain_Sandbox_logo_dark_draft.png")} alt="BsidesLV Logo" />
+        </a>
+        <a class="phx-logo">
+          <img src={Routes.static_path(@conn, "/images/quad-block-logo.png")} alt="game Logo" />
+        </a>
+        <h1>QuadBlockQuiz</h1>
+        <h3>Supply Chain Edition</h3>
+      </section>
+      <%= render(QuadblockquizWeb.LayoutView, "navbar.html", assigns) %>
+    </header>
+    <%= @inner_content %>
+    </div>
+  <footer>
+  <table>
+  <tr>
+    <td>
+      <a href="https://sfractal.com/" class="phx-logo">
+        <img src={Routes.static_path(@conn, "/images/sFractalConsulting.png")} alt="sFractal Logo" />
+      </a>
+    </td>
+    <td>
+      <a href="https://podiihq.com/" class="phx-logo">
+        <img src={Routes.static_path(@conn, "/images/podiilogo.png")} alt="Podii Logo" />
+      </a>
+    </td>
+    <td>
+      <a href="https://briarcutter.com/" class="phx-logo">
+        <img src={Routes.static_path(@conn, "/images/Briar Cutter Final PNG@2x.png")} alt="Briar Cutter Logo" />
+      </a>
+    </td>
+    <td>
+      <a href="https://grox.io/" class="phx-logo">
+        <img src={Routes.static_path(@conn, "/images/groxio.png")} alt="Grox.io Logo" />
+      </a>
+    </td>
+    <td>
+      <a href="https://google.com/" class="phx-logo">
+        <img src={Routes.static_path(@conn, "/images/google2.0.0.jpg")} alt="Google Logo" />
+      </a>
+    </td>
+</tr>
+</table>
+</footer>
+  </body>
+</html>
