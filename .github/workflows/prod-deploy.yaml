@@ -56,12 +56,12 @@ jobs:
         echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
         echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
         echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_REF_NAME" .
+        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_REF_NAME"
+        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}"
 
     - name: Deploy to Cloud Run
       id: deploy
@@ -70,4 +70,4 @@ jobs:
         service: quadquiz
         region: us-east4
         # NOTE: If using a pre-built image, update the image name here
-        image: "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_REF_NAME"
+        image: "gcr.io/duncan-openc2-plugfest/quadquiz:${{ github.ref_name }}"
