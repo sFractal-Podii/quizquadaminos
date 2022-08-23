@@ -5,7 +5,7 @@ defmodule Quadblockquiz.MixProject do
     [
       app: :quadblockquiz,
       description: "Descri'be",
-      version: "0.23.1",
+      version: "0.24.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -74,7 +74,11 @@ defmodule Quadblockquiz.MixProject do
       {:ueberauth_github, "~> 0.7"},
       {:ueberauth_linkedin, git: "https://github.com/fajarmf/ueberauth_linkedin"},
       {:ueberauth_google, "~>0.10"},
-      {:sbom, git: "https://github.com/sigu/sbom.git", only: :dev, branch: "auto-install-bom", runtime: false},
+      {:sbom,
+       git: "https://github.com/sigu/sbom.git",
+       only: :dev,
+       branch: "auto-install-bom",
+       runtime: false},
       {:earmark, "~> 1.4"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
