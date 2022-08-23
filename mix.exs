@@ -4,6 +4,7 @@ defmodule Quadblockquiz.MixProject do
   def project do
     [
       app: :quadblockquiz,
+      description: "Descri'be",
       version: "0.23.1",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -73,7 +74,7 @@ defmodule Quadblockquiz.MixProject do
       {:ueberauth_github, "~> 0.7"},
       {:ueberauth_linkedin, git: "https://github.com/fajarmf/ueberauth_linkedin"},
       {:ueberauth_google, "~>0.10"},
-      {:sbom, git: "https://github.com/sigu/sbom", runtime: false},
+      {:sbom, git: "https://github.com/sigu/sbom.git", only: :dev, branch: "auto-install-bom", runtime: false},
       {:earmark, "~> 1.4"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
@@ -95,7 +96,8 @@ defmodule Quadblockquiz.MixProject do
         "cmd --cd assets node build.js",
         "cmd --cd assets npm run deploy",
         "phx.digest"
-      ]
+      ],
+      sbom: ["sbom.install", "sbom.cyclonedx", "sbom.phx"]
     ]
   end
 end

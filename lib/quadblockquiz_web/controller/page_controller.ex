@@ -2,8 +2,9 @@ defmodule QuadblockquizWeb.PageController do
   @moduledoc """
   Static page controller
   """
-
   use QuadblockquizWeb, :controller
+  import Phoenix.LiveView.Controller
+
   alias Quadblockquiz.Accounts
   alias Quadblockquiz.GameBoard.Records
 
@@ -21,20 +22,12 @@ defmodule QuadblockquizWeb.PageController do
     render(conn, "how-to-play.html")
   end
 
-  def read_more(conn, _params) do
-    render(conn, "read_more.html")
-  end
-
-  def sign_up(conn, _params) do
-    render(conn, "sign_up.html")
-  end
-
   def redirect_to_well_known(conn, _params) do
     redirect(conn, to: "/.well-known/sbom")
   end
 
   def sbom(conn, _params) do
-    render(conn, "sbom.html")
+    live_render(conn, QuadblockquizWeb.SbomLive)
   end
 
   defp current_user(nil), do: nil

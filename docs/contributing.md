@@ -184,6 +184,27 @@ $ mix gen.answers courses # genratates only for the courses folder
 
 ```
 
+You can also run `make lint-questions` which generates answers for both `qna` and `courses` and also checks if the questions are correctly parsed.
+
+```shell
+$ make lint-questions
+mix gen.answers
+
+18:12:42.974 [info]  Generating answers for qna..
+
+18:12:42.988 [info]  Answers written to qna/answers.json
+
+18:12:42.988 [info]  Generating answers for courses..
+
+18:12:42.993 [info]  Answers written to courses/answers.json
+mix validate.questions
+
+18:12:43.589 [info]  Validating questions....
+
+18:12:43.749 [info]  All Files are valid!
+
+````
+
 #### Customising the answers
 
 Once the default answers have been generated, we can open the `answers.json` file and provide the correct answers. Note that the answers you provide will not be overridden by the next `mix gen.answers`
@@ -206,6 +227,7 @@ docker-image           builds docker image
 format                 Run formatting tools on the code
 lint-compile           check for warnings in functions used in the project
 lint-format            Check if the project is well formated using elixir formatter
+lint-questions         Check if the questions added are correctly parsed
 lint-unused            Check if there is unused functions
 lint                   Check if the project follows set conventions such as formatting
 push-and-serve-gcp     creates docker image then push to gcp and launches an instance with the image
