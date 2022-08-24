@@ -56,7 +56,7 @@ jobs:
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:preview-$GITHUB_SHA"
+        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
 
     - name: Deploy to Cloud Run
       id: deploy
@@ -64,4 +64,4 @@ jobs:
       with:
         service: quadquiz-preview
         region: us-east4
-        image: "gcr.io/duncan-openc2-plugfest/quadquiz:preview-$GITHUB_SHA"
+        image: "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
