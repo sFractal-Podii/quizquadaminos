@@ -35,8 +35,8 @@ jobs:
     - name: Set up Elixir
       uses: actions/setup-elixir@v1
       with:
-        elixir-version: '1.12.3' # Define the elixir version [required]
-        otp-version: '24' # Define the OTP version [required]
+        elixir-version: '1.13.4'
+        otp-version: '25'
         experimental-otp: true
     - name: Restore dependencies cache
       uses: actions/cache@v2
