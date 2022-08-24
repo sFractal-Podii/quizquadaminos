@@ -23,10 +23,9 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment:
-      name: staging
+      name: preview
       url: 'https://quadquiz-preview-q353uyxfhq-uk.a.run.app'
     env:
-      GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
       GCE_INSTANCE_ZONE: us-east4-c
 
     steps:
@@ -38,7 +37,6 @@ jobs:
       with:
         version: '290.0.1'
         service_account_key: ${{ secrets.GCE_SA_KEY }}
-        project_id: ${{ secrets.GCE_PROJECT }}
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
@@ -58,7 +56,7 @@ jobs:
       run: |-
         docker push "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
 
-    - name: Deploy to Cloud Run
+    - name: Deploy
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v0
       with:
