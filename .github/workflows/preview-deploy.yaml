@@ -61,4 +61,5 @@ jobs:
       with:
         service: quadquiz-preview
         region: us-east4
+        tag: "${{ github.ref_name }}"
         image: "gcr.io/duncan-openc2-plugfest/quadquiz:${{ github.sha }}"
