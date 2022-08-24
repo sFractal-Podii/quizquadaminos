@@ -20,7 +20,7 @@ config :logger, level: :info
 config :quadblockquiz, QuadblockquizWeb.Endpoint, server: true
 
 config :quadblockquiz,
-  base_questions_directory: "/home/app/prod/rel/quadblockquiz/"
+  base_questions_directory: "/home/app/rel/quadblockquiz/"
 
 # ## SSL Support
 #
