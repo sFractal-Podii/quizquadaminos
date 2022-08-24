@@ -16,8 +16,9 @@ name: Prod Deploy
 
 on:
   push:
-    branches:
-    - deploy-cloud-run
+    tags:
+    - 'v[0-9]+.[0-9]+.[0-9]+'
+    - '!v*-*'
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
@@ -28,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: prod
-      url: 'http://quadblockquiz.org/'
+      url: 'https://quadblockquiz.org/'
     env:
       GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
       GCE_INSTANCE_ZONE: us-east4-c
@@ -69,5 +70,4 @@ jobs:
       with:
         service: quadquiz
         region: us-east4
-        # NOTE: If using a pre-built image, update the image name here
         image: "gcr.io/duncan-openc2-plugfest/quadquiz:${{ github.ref_name }}"
