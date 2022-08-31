@@ -16,7 +16,7 @@ defmodule QuadblockquizWeb.ContestRules do
           <div class="contest-rule md:max-w-5xl md:mx-auto md:bg-white md:border md:rounded-lg md:border-gray-200 space-y-4 md:p-6 lg:p-12 md:text-base  text-sm font-normal">
             <p>
               These are the rules for the
-              RSAC Supply Chain Sandbox
+              AT&T Software Symposium Cybersecurity Workshop
               Quadblockquiz contest.
               Prizes are described at
               <a href= <%= Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes) %> >prizes</a>.
@@ -35,7 +35,8 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be
-              RSAC attendees. Prizes will be awarded at QBQ Finals (Thurs 2PM Pacific) and require being physically present in the RSAC Sandbox.
+              Workshop attendees.
+              Prizes will be awarded live at the Workshop.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be least 21 years of age or older to win prizes.
