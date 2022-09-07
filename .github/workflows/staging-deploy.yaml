@@ -17,55 +17,17 @@ name: Staging Deploy
 on:
   push:
     branches:
-    - develop
+    - test-reusable
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
 
 jobs:
   setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
-    runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: 'https://staging.quadblockquiz.org/'
-    env:
-      GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
-      GCE_INSTANCE_ZONE: us-east4-c
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    # Setup gcloud CLI
-    - uses: google-github-actions/setup-gcloud@v0
-      with:
-        version: '290.0.1'
-        service_account_key: ${{ secrets.GCE_SA_KEY }}
-        project_id: ${{ secrets.GCE_PROJECT }}
-
-    # Configure Docker to use the gcloud command-line tool as a credential
-    # helper for authentication
-    - run: |-
-        gcloud --quiet auth configure-docker
-
-    # Build the Docker image
-    - name: Build
-      run: |
-        echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
-        echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
-        echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:staging" .
-
-    # Push the Docker image to Google Container Registry
-    - name: Publish
-      run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:staging"
-
-    - name: Deploy to Cloud Run
-      id: deploy
-      uses: google-github-actions/deploy-cloudrun@v0
-      with:
-        service: quadquiz-staging
-        region: us-east4
-        image: "gcr.io/duncan-openc2-plugfest/quadquiz:staging"
+    uses: sigu/shared-actions/.github/workflows/actions.yml@main
+    with:
+      project_name: qbq
+    secrets:
+      gce_sa_key: ${{secrets.GCE_SA_KEY}}
+      project_id: ${{ secrets.PROJECT_ID }}
+      releases_secrets: ${{ secrets.RELEASES_SECRETS }}
