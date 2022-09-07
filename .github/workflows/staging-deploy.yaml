@@ -26,7 +26,8 @@ jobs:
   setup-build-publish-deploy:
     uses: sigu/shared-actions/.github/workflows/actions.yml@main
     with:
-      project_name: qbq
+      project_name: quadquiz
+      service_name: quadquiz
     secrets:
       gce_sa_key: ${{secrets.GCE_SA_KEY}}
       project_id: ${{ secrets.PROJECT_ID }}
