@@ -16,12 +16,12 @@ defmodule QuadblockquizWeb.ContestRules do
           <div class="contest-rule md:max-w-5xl md:mx-auto md:bg-white md:border md:rounded-lg md:border-gray-200 space-y-4 md:p-6 lg:p-12 md:text-base  text-sm font-normal">
             <p>
               These are the rules for the
-              RSAC Supply Chain Sandbox
+              AT&T Software Symposium Cybersecurity Workshop
               Quadblockquiz contest.
               Prizes are described at
               <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes)}>prizes</a>.
               This contests was organized by sFractal Consulting
-              to increase awarenessa and adoption of supply chain cybersecurity.
+              to increase awareness aand adoption of supply chain cybersecurity.
             </p>
             <p>
               By participating in a contest,
@@ -35,7 +35,16 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be
-              RSAC attendees. Prizes will be awarded at QBQ Finals (Thurs 2PM Pacific) and require being physically present in the RSAC Sandbox.
+              Workshop attendees.
+              Contestants must login to the game using the 'handle' option,
+              and must choose a handle that is unique and somehow includes
+              their attuid
+              (e.g. sfractal_ds6284, ds6284, ds6284_isnotveryoriginal).
+              The handle must be such that judges can figure our your attuid
+              to award you the prize.
+              Recall there may be a prize for originality, so be creative!
+              You may have more than one handle, but can only win one prize.
+              Prizes will be awarded live at the Workshop.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be least 21 years of age or older to win prizes.
