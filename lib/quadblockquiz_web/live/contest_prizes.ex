@@ -68,7 +68,9 @@ defmodule QuadblockquizWeb.ContestPrizes do
       AT&T Software Symposium Cybersecurity Workshop
       QuadBlockQuiz contests.
       See
-      <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules)}> Contest Rules </a> for more information on contest rules.
+      <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules)}>
+        Contest Rules
+      </a> for more information on contest rules.
     </p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-4 gap-4 place-items-center">
       <%= for price <- prices do %>
