@@ -23,63 +23,97 @@ defmodule QuadblockquizWeb.LeaderboardLive do
     <div class="md:grid md:items-center md:justify-center md:space-y-12">
       <div class="hidden md:block table w-full">
         <div class="table-caption heading-1">Leaderboard</div>
-          <div class=" md:table-header-group md:bg-sky-50 ">
-            <div class="table-row">
-              <div class="md:table-cell md:p-4">Player</div>
-              <div class="md:cursor-pointer text-left table-cell md:p-4" phx-click="sort" phx-value-param="score">Score</div>
-              <div class="md:cursor-pointer text-left table-cell md:p-4" phx-click="sort" phx-value-param="dropped_bricks">Bricks</div>
-              <div class="md:cursor-pointer text-left table-cell md:p-4" phx-click="sort" phx-value-param="correctly_answered_qna">Questions</div>
-             <div class=" text-lef table-cell md:p-4">Powerups(used|available)</div>
-              <div class=" text-lef table-cell md:p-4">Start time</div>
-              <div class="table-cell text-left md:p-4">End time</div>
-              <div class="table-cell text-left  md:p-4">Date</div>
-              <div class="table-cell text-left  md:p-4"></div>
-            </div>
-          </div>
-        <div class="md:table-row-group">
-        <%= for record <- @records do %>
+        <div class=" md:table-header-group md:bg-sky-50 ">
           <div class="table-row">
-            <div class={"table-cell #{cell_style()}"}><%= record.user.name %></div>
-            <div class={"table-cell #{cell_style()}"}><%= record.score %></div>
-            <div class={"table-cell #{cell_style()}"}><%= record.dropped_bricks %></div>
-            <div class={"table-cell #{cell_style()}"}><%= record.correctly_answered_qna %></div>
-            <div class={"table-cell #{cell_style()}"}><%= record.powerups %></div>
-            <div class={"table-cell #{cell_style()}"}><%= Util.datetime_to_time(record.start_time) %></div>
-            <div class={"table-cell #{cell_style()}"}><%= Util.datetime_to_time(record.end_time) %></div>
-            <div class={"table-cell #{cell_style()}"}><%= Util.datetime_to_date(record.start_time) %></div>
-            <div class={"table-cell #{cell_style()}"}><a href={Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive.Show, record)}><i class="fas fa-chevron-right"></i></a></div>
+            <div class="md:table-cell md:p-4">Player</div>
+            <div
+              class="md:cursor-pointer text-left table-cell md:p-4"
+              phx-click="sort"
+              phx-value-param="score"
+            >
+              Score
+            </div>
+            <div
+              class="md:cursor-pointer text-left table-cell md:p-4"
+              phx-click="sort"
+              phx-value-param="dropped_bricks"
+            >
+              Bricks
+            </div>
+            <div
+              class="md:cursor-pointer text-left table-cell md:p-4"
+              phx-click="sort"
+              phx-value-param="correctly_answered_qna"
+            >
+              Questions
+            </div>
+            <div class=" text-lef table-cell md:p-4">Powerups(used|available)</div>
+            <div class=" text-lef table-cell md:p-4">Start time</div>
+            <div class="table-cell text-left md:p-4">End time</div>
+            <div class="table-cell text-left  md:p-4">Date</div>
+            <div class="table-cell text-left  md:p-4"></div>
           </div>
+        </div>
+        <div class="md:table-row-group">
+          <%= for record <- @records do %>
+            <div class="table-row">
+              <div class={"table-cell #{cell_style()}"}><%= record.user.name %></div>
+              <div class={"table-cell #{cell_style()}"}><%= record.score %></div>
+              <div class={"table-cell #{cell_style()}"}><%= record.dropped_bricks %></div>
+              <div class={"table-cell #{cell_style()}"}><%= record.correctly_answered_qna %></div>
+              <div class={"table-cell #{cell_style()}"}><%= record.powerups %></div>
+              <div class={"table-cell #{cell_style()}"}>
+                <%= Util.datetime_to_time(record.start_time) %>
+              </div>
+              <div class={"table-cell #{cell_style()}"}>
+                <%= Util.datetime_to_time(record.end_time) %>
+              </div>
+              <div class={"table-cell #{cell_style()}"}>
+                <%= Util.datetime_to_date(record.start_time) %>
+              </div>
+              <div class={"table-cell #{cell_style()}"}>
+                <a href={Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive.Show, record)}>
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </div>
+            </div>
           <% end %>
         </div>
       </div>
 
-        <div class="md:hidden">
-          <div class="table-caption heading-1">Leaderboard</div>
-          <%= for record <- @records do %>
+      <div class="md:hidden">
+        <div class="table-caption heading-1">Leaderboard</div>
+        <%= for record <- @records do %>
           <div class="rounded-lg shadow">
             <ul class="list-decimal py-4 pl-4">
               <a href={Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive.Show, record)}>
-              <li class="inline-flex">
-                <%= user_avatar(record.user.avatar, assigns) %>
-                <div class="grid grid-cols-2 gap-x-44 pt-2 px-4">
-                  <div class="grid w-48">
-                    <p class="text-base font-sans tracking-wide"><%= record.user.name %></p>
-                    <p class="text-gray-400 text-sm"><%= time_taken(record.start_time, record.end_time)%></p>
+                <li class="inline-flex">
+                  <%= user_avatar(record.user.avatar, assigns) %>
+                  <div class="grid grid-cols-2 gap-x-44 pt-2 px-4">
+                    <div class="grid w-48">
+                      <p class="text-base font-sans tracking-wide"><%= record.user.name %></p>
+                      <p class="text-gray-400 text-sm">
+                        <%= time_taken(record.start_time, record.end_time) %>
+                      </p>
+                    </div>
+                    <p class="tracking-wide text-base font-sans font-bold"><%= record.score %></p>
                   </div>
-                  <p class="tracking-wide text-base font-sans font-bold"><%= record.score %></p>
-                </div>
-              </li>
+                </li>
               </a>
             </ul>
           </div>
-          <% end %>
-        </div>
+        <% end %>
+      </div>
 
       <div class="hidden md:flex md:items-center md:justify-center md:gap-x-2">
         <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
           <div class="md:border md:border-blue-600 md:p-2 md:rounded">
-            <%= live_patch i, class: "button button-outline",  to: Routes.live_path(@socket,__MODULE__,page: i, sort_by: @sort_by), id: "goto-#{i}" %>
-         </div>
+            <%= live_patch(i,
+              class: "button button-outline",
+              to: Routes.live_path(@socket, __MODULE__, page: i, sort_by: @sort_by),
+              id: "goto-#{i}"
+            ) %>
+          </div>
         <% end %>
       </div>
     </div>
@@ -100,13 +134,20 @@ defmodule QuadblockquizWeb.LeaderboardLive do
 
   defp user_avatar(nil, assigns) do
     ~H"""
-      <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src={Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg")} alt="user avatar" />
+    <img
+      class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center "
+      src={Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg")}
+      alt="user avatar"
+    />
     """
   end
 
   defp user_avatar(avatar, assigns) do
     ~H"""
-     <img class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center " src={avatar} />
+    <img
+      class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center "
+      src={avatar}
+    />
     """
   end
 

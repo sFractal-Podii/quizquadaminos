@@ -10,14 +10,20 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
   def render(assigns) do
     ~H"""
     <div>
-    <h3> What's your email address? </h3>
-    <.form let={f} for={@changeset} phx-change="validate" phx-submit="update_email" phx-target={@myself}>
-    <%= label f, :email %>
-    <%= text_input f, :email, type: :email %>
-    <%= error_tag f, :email %>
-    <%= text_input f, :uid, type: :hidden %>
-    <button> Update Email </button>
-    </.form>
+      <h3>What's your email address?</h3>
+      <.form
+        let={f}
+        for={@changeset}
+        phx-change="validate"
+        phx-submit="update_email"
+        phx-target={@myself}
+      >
+        <%= label(f, :email) %>
+        <%= text_input(f, :email, type: :email) %>
+        <%= error_tag(f, :email) %>
+        <%= text_input(f, :uid, type: :hidden) %>
+        <button>Update Email</button>
+      </.form>
     </div>
     """
   end

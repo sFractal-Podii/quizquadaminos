@@ -9,22 +9,24 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
   def render(assigns) do
     ~H"""
     <div class="container">
-    <div class="row">
-    <div class="column column-50">
-    <%= display_bottom(@record.bottom_blocks, assigns) %>
+      <div class="row">
+        <div class="column column-50">
+          <%= display_bottom(@record.bottom_blocks, assigns) %>
+        </div>
+        <div class="column column-50 column-offset-25">
+          <p><b>End game status for <%= @record.user.name %></b></p>
+          <ul>
+            <li><b>Score:</b><%= @record.score %></li>
+            <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
+            <li><b>Questions:</b><%= @record.correctly_answered_qna %></li>
+          </ul>
+          <%= live_patch("Back to Leaderboard",
+            class: "button",
+            to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive)
+          ) %>
+        </div>
+      </div>
     </div>
-    <div class="column column-50 column-offset-25">
-    <p><b>End game status for <%= @record.user.name %></b> </p>
-    <ul>
-    <li><b>Score:</b><%= @record.score  %></li>
-    <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
-    <li><b>Questions:</b><%= @record.correctly_answered_qna %></li>
-    </ul>
-    <%= live_patch "Back to Leaderboard", class: "button", to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive) %>
-    </div>
-    </div>
-    </div>
-
     """
   end
 
@@ -39,15 +41,15 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
 
   def display_bottom(bottom_blocks, assigns) do
     ~H"""
-    <%= raw SvgBoard.svg_head() %>
-      <%= for row <- [bottom_values(bottom_blocks)] do %>
-        <%= for {x, y, color} <- row do %>
-         <svg>
-          <%= raw SvgBoard.box({x, y}, color)%>
-            </svg>
-        <% end %>
+    <%= raw(SvgBoard.svg_head()) %>
+    <%= for row <- [bottom_values(bottom_blocks)] do %>
+      <%= for {x, y, color} <- row do %>
+        <svg>
+          <%= raw(SvgBoard.box({x, y}, color)) %>
+        </svg>
       <% end %>
-        <%= raw SvgBoard.svg_foot() %>
+    <% end %>
+    <%= raw(SvgBoard.svg_foot()) %>
     """
   end
 
