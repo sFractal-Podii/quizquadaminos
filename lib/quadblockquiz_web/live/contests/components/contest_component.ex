@@ -18,28 +18,28 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="md:table-row">
-        <div class="hidden md:table-cell md:p-4"><%= @contest.name %></div>
-          <%= if @current_user.admin? do %>
-          <div class="hidden md:table-cell md:p-4"><%= start_or_pause_button(assigns, @contest) %></div>
-          <div class="hidden md:table-cell md:p-4">
-            <button
-              class={
-                "#{maybe_disable_button(@contest)} #{if contest_running?(@contest), do: "red"} icon-button"
-              }
-              phx-click="stop"
-              phx-value-contest={@contest.name}
-              disabled={maybe_disable_button(@contest)}
-            >
-              <i class="fas fa-stop-circle fa-2x"></i>
-            </button>
-          </div>
-        <% end %>
-        <div class="hidden md:table-cell md:p-4"><%= timer_or_final_result(assigns, @contest) %></div>
-        <div class="hidden md:table-cell md:p-4"><%= contest_date(assigns, @contest) %></div>
-        <div class="hidden md:table-cell md:p-4"><%= truncate_date(@contest.start_time) %></div>
-        <div class="hidden md:table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
-        <div class="hidden md:table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
+    <div class="md:table-row">
+      <div class="hidden md:table-cell md:p-4"><%= @contest.name %></div>
+      <%= if @current_user.admin? do %>
+        <div class="hidden md:table-cell md:p-4"><%= start_or_pause_button(assigns, @contest) %></div>
+        <div class="hidden md:table-cell md:p-4">
+          <button
+            class={
+              "#{maybe_disable_button(@contest)} #{if contest_running?(@contest), do: "red"} icon-button"
+            }
+            phx-click="stop"
+            phx-value-contest={@contest.name}
+            disabled={maybe_disable_button(@contest)}
+          >
+            <i class="fas fa-stop-circle fa-2x"></i>
+          </button>
+        </div>
+      <% end %>
+      <div class="hidden md:table-cell md:p-4"><%= timer_or_final_result(assigns, @contest) %></div>
+      <div class="hidden md:table-cell md:p-4"><%= contest_date(assigns, @contest) %></div>
+      <div class="hidden md:table-cell md:p-4"><%= truncate_date(@contest.start_time) %></div>
+      <div class="hidden md:table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
+      <div class="hidden md:table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
       <div class="flex rounded-lg flex-row shadow md:hidden justify-center p-4 gap-x-12 border border-t-0 mb-4">
         <div class="flex flex-col space-y-2">
           <div class="heading-3 text-blue-500 text-lg font-normal tracking-wide">
@@ -106,12 +106,24 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   defp start_or_pause_button(assigns, contest) do
     ~H"""
-    <%= if contest.status == :running do%>
-
-    <button class= "{if contest.end_time, do: 'disabled' }  icon-button" phx-click="restart" phx-value-contest={contest.name} {if contest.end_time, do: [{'disabled', true}], else: [] } ><i class="fas fa-undo fa-2x"></i></button>
+    <%= if contest.status == :running do %>
+      <button
+        class="{if contest.end_time, do: 'disabled' }  icon-button"
+        phx-click="restart"
+        phx-value-contest={contest.name}
+        {if contest.end_time, do: [{'disabled', true}], else: [] }
+      >
+        <i class="fas fa-undo fa-2x"></i>
+      </button>
     <% else %>
-    <button class= "{if contest.end_time, do: 'disabled' }  icon-button" phx-click="start" phx-value-contest={contest.name} {if contest.end_time, do: [{'disabled', true}], else: [] } ><i class="fas fa-play-circle fa-2x"></i></button>
-
+      <button
+        class="{if contest.end_time, do: 'disabled' }  icon-button"
+        phx-click="start"
+        phx-value-contest={contest.name}
+        {if contest.end_time, do: [{'disabled', true}], else: [] }
+      >
+        <i class="fas fa-play-circle fa-2x"></i>
+      </button>
     <% end %>
     """
   end
@@ -129,17 +141,25 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   defp timer_or_final_result(assigns, %Contest{status: :running}) do
     ~H"""
     <% {hours, minutes, seconds} = @contest.time_elapsed |> to_human_time() %>
-    <p><%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(seconds) %></p>
+    <p>
+      <%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(
+        seconds
+      ) %>
+    </p>
     """
   end
 
   defp timer_or_final_result(assigns, %Contest{status: :future}) do
     ~H"""
     <%= if @time_remaining do %>
-    <% {days, hours, minutes, seconds} = @time_remaining |> Util.to_human_time() %>
-    <p><%= Util.count_display(days) %> days <%= Util.count_display(hours) %>h <%= Util.count_display(minutes) %>m <%= Util.count_display(seconds) %>s</p>
+      <% {days, hours, minutes, seconds} = @time_remaining |> Util.to_human_time() %>
+      <p>
+        <%= Util.count_display(days) %> days <%= Util.count_display(hours) %>h <%= Util.count_display(
+          minutes
+        ) %>m <%= Util.count_display(seconds) %>s
+      </p>
     <% else %>
-    <p> Date not yet set </p>
+      <p>Date not yet set</p>
     <% end %>
     """
   end
@@ -147,7 +167,9 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   defp timer_or_final_result(assigns, contest) do
     if contest.end_time do
       ~H"""
-      <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"><%= live_redirect "Final Results",  to: Routes.contests_path(@socket, :show, contest)%></button>
+      <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white">
+        <%= live_redirect("Final Results", to: Routes.contests_path(@socket, :show, contest)) %>
+      </button>
       """
     end
   end
@@ -157,23 +179,32 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
         %Contest{contest_date: nil} = contest
       ) do
     ~H"""
-    <button phx-click="add_contest_date" phx-value-contest={contest.name} phx-target={@myself}>Add</button>
+    <button phx-click="add_contest_date" phx-value-contest={contest.name} phx-target={@myself}>
+      Add
+    </button>
     """
   end
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: true} = assigns, _contest) do
     ~H"""
-      <.form let={_f} for={:count} phx-submit={:save_date} phx-target={@myself} >
-        <input type="datetime-local" id="contest_date" name="contest_date">
-        <button>Save</button>
-      </.form>
+    <.form let={_f} for={:count} phx-submit={:save_date} phx-target={@myself}>
+      <input type="datetime-local" id="contest_date" name="contest_date" />
+      <button>Save</button>
+    </.form>
     """
   end
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: false} = assigns, contest) do
     ~H"""
     <%= truncate_date(contest.contest_date) %>
-    <button class="button-clear" phx-click="edit_contest_date" phx-value-contest={contest.name} phx-target={@myself} ><i class="fas fa-edit fa-2x"></i></button>
+    <button
+      class="button-clear"
+      phx-click="edit_contest_date"
+      phx-value-contest={contest.name}
+      phx-target={@myself}
+    >
+      <i class="fas fa-edit fa-2x"></i>
+    </button>
     """
   end
 
@@ -185,14 +216,20 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
     ~H"""
-    <%= live_redirect "Live Results", class: "md:bg-blue-600 md:flex md:items-center md:justify-center md:rounded md:w-32 md:h-10 md:text-white",  to: Routes.contests_path(@socket, :show, contest)%>
+    <%= live_redirect("Live Results",
+      class:
+        "md:bg-blue-600 md:flex md:items-center md:justify-center md:rounded md:w-32 md:h-10 md:text-white",
+      to: Routes.contests_path(@socket, :show, contest)
+    ) %>
     """
   end
 
   defp rsvp_or_results_button(%{current_user: %User{uid: id}} = assigns, _contest)
        when id in [nil, "anonymous"] do
     ~H"""
-    <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white md:opacity-60 md:cursor-not-allowed">  RSVP </button>
+    <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white md:opacity-60 md:cursor-not-allowed">
+      RSVP
+    </button>
     """
   end
 
@@ -200,22 +237,37 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
          status: :future
        }) do
     ~H"""
-    <button phx-click="ask-for-email"> RSVP </button>
+    <button phx-click="ask-for-email">RSVP</button>
     """
   end
 
   defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
     ~H"""
     <%= if @rsvped? do %>
-      <button class="md:bg-red-600 md:p-2 md:rounded md:w-40  md:text-white" phx-click="cancel_rsvp" phx-target={@myself} phx-value-contest_id={contest.id}> CANCEL RSVP </button>
+      <button
+        class="md:bg-red-600 md:p-2 md:rounded md:w-40  md:text-white"
+        phx-click="cancel_rsvp"
+        phx-target={@myself}
+        phx-value-contest_id={contest.id}
+      >
+        CANCEL RSVP
+      </button>
     <% else %>
-      <button class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white" phx-click="rsvp" phx-target={@myself} phx-value-contest_id={contest.id} > RSVP </button>
+      <button
+        class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"
+        phx-click="rsvp"
+        phx-target={@myself}
+        phx-value-contest_id={contest.id}
+      >
+        RSVP
+      </button>
     <% end %>
     """
   end
 
   defp rsvp_or_results_button(assigns, %Contest{}) do
     ~H"""
+
     """
   end
 

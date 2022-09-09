@@ -27,26 +27,24 @@ defmodule QuadblockquizWeb.CourseLive do
   def render(%{live_action: :questions} = assigns) do
     ~H"""
     <div class="container">
-    <table>
-    <th>
-    <h1> Questions </h1>
-    </th>
+      <table>
+        <th>
+          <h1>Questions</h1>
+        </th>
 
-    <%= for content <- Courses.questions(@chapter,@course) do %>
-    <tr>
-    <td>
-      <%= raw(question(content)) %>
-      <%= for answer <- answers(content) do %>
-      <%= label do %>
-      <%= answer %>
-      <% end %>
-
-      <% end %>
-
-    </td>
-    </tr>
-      <% end %>
-    </table>
+        <%= for content <- Courses.questions(@chapter,@course) do %>
+          <tr>
+            <td>
+              <%= raw(question(content)) %>
+              <%= for answer <- answers(content) do %>
+                <%= label do %>
+                  <%= answer %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
     </div>
     """
   end
@@ -55,30 +53,33 @@ defmodule QuadblockquizWeb.CourseLive do
   def render(%{live_action: :show} = assigns) do
     ~H"""
     <div class="container">
-    <div class="row">
-      <div class="column column-25">
-        <%= for chapter <- Courses.chapter_list(assigns.course) do%>
-        <ul>
-        <%= live_redirect "start #{chapter}", to: Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter}) %>
-
-        </ul>
-        <% end %>
-      </div> <!-- column -->
-
-      <div class="column">
-      <%= for file <- @chapter_files do %>
-      <ul>
-       <a href="#" phx-click="go-to-question" phx-value-question={file} > <%= file %> </a> <br />
-       </ul>
-      <% end %>
-      </div> <!-- column -->
-
-      <div class="column column-75">
-      <%= raw @question %>
-      </div> <!-- column -->
-
-     </div> <!-- row -->
-     </div> <!-- container -->
+      <div class="row">
+        <div class="column column-25">
+          <%= for chapter <- Courses.chapter_list(assigns.course) do %>
+            <ul>
+              <%= live_redirect("start #{chapter}",
+                to: Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
+              ) %>
+            </ul>
+          <% end %>
+        </div>
+        <!-- column -->
+        <div class="column">
+          <%= for file <- @chapter_files do %>
+            <ul>
+              <a href="#" phx-click="go-to-question" phx-value-question={file}><%= file %></a> <br />
+            </ul>
+          <% end %>
+        </div>
+        <!-- column -->
+        <div class="column column-75">
+          <%= raw(@question) %>
+        </div>
+        <!-- column -->
+      </div>
+      <!-- row -->
+    </div>
+    <!-- container -->
     """
   end
 
@@ -86,36 +87,55 @@ defmodule QuadblockquizWeb.CourseLive do
   def render(assigns) do
     ~H"""
     <%= if @has_email? do %>
-    <h1 class="pt-10 text-5xl font-normal"> Courses </h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 md:pt-10 ">
-      <%= for course <- Courses.courses_list() do %>
-        <div class="pt-4 md:pt-0 shadow md:shadow-none flex flex-row md:flex-col border-t-0 md:border border-grey-200 rounded-xl">
-          <div class="pt-4 pb-0 md:pt-0">
-            <img class="rounded-lg h-20 w-64 md:w-full md:h-52" src={Routes.static_path(QuadblockquizWeb.Endpoint, "/images/Supply_Chain_Sandbox_logo_dark_draft.png")} alt="course chapter" />
-          </div>
-          <div class="p-2 md:p-4 md:space-y-4">
-            <div>
-              <h1 class="text-blue-600 text-sm font-bold md:text-black md:text-2xl md:font-normal"><%= course %></h1>
-              <p class="text-xs font-normal md:text-base md:font-light md:text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida ullamcorper mattis quis nec sed accumsan. Velit urna enim.
-              </p>
-              <p class="text-blue-600 underline float-right text-xs font-normal md:invisible"><%= live_patch "start course", to: Routes.course_path(@socket, :show , course) %></p>
+      <h1 class="pt-10 text-5xl font-normal">Courses</h1>
+      <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 md:pt-10 ">
+        <%= for course <- Courses.courses_list() do %>
+          <div class="pt-4 md:pt-0 shadow md:shadow-none flex flex-row md:flex-col border-t-0 md:border border-grey-200 rounded-xl">
+            <div class="pt-4 pb-0 md:pt-0">
+              <img
+                class="rounded-lg h-20 w-64 md:w-full md:h-52"
+                src={
+                  Routes.static_path(
+                    QuadblockquizWeb.Endpoint,
+                    "/images/Supply_Chain_Sandbox_logo_dark_draft.png"
+                  )
+                }
+                alt="course chapter"
+              />
             </div>
-            <div class="hidden md:flex md:justify-between">
+            <div class="p-2 md:p-4 md:space-y-4">
               <div>
-                <h2 class="text-xl font-normal  ">Mentor</h2>
-                <img class="rounded-full h-12 w-12 flex items-center justify-center " src={Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg")} alt="user avatar" />
+                <h1 class="text-blue-600 text-sm font-bold md:text-black md:text-2xl md:font-normal">
+                  <%= course %>
+                </h1>
+                <p class="text-xs font-normal md:text-base md:font-light md:text-gray-600">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida ullamcorper mattis quis nec sed accumsan. Velit urna enim.
+                </p>
+                <p class="text-blue-600 underline float-right text-xs font-normal md:invisible">
+                  <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                </p>
               </div>
-              <div class="pt-7">
-                <button class="rounded-sm bg-blue-600 text-white flex items-center justify-center text-base font-normal h-12 w-40"><%= live_patch "start course", to: Routes.course_path(@socket, :show , course) %></button>
+              <div class="hidden md:flex md:justify-between">
+                <div>
+                  <h2 class="text-xl font-normal  ">Mentor</h2>
+                  <img
+                    class="rounded-full h-12 w-12 flex items-center justify-center "
+                    src={Routes.static_path(QuadblockquizWeb.Endpoint, "/images/user-avatar.jpeg")}
+                    alt="user avatar"
+                  />
+                </div>
+                <div class="pt-7">
+                  <button class="rounded-sm bg-blue-600 text-white flex items-center justify-center text-base font-normal h-12 w-40">
+                    <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
     <% else %>
-      <div class ="container">
+      <div class="container">
         <div class="row">
           <div class="column column-50 column-offset-25">
             <%= ask_for_email(assigns) %>
@@ -123,7 +143,6 @@ defmodule QuadblockquizWeb.CourseLive do
         </div>
       </div>
     <% end %>
-
     """
   end
 
@@ -162,7 +181,12 @@ defmodule QuadblockquizWeb.CourseLive do
   defp ask_for_email(assigns) do
     ~H"""
     <%= unless @current_user == nil ||  @current_user.email do %>
-    <.live_component  module={QuadblockquizWeb.SharedLive.AskEmailComponent} id={2} current_user={@current_user} redirect_to={@current_uri} />
+      <.live_component
+        module={QuadblockquizWeb.SharedLive.AskEmailComponent}
+        id={2}
+        current_user={@current_user}
+        redirect_to={@current_uri}
+      />
     <% end %>
     """
   end

@@ -18,8 +18,9 @@ defmodule QuadblockquizWeb.ContestRules do
               These are the rules for the
               AT&T Software Symposium Cybersecurity Workshop
               Quadblockquiz contest.
-              Prizes are described at
-              <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes)}>prizes</a>.
+              Prizes are described at <a href={
+                Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestPrizes)
+              }>prizes</a>.
               This contests was organized by sFractal Consulting
               to increase awareness aand adoption of supply chain cybersecurity.
             </p>
@@ -63,10 +64,14 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <div class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               <ul class="list-disc pl-4">
-                <li> You can play with more than one handle - but one person can only win one prize!</li>
+                <li>
+                  You can play with more than one handle - but one person can only win one prize!
+                </li>
                 <li>The game should prompt you for your email when you first start to play.</li>
                 <li>Once assigned, that handle will stay connected to that email address.</li>
-                <li>If it didn't prompt you for your email, you might have chosen an existing handle (hopefully yours).</li>
+                <li>
+                  If it didn't prompt you for your email, you might have chosen an existing handle (hopefully yours).
+                </li>
               </ul>
             </div>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
@@ -101,27 +106,25 @@ defmodule QuadblockquizWeb.ContestRules do
                   Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
                 </li>
                 <li>
-                Finalists will be chosen from Celebrity, Sandbox, and Virtual contests. You must be present at Finals to be eligible for Finals.
+                  Finalists will be chosen from Celebrity, Sandbox, and Virtual contests. You must be present at Finals to be eligible for Finals.
                 </li>
                 <li>
-                Seat 1 at Finals goes to the winning points score (17,294) at the Celebrity Contest. Note she won overall last year and is the person to beat!
+                  Seat 1 at Finals goes to the winning points score (17,294) at the Celebrity Contest. Note she won overall last year and is the person to beat!
                 </li>
-                <li>Seat 2 at Finals is to winning Questions score (32) at the Celebrity Contest. This is the author whose book is one of the prizes - so he has to go for the cocktail party.
+                <li>
+                  Seat 2 at Finals is to winning Questions score (32) at the Celebrity Contest. This is the author whose book is one of the prizes - so he has to go for the cocktail party.
                 </li>
                 <li>Seat 3 at Finals will go to points-winner of the Sandbox
-                Contest
-                </li>
+                  Contest</li>
                 <li>Seat 4 at Finals will go to questions-winner of the Sandbox
-                Contest
-                </li>
+                  Contest</li>
                 <li>Seat 5 at Finals will go to bricks-winner of the Sandbox
-                Contest
-                </li>
+                  Contest</li>
                 <li>Seat 6 at Finals will go to points-winner of the Virtual
-                Contest
-                </li>
-                <li>If winner for a seat is not present, it goes
-                to next eligible person (eg next highest points) that is present. So show up! Even low scores might be elegible.
+                  Contest</li>
+                <li>
+                  If winner for a seat is not present, it goes
+                  to next eligible person (eg next highest points) that is present. So show up! Even low scores might be elegible.
                 </li>
                 <li>
                   The "most points" prize will be awarded to the eligible
@@ -156,8 +159,12 @@ defmodule QuadblockquizWeb.ContestRules do
             </div>
             <p>
               See our
-              <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive)}> Privacy </a>
-              policy and our <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive)}> Terms Of Service </a>.
+              <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.PrivacyLive)}>
+                Privacy
+              </a>
+              policy and our <a href={
+                Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.TermsOfServiceLive)
+              }> Terms Of Service </a>.
               The TL;DR version is
               we only use your handle on the
               Leaderboard and Contest Scoreboard, and your email
