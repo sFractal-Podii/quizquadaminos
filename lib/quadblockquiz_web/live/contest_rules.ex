@@ -38,16 +38,14 @@ defmodule QuadblockquizWeb.ContestRules do
               Contestants must be
               Workshop attendees.
               Contestants must login to the game using the 'handle' option,
-              and must choose a handle that is unique and somehow includes
-              their attuid
-              (e.g. sfractal_ds6284, ds6284, ds6284_isnotveryoriginal).
-              The handle must be such that judges can figure our your attuid
-              to award you the prize.
+              and must choose a handle that is unique and
+              DOES NOT include their attuid.
               Recall there may be a prize for originality, so be creative!
               You may have more than one handle, but can only win one prize.
               The email provided for your handle
               (you will be prompted for email first time a unique handle used)
               must be your att email to to be eligbile to win.
+              Your email address will kept private - only your handle will be shown.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be least 21 years of age or older to win prizes.
