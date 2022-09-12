@@ -45,7 +45,9 @@ defmodule QuadblockquizWeb.ContestRules do
               to award you the prize.
               Recall there may be a prize for originality, so be creative!
               You may have more than one handle, but can only win one prize.
-              Prizes will be awarded live at the Workshop.
+              The email provided for your handle
+              (you will be prompted for email first time a unique handle used)
+              must be your att email to to be eligbile to win.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants must be least 21 years of age or older to win prizes.
@@ -75,14 +77,15 @@ defmodule QuadblockquizWeb.ContestRules do
               </ul>
             </div>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Only valid emails are elibigle to win prizes.
+              Only valid att.com emails are elibigle to win prizes.
               The organizers must be able to
-              to communicate with contest organizer about reciving their prize.
+              to communicate with contest organizer about receiving their prize.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               The game must be played during eligle times.
-              An eligible games must start and end during times announced during the Sandbox.
               Make sure to finish your game cleanly so that you have seen the endgame screen with your score.
+              To be on the safe side, take a pic of your end score screen
+              in case there are issues with the game scoreboard.
             </p>
             <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               Contestants may submit more than one game,
@@ -96,9 +99,7 @@ defmodule QuadblockquizWeb.ContestRules do
               <p>
                 You must enter the contest to win!!!!
                 When you start to play each game, it will ask whether you want to be part of this contest.
-                You must enter the contest to be on the Contest Scoreboard. Note some contests (Celebrity, Sandbox,
-                Finals) require you to be in the Sandbox and will
-                require a pin. Virtual is open to all without a pin.
+                You must enter the contest to be on the Contest Scoreboard.
               </p>
               <ul class="list-disc pl-4">
                 <li>
@@ -106,40 +107,22 @@ defmodule QuadblockquizWeb.ContestRules do
                   Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
                 </li>
                 <li>
-                  Finalists will be chosen from Celebrity, Sandbox, and Virtual contests. You must be present at Finals to be eligible for Finals.
-                </li>
-                <li>
-                  Seat 1 at Finals goes to the winning points score (17,294) at the Celebrity Contest. Note she won overall last year and is the person to beat!
-                </li>
-                <li>
-                  Seat 2 at Finals is to winning Questions score (32) at the Celebrity Contest. This is the author whose book is one of the prizes - so he has to go for the cocktail party.
-                </li>
-                <li>Seat 3 at Finals will go to points-winner of the Sandbox
-                  Contest</li>
-                <li>Seat 4 at Finals will go to questions-winner of the Sandbox
-                  Contest</li>
-                <li>Seat 5 at Finals will go to bricks-winner of the Sandbox
-                  Contest</li>
-                <li>Seat 6 at Finals will go to points-winner of the Virtual
-                  Contest</li>
-                <li>
-                  If winner for a seat is not present, it goes
-                  to next eligible person (eg next highest points) that is present. So show up! Even low scores might be elegible.
-                </li>
-                <li>
-                  The "most points" prize will be awarded to the eligible
+                  The "most points" gold medal prize will be awarded to the eligible
                   contest contestant with the highest points,
                   who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
-                  The "most questions" prize will be awarded to the eligible
+                  The "most questions" gold medal prize will be awarded to the eligible
                   contest contestant who answered correctly the most trivia questions,
                   who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
-                  The "most bricks" prize will be awarded to the eligible
+                  The "most bricks" gold medal prize will be awarded to the eligible
                   contest contestant with the most number of bricks(quadblocks) in one game,
                   who will then be ineligible for the other Contest prizes.
+                </li>
+                <li>
+                  Similarly for silver, bronze medals for points/questions/bricks.
                 </li>
                 <li>
                   The "????" prize will be awarded to the eligible

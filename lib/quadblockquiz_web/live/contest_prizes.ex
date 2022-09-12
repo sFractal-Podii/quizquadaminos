@@ -8,9 +8,9 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "trophy",
         heading: "High Score",
         content: """
-        One lucky person will win a
+        Three lucky people will win a
         $25 MyRewards Gift Card.
-        The prize goes to ELIGIBLE person with
+        The gold medal prize goes to ELIGIBLE person with
         the highest score
         in a game during the live contest (see rules).
         """,
@@ -20,11 +20,11 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "th",
         heading: "Most Bricks",
         content: """
-        One lucky person will win a
+        Three lucky people will win a
         $25 MyRewards Gift Card.
-        The prize goes to ELIGIBLE person with
+        The gold medal prize goes to ELIGIBLE person with
         the most bricks
-        in a game during the live contest (see rules).
+        in a game during the live contest (see rules for details).
         """,
         price: "$25"
       },
@@ -32,9 +32,9 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "question",
         heading: "Most Questions",
         content: """
-        One lucky person will win a
+        Three lucky people will win a
         $25 MyRewards Gift Card.
-        The prize goes to ELIGIBLE person
+        The gold medal prize goes to ELIGIBLE person
         who answers the most quiz questions
         in a game during the live contest (see rules).
         """,
