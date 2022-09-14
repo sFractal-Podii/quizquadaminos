@@ -255,7 +255,6 @@ defmodule Quadblockquiz.Contests do
     |> Repo.all()
   end
 
-
   @doc """
   creates a new RSVP on the database
   """

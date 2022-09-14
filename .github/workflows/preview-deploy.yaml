@@ -12,13 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Staging Deploy
+name: Preview Environment Deploy
 
-on:
-  push:
-    branches:
-    - develop
-
+on: [workflow_dispatch]
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
 
@@ -27,11 +23,8 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment:
-      name: staging
-      url: 'https://staging.quadblockquiz.org/'
-    env:
-      GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
-      GCE_INSTANCE_ZONE: us-east4-c
+      name: preview
+      url: 'https://${{ github.ref_name }}---quadquiz-preview-q353uyxfhq-uk.a.run.app'
 
     steps:
     - name: Checkout
@@ -42,7 +35,7 @@ jobs:
       with:
         version: '290.0.1'
         service_account_key: ${{ secrets.GCE_SA_KEY }}
-        project_id: ${{ secrets.GCE_PROJECT }}
+        project_id: ${{ secrets.PROJECT_ID }}
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
@@ -55,17 +48,18 @@ jobs:
         echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
         echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
         echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:staging" .
+        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:staging"
+        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:$GITHUB_SHA"
 
-    - name: Deploy to Cloud Run
+    - name: Deploy
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v0
       with:
-        service: quadquiz-staging
+        service: quadquiz-preview
         region: us-east4
-        image: "gcr.io/duncan-openc2-plugfest/quadquiz:staging"
+        tag: "${{ github.ref_name }}"
+        image: "gcr.io/duncan-openc2-plugfest/quadquiz:${{ github.sha }}"

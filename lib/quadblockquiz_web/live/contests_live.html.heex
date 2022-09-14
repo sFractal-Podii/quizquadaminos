@@ -1,69 +1,101 @@
 <div class="grid items-center justify-center md:space-y-12">
-    <%= if @live_action == :show do %>
-        <.live_component module={QuadblockquizWeb.ContestFinalResultComponent} id={"final_result"} contest_records={@contest_records} contest={@contest} page={@page} sort_by={@sort_by}/>
-    <% else %>
+  <%= if @live_action == :show do %>
+    <.live_component
+      module={QuadblockquizWeb.ContestFinalResultComponent}
+      id="final_result"
+      contest_records={@contest_records}
+      contest={@contest}
+      page={@page}
+      sort_by={@sort_by}
+    />
+  <% else %>
     <div class="heading-1">Contests</div>
     <div class="container max-width: 768px">
-      <%= if @current_user.admin? do  %>
+      <%= if @current_user.admin? do %>
         <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
-        <div class="md:flex items-center">
+          <div class="md:flex items-center">
             <div class="md:px-5 mt-2 md:mt-0">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">
-              Contest
-            </label>
-              <%= text_input f, :name, placeholder: "contest-name" %>
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="name"
+              >
+                Contest
+              </label>
+              <%= text_input(f, :name, placeholder: "contest-name") %>
             </div>
             <div class="md:px-5 mt-2 md:mt-0">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="pin">
-              Pin
-            </label>
-              <%= text_input f, :pin, placeholder: "contest-pin" %>
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="pin"
+              >
+                Pin
+              </label>
+              <%= text_input(f, :pin, placeholder: "contest-pin") %>
             </div>
             <div phx-update="ignore" id="contest_date" class="md:px-5 mt-2 md:mt-0">
-             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="contest_contest_date">
-              Date
-            </label>
-              <%= datetime_local_input f, :contest_date, class: "w-full" %>
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="contest_contest_date"
+              >
+                Date
+              </label>
+              <%= datetime_local_input(f, :contest_date, class: "w-full") %>
             </div>
             <div class="mt-2 md:mt-6">
-              <%= submit "Create", class: "btn" %>
+              <%= submit("Create", class: "btn") %>
             </div>
-          </div> <!--closes row-->
+          </div>
+          <!--closes row-->
         </.form>
-      <%end%>
-    </div>
-  <%=  if @modal do %>
-    <%= live_modal @socket, QuadblockquizWeb.SharedLive.AskEmailComponent, id: 1, return_to: @current_uri, redirect_to: @current_uri, current_user: @current_user %>
-  <% end %>
-  <div class="table">
-    <div class="hidden md:table-header-group md:bg-white md:text-base md:font-bold font-normal">
-      <div class="md:table-cell md:p-4"> Contest Name</div><!-- contest name -->
-      <%= if @current_user.admin? do %>
-        <div class="md:table-cell md:p-4"></div> <!--start pause button-->
-        <div class="md:table-cell md:p-4"></div><!-- STOP button-->
-      <% end %>
-      <div class="md:table-cell md:p-4"></div><!--count up timer-->
-      <div class="md:table-cell md:p-4">Date</div>
-      <div class="md:table-cell md:p-4">Start</div>
-      <div class="md:table-cell md:p-4">End</div>
-      <%= if admin?(@current_user) do %>
-        <div class="md:table-cell md:p-4">contest date</div>
       <% end %>
     </div>
-    <%= for {status, contests} <- @contests |> group_contest_by_status do %>
-      <div class="md:table-row pt-4">
-        <div class="md:table-cell md:p-4 md:bg-sky-50 font-normal text-base md:font-bold"><%= status(status)  %> Contests </div>
-        <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
-        <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
-        <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
-        <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
-        <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
-        <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
-      </div>
-      <%= for contest <- contests do %>
-        <.live_component module={QuadblockquizWeb.ContestsLive.ContestComponent} id={contest.id} current_user={@current_user}/>
-      <% end %>
+    <%= if @modal do %>
+      <%= live_modal(@socket, QuadblockquizWeb.SharedLive.AskEmailComponent,
+        id: 1,
+        return_to: @current_uri,
+        redirect_to: @current_uri,
+        current_user: @current_user
+      ) %>
     <% end %>
-  </div>
+    <div class="table">
+      <div class="hidden md:table-header-group md:bg-white md:text-base md:font-bold font-normal">
+        <div class="md:table-cell md:p-4">Contest Name</div>
+        <!-- contest name -->
+        <%= if @current_user.admin? do %>
+          <div class="md:table-cell md:p-4"></div>
+          <!--start pause button-->
+          <div class="md:table-cell md:p-4"></div>
+          <!-- STOP button-->
+        <% end %>
+        <div class="md:table-cell md:p-4"></div>
+        <!--count up timer-->
+        <div class="md:table-cell md:p-4">Date</div>
+        <div class="md:table-cell md:p-4">Start</div>
+        <div class="md:table-cell md:p-4">End</div>
+        <%= if admin?(@current_user) do %>
+          <div class="md:table-cell md:p-4">contest date</div>
+        <% end %>
+      </div>
+      <%= for {status, contests} <- @contests |> group_contest_by_status do %>
+        <div class="md:table-row pt-4">
+          <div class="md:table-cell md:p-4 md:bg-sky-50 font-normal text-base md:font-bold">
+            <%= status(status) %> Contests
+          </div>
+          <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
+          <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
+          <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
+          <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
+          <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
+          <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
+        </div>
+        <%= for contest <- contests do %>
+          <.live_component
+            module={QuadblockquizWeb.ContestsLive.ContestComponent}
+            id={contest.id}
+            current_user={@current_user}
+          />
+        <% end %>
+      <% end %>
+    </div>
   <% end %>
 </div>
