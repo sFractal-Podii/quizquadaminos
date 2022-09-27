@@ -270,9 +270,15 @@ This section is just some notes on how the software works.
 One simple way the game ends is because the user clicks the 'End Game' button
 when the game is paused (after hitting space bar while playing).
 How this occurs is as follows:
-- the user is on the .... and the 'End Game' button is displayed
-- the user clicks the 'End Game' button which invokes ...
-- fill in rest
+- the user is on the Quiz Modal and the 'End Game' button is displayed
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/quiz_modal_component.ex#L5
+- the user clicks the 'End Game' button which invokes the 'endgame' event
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L549
+- which calls end_game
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L1160
+- the socket state is set to :game_over (as opposed to :playing)
+- and the game over screen is rendered
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L67
 
 #### End of Game due to blockyard filling
 One way the game ends is when the stack of blocks reaches the top of blockyard.
@@ -297,4 +303,7 @@ How this occurs is as follows:
 #### End of Game due to running out of time
 Another way the game ends is when time runs out.
 How this occurs is as follows:
-- fill in
+- the max length of game time is set in TetrisLive at 15 min
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L26
+- Remaining time is calculated once per sec and if remaining time is zero,  endgame is called
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L961
