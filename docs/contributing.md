@@ -55,7 +55,7 @@ see [deployment](./deployment.md) for deployment options and how to deploy
 ## working with questions
 Quadblockquiz includes both playing quadblocks
 and answering questions
-to gain points and powerups. 
+to gain points and powerups.
 
 ### Adding questions
 
@@ -240,13 +240,13 @@ update-instance        updates image of a running instance
 
 ## Redesign of the project layout
 
-Currently the project is being redesigned using [tailwindcss framework](https://tailwindcss.com) which enables us to build complex responsive layouts. 
+Currently the project is being redesigned using [tailwindcss framework](https://tailwindcss.com) which enables us to build complex responsive layouts.
 
-At the moment the project is using both `phoenixcss` and `tailwindcss` framework. This was done, so that we couldn't affect the agile methodology adapted earlier and also not to affect the already existing pages layouts that are using phoenixcss framework. 
+At the moment the project is using both `phoenixcss` and `tailwindcss` framework. This was done, so that we couldn't affect the agile methodology adapted earlier and also not to affect the already existing pages layouts that are using phoenixcss framework.
 
 #### Steps to follow when redesigning a page using tailwindcss framework
 
-1. Use Prototype design layouts of the pages that are drawn on [figma](https://www.figma.com/file/vAUOkmrAHEo4Q2q1JtW9e1/quizquadaminos?node-id=156%3A2). 
+1. Use Prototype design layouts of the pages that are drawn on [figma](https://www.figma.com/file/vAUOkmrAHEo4Q2q1JtW9e1/quizquadaminos?node-id=156%3A2).
    Mobile design layout are available under `Android google pixel` and design layout for medium to large screens are available under `Web page` .
 
 2. Under `router.ex` add the path of the page you are redesigning inside the scope that is piped through tailwind_layout i.e
@@ -261,6 +261,40 @@ At the moment the project is using both `phoenixcss` and `tailwindcss` framework
     end
 
    ```
+## Design Notes
+This section is just some notes on how the software works.
 
+### End of Game
 
- 
+#### End of Game due to user ending
+One simple way the game ends is because the user clicks the 'End Game' button
+when the game is paused (after hitting space bar while playing).
+How this occurs is as follows:
+- the user is on the .... and the 'End Game' button is displayed
+- the user clicks the 'End Game' button which invokes ...
+- fill in rest
+
+#### End of Game due to blockyard filling
+One way the game ends is when the stack of blocks reaches the top of blockyard.
+How this occurs is as follows:
+- the clock tick causes the falling block to move down one row. TetrisLive.ontick(:playing)
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L1045 which calls TetrisLive.drop
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#394 which calls Tetris.drop
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L10 which calls Tetris.maybe_do_drop based on Bottom.collides?
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/bottom.ex#L10
+- the falling block 'collides' with existing blocks in the brickyard. The falling block is incorporated into the brickyard and a new block is created.
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L23. If the new block also collides (ie no room left), the game is over.
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L42 so Tetris.maybe_do_drop responds with game_over:true which Tetris.drop responds to TetrisLive.drop which puts it in response.game_over which TetrisLive.drop uses to set socket state to :game_over
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L433
+- the socket state is set to :game_over (as opposed to :playing)
+- on next tick the scores are broadcast
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L972
+- and on that same tick, the game is recorded in the db
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L344
+- and the game over screen is rendered
+   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L67
+
+#### End of Game due to running out of time
+Another way the game ends is when time runs out.
+How this occurs is as follows:
+- fill in
