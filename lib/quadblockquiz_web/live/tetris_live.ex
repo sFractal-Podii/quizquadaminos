@@ -69,8 +69,24 @@ defmodule QuadblockquizWeb.TetrisLive do
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Game Over!</h1>
+          <h1>Game Over! <%= @why_end %> </h1>
+          <%= case @why_end do %>
+
+            <% :you_quit -> %>
+              <h2>because you retired (hit "end game")</h2>
+
+            <% :timer_done -> %>
+              <h2>You are out of business because time expired</h2>
+
+            <% :supply_chain_too_long -> %>
+              <h2>You are out of business because your supply chain got too long ie the blockyard filled</h2>
+
+            <% _ -> %>
+              <h2>Oops. Not sure why it ended.</h2>
+
+          <% end %>
           <h2>Your score: <%= @score %></h2>
+
           <p>You are no longer in business.
             Maybe you are bankrupt
             due to a cyberattack,
@@ -339,6 +355,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> assign(vuln_threshold: 143)
     |> assign(available_powers_count: 0)
     |> assign(used_powers_count: 0)
+    |> assign(why_end: :unknown)
   end
 
   defp game_record(socket) do
@@ -441,6 +458,13 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def drop(_not_playing, socket), do: socket
+
+  # check_finished updates and returns socket if game is over,
+  defp check_finished(socket, true = _game_over), do
+     socket |> end_game(socket |> assign(why_end: :supply_chain_too_long))
+  end
+  # otherwise just leaves socket alone
+  defp check_finished(socket, false = _game_over), do: socket
 
   defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
     socket
@@ -547,7 +571,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    {:noreply, end_game(socket)}
+    {:noreply, end_game(socket |> assign(why_end: :you_quit))}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -958,10 +982,12 @@ defmodule QuadblockquizWeb.TetrisLive do
     socket =
       case remaining_time do
         {0, 0, 0, 0} ->
-          end_game(socket)
+          end_game(socket |> assign(why_end: :timer_done))
 
         _ ->
-          socket |> assign(:time_elapsed, elapsed_time) |> assign(:remaining_time, remaining_time)
+          socket
+            |> assign(:time_elapsed, elapsed_time)
+            |> assign(:remaining_time, remaining_time)
       end
 
     {:noreply, socket}
