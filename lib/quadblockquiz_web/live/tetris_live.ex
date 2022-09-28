@@ -138,9 +138,7 @@ defmodule QuadblockquizWeb.TetrisLive do
                     <br />TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %>
                      <br />Powerups:<%= @used_powers_count %>|<%= @available_powers_count %>
 
-                    <% {_,
-     _, m,
-     s} = @remaining_time %>
+                    <% {_, _, m, s} = @remaining_time %>
                     <br /><%= m %> mins, <%= s %> sec </p>
                 </div>
                 <div class="column column-50">
