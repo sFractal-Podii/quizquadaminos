@@ -1,5 +1,6 @@
 defmodule QuadblockquizWeb.TetrisLive do
   use QuadblockquizWeb, :live_view
+  require Logger
 
   alias Quadblockquiz.Accounts
   alias QuadblockquizWeb.SvgBoard
@@ -298,7 +299,9 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   defp new_game(socket) do
-    ## should qna be reset or carryover between games????
+    # log start of game including user
+    user = socket.assigns.current_user
+    Logger.notice("Starting Game: #{inspect user}")
     socket
     |> init_game
     |> new_block
