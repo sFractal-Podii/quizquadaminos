@@ -453,7 +453,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   def drop(_not_playing, socket), do: socket
 
   # check_finished updates and returns socket if game is over,
-  defp check_finished(socket, true = _game_over), do
+  defp check_finished(socket, true = _game_over) do
      socket
      |> assign(why_end: :supply_chain_too_long)
      |> end_game()
