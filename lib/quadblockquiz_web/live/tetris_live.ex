@@ -438,15 +438,9 @@ defmodule QuadblockquizWeb.TetrisLive do
           Scoring.tick(socket.assigns.speed) +
           Scoring.rows(response.row_count, socket.assigns.correct_answers)
     )
-    |> assign(
-      state:
-        if(response.game_over || ended_contest?,
-          do: :game_over,
-          else: :playing
-        )
-    )
     |> cache_contest_game()
-    |> maybe_save_game_record()
+    # check if either last block filled or if contest ended
+    |> check_finished(response.game_over || ended_contest?)
     |> show
   end
 
@@ -455,6 +449,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   # check_finished updates and returns socket if game is over,
   defp check_finished(socket, true = _game_over) do
      socket
+     |> assign(state: :game_over)
      |> assign(why_end: :supply_chain_too_long)
      |> end_game()
   end
