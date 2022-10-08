@@ -70,21 +70,18 @@ defmodule QuadblockquizWeb.TetrisLive do
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Game Over! <%= @why_end %> </h1>
+          <h1>Game Over! <%= @why_end %></h1>
           <%= case @why_end do %>
-
             <% :you_quit -> %>
               <h2>because you retired (hit "end game")</h2>
-
             <% :timer_done -> %>
               <h2>You are out of business because time expired</h2>
-
             <% :supply_chain_too_long -> %>
-              <h2>You are out of business because your supply chain got too long ie the blockyard filled</h2>
-
+              <h2>
+                You are out of business because your supply chain got too long ie the blockyard filled
+              </h2>
             <% _ -> %>
               <h2>Oops. Not sure why it ended.</h2>
-
           <% end %>
           <h2>Your score: <%= @score %></h2>
 
@@ -131,7 +128,9 @@ defmodule QuadblockquizWeb.TetrisLive do
                     <br />TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %>
                      <br />Powerups:<%= @used_powers_count %>|<%= @available_powers_count %>
 
-                    <% {_, _, m, s} = @remaining_time %>
+                    <% {_,
+     _, m,
+     s} = @remaining_time %>
                     <br /><%= m %> mins, <%= s %> sec </p>
                 </div>
                 <div class="column column-50">
@@ -293,7 +292,8 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp new_game(socket) do
     # log start of game including user
     user = socket.assigns.current_user
-    Logger.notice("Starting Game: #{inspect user}")
+    Logger.notice("Starting Game: #{inspect(user)}")
+
     socket
     |> init_game
     |> new_block
@@ -448,11 +448,12 @@ defmodule QuadblockquizWeb.TetrisLive do
 
   # check_finished updates and returns socket if game is over,
   defp check_finished(socket, true = _game_over) do
-     socket
-     |> assign(state: :game_over)
-     |> assign(why_end: :supply_chain_too_long)
-     |> end_game()
+    socket
+    |> assign(state: :game_over)
+    |> assign(why_end: :supply_chain_too_long)
+    |> end_game()
   end
+
   # otherwise just leaves socket alone
   defp check_finished(socket, false = _game_over), do: socket
 
@@ -973,13 +974,13 @@ defmodule QuadblockquizWeb.TetrisLive do
       case remaining_time do
         {0, 0, 0, 0} ->
           socket
-            |> assign(why_end: :timer_done)
-            |> end_game()
+          |> assign(why_end: :timer_done)
+          |> end_game()
 
         _ ->
           socket
-            |> assign(:time_elapsed, elapsed_time)
-            |> assign(:remaining_time, remaining_time)
+          |> assign(:time_elapsed, elapsed_time)
+          |> assign(:remaining_time, remaining_time)
       end
 
     {:noreply, socket}
@@ -1179,7 +1180,8 @@ defmodule QuadblockquizWeb.TetrisLive do
     # log end of game for a user for a reason
     user = socket.assigns.current_user
     reason = socket.assigns.why_end
-    Logger.notice("Ending Game of #{inspect user} for #{inspect reason}")
+    Logger.notice("Ending Game of #{inspect(user)} for #{inspect(reason)}")
+
     socket
     |> assign(end_time: DateTime.utc_now())
     |> cache_contest_game()
