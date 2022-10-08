@@ -88,14 +88,6 @@ defmodule QuadblockquizWeb.TetrisLive do
           <% end %>
           <h2>Your score: <%= @score %></h2>
 
-          <p>You are no longer in business.
-            Maybe you are bankrupt
-            due to a cyberattack,
-            or due to a lawsuit,
-            or maybe because you let your supply chain get to long.
-            Or maybe you were too busy answering cybersecurity questions
-            and not paying attention to business.
-            Or maybe you just hit quit :-).</p>
           <hr />
           <%= raw(SvgBoard.svg_head()) %>
           <%= for row <- [Map.values(@bottom)] do %>
@@ -462,7 +454,9 @@ defmodule QuadblockquizWeb.TetrisLive do
 
   # check_finished updates and returns socket if game is over,
   defp check_finished(socket, true = _game_over), do
-     socket |> end_game(socket |> assign(why_end: :supply_chain_too_long))
+     socket
+     |> assign(why_end: :supply_chain_too_long)
+     |> end_game()
   end
   # otherwise just leaves socket alone
   defp check_finished(socket, false = _game_over), do: socket
@@ -983,7 +977,9 @@ defmodule QuadblockquizWeb.TetrisLive do
     socket =
       case remaining_time do
         {0, 0, 0, 0} ->
-          end_game(socket |> assign(why_end: :timer_done))
+          socket
+            |> assign(why_end: :timer_done)
+            |> end_game()
 
         _ ->
           socket
@@ -1185,6 +1181,10 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   defp end_game(socket) do
+    # log end of game for a user for a reason
+    user = socket.assigns.current_user
+    reason = socket.assigns.why_end
+    Logger.notice("Ending Game of #{inspect user} for #{inspect reason}")
     socket
     |> assign(end_time: DateTime.utc_now())
     |> cache_contest_game()
