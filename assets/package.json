@@ -16,7 +16,7 @@
     "postcss": "^8.4.18",
     "postcss-cli": "^10.0.0",
     "postcss-import": "^15.0.0",
-    "tailwindcss": "^3.1.8",
+    "tailwindcss": "^3.2.4",
     "nanoid": ">=4.0.0",
     "minimist": "^1.2.6"
   },
