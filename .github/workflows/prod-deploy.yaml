@@ -14,11 +14,16 @@
 
 name: Prod Deploy      
 
+
 on:
   push:
-    tags:
-    - 'v[0-9]+.[0-9]+.[0-9]+'
-    - '!v*-*'
+    branches:
+    - fix_failing_ci
+# on:
+#   push:
+#     tags:
+#     - 'v[0-9]+.[0-9]+.[0-9]+'
+#     - '!v*-*'
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
@@ -42,7 +47,7 @@ jobs:
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0
       with:
-        version: '290.0.1'
+        version: '318.0.0'
         service_account_key: ${{ secrets.GCE_SA_KEY }}
         project_id: ${{ secrets.GCE_PROJECT }}
 
