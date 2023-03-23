@@ -1,5 +1,6 @@
 defmodule QuadblockquizWeb.TetrisLive do
   use QuadblockquizWeb, :live_view
+  require Logger
 
   alias Quadblockquiz.Accounts
   alias QuadblockquizWeb.SvgBoard
@@ -69,16 +70,21 @@ defmodule QuadblockquizWeb.TetrisLive do
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Game Over!</h1>
+          <h1>Game Over! <%= @why_end %></h1>
+          <%= case @why_end do %>
+            <% :you_quit -> %>
+              <h2>because you retired (hit "end game")</h2>
+            <% :timer_done -> %>
+              <h2>You are out of business because time expired</h2>
+            <% :supply_chain_too_long -> %>
+              <h2>
+                You are out of business because your supply chain got too long ie the blockyard filled
+              </h2>
+            <% _ -> %>
+              <h2>Oops. Not sure why it ended.</h2>
+          <% end %>
           <h2>Your score: <%= @score %></h2>
-          <p>You are no longer in business.
-            Maybe you are bankrupt
-            due to a cyberattack,
-            or due to a lawsuit,
-            or maybe because you let your supply chain get to long.
-            Or maybe you were too busy answering cybersecurity questions
-            and not paying attention to business.
-            Or maybe you just hit quit :-).</p>
+
           <hr />
           <%= raw(SvgBoard.svg_head()) %>
           <%= for row <- [Map.values(@bottom)] do %>
@@ -284,7 +290,10 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   defp new_game(socket) do
-    ## should qna be reset or carryover between games????
+    # log start of game including user
+    user = socket.assigns.current_user
+    Logger.notice("Starting Game: #{inspect(user)}")
+
     socket
     |> init_game
     |> new_block
@@ -339,6 +348,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> assign(vuln_threshold: 143)
     |> assign(available_powers_count: 0)
     |> assign(used_powers_count: 0)
+    |> assign(why_end: :unknown)
   end
 
   defp game_record(socket) do
@@ -428,19 +438,24 @@ defmodule QuadblockquizWeb.TetrisLive do
           Scoring.tick(socket.assigns.speed) +
           Scoring.rows(response.row_count, socket.assigns.correct_answers)
     )
-    |> assign(
-      state:
-        if(response.game_over || ended_contest?,
-          do: :game_over,
-          else: :playing
-        )
-    )
     |> cache_contest_game()
-    |> maybe_save_game_record()
+    # check if either last block filled or if contest ended
+    |> check_finished(response.game_over || ended_contest?)
     |> show
   end
 
   def drop(_not_playing, socket), do: socket
+
+  # check_finished updates and returns socket if game is over,
+  defp check_finished(socket, true = _game_over) do
+    socket
+    |> assign(state: :game_over)
+    |> assign(why_end: :supply_chain_too_long)
+    |> end_game()
+  end
+
+  # otherwise just leaves socket alone
+  defp check_finished(socket, false = _game_over), do: socket
 
   defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
     socket
@@ -547,7 +562,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    {:noreply, end_game(socket)}
+    {:noreply, end_game(socket |> assign(why_end: :you_quit))}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -958,10 +973,14 @@ defmodule QuadblockquizWeb.TetrisLive do
     socket =
       case remaining_time do
         {0, 0, 0, 0} ->
-          end_game(socket)
+          socket
+          |> assign(why_end: :timer_done)
+          |> end_game()
 
         _ ->
-          socket |> assign(:time_elapsed, elapsed_time) |> assign(:remaining_time, remaining_time)
+          socket
+          |> assign(:time_elapsed, elapsed_time)
+          |> assign(:remaining_time, remaining_time)
       end
 
     {:noreply, socket}
@@ -1158,6 +1177,11 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   defp end_game(socket) do
+    # log end of game for a user for a reason
+    user = socket.assigns.current_user
+    reason = socket.assigns.why_end
+    Logger.notice("Ending Game of #{inspect(user)} for #{inspect(reason)}")
+
     socket
     |> assign(end_time: DateTime.utc_now())
     |> cache_contest_game()

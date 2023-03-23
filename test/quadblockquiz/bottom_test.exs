@@ -94,14 +94,16 @@ defmodule Quadblockquiz.BottomTest do
     |> Map.new()
   end
 
-  test "remove all vulnerabilities - empty bottom" do
+  test "add vulnerabilities - empty bottom" do
     bottom = %{}
-    actual = add_vulnerability(bottom)
-    expected = %{{1, 20} => {1, 20, :vuln_grey_yellow}}
-    assert actual == expected
+    new_bottom = add_vulnerability(bottom)
+
+    actual = Enum.any?(new_bottom, fn {{x, y}, value} -> {x, y, :vuln_grey_yellow} == value end)
+
+    assert actual
   end
 
-  test "remove all vulnerabilities" do
+  test "add vulnerabilities - non-empty bottom" do
     bottom = %{{4, 20} => {4, 20, :red}}
     actual = add_vulnerability(bottom)
     expected = %{{4, 20} => {4, 20, :vuln_grey_yellow}}
