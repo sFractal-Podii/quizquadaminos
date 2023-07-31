@@ -45,6 +45,7 @@ COPY courses ./courses
 RUN npm ci --prefix ./assets
 
 # sbom library is only available in dev mode
+RUN MIX_ENV=dev mix deps.compile
 RUN MIX_ENV=dev mix sbom.phx
 
 RUN mix assets.deploy
