@@ -1,5 +1,5 @@
 # heavily borrowed from https://elixirforum.com/t/cannot-find-libtinfo-so-6-when-launching-elixir-app/24101/11?u=sigu
-FROM elixir:1.15.4-otp-25 AS app_builder
+FROM hexpm/elixir:1.15.4-erlang-26.0.2-debian-bullseye-20230612 AS app_builder
 
 ARG env=prod
 
@@ -10,6 +10,7 @@ ENV LANG=C.UTF-8 \
 RUN mkdir /opt/release
 WORKDIR /opt/release
 RUN mix local.hex --force && mix local.rebar --force
+RUN apt-get update && apt-get install curl git -y
 RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
 
@@ -27,7 +28,7 @@ RUN cp *bom* ./priv/static/.well-known/sbom/
 
 COPY mix.exs .
 COPY mix.lock .
-RUN mix deps.get && mix deps.compile
+RUN MIX_ENV=prod mix deps.get && mix deps.compile
 # Let's make sure we have node
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
