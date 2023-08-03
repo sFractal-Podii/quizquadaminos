@@ -28,7 +28,7 @@ RUN cp *bom* ./priv/static/.well-known/sbom/
 
 COPY mix.exs .
 COPY mix.lock .
-RUN MIX_ENV=prod mix deps.get && mix deps.compile
+RUN mix deps.get && mix deps.compile
 # Let's make sure we have node
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
@@ -45,9 +45,13 @@ COPY courses ./courses
 
 RUN npm ci --prefix ./assets
 
-# sbom library is only available in dev mode
 RUN MIX_ENV=dev mix deps.compile
-RUN MIX_ENV=dev mix sbom.phx
+RUN MIX_ENV=dev mix sbom.install
+RUN MIX_ENV=dev mix sbom.cyclonedx
+RUN MIX_ENV=dev mix sbom.convert
+
+
+RUN ls ./priv/static/.well-known/sbom/
 
 RUN mix assets.deploy
 RUN mix release
