@@ -51,8 +51,6 @@ RUN MIX_ENV=dev mix sbom.cyclonedx
 RUN MIX_ENV=dev mix sbom.convert
 
 
-RUN ls ./priv/static/.well-known/sbom/
-
 RUN mix assets.deploy
 RUN mix release
 
