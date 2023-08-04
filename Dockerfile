@@ -11,19 +11,9 @@ RUN mkdir /opt/release
 WORKDIR /opt/release
 RUN mix local.hex --force && mix local.rebar --force
 RUN apt-get update && apt-get install curl git -y
+RUN apt-get install -y libicu-dev
 RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
-
-RUN mkdir -p priv/static/.well-known/sbom
-
-# make sbom for the production docker image
-RUN syft debian:bullseye-slim -o spdx > debian.bullseye_slim-spdx-bom.spdx
-RUN syft debian:bullseye-slim -o spdx-json > debian.bullseye_slim-spdx-bom.json
-RUN syft debian:bullseye-slim -o cyclonedx-json > debian.bullseye_slim-cyclonedx-bom.json
-RUN syft debian:bullseye-slim -o cyclonedx > debian.bullseye_slim-cyclonedx-bom.xml
-
-
-RUN cp *bom* ./priv/static/.well-known/sbom/
 
 
 COPY mix.exs .
@@ -50,6 +40,16 @@ RUN MIX_ENV=dev mix sbom.install
 RUN MIX_ENV=dev mix sbom.cyclonedx
 RUN MIX_ENV=dev mix sbom.convert
 
+
+# make sbom for the production docker image
+RUN syft debian:bullseye-slim -o spdx > debian.bullseye_slim-spdx-bom.spdx
+RUN syft debian:bullseye-slim -o spdx-json > debian.bullseye_slim-spdx-bom.json
+RUN syft debian:bullseye-slim -o cyclonedx-json > debian.bullseye_slim-cyclonedx-bom.json
+RUN syft debian:bullseye-slim -o cyclonedx > debian.bullseye_slim-cyclonedx-bom.xml
+
+
+RUN cp *bom* ./priv/static/.well-known/sbom/
+RUN ls /opt/release/priv/static/.well-known/sbom/
 
 RUN mix assets.deploy
 RUN mix release
