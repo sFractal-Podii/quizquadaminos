@@ -5,7 +5,7 @@ defmodule Quadblockquiz.MixProject do
     [
       app: :quadblockquiz,
       description: "Descri'be",
-      version: "0.27.0",
+      version: "0.28.0",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
@@ -67,7 +67,6 @@ defmodule Quadblockquiz.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.22.3"},
-       {:ssl_verify_fun, "~> 1.1.7", manager: :rebar3, override: true},
       {:jason, "~> 1.4.1"},
       {:plug_cowboy, "~> 2.6.1"},
       {:oauth2, "~> 2.1.0", override: true},
