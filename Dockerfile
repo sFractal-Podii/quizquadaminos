@@ -1,5 +1,5 @@
 # heavily borrowed from https://elixirforum.com/t/cannot-find-libtinfo-so-6-when-launching-elixir-app/24101/11?u=sigu
-FROM elixir:1.13.4-otp-25 AS app_builder
+FROM hexpm/elixir:1.15.4-erlang-26.0.2-debian-bullseye-20230612 AS app_builder
 
 ARG env=prod
 
@@ -10,26 +10,17 @@ ENV LANG=C.UTF-8 \
 RUN mkdir /opt/release
 WORKDIR /opt/release
 RUN mix local.hex --force && mix local.rebar --force
+RUN apt-get update && apt-get install curl git -y
+RUN apt-get install -y libicu-dev
 RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
-
-RUN mkdir -p priv/static/.well-known/sbom
-
-# make sbom for the production docker image
-RUN syft debian:bullseye-slim -o spdx > debian.bullseye_slim-spdx-bom.spdx
-RUN syft debian:bullseye-slim -o spdx-json > debian.bullseye_slim-spdx-bom.json
-RUN syft debian:bullseye-slim -o cyclonedx-json > debian.bullseye_slim-cyclonedx-bom.json
-RUN syft debian:bullseye-slim -o cyclonedx > debian.bullseye_slim-cyclonedx-bom.xml
-
-
-RUN cp *bom* ./priv/static/.well-known/sbom/
 
 
 COPY mix.exs .
 COPY mix.lock .
 RUN mix deps.get && mix deps.compile
 # Let's make sure we have node
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
 
 COPY assets ./assets
@@ -44,8 +35,21 @@ COPY courses ./courses
 
 RUN npm ci --prefix ./assets
 
-# sbom library is only available in dev mode
-RUN MIX_ENV=dev mix sbom.phx
+RUN MIX_ENV=dev mix deps.compile
+RUN MIX_ENV=dev mix sbom.install
+RUN MIX_ENV=dev mix sbom.cyclonedx
+RUN MIX_ENV=dev mix sbom.convert
+
+
+# make sbom for the production docker image
+RUN syft debian:bullseye-slim -o spdx > debian.bullseye_slim-spdx-bom.spdx
+RUN syft debian:bullseye-slim -o spdx-json > debian.bullseye_slim-spdx-bom.json
+RUN syft debian:bullseye-slim -o cyclonedx-json > debian.bullseye_slim-cyclonedx-bom.json
+RUN syft debian:bullseye-slim -o cyclonedx > debian.bullseye_slim-cyclonedx-bom.xml
+
+
+RUN cp *bom* ./priv/static/.well-known/sbom/
+RUN ls /opt/release/priv/static/.well-known/sbom/
 
 RUN mix assets.deploy
 RUN mix release
