@@ -9,7 +9,8 @@ import Config
 
 config :logger,
   compile_time_purge_matching: [
-    [application: :plug_cowboy, level_lower_than: :error]
+    [application: [:plug_cowboy, :credo, :postgrex]],
+    [level_lower_than: :error]
   ]
 
 config :quadblockquiz,
