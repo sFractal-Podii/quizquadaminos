@@ -36,8 +36,7 @@ defmodule Quadblockquiz.Bottom do
       bottom
       |> remove_trouble_blocks()
       |> Map.keys()
-      |> Enum.filter(fn {_x, y} -> y == row end)
-      |> Enum.count()
+      |> Enum.count(fn {_x, y} -> y == row end)
 
     count == 10
   end
@@ -187,11 +186,10 @@ defmodule Quadblockquiz.Bottom do
     ## see if under attack
     vuln_count =
       bottom
-      |> Enum.filter(fn block ->
+      |> Enum.count(fn block ->
         {_key, {_x, _y, color}} = block
         color == :vuln_grey_yellow
       end)
-      |> Enum.count()
 
     ## return true if more vuln's than attack_threshold
     vuln_count >= attack_threshold
@@ -201,11 +199,10 @@ defmodule Quadblockquiz.Bottom do
     ## see if being sued (count license issues)
     li_count =
       bottom
-      |> Enum.filter(fn block ->
+      |> Enum.count(fn block ->
         {_key, {_x, _y, color}} = block
         color == :license_grey_brown
       end)
-      |> Enum.count()
 
     ## return true if more vuln's than attack_threshold
     li_count >= suit_threshold

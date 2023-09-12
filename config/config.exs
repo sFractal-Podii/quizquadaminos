@@ -7,6 +7,11 @@
 # General application configuration
 import Config
 
+config :logger,
+  compile_time_purge_matching: [
+    [application: :plug_cowboy, level_lower_than: :error]
+  ]
+
 config :quadblockquiz,
   ecto_repos: [Quadblockquiz.Repo]
 
@@ -54,8 +59,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: "",
-  client_secret: ""
+  client_id: "4a4208b91287caaa3c9f ",
+  client_secret: "6e08cf34364ec61fc44bdf5bee7e6eb891e6a959"
 
 config :quadblockquiz,
   # add github_id of authorized users
