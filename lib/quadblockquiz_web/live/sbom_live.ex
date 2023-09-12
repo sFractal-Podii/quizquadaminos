@@ -15,20 +15,6 @@ defmodule QuadblockquizWeb.SbomLive do
     """
   end
 
-  #   debian.bullseye_slim-cyclonedx-bom.json
-  # debian.bullseye_slim-cyclonedx-bom.xml
-  # debian.bullseye_slim-spdx-bom.json
-  # debian.bullseye_slim-spdx-bom.spdx
-  # quadblockquiz.0.24.0-cyclonedx-sbom.1.0.0.json
-  # quadblockquiz.0.24.0-cyclonedx-sbom.1.0.0.xml
-  # quadblockquiz.0.24.0-spdx-sbom.1.0.0.spdx
-  # quadblockquiz.0.25.0-cyclonedx-sbom.1.0.0.json
-  # quadblockquiz.0.25.0-cyclonedx-sbom.1.0.0.xml
-  # quadblockquiz.0.25.0-spdx-sbom.1.0.0.spdx
-  # quadblockquiz_vex_20211214_no_log4j.html
-  # quadblockquiz_vex_20211214_no_log4j.json
-  # quadquizaminos.0.14.6-spdx-sbom.1.0.0.spdx
-
   defp sbom_files(assigns) do
     files =
       :quadblockquiz
