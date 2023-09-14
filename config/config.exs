@@ -9,7 +9,7 @@ import Config
 
 config :logger,
   compile_time_purge_matching: [
-    [application: [:plug_cowboy, :credo, :postgrex]],
+    [application: [:plug_cowboy, :credo, :postgrex, :earmark]],
     [level_lower_than: :error]
   ]
 
