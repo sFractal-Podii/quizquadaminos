@@ -18,6 +18,12 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :logger,
+  compile_time_purge_matching: [
+    [application: [:plug_cowboy, :credo, :postgrex, :earmark]],
+    [level_lower_than: :error]
+  ]
+
 # Print only warnings and errors during test
 config :logger, level: :warning
 
