@@ -55,18 +55,18 @@ defmodule Quadblockquiz.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.6.16"},
+      {:phoenix, "~> 1.7.7", override: true},
       {:phoenix_ecto, "~> 4.4.2"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.17.2"},
-      {:phoenix_live_view, "~> 0.17.14"},
+      {:phoenix_live_view, "~> 0.19.5", override: true},
       {:floki, ">= 0.34.3", only: :test},
       {:phoenix_html, "~> 3.3.1"},
       {:phoenix_live_reload, "~> 1.4.1", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.6"},
+      {:phoenix_live_dashboard, "~>  0.8.1"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
-      {:gettext, "~> 0.22.3"},
+      {:gettext, "~> 0.23.1", override: true},
       {:jason, "~> 1.4.1"},
       {:plug_cowboy, "~> 2.6.1"},
       {:oauth2, "~> 2.1.0", override: true},
