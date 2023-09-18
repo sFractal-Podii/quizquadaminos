@@ -56,8 +56,14 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
       render_click(view, "choose_category", %{"category" => category})
       right_answer = Quadblockquiz.QnA.question(["qna"], category).correct
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
+
+      category =
+        categories
+        |> Enum.random()
+        |> Macro.camelize()
+
       assert html =~ "Continue"
-      assert html =~ "#{categories |> Enum.random() |> Macro.camelize()}"
+      assert html =~ category
     end
   end
 
@@ -86,7 +92,9 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
       continue_html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
-      assert continue_html =~ "<h1>#{score["Right"]}</h1>"
+      score = score["Right"]
+
+      assert continue_html =~ "<h1>" <> score <> "</h1>"
     end
 
     test "points are deducted with scores set on qna if answered wrongly", %{conn: conn} do
@@ -100,7 +108,9 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
       html = render_submit(view, "check_answer", %{"quiz" => %{"guess" => right_answer}})
 
-      assert html =~ "<h1>#{score["Right"]}</h1>"
+      score_to_display = score["Right"]
+
+      assert html =~ "<h1>" <> score_to_display <> "</h1>"
 
       render_keydown(view, "keydown", %{"key" => " "})
 
