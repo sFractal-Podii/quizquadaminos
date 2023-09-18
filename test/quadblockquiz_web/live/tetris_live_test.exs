@@ -110,6 +110,10 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
       score_to_display = score["Right"]
 
+      IO.inspect("<h1>" <> score_to_display <> "</h1>",
+        label: "============================whats happening"
+      )
+
       assert html =~ "<h1>" <> score_to_display <> "</h1>"
 
       render_keydown(view, "keydown", %{"key" => " "})
