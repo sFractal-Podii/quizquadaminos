@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Gen.Answers do
   use Mix.Task
 
-  @directories ["qna", "courses"]
+  @directories ["qna", "courses", "test/quadblockquiz/qna"]
   require Logger
 
   @shortdoc "Generates json file answers to the specified directory"
