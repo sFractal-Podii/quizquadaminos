@@ -26,7 +26,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
       Enum.each(categories, fn category ->
         category = category |> Macro.camelize()
-        assert html =~ "#{category}"
+        assert html =~ category
       end)
     end
 
