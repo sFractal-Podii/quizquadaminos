@@ -60,8 +60,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: "4a4208b91287caaa3c9f ",
-  client_secret: "6e08cf34364ec61fc44bdf5bee7e6eb891e6a959"
+  client_id: "",
+  client_secret: ""
 
 config :quadblockquiz,
   # add github_id of authorized users
