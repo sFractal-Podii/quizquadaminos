@@ -7,12 +7,6 @@
 # General application configuration
 import Config
 
-config :logger,
-  compile_time_purge_matching: [
-    [application: [:plug_cowboy, :credo, :postgrex, :earmark]],
-    [level_lower_than: :error]
-  ]
-
 config :quadblockquiz,
   ecto_repos: [Quadblockquiz.Repo]
 

@@ -18,8 +18,6 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-config :logger, backends: []
-
 # Print only warnings and errors during test
 config :logger, level: :warning
 
