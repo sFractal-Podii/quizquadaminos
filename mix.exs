@@ -66,7 +66,7 @@ defmodule Quadblockquiz.MixProject do
       {:phoenix_live_dashboard, "~> 0.6"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
-      {:gettext, "~> 0.22.3"},
+      {:gettext, "~> 0.23.1"},
       {:jason, "~> 1.4.1"},
       {:plug_cowboy, "~> 2.6.1"},
       {:oauth2, "~> 2.1.0", override: true},
