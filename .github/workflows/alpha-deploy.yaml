@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: alpha
-      url: 'http://34.86.212.145:4000'
+      url: 'https://alpha.quadblockquiz.org/'
     env:
       GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
       GCE_INSTANCE_ZONE: us-east4-c
@@ -39,6 +39,10 @@ jobs:
       uses: actions/checkout@v2
 
     # Setup gcloud CLI
+    - run: |
+        sudo apt-get install python2.7
+        export CLOUDSDK_PYTHON="/usr/bin/python2"
+        
     - uses: google-github-actions/setup-gcloud@v0
       with:
         version: '290.0.1'
@@ -59,17 +63,17 @@ jobs:
         echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
         echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
         echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}" .
+        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}"
+        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}"
 
-    - name: Deploy
-      run: |-
-        gcloud compute instances update-container "$GCE_INSTANCE" \
-          --zone "$GCE_INSTANCE_ZONE" \
-          --container-image "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF##*/}"
-
-
+    - name: Deploy to Cloud Run
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v0
+      with:
+        service: quadquiz-alpha
+        region: us-east4
+        image: "gcr.io/duncan-openc2-plugfest/quadquiz:${{ github.ref_name }}"

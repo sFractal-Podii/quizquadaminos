@@ -17,30 +17,48 @@ defmodule QuadblockquizWeb.AdminLive do
   def render(assigns) do
     ~H"""
     <div class="container">
-    <h1>users level of login</h1>
-    <section class="phx-hero">
-    <h3><%= notification(assigns) %></h3>
-    </section>
-     <form  phx-change="login_levels">
-     <label>
-    <input type="radio" id="by_config" name="login_levels" value="by_config" checked={@by_config}> by_config
-    </label>
-    <label>
-    <input type="radio" id="oauth_login" name="login_levels" value="oauth_login" checked={@oauth_login}> oauth_login
-    </label>
-    <label>
-    <input type="radio" id="anonymous_login" name="login_levels" value="anonymous_login" checked={@anonymous_login}>anonymous_login
-    </label>
-    </form>
+      <h1>users level of login</h1>
+      <section class="phx-hero">
+        <h3><%= notification(assigns) %></h3>
+      </section>
+      <form phx-change="login_levels">
+        <label>
+          <input
+            type="radio"
+            id="by_config"
+            name="login_levels"
+            value="by_config"
+            checked={@by_config}
+          /> by_config
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="oauth_login"
+            name="login_levels"
+            value="oauth_login"
+            checked={@oauth_login}
+          /> oauth_login
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="anonymous_login"
+            name="login_levels"
+            value="anonymous_login"
+            checked={@anonymous_login}
+          />anonymous_login
+        </label>
+      </form>
 
-    <%= if @cleared? do %>
-    <div class="alert-info" >
-    <p> Game score records have been cleared </p>
-     </div>
-    <% end %>
+      <%= if @cleared? do %>
+        <div class="alert-info">
+          <p>Game score records have been cleared</p>
+        </div>
+      <% end %>
 
-    <h2> Reset game table </h2>
-    <%= raw reset_game_table_button() %>
+      <h2>Reset game table</h2>
+      <%= raw(reset_game_table_button()) %>
     </div>
     """
   end
@@ -75,9 +93,9 @@ defmodule QuadblockquizWeb.AdminLive do
 
   defp notification(assigns) do
     ~H"""
-      <%= if @by_config, do: "by_config is active" %>
-      <%= if @oauth_login, do: "oauth_login  is active" %>
-      <%= if @anonymous_login, do: "anonymous_login is active" %>
+    <%= if @by_config, do: "by_config is active" %>
+    <%= if @oauth_login, do: "oauth_login  is active" %>
+    <%= if @anonymous_login, do: "anonymous_login is active" %>
     """
   end
 
