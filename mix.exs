@@ -55,7 +55,7 @@ defmodule Quadblockquiz.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.6.16"},
+      {:phoenix, "~> 1.7.9"},
       {:phoenix_ecto, "~> 4.4.2"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.17.2"},
