@@ -1,5 +1,4 @@
-const esbuild = require('esbuild')
-
+import * as esbuild from 'esbuild'
 const args = process.argv.slice(2)
 const watch = args.includes('--watch')
 const deploy = args.includes('--deploy')
@@ -25,7 +24,6 @@ let opts = {
 if (watch) {
   opts = {
     ...opts,
-    watch,
     sourcemap: 'inline'
   }
 }
@@ -37,14 +35,16 @@ if (deploy) {
   }
 }
 
+const ctx = await esbuild.context(opts)
 const promise = esbuild.build(opts)
 
 if (watch) {
-  promise.then(_result => {
-    process.stdin.on('close', () => {
-      process.exit(0)
-    })
-
-    process.stdin.resume()
-  })
+  await ctx.watch();
+  // promise.then(_result => {
+  //   process.stdin.on('close', () => {
+  //     process.exit(0)
+  //   })
+  //
+  //   process.stdin.resume()
+  // })
 }
