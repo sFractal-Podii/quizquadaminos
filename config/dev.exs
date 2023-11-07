@@ -15,7 +15,7 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
   check_origin: false,
   watchers: [
     node: [
-      "build.js",
+      "build.mjs",
       "--watch",
       cd: Path.expand("../assets", __DIR__)
     ],
