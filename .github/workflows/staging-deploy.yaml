@@ -17,7 +17,7 @@ name: Staging Deploy
 on:
   push:
     branches:
-    - develop
+    - fix_github_oauth_login
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
