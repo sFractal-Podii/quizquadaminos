@@ -5,7 +5,7 @@ defmodule Quadblockquiz.MixProject do
     [
       app: :quadblockquiz,
       description: "Descri'be",
-      version: "0.28.1",
+      version: "0.28.3",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
@@ -69,9 +69,9 @@ defmodule Quadblockquiz.MixProject do
       {:gettext, "~> 0.22.3"},
       {:jason, "~> 1.4.1"},
       {:plug_cowboy, "~> 2.6.1"},
-      {:oauth2, "~> 2.1.0", override: true},
-      {:ueberauth, "~> 0.10.5"},
-      {:ueberauth_github, "~> 0.8.3"},
+      {:oauth2, "2.0.1", override: true},
+      {:ueberauth, "~>0.6"},
+      {:ueberauth_github, "~>0.7"},
       {:ueberauth_linkedin, git: "https://github.com/fajarmf/ueberauth_linkedin"},
       {:ueberauth_google, "~>0.10"},
       {:sbom,
@@ -105,3 +105,4 @@ defmodule Quadblockquiz.MixProject do
     ]
   end
 end
+
