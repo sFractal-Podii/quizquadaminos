@@ -43,3 +43,5 @@ config :quadblockquiz,
   # this threshold determines the marking of vulnerability to new incoming block when
   # brick counter is evenly divided by it
   vulnerability_new_brick_threshold: 7
+
+  
