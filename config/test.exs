@@ -30,8 +30,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: "4b4208b91287cbbb3c9f",
-  client_secret: "f9b66591504ae801955cb2200004fc5f4c0d9621"
+  # client_id: "4b4208b91287cbbb3c9f",
+  # client_secret: "f9b66591504ae801955cb2200004fc5f4c0d9621"
 
 config :quadblockquiz,
   # add github_id of authorized users
@@ -43,3 +43,5 @@ config :quadblockquiz,
   # this threshold determines the marking of vulnerability to new incoming block when
   # brick counter is evenly divided by it
   vulnerability_new_brick_threshold: 7
+
+  
