@@ -109,13 +109,41 @@ defmodule Quadblockquiz.QnA do
         score
         |> String.trim()
         |> String.split("-", trim: true)
-        |> Enum.map(fn score -> score |> String.trim() |> String.split(":") |> List.to_tuple() end)
+        |> Enum.map(fn score ->
+          score |> String.trim() |> String.split(":") |> List.to_tuple() |> modify_score()
+        end)
         |> Map.new()
 
       nil ->
         %{"Right" => "25", "Wrong" => "5"}
     end
   end
+
+  defp modify_score({"Right", score}) do
+    regex = ~r/\d+/
+
+    if Regex.match?(~r/negative/, score) do
+      [score | _] = Regex.run(regex, score)
+
+      {"Right", "-" <> score}
+    else
+      {"Right", score}
+    end
+  end
+
+  defp modify_score({"Wrong", score}) do
+    regex = ~r/\d+/
+
+    if Regex.match?(~r/negative/, score) do
+      [score | _] = Regex.run(regex, score)
+
+      {"Wrong", "-" <> score}
+    else
+      {"Wrong", score}
+    end
+  end
+
+  defp modify_score(score), do: score
 
   defp powerup(content) do
     regex = ~r/# powerup(?<powerup>.*)/i
