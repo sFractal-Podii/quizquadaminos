@@ -105,4 +105,3 @@ defmodule Quadblockquiz.MixProject do
     ]
   end
 end
-
