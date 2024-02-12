@@ -5,7 +5,7 @@ defmodule Quadblockquiz.MixProject do
     [
       app: :quadblockquiz,
       description: "Descri'be",
-      version: "0.28.6",
+      version: "0.28.8",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
