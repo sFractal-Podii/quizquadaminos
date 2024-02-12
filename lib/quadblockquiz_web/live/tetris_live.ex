@@ -1093,7 +1093,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp right_points(socket) do
     # points for right answer
     %{"Right" => points} = socket.assigns.qna.score
-    {points, _} = Integer.parse(points)
+    {points, _} = points |> String.trim() |> Integer.parse()
     # multiplier for # blocks
     correct_answers = socket.assigns.correct_answers
     mult = Scoring.question_block_multiplier(correct_answers)

@@ -3,12 +3,20 @@ This directory contains
 a group of subdirectories,
 each with a set of questions:
 
+- OStart
+- Sponsors
+- Village
 - Automation
-- OpenChain
+- CACAO
+- CSAF
+- IoB
+- Kestrel
+- OCA
+- OpenC2
 - Phoenix
 - Risk
 - SBOM
-- Sponsors
+- STIX
 - Supply Chain
 
 blah blah on why each is important to either supply chain or this game

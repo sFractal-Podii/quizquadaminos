@@ -108,8 +108,10 @@ defmodule Quadblockquiz.QnA do
 
         score
         |> String.trim()
-        |> String.split("-", trim: true)
-        |> Enum.map(fn score -> score |> String.trim() |> String.split(":") |> List.to_tuple() end)
+        |> String.split("- ", trim: true)
+        |> Enum.map(fn score ->
+          score |> String.trim() |> String.split(":") |> List.to_tuple()
+        end)
         |> Map.new()
 
       nil ->
