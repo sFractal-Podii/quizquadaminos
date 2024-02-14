@@ -5,7 +5,8 @@ defmodule QuadblockquizWeb.QuizModalComponent do
   def render(%{category: nil} = assigns) do
     ~H"""
     <div style="text-align:center;">
-      <button phx-click="unpause">Continue</button><br />
+      <button phx-click="unpause">Continue</button>
+      <br />
       <%= for category <- QnA.remove_used_categories(@file_path, @categories) do %>
         <button phx-click="choose_category" phx-value-category={category}>
           <%= Macro.camelize(category) %>
@@ -13,7 +14,8 @@ defmodule QuadblockquizWeb.QuizModalComponent do
       <% end %>
       <br />
       <%= show_powers(assigns) %><br />
-      <button phx-click="endgame">End Game</button><br />
+      <button phx-click="endgame">End Game</button>
+      <br />
     </div>
     """
   end
@@ -62,7 +64,7 @@ defmodule QuadblockquizWeb.QuizModalComponent do
     ~H"""
     <.form let={f} for={:quiz} phx-submit="check_answer">
       <%= text_input(f, :guess) %>
-      <button class="button-outline" phx-click="skip-question">Skip Question</button><br />
+      <button class="button-outline" phx-click="skip-question">Skip Question</button> <br />
       <%= submit("Continue") %>
     </.form>
     """

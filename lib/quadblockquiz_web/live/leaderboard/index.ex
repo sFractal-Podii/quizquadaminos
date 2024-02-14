@@ -143,10 +143,12 @@ defmodule QuadblockquizWeb.LeaderboardLive do
   end
 
   defp user_avatar(avatar, assigns) do
+    assigns = assign(assigns, :avatar, avatar)
+
     ~H"""
     <img
       class="border-2 border-blue-600 rounded-full h-12 w-12 flex items-center justify-center "
-      src={avatar}
+      src={@avatar}
     />
     """
   end

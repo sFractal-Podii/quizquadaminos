@@ -77,26 +77,26 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
   end
 
   defp sign_up_button(%{style: :tailwind} = assigns) do
-    dropdown_item_class = @dropdown_item_class
+    assigns = assign(assigns, :dropdown_item_class, @dropdown_item_class)
 
     ~H"""
-    <a class={dropdown_item_class} href={Routes.session_path(QuadblockquizWeb.Endpoint, :new)}>
+    <a class={@dropdown_item_class} href={Routes.session_path(QuadblockquizWeb.Endpoint, :new)}>
       Handle
     </a>
     <a
-      class={dropdown_item_class}
+      class={@dropdown_item_class}
       href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "github")}
     >
       GitHub
     </a>
     <a
-      class={dropdown_item_class}
+      class={@dropdown_item_class}
       href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "google")}
     >
       Google
     </a>
     <a
-      class={dropdown_item_class}
+      class={@dropdown_item_class}
       href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "linkedin")}
     >
       LinkedIn
