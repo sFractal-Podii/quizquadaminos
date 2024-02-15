@@ -71,6 +71,8 @@ defmodule QuadblockquizWeb.QuizModalComponent do
   end
 
   defp choices(assigns, category) do
+    assigns = assign(assigns, :category, category)
+
     ~H"""
     <.form let={f} for={:quiz} phx-submit="check_answer">
       <%= for {answer, index}<- @qna.choices do %>
@@ -81,7 +83,7 @@ defmodule QuadblockquizWeb.QuizModalComponent do
         <!-- end label -->
       <% end %>
       <br />
-      <button class="button-outline" phx-click="skip-question" phx-value-category={category}>
+      <button class="button-outline" phx-click="skip-question" phx-value-category={@category}>
         Skip Question
       </button>
       <%= submit("Continue") %>

@@ -39,7 +39,7 @@ defmodule QuadblockquizWeb.ContestsLive do
        contest_records: [],
        contest_id: nil,
        editing_date?: false,
-       changeset: Contests.change_contest(%Contests.Contest{}),
+       form: %Contests.Contest{} |> Contests.change_contest() |> to_form(),
        modal: false,
        page: 1,
        sort_by: "score"
@@ -78,7 +78,7 @@ defmodule QuadblockquizWeb.ContestsLive do
       |> Contests.change_contest(params)
       |> Map.put(:action, :insert)
 
-    {:noreply, assign(socket, changeset: changeset)}
+    {:noreply, assign(socket, form: to_form(changeset))}
   end
 
   def handle_event(
@@ -196,7 +196,7 @@ defmodule QuadblockquizWeb.ContestsLive do
       {:ok, contest} ->
         assign(socket,
           contests: contests ++ [contest],
-          changeset: Contests.change_contest(%Contests.Contest{})
+          form: %Contests.Contest{} |> Contests.change_contest() |> to_form()
         )
 
       _ ->
@@ -212,7 +212,7 @@ defmodule QuadblockquizWeb.ContestsLive do
       {:ok, contest} ->
         assign(socket,
           contests: contests ++ [contest],
-          changeset: Contests.change_contest(%Contests.Contest{})
+          form: %Contests.Contest{} |> Contests.change_contest() |> to_form()
         )
 
       _ ->

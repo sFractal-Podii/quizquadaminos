@@ -40,9 +40,11 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
   end
 
   def display_bottom(bottom_blocks, assigns) do
+    assigns = assign(assigns, :bottom_blocks, bottom_blocks)
+
     ~H"""
     <%= raw(SvgBoard.svg_head()) %>
-    <%= for row <- [bottom_values(bottom_blocks)] do %>
+    <%= for row <- [bottom_values(@bottom_blocks)] do %>
       <%= for {x, y, color} <- row do %>
         <svg>
           <%= raw(SvgBoard.box({x, y}, color)) %>

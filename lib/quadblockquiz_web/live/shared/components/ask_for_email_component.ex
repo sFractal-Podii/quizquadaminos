@@ -4,24 +4,17 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
 
   def update(assigns, socket) do
     changeset = Accounts.change_user(assigns.current_user)
-    {:ok, socket |> assign(changeset: changeset, redirect_to: assigns.redirect_to)}
+    {:ok, socket |> assign(form: to_form(changeset), redirect_to: assigns.redirect_to)}
   end
 
   def render(assigns) do
     ~H"""
     <div>
       <h3>What's your email address?</h3>
-      <.form
-        let={f}
-        for={@changeset}
-        phx-change="validate"
-        phx-submit="update_email"
-        phx-target={@myself}
-      >
-        <%= label(f, :email) %>
-        <%= text_input(f, :email, type: :email) %>
-        <%= error_tag(f, :email) %>
-        <%= text_input(f, :uid, type: :hidden) %>
+      <.form for={@form} phx-change="validate" phx-submit="update_email" phx-target={@myself}>
+        <label>Email</label>
+        <.input type="email" field={@form[:email]} />
+        <.input type="hidden" field={@form[:uid]} />
         <button>Update Email</button>
       </.form>
     </div>
@@ -34,7 +27,7 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
       |> Accounts.change_user(params)
       |> Map.put(:action, :insert)
 
-    {:noreply, socket |> assign(changeset: changeset)}
+    {:noreply, socket |> assign(form: to_form(changeset))}
   end
 
   def handle_event("update_email", %{"user" => params}, socket) do
@@ -50,7 +43,7 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
          |> push_patch(to: redirect_path)}
 
       {:error, changeset} ->
-        {:noreply, socket |> assign(changeset: changeset)}
+        {:noreply, socket |> assign(form: to_form(changeset))}
     end
   end
 end

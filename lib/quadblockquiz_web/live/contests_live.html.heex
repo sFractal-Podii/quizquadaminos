@@ -12,7 +12,7 @@
     <div class="heading-1">Contests</div>
     <div class="container max-width: 768px">
       <%= if @current_user.admin? do %>
-        <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
+        <.form for={@form} phx-change="validate" phx-submit="save">
           <div class="md:flex items-center">
             <div class="md:px-5 mt-2 md:mt-0">
               <label
@@ -21,7 +21,7 @@
               >
                 Contest
               </label>
-              <%= text_input(f, :name, placeholder: "contest-name") %>
+              <.input type="text" field={@form[:name]} placeholder="contest-name" />
             </div>
             <div class="md:px-5 mt-2 md:mt-0">
               <label
@@ -30,7 +30,7 @@
               >
                 Pin
               </label>
-              <%= text_input(f, :pin, placeholder: "contest-pin") %>
+              <.input type="text" field={@form[:pin]} placeholder="contest-pin" />
             </div>
             <div phx-update="ignore" id="contest_date" class="md:px-5 mt-2 md:mt-0">
               <label
@@ -39,7 +39,7 @@
               >
                 Date
               </label>
-              <%= datetime_local_input(f, :contest_date, class: "w-full") %>
+              <.input type="datetime-local" field={@form[:contest_date]} />
             </div>
             <div class="mt-2 md:mt-6">
               <%= submit("Create", class: "btn") %>
