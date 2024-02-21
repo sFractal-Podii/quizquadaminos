@@ -1,5 +1,6 @@
 defmodule QuadblockquizWeb.TetrisLive do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
   require Logger
 
   alias Quadblockquiz.Accounts
@@ -96,7 +97,7 @@ defmodule QuadblockquizWeb.TetrisLive do
           <% end %>
           <%= raw(SvgBoard.svg_foot()) %>
           <hr />
-          <%= live_redirect("Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button") %>
+          <.link navigate={Routes.tetris_path(@socket, :tetris)}>Play again?</.link>
         </div>
         <div class="column column-25 column-offset-25">
           <p><%= @brick_count %> QuadBlocks dropped</p>

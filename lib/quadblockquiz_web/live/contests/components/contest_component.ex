@@ -3,6 +3,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   Component to compatmentalize contests
   """
   use QuadblockquizWeb, :live_component
+  import Phoenix.Component
 
   alias Quadblockquiz.Accounts.User
   alias Quadblockquiz.Contests
@@ -168,7 +169,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
     if contest.end_time do
       ~H"""
       <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white">
-        <%= live_redirect("Final Results", to: Routes.contests_path(@socket, :show, contest)) %>
+        <.link navigate={Routes.contests_path(@socket, :show, contest)}>Final Results</.link>
       </button>
       """
     end
@@ -187,7 +188,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: true} = assigns, _contest) do
     ~H"""
-    <.form let={_f} for={:count} phx-submit={:save_date} phx-target={@myself}>
+    <.form :let={_f} for={:count} phx-submit={:save_date} phx-target={@myself}>
       <input type="datetime-local" id="contest_date" name="contest_date" />
       <button>Save</button>
     </.form>
@@ -216,11 +217,12 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
     ~H"""
-    <%= live_redirect("Live Results",
-      class:
-        "md:bg-blue-600 md:flex md:items-center md:justify-center md:rounded md:w-32 md:h-10 md:text-white",
-      to: Routes.contests_path(@socket, :show, contest)
-    ) %>
+    <.link
+      navigate={Routes.contests_path(@socket, :show, contest)}
+      class="md:bg-blue-600 md:flex md:items-center md:justify-center md:rounded md:w-32 md:h-10 md:text-white"
+    >
+      Live Results
+    </.link>
     """
   end
 
