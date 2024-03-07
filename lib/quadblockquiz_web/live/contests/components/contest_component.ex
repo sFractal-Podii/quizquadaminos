@@ -106,22 +106,24 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   defp start_or_pause_button(assigns, contest) do
+    assigns = assign_new(assigns, :contest, fn -> contest end)
+
     ~H"""
-    <%= if contest.status == :running do %>
+    <%= if @contest.status == :running do %>
       <button
-        class="{if contest.end_time, do: 'disabled' }  icon-button"
+        class="{if @contest.end_time, do: 'disabled' }  icon-button"
         phx-click="restart"
-        phx-value-contest={contest.name}
-        {if contest.end_time, do: [{'disabled', true}], else: [] }
+        phx-value-contest={@contest.name}
+        {if @contest.end_time, do: [{'disabled', true}], else: [] }
       >
         <i class="fas fa-undo fa-2x"></i>
       </button>
     <% else %>
       <button
-        class="{if contest.end_time, do: 'disabled' }  icon-button"
+        class="{if @contest.end_time, do: 'disabled' }  icon-button"
         phx-click="start"
-        phx-value-contest={contest.name}
-        {if contest.end_time, do: [{'disabled', true}], else: [] }
+        phx-value-contest={@contest.name}
+        {if @contest.end_time, do: [{'disabled', true}], else: [] }
       >
         <i class="fas fa-play-circle fa-2x"></i>
       </button>
@@ -166,10 +168,12 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   defp timer_or_final_result(assigns, contest) do
+    assigns = assign_new(assigns, :contest, fn -> contest end)
+
     if contest.end_time do
       ~H"""
       <button class="invisible md:visible md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white">
-        <.link navigate={Routes.contests_path(@socket, :show, contest)}>Final Results</.link>
+        <.link navigate={Routes.contests_path(@socket, :show, @contest)}>Final Results</.link>
       </button>
       """
     end
@@ -179,8 +183,10 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
         %{current_user: %{admin?: true}, editing_date?: false} = assigns,
         %Contest{contest_date: nil} = contest
       ) do
+    assigns = assign_new(assigns, :contest, fn -> contest end)
+
     ~H"""
-    <button phx-click="add_contest_date" phx-value-contest={contest.name} phx-target={@myself}>
+    <button phx-click="add_contest_date" phx-value-contest={@contest.name} phx-target={@myself}>
       Add
     </button>
     """
@@ -196,12 +202,14 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   def contest_date(%{current_user: %{admin?: true}, editing_date?: false} = assigns, contest) do
+    assigns = assign_new(assigns, :contest, fn -> contest end)
+
     ~H"""
-    <%= truncate_date(contest.contest_date) %>
+    <%= truncate_date(@contest.contest_date) %>
     <button
       class="button-clear"
       phx-click="edit_contest_date"
-      phx-value-contest={contest.name}
+      phx-value-contest={@contest.name}
       phx-target={@myself}
     >
       <i class="fas fa-edit fa-2x"></i>
@@ -210,15 +218,19 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   def contest_date(assigns, contest) do
+    assigns = assign_new(assigns, :contest, fn -> contest end)
+
     ~H"""
-    <%= truncate_date(contest.contest_date) %>
+    <%= truncate_date(@contest.contest_date) %>
     """
   end
 
   defp rsvp_or_results_button(assigns, %Contest{status: :running} = contest) do
+    assigns = assign_new(assigns, :contest, fn -> contest end)
+
     ~H"""
     <.link
-      navigate={Routes.contests_path(@socket, :show, contest)}
+      navigate={Routes.contests_path(@socket, :show, @contest)}
       class="md:bg-blue-600 md:flex md:items-center md:justify-center md:rounded md:w-32 md:h-10 md:text-white"
     >
       Live Results
@@ -244,13 +256,15 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   defp rsvp_or_results_button(assigns, %Contest{status: :future} = contest) do
+    assigns = assign_new(assigns, :contest, fn -> contest end)
+
     ~H"""
     <%= if @rsvped? do %>
       <button
         class="md:bg-red-600 md:p-2 md:rounded md:w-40  md:text-white"
         phx-click="cancel_rsvp"
         phx-target={@myself}
-        phx-value-contest_id={contest.id}
+        phx-value-contest_id={@contest.id}
       >
         CANCEL RSVP
       </button>
@@ -259,7 +273,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
         class="md:bg-blue-600 md:p-2 md:rounded md:w-32 md:text-white"
         phx-click="rsvp"
         phx-target={@myself}
-        phx-value-contest_id={contest.id}
+        phx-value-contest_id={@contest.id}
       >
         RSVP
       </button>

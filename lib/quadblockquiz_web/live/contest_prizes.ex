@@ -61,6 +61,8 @@ defmodule QuadblockquizWeb.ContestPrizes do
       }
     ]
 
+    assigns = assign_new(assigns, :prices, fn -> prices end)
+
     ~H"""
     <h1 class="heading-1 mt-7 text-4xl tracking-widest">Contest Prizes</h1>
     <p class="pb-7">
@@ -74,7 +76,7 @@ defmodule QuadblockquizWeb.ContestPrizes do
       for more information on contest rules.
     </p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-4 gap-4 place-items-center">
-      <%= for price <- prices do %>
+      <%= for price <- @prices do %>
         <div class="bg-slate-100 p-4 pb-8 rounded-md text-center">
           <i class={"text-blue-300 fas fa-#{price.icon} fa-4x mt-6"}></i>
           <h2 class="heading-2 my-6"><%= price.heading %></h2>
