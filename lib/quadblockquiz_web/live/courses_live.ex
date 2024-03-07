@@ -1,8 +1,10 @@
 defmodule QuadblockquizWeb.CourseLive do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
 
   alias Quadblockquiz.Accounts
   alias Quadblockquiz.Courses
+
   alias QuadblockquizWeb.Router.Helpers, as: Routes
 
   @impl true
@@ -57,9 +59,11 @@ defmodule QuadblockquizWeb.CourseLive do
         <div class="column column-25">
           <%= for chapter <- Courses.chapter_list(assigns.course) do %>
             <ul>
-              <%= live_redirect("start #{chapter}",
-                to: Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
-              ) %>
+              <.link navigate={
+                Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
+              }>
+                <%= "start #{chapter}" %>
+              </.link>
             </ul>
           <% end %>
         </div>
