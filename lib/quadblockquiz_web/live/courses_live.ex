@@ -116,7 +116,7 @@ defmodule QuadblockquizWeb.CourseLive do
                   This is a future feature. Ignore
                 </p>
                 <p class="text-blue-600 underline float-right text-xs font-normal md:invisible">
-                  <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                  <.link patch={Routes.course_path(@socket, :show, course)}>start course</.link>
                 </p>
               </div>
               <div class="hidden md:flex md:justify-between">
@@ -130,7 +130,7 @@ defmodule QuadblockquizWeb.CourseLive do
                 </div>
                 <div class="pt-7">
                   <button class="rounded-sm bg-blue-600 text-white flex items-center justify-center text-base font-normal h-12 w-40">
-                    <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                    <.link patch={Routes.course_path(@socket, :show, course)}>start course</.link>
                   </button>
                 </div>
               </div>

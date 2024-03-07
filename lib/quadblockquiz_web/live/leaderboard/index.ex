@@ -1,5 +1,6 @@
 defmodule QuadblockquizWeb.LeaderboardLive do
   use Phoenix.LiveView
+  import Phoenix.Component
 
   alias QuadblockquizWeb.Router.Helpers, as: Routes
 
@@ -108,11 +109,13 @@ defmodule QuadblockquizWeb.LeaderboardLive do
       <div class="hidden md:flex md:items-center md:justify-center md:gap-x-2">
         <%= for i <- (@page - 5)..(@page + 5), i>0 do %>
           <div class="md:border md:border-blue-600 md:p-2 md:rounded">
-            <%= live_patch(i,
-              class: "button button-outline",
-              to: Routes.live_path(@socket, __MODULE__, page: i, sort_by: @sort_by),
-              id: "goto-#{i}"
-            ) %>
+            <.link
+              patch={Routes.live_path(@socket, __MODULE__, page: i, sort_by: @sort_by)}
+              id="goto-#{i}"
+              class="button button-outline"
+            >
+              <%= i %>
+            </.link>
           </div>
         <% end %>
       </div>

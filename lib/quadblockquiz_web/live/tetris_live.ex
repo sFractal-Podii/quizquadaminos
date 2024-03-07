@@ -1,5 +1,7 @@
 defmodule QuadblockquizWeb.TetrisLive do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
+
   require Logger
 
   alias Quadblockquiz.Accounts

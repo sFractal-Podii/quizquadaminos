@@ -1,5 +1,6 @@
 defmodule QuadblockquizWeb.LeaderboardLive.Show do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
 
   alias Quadblockquiz.GameBoard.Records
 
@@ -20,10 +21,9 @@ defmodule QuadblockquizWeb.LeaderboardLive.Show do
             <li><b>Bricks:</b><%= @record.dropped_bricks %></li>
             <li><b>Questions:</b><%= @record.correctly_answered_qna %></li>
           </ul>
-          <%= live_patch("Back to Leaderboard",
-            class: "button",
-            to: Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive)
-          ) %>
+          <.link patch={Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive)} class="button">
+            Back to Leaderboard
+          </.link>
         </div>
       </div>
     </div>
