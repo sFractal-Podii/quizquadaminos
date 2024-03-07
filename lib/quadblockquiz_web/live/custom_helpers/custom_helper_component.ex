@@ -7,7 +7,10 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
   @dropdown_item_class "block px-4 py-2 mt-2 text-sm font-semibold bg-transparent dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
 
   def hide_or_show_sign_up_button(assigns) do
-    assigns = assign_new(assigns, :style, fn -> :milligram end)
+    assigns =
+      assigns
+      |> assign_new(:style, fn -> :milligram end)
+      |> assign_new(:dropdown_item_class, fn -> @dropdown_item_class end)
 
     ~H"""
     <%= selected_login_level() |> sign_up_button(assigns) %>
@@ -77,26 +80,24 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
   end
 
   defp sign_up_button(%{style: :tailwind} = assigns) do
-    dropdown_item_class = @dropdown_item_class
-
     ~H"""
-    <a class={dropdown_item_class} href={Routes.session_path(QuadblockquizWeb.Endpoint, :new)}>
+    <a class={@dropdown_item_class} href={Routes.session_path(QuadblockquizWeb.Endpoint, :new)}>
       Handle
     </a>
     <a
-      class={dropdown_item_class}
+      class={@dropdown_item_class}
       href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "github")}
     >
       GitHub
     </a>
     <a
-      class={dropdown_item_class}
+      class={@dropdown_item_class}
       href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "google")}
     >
       Google
     </a>
     <a
-      class={dropdown_item_class}
+      class={@dropdown_item_class}
       href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "linkedin")}
     >
       LinkedIn
