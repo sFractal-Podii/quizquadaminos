@@ -3,6 +3,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   Component to compatmentalize contests
   """
   use QuadblockquizWeb, :live_component
+  import Phoenix.Component
 
   alias Quadblockquiz.Accounts.User
   alias Quadblockquiz.Contests
