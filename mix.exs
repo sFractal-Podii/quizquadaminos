@@ -68,7 +68,7 @@ defmodule Quadblockquiz.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.22.3"},
       {:jason, "~> 1.4.1"},
-      {:plug_cowboy, "~> 2.6.1"},
+      {:plug_cowboy, "~> 2.7"},
       {:oauth2, "2.0.1", override: true},
       {:ueberauth, "~>0.6"},
       {:ueberauth_github, "~>0.7"},
