@@ -80,19 +80,19 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   @impl true
   def update_many(assigns_sockets) do
+    list_of_ids = Enum.map(assigns_sockets, fn {assigns, _sockets} -> assigns.id end)
+
+    contests =
+      list_of_ids
+      |> Contests.select_contests_by_id()
+      |> Map.new()
+
     Enum.map(assigns_sockets, fn {assigns, socket} ->
-      contest =
-        assigns.id
-        |> Contests.get_contest()
-        |> Contests.load_contest_vitual_fields()
-
-      rsvped? = Contests.user_rsvped?(assigns.current_user, contest)
-
       assign(socket,
-        contest: contest,
+        contest: contests[assigns.id] |> Contests.load_contest_vitual_fields(),
+        rsvped?: Contests.user_rsvped?(assigns.current_user, contests[assigns.id]),
         current_user: assigns.current_user,
-        rsvped?: rsvped?,
-        time_remaining: time_remaining(contest)
+        time_remaining: time_remaining(contests[assigns.id])
       )
     end)
   end
