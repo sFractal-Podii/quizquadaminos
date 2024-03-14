@@ -79,30 +79,22 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   end
 
   @impl true
-  def preload(list_of_assigns) do
-    list_of_assigns
-    |> Enum.map(fn assigns ->
+  def update_many(assigns_sockets) do
+    Enum.map(assigns_sockets, fn {assigns, socket} ->
       contest =
-        Contests.get_contest(assigns.id)
+        assigns.id
+        |> Contests.get_contest()
         |> Contests.load_contest_vitual_fields()
 
-      Map.put(assigns, :contest, contest)
+      rsvped? = Contests.user_rsvped?(assigns.current_user, contest)
+
+      assign(socket,
+        contest: contest,
+        current_user: assigns.current_user,
+        rsvped?: rsvped?,
+        time_remaining: time_remaining(contest)
+      )
     end)
-  end
-
-  @impl true
-  def update(assigns, socket) do
-    contest = assigns.contest
-
-    rsvped? = Contests.user_rsvped?(assigns.current_user, contest)
-
-    {:ok,
-     assign(socket,
-       contest: contest,
-       current_user: assigns.current_user,
-       rsvped?: rsvped?,
-       time_remaining: time_remaining(contest)
-     )}
   end
 
   defp start_or_pause_button(assigns, contest) do
