@@ -137,29 +137,31 @@ defmodule QuadblockquizWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal(
-      @socket,
-      QuadblockquizWeb.QuizModalComponent,
-      id: 1,
-      powers: @powers,
-      score: @score,
-      modal: @modal,
-      qna: @qna,
-      file_path: @file_path,
-      categories: @categories,
-      category: @category,
-      return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)
-    ) %>
+                  <.modal return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}>
+                    <.live_component
+                      module={QuadblockquizWeb.QuizModalComponent}
+                      id={1}  
+                      powers = {@powers}
+                      score= {@score}
+                      modal= {@modal}
+                      qna = {@qna}
+                      file_path = {@file_path}
+                      categories = {@categories}
+                      category = {@category}
+                      return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}
+                    />
+                  </.modal>
                 <% end %>
                 <%= if @super_modal do %>
-                <%= live_modal(
-      @socket,
-      QuadblockquizWeb.SuperpModalComponent,
-      id: 3,
-      powers: @powers,
-      super_modal: @super_modal,
-      return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)
-    ) %>
+                  <.modal return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}>
+                    <.live_component
+                      module={QuadblockquizWeb.SuperpModalComponent}
+                      id={3}
+                      powers = {@powers}
+                      super_modal= {@super_modal}
+                      return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}
+                    />
+                  </.modal>
                 <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw(

@@ -1,5 +1,4 @@
 defmodule QuadblockquizWeb.LiveHelpers do
-  import Phoenix.LiveView.Helpers
   @moduledoc false
   import Phoenix.Component
 
@@ -61,5 +60,3 @@ defmodule QuadblockquizWeb.LiveHelpers do
     |> JS.hide(to: "#modal-content", transition: "fade-out-scale")
   end
 end
-
-# https://elixirforum.com/t/how-to-create-a-modal/54286
