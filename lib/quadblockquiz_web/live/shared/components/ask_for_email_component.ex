@@ -29,8 +29,6 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
   end
 
   def handle_event("validate", %{"user" => params}, socket) do
-    IO.puts("=========================")
-
     changeset =
       %Accounts.User{}
       |> Accounts.change_user(params)
