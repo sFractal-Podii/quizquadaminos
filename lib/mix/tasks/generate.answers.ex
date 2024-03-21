@@ -55,6 +55,7 @@ defmodule Mix.Tasks.Gen.Answers do
       case question_type(name) do
         "free-form" -> "secret"
         "multi-choice" -> 0
+        _ -> 0
       end
 
     {file_name, answer}

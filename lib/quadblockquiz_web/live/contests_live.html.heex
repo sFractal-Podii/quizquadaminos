@@ -12,7 +12,7 @@
     <div class="heading-1">Contests</div>
     <div class="container max-width: 768px">
       <%= if @current_user.admin? do %>
-        <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
+        <.form :let={f} for={@changeset} phx-change="validate" phx-submit="save">
           <div class="md:flex items-center">
             <div class="md:px-5 mt-2 md:mt-0">
               <label
@@ -50,12 +50,15 @@
       <% end %>
     </div>
     <%= if @modal do %>
-      <%= live_modal(@socket, QuadblockquizWeb.SharedLive.AskEmailComponent,
-        id: 1,
-        return_to: @current_uri,
-        redirect_to: @current_uri,
-        current_user: @current_user
-      ) %>
+      <.modal return_to={@current_uri}>
+        <.live_component
+          module={QuadblockquizWeb.SharedLive.AskEmailComponent}
+          id={1}
+          return_to={@current_uri}
+          redirect_to={@current_uri}
+          current_user={@current_user}
+        />
+      </.modal>
     <% end %>
     <div class="table">
       <div class="hidden md:table-header-group md:bg-white md:text-base md:font-bold font-normal">

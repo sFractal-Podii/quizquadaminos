@@ -47,7 +47,7 @@
       </button>
     </div>
     <nav
-      :class="{'flex': open, 'hidden': !open}"
+      x-bind:class="{'flex': open, 'hidden': !open}"
       class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row"
     >
       <a class={element_class} href="/">Home</a>
@@ -104,7 +104,7 @@
               <svg
                 fill="currentColor"
                 viewBox="0 0 20 20"
-                :class="{'rotate-180': open, 'rotate-0': !open}"
+                x-bind:class="{'rotate-180': open, 'rotate-0': !open}"
                 class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1"
               >
                 <path
@@ -174,7 +174,7 @@
             <svg
               fill="currentColor"
               viewBox="0 0 20 20"
-              :class="{'rotate-180': open, 'rotate-0': !open}"
+              x-bind:class="{'rotate-180': open, 'rotate-0': !open}"
               class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1"
             >
               <path

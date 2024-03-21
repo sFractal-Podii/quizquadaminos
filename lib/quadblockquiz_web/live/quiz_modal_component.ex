@@ -5,7 +5,8 @@ defmodule QuadblockquizWeb.QuizModalComponent do
   def render(%{category: nil} = assigns) do
     ~H"""
     <div style="text-align:center;">
-      <button phx-click="unpause">Continue</button><br />
+      <button phx-click="unpause">Continue</button>
+      <br />
       <%= for category <- QnA.remove_used_categories(@file_path, @categories) do %>
         <button phx-click="choose_category" phx-value-category={category}>
           <%= Macro.camelize(category) %>
@@ -13,7 +14,8 @@ defmodule QuadblockquizWeb.QuizModalComponent do
       <% end %>
       <br />
       <%= show_powers(assigns) %><br />
-      <button phx-click="endgame">End Game</button><br />
+      <button phx-click="endgame">End Game</button>
+      <br />
     </div>
     """
   end
@@ -60,17 +62,19 @@ defmodule QuadblockquizWeb.QuizModalComponent do
 
   defp choices(assigns, "free-form") do
     ~H"""
-    <.form let={f} for={:quiz} phx-submit="check_answer">
+    <.form :let={f} for={%{}} as={:quiz} phx-submit="check_answer">
       <%= text_input(f, :guess) %>
-      <button class="button-outline" phx-click="skip-question">Skip Question</button><br />
+      <button class="button-outline" phx-click="skip-question">Skip Question</button> <br />
       <%= submit("Continue") %>
     </.form>
     """
   end
 
   defp choices(assigns, category) do
+    assigns = assign_new(assigns, :category, fn -> category end)
+
     ~H"""
-    <.form let={f} for={:quiz} phx-submit="check_answer">
+    <.form :let={f} for={%{}} as={:quiz} phx-submit="check_answer">
       <%= for {answer, index}<- @qna.choices do %>
         <%= label do %>
           <%= radio_button(f, :guess, answer, value: index) %>
@@ -79,7 +83,7 @@ defmodule QuadblockquizWeb.QuizModalComponent do
         <!-- end label -->
       <% end %>
       <br />
-      <button class="button-outline" phx-click="skip-question" phx-value-category={category}>
+      <button class="button-outline" phx-click="skip-question" phx-value-category={@category}>
         Skip Question
       </button>
       <%= submit("Continue") %>

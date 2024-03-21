@@ -45,7 +45,7 @@ defmodule QuadblockquizWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {QuadblockquizWeb.LayoutView, "live.html"}
+        layout: {QuadblockquizWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end

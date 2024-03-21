@@ -1,5 +1,6 @@
 defmodule QuadblockquizWeb.ContestFinalResultComponent do
   use QuadblockquizWeb, :live_component
+  import Phoenix.Component
 
   alias Quadblockquiz.Contests
 
@@ -9,10 +10,9 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
       <h1>Contestboard for <%= @contest.name %></h1>
       <%= if @contest_records == []  do %>
         <h2>No records for this contest</h2>
-        <%= live_patch("Back to contest listing",
-          class: "button button-outline",
-          to: Routes.contests_path(@socket, :index)
-        ) %>
+        <.link patch={Routes.contests_path(@socket, :index)} class="button button-outline">
+          Back to contest listing
+        </.link>
       <% else %>
         <table>
           <tr>
@@ -55,10 +55,12 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
         </table>
         <%= unless active_contest?(@contest.name) do %>
           <%= for i <- (@page - 5)..(@page + 5), i >0 do %>
-            <%= live_patch(i,
-              class: "button button-outline",
-              to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)
-            ) %>
+            <.link
+              patch={Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)}
+              class="button button-outline"
+            >
+              <%= i %>
+            </.link>
           <% end %>
         <% end %>
       <% end %>

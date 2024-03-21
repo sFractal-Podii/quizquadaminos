@@ -119,6 +119,11 @@ defmodule Quadblockquiz.Contests do
     Repo.all(q)
   end
 
+  def select_contests_by_id(list_of_ids) do
+    q = from(c in Contest, where: c.id in ^list_of_ids, select: {c.id, c})
+    Repo.all(q)
+  end
+
   @doc """
   Gives us the names of all contests that are either running or paused
   """

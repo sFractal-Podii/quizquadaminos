@@ -17,7 +17,7 @@ defmodule QuadblockquizWeb.TetrisLiveTest do
 
       html = render_keydown(view, "keydown", %{"key" => " "})
       assert html =~ "button phx-click=\"unpause\">Continue</button>"
-      assert html =~ "<div class=\"phx-modal-content\">"
+      assert html =~ "<button phx-click=\"endgame\">End Game</button>"
     end
 
     test "player can see categories of topics to select", %{conn: conn} do
