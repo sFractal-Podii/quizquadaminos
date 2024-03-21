@@ -8,7 +8,6 @@ defmodule Quadblockquiz.MixProject do
       version: "0.28.8",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       build_embedded: true,
@@ -55,14 +54,15 @@ defmodule Quadblockquiz.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.6.16"},
-      {:phoenix_ecto, "~> 4.4.2"},
-      {:ecto_sql, "~> 3.10"},
+      {:phoenix, "~> 1.7.11"},
+      {:phoenix_ecto, "~> 4.5.1"},
+      {:ecto_sql, "~> 3.11.1"},
       {:postgrex, ">= 0.17.2"},
       {:phoenix_live_view, "~> 0.20.14"},
       {:floki, ">= 0.36.0", only: :test},
       {:phoenix_html, "~> 3.3.1"},
-      {:phoenix_live_reload, "~> 1.4.1", only: :dev},
+      {:phoenix_view, "~> 2.0"},
+      {:phoenix_live_reload, "~> 1.5.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.8.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
@@ -80,7 +80,7 @@ defmodule Quadblockquiz.MixProject do
        branch: "auto-install-bom",
        runtime: false},
       {:earmark, "~> 1.4"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7.5", only: [:dev, :test], runtime: false}
     ]
   end
 
