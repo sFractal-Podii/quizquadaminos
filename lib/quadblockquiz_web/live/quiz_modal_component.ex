@@ -62,7 +62,7 @@ defmodule QuadblockquizWeb.QuizModalComponent do
 
   defp choices(assigns, "free-form") do
     ~H"""
-    <.form :let={f} for={:quiz} phx-submit="check_answer">
+    <.form :let={f} for={%{}} as={:quiz} phx-submit="check_answer">
       <%= text_input(f, :guess) %>
       <button class="button-outline" phx-click="skip-question">Skip Question</button> <br />
       <%= submit("Continue") %>
@@ -74,7 +74,7 @@ defmodule QuadblockquizWeb.QuizModalComponent do
     assigns = assign_new(assigns, :category, fn -> category end)
 
     ~H"""
-    <.form :let={f} for={:quiz} phx-submit="check_answer">
+    <.form :let={f} for={%{}} as={:quiz} phx-submit="check_answer">
       <%= for {answer, index}<- @qna.choices do %>
         <%= label do %>
           <%= radio_button(f, :guess, answer, value: index) %>
