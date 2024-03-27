@@ -6,56 +6,77 @@ defmodule QuadblockquizWeb.ContestPrizes do
     prices = [
       %{
         icon: "trophy",
-        heading: "High Score",
+        heading: "IRL High Score",
         content: """
-        Three lucky people will win a
-        $25 MyRewards Gift Card.
-        The gold medal prize goes to ELIGIBLE person with
-        the highest score
-        in a game during the live contest (see rules).
+        A $100 Amazon Gift Card will be handed
+        "in real life" (IRL)
+        at lunch on Friday
+        to the
+        ELIGIBLE person with
+        the highest score in the IRL contest (see rules).
+        """,
+        price: "$100"
+      },
+      %{
+        icon: "question",
+        heading: "IRL Most Questions",
+        content: """
+        A $50 Barnes & Noble Gift Card will be handed
+        "in real life" (IRL)
+        at lunch on Friday
+        to the
+        ELIGIBLE person who
+        answers the most quiz questions
+        in a game during the IRL contest (see rules).
+        """,
+        price: "$50"
+      },
+      %{
+        icon: "th",
+        heading: "IRL Most Bricks",
+        content: """
+        A $50 Home Depot Gift Card will be handed
+        "in real life" (IRL)
+        at lunch on Friday
+        to the
+        ELIGIBLE person
+        with the most bricks
+        in a game during the IRL contest (see rules).
+        """,
+        price: "$50"
+      },
+      %{
+        icon: "trophy",
+        heading: "Hybrid High Score",
+        content: """
+        A $50 Amazon Gift Card will be emailed
+        after the Village to the
+        ELIGIBLE person with
+        the highest score in the Hybrid contest (see rules).
+        """,
+        price: "$50"
+      },
+      %{
+        icon: "question",
+        heading: "Hybrid Most Questions",
+        content: """
+        A $25 Barnes & Noble Gift Card will be emailed
+        after the Village to the ELIGIBLE person who
+        answers the most quiz questions
+        in a game during the Hybrid contest (see rules).
         """,
         price: "$25"
       },
       %{
         icon: "th",
-        heading: "Most Bricks",
+        heading: "Hybrid Most Bricks",
         content: """
-        Three lucky people will win a
-        $25 MyRewards Gift Card.
-        The gold medal prize goes to ELIGIBLE person with
-        the most bricks
-        in a game during the live contest (see rules for details).
-        """,
-        price: "$25"
-      },
-      %{
-        icon: "question",
-        heading: "Most Questions",
-        content: """
-        Three lucky people will win a
-        $25 MyRewards Gift Card.
-        The gold medal prize goes to ELIGIBLE person
-        who answers the most quiz questions
-        in a game during the live contest (see rules).
-        """,
-        price: "$25"
-      },
-      %{
-        icon: "gift",
-        heading: "???????",
-        content: """
-        One lucky person will win a
-        $25 MyRewards Card.
-        The prize goes to ELIGIBLE person
-        who meets a suprise criteria
-        (see rules).
-        In the past, the surpise criteria
-        was a random selection.
-        Another time it was for finding a new bug
-        in the game.
-        Or it might be used when there is a tie.
-        Or it could even be for the most creative handle.
-        Or it might be some other criteria.
+        A $25 Home Depot Gift Card will be emailed
+        after the Village
+        to the
+        ELIGIBLE person
+        with the most bricks
+        in a game during the Hybrid contest (see rules).
         """,
         price: "$25"
       }
@@ -65,7 +86,7 @@ defmodule QuadblockquizWeb.ContestPrizes do
     <h1 class="heading-1 mt-7 text-4xl tracking-widest">Contest Prizes</h1>
     <p class="pb-7">
       This is the prize page for the
-      AT&T Software Symposium Cybersecurity Workshop
+      Cybersecurity Automation Village
       QuadBlockQuiz contests.
       See
       <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules)}>
