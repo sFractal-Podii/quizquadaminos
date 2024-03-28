@@ -50,71 +50,65 @@ defmodule QuadblockquizWeb.ContestRules do
 
               Your email address will kept private - only your handle will be shown.
             </p>
-            <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Contestants must be least 21 years of age or older to win prizes.
-            </p>
-            <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Contestants must logon to the game using the 'handle' option
-              NOT github, google, anonymous, etc).
-            </p>
-            <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Contestants may use any handle they want,
-              but recognize there are hundreds of participants
-              so there is the chance of overlap. Eg don't use 'anonymous' and expect to be unique!
-            </p>
-            <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              The game does not check for overlap so pick something unique.
-            </p>
             <div class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               <ul class="list-disc pl-4">
-                <li>
+              <li>
+              Contestants must be least 21 years of age or older to win prizes.
+              </li>
+              <li>
+                Contestants must logon to the game using the 'handle' option (NOT github, google, anonymous, etc).
+              </li>
+              <li>
+                The game does not check for overlapping handles so pick something unique.
+              </li>
+              <li>
+                Contestants may use any handle they want,but recognize there are hundreds of participants
+                so there is the chance of overlap. Eg don't use 'anonymous' and expect to be unique!
+              </li>
+              <li>
                   You can play with more than one handle - but one person can only win one prize!
                 </li>
-                <li>The game should prompt you for your email when you first start to play.</li>
+                <li>The game should prompt you for your email when you enter your handle for first time.</li>
                 <li>Once assigned, that handle will stay connected to that email address.</li>
                 <li>
                   If it didn't prompt you for your email, you might have chosen an existing handle (hopefully yours).
                 </li>
-              </ul>
-            </div>
-            <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Only valid emails are elibigle to win prizes.
-              The organizers must be able to
-              to communicate with contest organizer about receiving their prize.
-            </p>
-            <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              The game must be played during eligle times.
-              Make sure to finish your game cleanly so that you have seen the endgame screen with your score.
-              To be on the safe side, take a pic of your end score screen with your cell
-              in case there are issues with the game scoreboard.
-            </p>
-            <p class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              Contestants may submit more than one game,
-              but only one prize per person.
-              The contest scoreboard will automatically do this,
-              but note the leaderboard only shows games in progress.
-              The final tally (including the finished games)
-              doesn't show until the contest is over.
-            </p>
-            <div class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
-              <p>
-                You must enter the contest to win!!!!
-                Note there are two contests and you must pick one for each game played.
-              </p>
-              <p>
-                The "In Real Life" (IRL) Contest is for those physically present at the Village.
-                Although remote players can play the game, they are not eligible to win the IRL contest
-                and should sign up for the Hybrid contest instead.
-              </p>
-              <p>
-                The Hybrid Contest is for those remote from the conference, although nothing prevents
-                those physically present from entering Hybrid if they want to.
-              </p>
-              <p>
-                When you start to play each game, it will ask whether you want to be part of this contest.
-                You must enter the contest to be on the Contest Scoreboard.
-              </p>
-              <ul class="list-disc pl-4">
+                <li>
+                  Only valid emails are elibigle to win prizes.
+                  The organizers must be able to
+                  communicate with contest organizer about receiving their prize.
+                </li>
+                <li>
+                  The game must be played during eligle times.
+                  Make sure to finish your game cleanly so that you have seen the endgame screen with your score.
+                  To be on the safe side, take a pic of your end score screen with your cell
+                  in case there are issues with the game scoreboard.
+                </li>
+                <li>
+                  Contestants may submit more than one game,
+                  but only one prize per person.
+                  The contest scoreboard will automatically do this,
+                  but note the leaderboard only shows games in progress.
+                  The final tally (including the finished games)
+                  doesn't show until the contest is over.
+                </li>
+                <li>
+                  You must enter the contest to win!!!!
+                  Note there are two contests and you must pick one for each game played.
+                </li>
+                <li>
+                  The "In Real Life" (IRL) Contest is for those physically present at the Village.
+                  Although remote players can play the game, they are not eligible to win the IRL contest
+                  and should sign up for the Hybrid contest instead.
+                </li>
+                <li>
+                  The Hybrid Contest is for those remote from the conference, although nothing prevents
+                  those physically present from entering Hybrid if they want to.
+                </li>
+                <li>
+                  When you start to play each game, it will ask whether you want to be part of this contest.
+                  You must enter the contest to be on the Contest Scoreboard.
+                </li>
                 <li>
                   Winners will be chosen based on their positions on the Contest Scoreboards.
                   Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
@@ -126,24 +120,24 @@ defmodule QuadblockquizWeb.ContestRules do
                   Note the winner maynot be the person at the top of the Contest Scoreboard
                   because people may be ineligible
                 </li>
+                <li>
                   To be eligible for IRL Contest prizes, the person must be physcially present
                   at lunch on Friday.
                   If not present, the person will be declared ineligible and the prize will go
                   to next eligible person.
-                <li>
                 </li>
                 <li>
-                  The "most points" gold medal prize will be awarded to the eligible
+                  The "most points" prize will be awarded to the eligible
                   contest contestant with the highest points,
                   who will then be **ineligible for the other Contest prizes**.
                 </li>
                 <li>
-                  The "most questions" gold medal prize will be awarded to the eligible
+                  The "most questions" prize will be awarded to the eligible
                   contest contestant who answered correctly the most trivia questions,
                   who will then be ineligible for the other Contest prizes.
                 </li>
                 <li>
-                  The "most bricks" gold medal prize will be awarded to the eligible
+                  The "most bricks" prize will be awarded to the eligible
                   contest contestant with the most number of bricks(quadblocks) in one game,
                   who will then be ineligible for the other Contest prizes.
                 </li>

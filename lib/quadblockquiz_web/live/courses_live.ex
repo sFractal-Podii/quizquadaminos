@@ -109,7 +109,7 @@ defmodule QuadblockquizWeb.CourseLive do
                   <%= course %>
                 </h1>
                 <p class="text-xs font-normal md:text-base md:font-light md:text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida ullamcorper mattis quis nec sed accumsan. Velit urna enim.
+                  This is a future feature. Ignore
                 </p>
                 <p class="text-blue-600 underline float-right text-xs font-normal md:invisible">
                   <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
