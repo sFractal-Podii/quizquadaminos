@@ -52,23 +52,25 @@ defmodule QuadblockquizWeb.ContestRules do
             </p>
             <div class="border md:border-none rounded-lg md:rounded-lg-none border-gray-200 bg-slate-100 md:bg-white p-2 md:p-0">
               <ul class="list-disc pl-4">
-              <li>
-              Contestants must be least 21 years of age or older to win prizes.
-              </li>
-              <li>
-                Contestants must logon to the game using the 'handle' option (NOT github, google, anonymous, etc).
-              </li>
-              <li>
-                The game does not check for overlapping handles so pick something unique.
-              </li>
-              <li>
-                Contestants may use any handle they want,but recognize there are hundreds of participants
-                so there is the chance of overlap. Eg don't use 'anonymous' and expect to be unique!
-              </li>
-              <li>
+                <li>
+                  Contestants must be least 21 years of age or older to win prizes.
+                </li>
+                <li>
+                  Contestants must logon to the game using the 'handle' option (NOT github, google, anonymous, etc).
+                </li>
+                <li>
+                  The game does not check for overlapping handles so pick something unique.
+                </li>
+                <li>
+                  Contestants may use any handle they want,but recognize there are hundreds of participants
+                  so there is the chance of overlap. Eg don't use 'anonymous' and expect to be unique!
+                </li>
+                <li>
                   You can play with more than one handle - but one person can only win one prize!
                 </li>
-                <li>The game should prompt you for your email when you enter your handle for first time.</li>
+                <li>
+                  The game should prompt you for your email when you enter your handle for first time.
+                </li>
                 <li>Once assigned, that handle will stay connected to that email address.</li>
                 <li>
                   If it didn't prompt you for your email, you might have chosen an existing handle (hopefully yours).
