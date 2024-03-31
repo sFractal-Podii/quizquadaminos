@@ -40,7 +40,7 @@ defmodule QuadblockquizWeb.LoginLevelTest do
       conn = get(conn, "/")
 
       assert conn.resp_body =~
-               "Game not available until workshop starts"
+               "Game not available until congest starts"
     end
 
     test "if users were logged in via other oauth option other than github, they are displayed with a message to indicate game not available",
@@ -52,7 +52,7 @@ defmodule QuadblockquizWeb.LoginLevelTest do
       conn = get(conn, "/")
 
       assert conn.resp_body =~
-               "Game not available until workshop starts"
+               "Game not available until contest starts"
     end
 
     test "if users were logged in anonymously, they are displayed with a message to indicate game not available",
@@ -61,7 +61,7 @@ defmodule QuadblockquizWeb.LoginLevelTest do
       conn = get(conn, "/")
 
       assert conn.resp_body =~
-               "Game not available until workshop starts"
+               "Game not available until contest starts"
     end
   end
 
@@ -98,7 +98,7 @@ defmodule QuadblockquizWeb.LoginLevelTest do
       conn = get(conn, "/")
 
       assert conn.resp_body =~
-               "Game not available until workshop starts"
+               "Game not available until contest starts"
     end
   end
 
