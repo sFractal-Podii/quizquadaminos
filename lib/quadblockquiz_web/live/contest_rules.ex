@@ -130,11 +130,11 @@ defmodule QuadblockquizWeb.ContestRules do
                   and the prize will go to next eligible person.
                 </li>
                 <li>
-                To be eligible for Hybrid Contest prizes, the person must be on the bridge
-                at lunch on Friday.
-                Unless previously agreed with sFractal, the person will be declared ineligible if not on the bridge,
-                and the prize will go to next eligible person.
-              </li>
+                  To be eligible for Hybrid Contest prizes, the person must be on the bridge
+                  at lunch on Friday.
+                  Unless previously agreed with sFractal, the person will be declared ineligible if not on the bridge,
+                  and the prize will go to next eligible person.
+                </li>
                 <li>
                   The "most points" prize will be awarded to the eligible
                   contest contestant with the highest points,
