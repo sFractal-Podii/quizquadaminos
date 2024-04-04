@@ -88,9 +88,10 @@ defmodule QuadblockquizWeb.ContestRules do
                 </li>
                 <li>
                   Contestants may submit more than one game,
+                  play often to increase your chances of winning,
                   but only one prize per person.
-                  The contest scoreboard will automatically do this,
-                  but note the leaderboard only shows games in progress.
+                  The contest scoreboard will automatically keep track of all your games,
+                  but note the scoreboard only shows games in progress.
                   The final tally (including the finished games)
                   doesn't show until the contest is over.
                 </li>
@@ -113,7 +114,7 @@ defmodule QuadblockquizWeb.ContestRules do
                 </li>
                 <li>
                   Winners will be chosen based on their positions on the Contest Scoreboards.
-                  Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
+                  Note the Contest Scoreboards are different than the Leaderboard (which is for "all-time").
                 </li>
                 <li>
                   A person can only win a single prize across the two Contests.
@@ -125,9 +126,15 @@ defmodule QuadblockquizWeb.ContestRules do
                 <li>
                   To be eligible for IRL Contest prizes, the person must be physcially present
                   at lunch on Friday.
-                  If not present, the person will be declared ineligible and the prize will go
-                  to next eligible person.
+                  Unless previously agreed with sFractal, the person will be declared ineligible if not present,
+                  and the prize will go to next eligible person.
                 </li>
+                <li>
+                To be eligible for Hybrid Contest prizes, the person must be on the bridge
+                at lunch on Friday.
+                Unless previously agreed with sFractal, the person will be declared ineligible if not on the bridge,
+                and the prize will go to next eligible person.
+              </li>
                 <li>
                   The "most points" prize will be awarded to the eligible
                   contest contestant with the highest points,
