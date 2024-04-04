@@ -40,7 +40,7 @@ defmodule QuadblockquizWeb.ContestRules do
               registered attendees at the Cybersecurity Automation Village.
               Contestants must login to the game using the 'handle' option,
               and must choose a handle that is unique from other contestants.
-              You should be asked for your email address on the first use of your handle.
+              You should be asked for your email address on starting the first using that handle.
               If you are not asked for your email, then there is already an email for that handle.
               If it wasn't yours, then you are playing for someone else!
               You may have more than one handle, but can only win one prize.
@@ -69,7 +69,7 @@ defmodule QuadblockquizWeb.ContestRules do
                   You can play with more than one handle - but one person can only win one prize!
                 </li>
                 <li>
-                  The game should prompt you for your email when you enter your handle for first time.
+                  The game should prompt you for your email on starting a game using that handle for first time.
                 </li>
                 <li>Once assigned, that handle will stay connected to that email address.</li>
                 <li>
