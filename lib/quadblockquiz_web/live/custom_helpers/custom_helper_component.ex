@@ -65,12 +65,6 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
         <a class="button" href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "github")}>
           <i class="fas fa-github"></i> Sign in with GitHub
         </a>
-        <a class="button" href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "google")}>
-          Sign in with Google
-        </a>
-        <a class="button" href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "linkedin")}>
-          Sign in with LinkedIn
-        </a>
         <%= if @login_level == "anonymous_login" do %>
           <.anonymous_sign_in style={:milligram} />
         <% end %>
@@ -90,18 +84,7 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
     >
       GitHub
     </a>
-    <a
-      class={@dropdown_item_class}
-      href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "google")}
-    >
-      Google
-    </a>
-    <a
-      class={@dropdown_item_class}
-      href={Routes.auth_path(QuadblockquizWeb.Endpoint, :request, "linkedin")}
-    >
-      LinkedIn
-    </a>
+
     <%= if @login_level == "anonymous_login" do %>
       <.anonymous_sign_in style={:tailwind} />
     <% end %>
@@ -155,7 +138,11 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
     """
   end
 
-  def display_name_and_avatar(%{current_user: "anonymous"} = _assigns), do: ""
+  def display_name_and_avatar(%{current_user: "anonymous"} = assigns) do
+    ~H"""
+    <div></div>
+    """
+  end
 
   def display_name_and_avatar(assigns) do
     ~H"""
