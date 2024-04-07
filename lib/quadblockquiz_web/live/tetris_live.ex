@@ -102,7 +102,7 @@ defmodule QuadblockquizWeb.TetrisLive do
         </div>
         <div class="column column-25 column-offset-25">
           <p><%= @brick_count %> QuadBlocks dropped</p>
-          <p><%= @row_count %> rows cleard</p>
+          <p><%= @row_count %> rows cleared</p>
           <p><%= @correct_answers %> questions answered correctly</p>
           <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
         </div>
@@ -140,7 +140,7 @@ defmodule QuadblockquizWeb.TetrisLive do
                   <.modal return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}>
                     <.live_component
                       module={QuadblockquizWeb.QuizModalComponent}
-                      id={1}  
+                      id={1}
                       powers = {@powers}
                       score= {@score}
                       modal= {@modal}
