@@ -153,12 +153,12 @@ defmodule QuadblockquizWeb.ContestRules do
                 <li>
                   A person is only elegible to receive one prize,
                   (e.g first on points and first on bricks would only receive one prize for points, and then 'runner up' on bricks would win that prize).
-                  </li>
-                  <li>
-                    There is a 1,000 point question in the OStart Category.
-                    It's answer is
-                    "Studies showed a two-order of magnitude reduction in attacker impact when cybersecurity automation was implemented.".
-                  </li>
+                </li>
+                <li>
+                  There is a 1,000 point question in the OStart Category.
+                  It's answer is
+                  "Studies showed a two-order of magnitude reduction in attacker impact when cybersecurity automation was implemented.".
+                </li>
                 <li>
                   The organizers retain the right to adjust or shutdown the contest
                   at any time, and has the right to investigate possible cheating
