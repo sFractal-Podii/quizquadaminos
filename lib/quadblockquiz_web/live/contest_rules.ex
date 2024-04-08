@@ -102,11 +102,11 @@ defmodule QuadblockquizWeb.ContestRules do
                 <li>
                   The "In Real Life" (IRL) Contest is for those physically present at the Village.
                   Although remote players can play the game, they are not eligible to win the IRL contest
-                  and should sign up for the Hybrid contest instead.
+                  and should sign up for the Hybrid contest instead. The IRL pin is irl411
                 </li>
                 <li>
                   The Hybrid Contest is for those remote from the conference, although nothing prevents
-                  those physically present from entering Hybrid if they want to.
+                  those physically present from entering Hybrid if they want to. The Hybrid pin is hybrid411
                 </li>
                 <li>
                   When you start to play each game, it will ask whether you want to be part of this contest.
@@ -121,7 +121,7 @@ defmodule QuadblockquizWeb.ContestRules do
                 </li>
                 <li>
                   Note the winner maynot be the person at the top of the Contest Scoreboard
-                  because people may be ineligible
+                  because people may be ineligible.
                 </li>
                 <li>
                   To be eligible for IRL Contest prizes, the person must be physcially present
@@ -153,6 +153,11 @@ defmodule QuadblockquizWeb.ContestRules do
                 <li>
                   A person is only elegible to receive one prize,
                   (e.g first on points and first on bricks would only receive one prize for points, and then 'runner up' on bricks would win that prize).
+                </li>
+                <li>
+                  There is a 1,000 point question in the OStart Category.
+                  It's answer is
+                  "Studies showed a two-order of magnitude reduction in attacker impact when cybersecurity automation was implemented.".
                 </li>
                 <li>
                   The organizers retain the right to adjust or shutdown the contest
