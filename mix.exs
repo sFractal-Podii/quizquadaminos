@@ -5,7 +5,7 @@ defmodule Quadblockquiz.MixProject do
     [
       app: :quadblockquiz,
       description: "Descri'be",
-      version: "1.0.12",
+      version: "1.0.11",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -97,7 +97,7 @@ defmodule Quadblockquiz.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
-        "cmd --cd assets node build.mjs",
+        "cmd --cd assets node build.js",
         "cmd --cd assets npm run deploy",
         "phx.digest"
       ],
