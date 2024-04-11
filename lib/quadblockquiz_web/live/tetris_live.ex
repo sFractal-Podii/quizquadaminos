@@ -137,7 +137,7 @@ defmodule QuadblockquizWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                  <.modal return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}>
+                  <.modal>
                     <.live_component
                       module={QuadblockquizWeb.QuizModalComponent}
                       id={1}
