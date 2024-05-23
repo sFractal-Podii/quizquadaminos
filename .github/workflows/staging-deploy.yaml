@@ -17,7 +17,7 @@ name: Staging Deploy
 on:
   push:
     branches:
-    - develop
+    - test_oauth
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
