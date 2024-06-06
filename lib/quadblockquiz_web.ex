@@ -79,9 +79,7 @@ defmodule QuadblockquizWeb do
   defp view_helpers do
     quote do
       # Use all HTML functionality (forms, tags, etc)
-      import Phoenix.HTML
-      import Phoenix.HTML.Form
-      use PhoenixHTMLHelpers
+      use Phoenix.HTML
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
