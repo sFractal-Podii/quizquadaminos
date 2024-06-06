@@ -1,8 +1,10 @@
 defmodule QuadblockquizWeb.CourseLive do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
 
   alias Quadblockquiz.Accounts
   alias Quadblockquiz.Courses
+
   alias QuadblockquizWeb.Router.Helpers, as: Routes
 
   @impl true
@@ -57,9 +59,11 @@ defmodule QuadblockquizWeb.CourseLive do
         <div class="column column-25">
           <%= for chapter <- Courses.chapter_list(assigns.course) do %>
             <ul>
-              <%= live_redirect("start #{chapter}",
-                to: Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
-              ) %>
+              <.link navigate={
+                Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
+              }>
+                <%= "start #{chapter}" %>
+              </.link>
             </ul>
           <% end %>
         </div>
@@ -109,10 +113,10 @@ defmodule QuadblockquizWeb.CourseLive do
                   <%= course %>
                 </h1>
                 <p class="text-xs font-normal md:text-base md:font-light md:text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida ullamcorper mattis quis nec sed accumsan. Velit urna enim.
+                  This is a future feature. Ignore
                 </p>
                 <p class="text-blue-600 underline float-right text-xs font-normal md:invisible">
-                  <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                  <.link patch={Routes.course_path(@socket, :show, course)}>start course</.link>
                 </p>
               </div>
               <div class="hidden md:flex md:justify-between">
@@ -126,7 +130,7 @@ defmodule QuadblockquizWeb.CourseLive do
                 </div>
                 <div class="pt-7">
                   <button class="rounded-sm bg-blue-600 text-white flex items-center justify-center text-base font-normal h-12 w-40">
-                    <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                    <.link patch={Routes.course_path(@socket, :show, course)}>start course</.link>
                   </button>
                 </div>
               </div>

@@ -12,7 +12,7 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
     <div>
       <h3>What's your email address?</h3>
       <.form
-        let={f}
+        :let={f}
         for={@changeset}
         phx-change="validate"
         phx-submit="update_email"

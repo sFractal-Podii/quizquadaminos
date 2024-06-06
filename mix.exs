@@ -5,10 +5,9 @@ defmodule Quadblockquiz.MixProject do
     [
       app: :quadblockquiz,
       description: "Descri'be",
-      version: "0.28.5",
+      version: "1.1.12",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       build_embedded: true,
@@ -55,20 +54,22 @@ defmodule Quadblockquiz.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.10"},
+ 
       {:phoenix_ecto, "~> 4.4.2"},
       {:ecto_sql, "~> 3.10"},
+      {:phoenix, "~> 1.7.11"}, 
       {:postgrex, ">= 0.17.2"},
-      {:phoenix_live_view, "~> 0.17.14"},
-      {:floki, ">= 0.34.3", only: :test},
+      {:phoenix_live_view, "~> 0.20.14"},
+      {:floki, ">= 0.36.0", only: :test},
       {:phoenix_html, "~> 3.3.1"},
-      {:phoenix_live_reload, "~> 1.4.1", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.6"},
+      {:phoenix_view, "~> 2.0"},
+      {:phoenix_live_reload, "~> 1.5.2", only: :dev},
+      {:phoenix_live_dashboard, "~> 0.8.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.22.3"},
       {:jason, "~> 1.4.1"},
-      {:plug_cowboy, "~> 2.6.1"},
+      {:plug_cowboy, "~> 2.7"},
       {:oauth2, "2.0.1", override: true},
       {:ueberauth, "~>0.6"},
       {:ueberauth_github, "~>0.7"},
@@ -80,7 +81,7 @@ defmodule Quadblockquiz.MixProject do
        branch: "auto-install-bom",
        runtime: false},
       {:earmark, "~> 1.4"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7.5", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -105,4 +106,3 @@ defmodule Quadblockquiz.MixProject do
     ]
   end
 end
-
