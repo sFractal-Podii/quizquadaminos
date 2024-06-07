@@ -5,7 +5,7 @@ defmodule Quadblockquiz.MixProject do
     [
       app: :quadblockquiz,
       description: "Descri'be",
-      version: "1.0.2",
+      version: "1.1.12",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -60,7 +60,8 @@ defmodule Quadblockquiz.MixProject do
       {:postgrex, ">= 0.17.2"},
       {:phoenix_live_view, "~> 0.20.14"},
       {:floki, ">= 0.36.0", only: :test},
-      {:phoenix_html, "~> 3.3.1"},
+      {:phoenix_html, "~> 4.1.1"},
+      {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix_live_reload, "~> 1.5.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.8.0"},
