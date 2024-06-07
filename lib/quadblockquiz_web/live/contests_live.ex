@@ -9,7 +9,6 @@ defmodule QuadblockquizWeb.ContestsLive do
   """
   use QuadblockquizWeb, :live_view
 
-  import Phoenix.HTML.Form
   alias Quadblockquiz.Accounts
   alias Quadblockquiz.Accounts.User
   alias Quadblockquiz.Contests
