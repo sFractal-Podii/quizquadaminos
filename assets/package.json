@@ -11,7 +11,7 @@
     "phoenix_live_view": "file:../deps/phoenix_live_view"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.13",
+    "autoprefixer": "^10.4.19",
     "esbuild": "^0.20.2",
     "postcss": "^8.4.38",
     "postcss-cli": "^10.1.0",
