@@ -40,7 +40,7 @@ defmodule QuadblockquizWeb.ContestRules do
               registered attendees at the Cybersecurity Automation Village.
               Contestants must login to the game using the 'handle' option,
               and must choose a handle that is unique from other contestants.
-              You should be asked for your email address on the first use of your handle.
+              You should be asked for your email address on starting the first using that handle.
               If you are not asked for your email, then there is already an email for that handle.
               If it wasn't yours, then you are playing for someone else!
               You may have more than one handle, but can only win one prize.
@@ -69,7 +69,7 @@ defmodule QuadblockquizWeb.ContestRules do
                   You can play with more than one handle - but one person can only win one prize!
                 </li>
                 <li>
-                  The game should prompt you for your email when you enter your handle for first time.
+                  The game should prompt you for your email on starting a game using that handle for first time.
                 </li>
                 <li>Once assigned, that handle will stay connected to that email address.</li>
                 <li>
@@ -88,9 +88,10 @@ defmodule QuadblockquizWeb.ContestRules do
                 </li>
                 <li>
                   Contestants may submit more than one game,
+                  play often to increase your chances of winning,
                   but only one prize per person.
-                  The contest scoreboard will automatically do this,
-                  but note the leaderboard only shows games in progress.
+                  The contest scoreboard will automatically keep track of all your games,
+                  but note the scoreboard only shows games in progress.
                   The final tally (including the finished games)
                   doesn't show until the contest is over.
                 </li>
@@ -101,11 +102,11 @@ defmodule QuadblockquizWeb.ContestRules do
                 <li>
                   The "In Real Life" (IRL) Contest is for those physically present at the Village.
                   Although remote players can play the game, they are not eligible to win the IRL contest
-                  and should sign up for the Hybrid contest instead.
+                  and should sign up for the Hybrid contest instead. The IRL pin is irl411
                 </li>
                 <li>
                   The Hybrid Contest is for those remote from the conference, although nothing prevents
-                  those physically present from entering Hybrid if they want to.
+                  those physically present from entering Hybrid if they want to. The Hybrid pin is hybrid411
                 </li>
                 <li>
                   When you start to play each game, it will ask whether you want to be part of this contest.
@@ -113,20 +114,26 @@ defmodule QuadblockquizWeb.ContestRules do
                 </li>
                 <li>
                   Winners will be chosen based on their positions on the Contest Scoreboards.
-                  Note the Contest Scoreboard is different than the Leaderboard (which is for "all-time").
+                  Note the Contest Scoreboards are different than the Leaderboard (which is for "all-time").
                 </li>
                 <li>
                   A person can only win a single prize across the two Contests.
                 </li>
                 <li>
                   Note the winner maynot be the person at the top of the Contest Scoreboard
-                  because people may be ineligible
+                  because people may be ineligible.
                 </li>
                 <li>
                   To be eligible for IRL Contest prizes, the person must be physcially present
                   at lunch on Friday.
-                  If not present, the person will be declared ineligible and the prize will go
-                  to next eligible person.
+                  Unless previously agreed with sFractal, the person will be declared ineligible if not present,
+                  and the prize will go to next eligible person.
+                </li>
+                <li>
+                  To be eligible for Hybrid Contest prizes, the person must be on the bridge
+                  at lunch on Friday.
+                  Unless previously agreed with sFractal, the person will be declared ineligible if not on the bridge,
+                  and the prize will go to next eligible person.
                 </li>
                 <li>
                   The "most points" prize will be awarded to the eligible
@@ -146,6 +153,11 @@ defmodule QuadblockquizWeb.ContestRules do
                 <li>
                   A person is only elegible to receive one prize,
                   (e.g first on points and first on bricks would only receive one prize for points, and then 'runner up' on bricks would win that prize).
+                </li>
+                <li>
+                  There is a 1,000 point question in the OStart Category.
+                  It's answer is
+                  "Studies showed a two-order of magnitude reduction in attacker impact when cybersecurity automation was implemented.".
                 </li>
                 <li>
                   The organizers retain the right to adjust or shutdown the contest
