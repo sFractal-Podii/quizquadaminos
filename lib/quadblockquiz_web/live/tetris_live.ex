@@ -1,5 +1,7 @@
 defmodule QuadblockquizWeb.TetrisLive do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
+
   require Logger
 
   alias Quadblockquiz.Accounts
@@ -96,11 +98,11 @@ defmodule QuadblockquizWeb.TetrisLive do
           <% end %>
           <%= raw(SvgBoard.svg_foot()) %>
           <hr />
-          <%= live_redirect("Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button") %>
+          <.link navigate={Routes.tetris_path(@socket, :tetris)} class="button">Play again?</.link>
         </div>
         <div class="column column-25 column-offset-25">
           <p><%= @brick_count %> QuadBlocks dropped</p>
-          <p><%= @row_count %> rows cleard</p>
+          <p><%= @row_count %> rows cleared</p>
           <p><%= @correct_answers %> questions answered correctly</p>
           <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
         </div>
@@ -135,29 +137,31 @@ defmodule QuadblockquizWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal(
-      @socket,
-      QuadblockquizWeb.QuizModalComponent,
-      id: 1,
-      powers: @powers,
-      score: @score,
-      modal: @modal,
-      qna: @qna,
-      file_path: @file_path,
-      categories: @categories,
-      category: @category,
-      return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)
-    ) %>
+                  <.modal>
+                    <.live_component
+                      module={QuadblockquizWeb.QuizModalComponent}
+                      id={1}
+                      powers = {@powers}
+                      score= {@score}
+                      modal= {@modal}
+                      qna = {@qna}
+                      file_path = {@file_path}
+                      categories = {@categories}
+                      category = {@category}
+                      return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}
+                    />
+                  </.modal>
                 <% end %>
                 <%= if @super_modal do %>
-                <%= live_modal(
-      @socket,
-      QuadblockquizWeb.SuperpModalComponent,
-      id: 3,
-      powers: @powers,
-      super_modal: @super_modal,
-      return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)
-    ) %>
+                  <.modal return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}>
+                    <.live_component
+                      module={QuadblockquizWeb.SuperpModalComponent}
+                      id={3}
+                      powers = {@powers}
+                      super_modal= {@super_modal}
+                      return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}
+                    />
+                  </.modal>
                 <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw(

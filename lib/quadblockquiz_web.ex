@@ -45,7 +45,7 @@ defmodule QuadblockquizWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {QuadblockquizWeb.LayoutView, "live.html"}
+        layout: {QuadblockquizWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -79,7 +79,9 @@ defmodule QuadblockquizWeb do
   defp view_helpers do
     quote do
       # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
+      import Phoenix.HTML
+      import Phoenix.HTML.Form
+      use PhoenixHTMLHelpers
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers

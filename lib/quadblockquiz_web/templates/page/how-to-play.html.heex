@@ -1,4 +1,45 @@
 <div class="p-6">
+  <h2 class="heading-2 tracking-wider">0. LOGIN</h2>
+  <p>When you first come to the site, you should see something like the following.
+    Since you are here (the "How To" tab), you presumabley have figured that out.
+    To get back to the Home page below, click on the Home tab.</p>
+  <p>Note there is no button to play the game. You must login first.</p>
+  <p>Note the "login" button in the upper right. Click on the login button.</p>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img src={Routes.static_path(@conn, "/images/signin1.png")} alt="signin1" class="max-h-64" />
+  <h3 class="heading-3 mt-6">_</h3>
+  <p>Clicking on the login button will cause a dropdown with 3 choices.
+    Click handle. Github is for developers and will display too much
+    of your personal info that game will get from GitHub.
+    You can click anonymous if you are just playing for fun,
+    but then you can't be in contests</p>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img src={Routes.static_path(@conn, "/images/signin3.png")} alt="signin3" class="max-h-64" />
+  <h3 class="heading-3 mt-6">_</h3>
+  <p>Clicking Handle will bring up a textbox to enter whatever
+    handle you want to go by. Note there is no checking for duplicates
+    so if you choose an existing handle, someone else will get credit for your play.
+    For example, sFractal and Duncan are already taken</p>
+  <h3 class="heading-3 mt-6">static_path</h3>
+  <img src={Routes.static_path(@conn, "/images/signin4.png")} alt="signin4" class="max-h-64" />
+  <h3 class="heading-3 mt-6">_</h3>
+  <p>
+    After providing a handle, the "Play" button will now appear
+    near the bottom of the Home page.
+    The first time you play with your handle, a popup should request your email.
+    If it doesn't, you might be playing with someone else's handles.
+    See
+    <a href={Routes.live_path(QuadblockquizWeb.Endpoint, QuadblockquizWeb.ContestRules)}>
+      Contest Rules
+    </a>
+    for more on handles.
+  </p>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img src={Routes.static_path(@conn, "/images/signin5.png")} alt="signin5" class="max-h-64" />
+  <h3 class="heading-3 mt-6">_</h3>
+</div>
+
+<div class="p-6">
   <h2 class="heading-2 tracking-wider">1. THE BASICS</h2>
   <p>Predictably patterned blocks will fall from the game's sky. It's your
     job to spin these blocks mid air to achieve a perfect fit on the game's ground level.</p>
@@ -13,12 +54,15 @@
     screen, it's lights out for you. Budget space and time wisely.</p>
   <p>Think of it this way: the game ends when you go out of business because your supply chain
     got too long and all the vulnerabilities you swept under the rug came back to haunt you.</p>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img src={Routes.static_path(@conn, "/images/gameover1.png")} alt="gameover1" class="max-h-64" />
+  <h3 class="heading-3 mt-6">_</h3>
 </div>
 
 <div class="mt-6 pt-0 p-6">
   <h2 class="heading-2 tracking-wider">2. POWER UPS</h2>
   <p>In their infinite wisdom, the game developers have seen fit to bestow you with
-    super human power ups. Simply press SPACE and correctly answer some real world trivia
+    super human power ups. Simply press SPACE and correctly answer some real world quiz
     questions to access one of the following wildly effective tools:</p>
   <ul class="py-4 pl-4 leading-8">
     <li><i class="fas fa-plus-square"></i> add a block - useful to fill in holes</li>
@@ -44,13 +88,15 @@
     <li><i class="fas fa-tape"></i> remove all licensing issues</li>
     <li><i class="fab fa-superpowers"></i> Superpower - exchange for any other powerup</li>
   </ul>
-  <p>What? You don't need no stinkin' Power Ups? Guess again.</p>
+  <p>
+    Note the answers to the quiz questions are included in the text. Read, learn, and answer. What? You don't need no stinkin' Power Ups? Guess again.
+  </p>
 </div>
 <div class="p-6">
   <h2 class="heading-2 tracking-wider">3. CATASTROPHIC VULNERABILITIES</h2>
   <p>
     As much as we all wish this was the Atari in your parents' basement, this is the
-    AT&T Cybersecurity Workshop
+    Cybersecurity Automation Village
     -- a venue to explore the vulnerabilities that haunt modern cyber security. Accordingly, we've built
     in a few little hiccups along the way to get you thinking about the supply chain of your block arrays.
   </p>
@@ -59,75 +105,135 @@
     without earning a power up or two. Here are some of the fun little challenges life will throw your way:
   </p>
   <ol class="list-decimal py-4 pl-4">
+    <li>Vulnerabilities (potential security holes in an otherwise functioning security paradigm)
+      Any vulnerability in a row will prevent it being cleared.
+      Vulnerabilities make it more likely that you'll be hit with a cyber attack (see below).
+      A vulnerability's arrival is a function of game time and wrong answers to quiz questions.
+      You will recognize a vulnerability on sight.
+      Known vulnerabilities are yellow/gray blocks that appear either in dropping blocks
+      or in uncleared blocks at the bottom.
+      There are 4 in the gameover picture above.
+      If you see one, you'd better get your power ups in order.</li>
     <li>
-      vulnerabilities (potential security holes in an otherwise functioning security paradigm)
+      licensing issues (extraneous blocks that gunk up the works)
+      Licensing issues are brown/grey blocks that also prevent a row from being cleared.
+      There is one in the gameover image above.
+      The more license issues, the greater the likelihood of a lawsuit (see below).
+      Like vulnerabilities, license issues are a function of game time and wrong answers to quiz questions.
     </li>
-    <ul class="py-4 pl-3.5 list-disc">
-      <li>any vulnerability in a row will prevent it being cleared.</li>
-      <li>
-        vulnerabilities make it more likely that you'll be hit with a cyber attack (see below).
-      </li>
-      <li>
-        a vulnerability's arrival is a function of game time and wrong answers to trivia questions.
-      </li>
-      <li>you will recognize a vulnerability on sight</li>
-      <ul class="py-4 pl-3.5 list-square">
-        <li>
-          Known vulnerabilities are yellow/gray blocks that appear either in dropping blocks or in uncleared blocks at the bottom.
-        </li>
-        <li>
-          Invisible vulnerabilities (zero days) are white-on-white blocks. If you see one, you'd better get your power ups in order.
-        </li>
-      </ul>
-    </ul>
-    <li>licensing issues (extraneous blocks that gunk up the works)</li>
-    <ul>
-      <li>licensing issues are brown/grey blocks that also prevent a row from being cleared.</li>
-      <li>the more license issues, the greater the likelihood of a lawsuit (see below).</li>
-      <li>like vulnerabilities, license issues are a function of game time and wrong answers
-        to trivia questions</li>
-    </ul>
     <li>cyber attacks(rapid changes in operating conditions that take over entire sections
-      of the gameboard and speed the game up uncontrollably)</li>
-    <ul>
-      <li>ignore enough (5) vulnerabilities in your block supply chain and you'll be in
-        for a nasty surprise</li>
-      <li>the game will accelerate to its fastest speed and an entire line of exploits
-        will magically appear on your screen preventing operations. Hit the space bar!</li>
-    </ul>
+      of the gameboard and speed the game up uncontrollably).
+      Ignore enough (5) vulnerabilities in your block supply chain and you'll be in
+      for a nasty surprise.
+      The game will accelerate to its fastest speed and an entire line of golden exploits
+      will magically appear on your screen preventing operations.
+      Hit the space bar!</li>
     <li>licensing lawsuits (tiresome procedures that gum up entire sections of the game board
-      and slow the game to a snail's pace)</li>
-    <ul>
-      <li>ignore enough (5) liscensing issues in your block supply chain and you'll be in
-        for a nasty surprise</li>
-      <li>
-        not only will the game slow down to a snail's pace, but a fresh coat of pesky brown/grey injunctions
-        will festoon your existing block arrays. Hit the space bar!
-      </li>
-    </ul>
+      and slow the game to a snail's pace).
+      Ignore enough (5) liscensing issues in your block supply chain and you'll be in
+      for a nasty surprise.
+      Not only will the game slow down to a snail's pace, but a fresh coat of pesky brown/grey injunctions
+      will festoon your existing block arrays. Hit the space bar!</li>
   </ol>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img src={Routes.static_path(@conn, "/images/qbq-attack.gif")} alt="attack" class="max-h-64" />
+  <h3 class="heading-3 mt-6">_</h3>
 </div>
 <div class="p-6">
   <h2 class="heading-2 tracking-wider">4. SCORING</h2>
+  <p></p>
   <p>Points are scored in several ways:</p>
-  <ol>
-    <li>chronological longevity / block drops</li>
-    <li>rows cleared</li>
-    <li>questions answered</li>
-  </ol>
+  <bl>
+    <li>Block drops. With every tic of the clock, the score increases
+      (or decreases in the case of a cyberattack or lawsuit). The game as various speeds.
+      A faster speed both increases how quickly the tics occur, but also increases
+      the amount of points per tic.</li>
+    <li>Rows cleared. The value of clearing a row
+      raises exponentially with the number of rows cleared at once.
+      Clearing one row might be worth 200 points
+      and clearing 5 rows at once would be 3,200 points.</li>
+    <li>
+      Questions answered correctly. Each correct answer adds a number of
+      points based on the number shown near the bottom of the question.
+      Note incorrect answers subtract (usually fewer) points.
+      Note different questions have different point scores - some quite large.
+      It pays to play often and go thru all the questions so you know how to maximize your score.
+    </li>
+  </bl>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img
+    src={Routes.static_path(@conn, "/images/qbq.09.x.score.gif")}
+    alt="exponential"
+    class="max-h-64"
+  />
+  <h3 class="heading-3 mt-6">_</h3>
   <p>The amount of points scored is also influenced by game conditions.
-    For instance, the value of clearing a row
-    raises exponentially with the number of rows cleared at once.</p>
+    For instance, there is a mulitplier on the points for answering questions.
+    A question worth 10 points is worth 20 points after just one block has dropped.
+    That 10 point question is worth 30 points after 10 blocks,
+    is worth 50 points after 20 blocks,
+    is worth 70 points after 50 blocks,
+    and is worth 110 points after 100 blocks.</p>
+  <p>Besides the exponential nature of points for clearing rows,
+    there is also a multipiler for questions answers correctly.
+    Clearing 1 row is worth 200 points if no questions are answered correctly,
+    is worth 400 points if one question was answered correctly,
+    is worth 600 points if 10 questions answered correctly,
+    is worth 1,000 points if 50 questions answered correctly,
+    is worth 1,400 points if 100 questions answered correctly,
+    and is worth 2,200 points if 30 questions answered correctly.
+    Note the gif above showing the exponential nature of rows was from before this feature was implemented
+    (ie assume is says 0 questions answered instead of 19).</p>
 </div>
 <div class="p-6">
-  <h2 class="heading-2 tracking-wider">5. PRO TIPS</h2>
-  <p>tetrominos vs quiz</p>
+  <h2 class="heading-2 tracking-wider">5. Quiz</h2>
+  <p>Hitting the space bar pauses the falling blocks and
+    pops up the quiz catetories.</p>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img
+    src={Routes.static_path(@conn, "/images/qbq-quiz.png")}
+    alt="quiz categories"
+    class="max-h-64"
+  />
+  <h3 class="heading-3 mt-6">_</h3>
+  <p>Hitting "Continue" brings you back to falling blocks.</p>
+  <p>Hitting "End Game" cleanly ends the game.</p>
+  <p>DO NOT CLICK on the "X" to close the quiz.
+    This is clicking on a phishing email and bricking your game.
+    There is no way out of this other than starting a new game.</p>
+  <p>Clicking on a category brings up the next question in the quiz.</p>
+  <h3 class="heading-3 mt-6">_</h3>
+  <img
+    src={Routes.static_path(@conn, "/images/qbq-question.png")}
+    alt="quiz question"
+    class="max-h-64"
+  />
+  <p></p>
+  <p>
+    Each quiz question contains explanatory material that includes the answer to the question.
+  </p>
+  <p>
+    Answer the question to receive points (see scoring).
+    Click on your choice of answer and then click "Continue".
+    Wrong answers subtract points. Wrong answers may also add vulnerabilities and/or licensing issues.
+  </p>
+  <p>
+    You can click "skip question" to skip the question. This is useful on the last question in each category.
+  </p>
+  <p>Note that although the blocks are no longer falling, the clock is still running,
+    and you can still be attacked while in quiz mode -particularly if you stay there too long.</p>
+</div>
+
+<div class="p-6">
+  <h2 class="heading-2 tracking-wider">6. PRO TIPS</h2>
+  <p>Just a little wisdom for thought for those with the ears to hear it.</p>
+  <h3 class="heading-3 mt-6">Dropping Blocks vs Answering Questions</h3>
   <p>just like in real life, it is sometimes expedient
     to defer patches due to more imediate revenue needs,
     sometimes leaving vulnerability or license issues in place lets you build rows
     that can be cleared at once (since fix/add/delete/move/...
     are done while game is paused)
-    - but be careful, since it also increases you likelihood
+    - but be careful, since it also increases your likelihood
     of a cyberattack or lawsuit.</p>
   <p>It's not an easy tradeoff.</p>
   <p>The game is not tilted towards fixing - you will get a lower
@@ -136,14 +242,37 @@
     a cyberattack or lawsuit if ignore them entirely.
     The best strategy is trading off between the two,
     and investing in areas that reduce the likelihood
-    (e.g. SBOM, Automation, OpenChain) of them occuring in the first place.</p>
-  <p>Just a little wisdom for thought for those with the ears to hear it.</p>
+    (e.g. SBOM, Automation, ...) of them occuring in the first place.</p>
+  <h3 class="heading-3 mt-6">End of Game</h3>
+  <p>The cleanest way for the game to end
+    (ie the highest liklihood your points will get recorded in the contest)
+    is if you click the "end game" button after hitting the space bar.
+    This should display a summary of how you did.
+    If it's a high score, and you are in a contest, you might want to snap a pic.
+    "just in case".</p>
+  <p>The most likely way a game will end will be supply chain problems and the blockyard fills.
+    This should also result in a summary of how you did.</p>
+  <p>There is a 15 minute elasped time limit and the game will quit 15 minutes after you started.
+    This "should' result in the game ending correctly with a summary displayed. But it would be safer
+    to end cleaning by hitting the end button</p>
+  <p>It is also possible there are bugs and the game will just reset. Sorry.
+    The developers could claim this is a 'feature' representing a reallife ransomware 'bricking' your company,
+    but we'd be lying. The reset is most likely to happen if you have a network interruption
+    (there is a live steam to server doing the updates) or if you leave and don't enter anything for awhile
+    (there is some timeout somewhere we haven't found yet which tears the connection down).</p>
+  <h3 class="heading-3 mt-6">Getting Started</h3>
+  <p>Easiet way to learn is to play.
+    It is recommended to start with "0Start" category of questions as they should guide you through many aspects.
+    Eventaully go thru all the questions in all the categories. Besides learning about automation projects you may not know,
+    you'll learn where the high-point-value questions are so you can optimize in later games.
+    Play many times. If the contests are active and you are elibible (ie registered for Village), enter a contest.
+    Your chances of winning are much better than you think.</p>
 </div>
 <div class="p-6">
-  <h2 class="heading-2 tracking-wider">6. Contest</h2>
+  <h2 class="heading-2 tracking-wider">7. Contest</h2>
   <p>
     There will be a contest at the
-    AT&T Cybersecurity Workshop.
+    Cybersecurity Automation Village.
   </p>
   <p>
     Save the quadblocks world from supply chain vulnerabilities
@@ -159,5 +288,7 @@
       contest prizes
     </a>
     for more information.
+    It is highly recommended to carefully read all contest rules both for contest pins,
+    but also for the answer to a 1,000 point question.
   </p>
 </div>
