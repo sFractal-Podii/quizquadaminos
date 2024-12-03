@@ -81,6 +81,7 @@ defmodule QuadblockquizWeb do
       # Use all HTML functionality (forms, tags, etc)
       import Phoenix.HTML
       import Phoenix.HTML.Form
+      import Phoenix.Flash
       use PhoenixHTMLHelpers
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
