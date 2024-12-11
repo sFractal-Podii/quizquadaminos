@@ -12,7 +12,6 @@ on:
 
 jobs:
   lint:
-
     name: Run test and check code styles
     runs-on: ubuntu-20.04
 
@@ -31,21 +30,23 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Elixir
-      uses: erlef/setup-beam@v1
-      with:
-        elixir-version: '1.15.4'
-        otp-version: '26.0.2'
-    - name: Restore dependencies cache
-      uses: actions/cache@v4
-      with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
-    - name: Install dependencies
-      run: mix deps.get
-    - name: Check lints
-      run: make header&&  make lint
-    - name: Run tests
-      run: mix gen.answers && mix test
+      - uses: actions/checkout@v3
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.15.4'
+          otp-version: '26.0.2'
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get
+      - name: Check lints
+        run: make header && make lint
+      - name: Run tests
+        run: mix gen.answers && mix test
+      - name: Build Docker Image
+        run: make docker-image
