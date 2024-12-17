@@ -657,6 +657,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      |> assign(
        bottom: %{},
        powers: powers,
+       state: :playing,
        used_powers_count: socket.assigns.used_powers_count + 1
      )}
   end
@@ -670,6 +671,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
+     |> assign(state: :playing)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
   end
@@ -683,6 +685,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
+     |> assign(state: :playing)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
   end
@@ -723,6 +726,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
+     |> assign(state: :playing)
      |> assign(bottom: bottom)}
   end
 
@@ -734,6 +738,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
+     |> assign(state: :playing)
      |> assign(bottom: bottom)}
   end
 
