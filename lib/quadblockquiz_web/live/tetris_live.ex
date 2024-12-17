@@ -780,7 +780,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     {x, y} = parse_to_integer(x, y)
     color = String.to_atom(color)
     bottom = Bottom.remove_vuln_and_license(socket.assigns.bottom, {x, y, color})
-    {:noreply, socket |> assign(bottom: bottom)}
+    {:noreply, socket |> assign(bottom: bottom, state: :playing)}
   end
 
   def handle_event("transform_block", _params, socket) do
@@ -905,12 +905,14 @@ defmodule QuadblockquizWeb.TetrisLive do
         block_coordinates: nil,
         adding_block: false,
         moving_block: false,
+        state: :playing,
         used_powers_count: socket.assigns.used_powers_count + 1
       )
     else
       assign(socket,
         moving_block: false,
-        adding_block: false
+        adding_block: false,
+        state: :playing
       )
     end
   end
@@ -928,6 +930,7 @@ defmodule QuadblockquizWeb.TetrisLive do
       bottom: bottom,
       deleting_block: false,
       powers: powers,
+      state: :playing,
       used_powers_count: socket.assigns.used_powers_count + 1
     )
   end
@@ -942,6 +945,7 @@ defmodule QuadblockquizWeb.TetrisLive do
       bottom: bottom,
       adding_block: false,
       powers: powers,
+      state: :playing,
       used_powers_count: socket.assigns.used_powers_count + 1
     )
   end
