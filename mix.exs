@@ -58,7 +58,7 @@ defmodule Quadblockquiz.MixProject do
       {:phoenix_ecto, "~> 4.5.1"},
       {:ecto_sql, "~> 3.11.1"},
       {:postgrex, ">= 0.19.3"},
-      {:phoenix_live_view, "~> 0.20.14"},
+      {:phoenix_live_view, "~> 1.0.1"},
       {:floki, ">= 0.37.0", only: :test},
       {:phoenix_html, "~> 4.1.1"},
       {:phoenix_html_helpers, "~> 1.0"},
