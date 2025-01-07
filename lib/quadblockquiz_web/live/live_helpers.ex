@@ -57,7 +57,8 @@ defmodule QuadblockquizWeb.LiveHelpers do
   defp hide_modal(:unpause) do
     hide_modal() |> JS.push("unpause")
   end
-  defp hide_modal() do
+
+  defp hide_modal do
     %JS{}
     |> JS.hide(to: "#modal", transition: "fade-out")
     |> JS.hide(to: "#modal-content", transition: "fade-out-scale")
