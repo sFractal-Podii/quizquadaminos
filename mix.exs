@@ -54,12 +54,12 @@ defmodule Quadblockquiz.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.11"},
+      {:phoenix, "~> 1.7.17"},
       {:phoenix_ecto, "~> 4.5.1"},
       {:ecto_sql, "~> 3.11.1"},
-      {:postgrex, ">= 0.17.2"},
+      {:postgrex, ">= 0.19.3"},
       {:phoenix_live_view, "~> 0.20.14"},
-      {:floki, ">= 0.36.0", only: :test},
+      {:floki, ">= 0.37.0", only: :test},
       {:phoenix_html, "~> 4.1.1"},
       {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix_view, "~> 2.0"},
@@ -80,8 +80,8 @@ defmodule Quadblockquiz.MixProject do
        only: :dev,
        branch: "auto-install-bom",
        runtime: false},
-      {:earmark, "~> 1.4"},
-      {:credo, "~> 1.7.5", only: [:dev, :test], runtime: false}
+      {:earmark, "~> 1.4.47"},
+      {:credo, "~> 1.7.10", only: [:dev, :test], runtime: false}
     ]
   end
 

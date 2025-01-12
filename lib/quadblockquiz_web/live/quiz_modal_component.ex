@@ -14,7 +14,7 @@ defmodule QuadblockquizWeb.QuizModalComponent do
       <% end %>
       <br />
       <%= show_powers(assigns) %><br />
-      <button phx-click="endgame">End Game</button>
+      <button phx-click="endgame" class="red">End Game</button>
       <br />
     </div>
     """

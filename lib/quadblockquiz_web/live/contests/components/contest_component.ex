@@ -106,7 +106,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
         class="{if @contest.end_time, do: 'disabled' }  icon-button"
         phx-click="restart"
         phx-value-contest={@contest.name}
-        {if @contest.end_time, do: [{'disabled', true}], else: [] }
+        {if @contest.end_time, do: [{"disabled", true}], else: [] }
       >
         <i class="fas fa-undo fa-2x"></i>
       </button>
@@ -115,7 +115,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
         class="{if @contest.end_time, do: 'disabled' }  icon-button"
         phx-click="start"
         phx-value-contest={@contest.name}
-        {if @contest.end_time, do: [{'disabled', true}], else: [] }
+        {if @contest.end_time, do: [{"disabled", true}], else: [] }
       >
         <i class="fas fa-play-circle fa-2x"></i>
       </button>
@@ -275,7 +275,6 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
 
   defp rsvp_or_results_button(assigns, %Contest{}) do
     ~H"""
-
     """
   end
 
