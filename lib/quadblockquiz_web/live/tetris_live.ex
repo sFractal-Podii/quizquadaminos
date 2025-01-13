@@ -57,9 +57,9 @@ defmodule QuadblockquizWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Welcome to QuadBlockQuiz!</h1>
           <%= if @has_email? do %>
-            <%= join_contest(assigns) %>
+            {join_contest(assigns)}
           <% else %>
-            <%= ask_for_email(assigns) %>
+            {ask_for_email(assigns)}
           <% end %>
         </div>
       </div>
@@ -72,7 +72,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Game Over! <%= @why_end %></h1>
+          <h1>Game Over! {@why_end}</h1>
           <%= case @why_end do %>
             <% :you_quit -> %>
               <h2>because you retired (hit "end game")</h2>
@@ -85,30 +85,30 @@ defmodule QuadblockquizWeb.TetrisLive do
             <% _ -> %>
               <h2>Oops. Not sure why it ended.</h2>
           <% end %>
-          <h2>Your score: <%= @score %></h2>
+          <h2>Your score: {@score}</h2>
 
           <hr />
-          <%= raw(SvgBoard.svg_head()) %>
+          {raw(SvgBoard.svg_head())}
           <%= for row <- [Map.values(@bottom)] do %>
             <%= for {x, y, color} <- row do %>
               <svg>
-                <%= raw(SvgBoard.box({x, y}, color)) %>
+                {raw(SvgBoard.box({x, y}, color))}
               </svg>
             <% end %>
           <% end %>
-          <%= raw(SvgBoard.svg_foot()) %>
+          {raw(SvgBoard.svg_foot())}
           <hr />
           <.link navigate={Routes.tetris_path(@socket, :tetris)} class="button">Play again?</.link>
         </div>
         <div class="column column-25 column-offset-25">
-          <p><%= @brick_count %> QuadBlocks dropped</p>
-          <p><%= @row_count %> rows cleared</p>
-          <p><%= @correct_answers %> questions answered correctly</p>
-          <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
+          <p>{@brick_count} QuadBlocks dropped</p>
+          <p>{@row_count} rows cleared</p>
+          <p>{@correct_answers} questions answered correctly</p>
+          <p>TecDebt:{@tech_vuln_debt}|{@tech_lic_debt}</p>
         </div>
       </div>
     </div>
-    <%= debug(assigns) %>
+    {debug(assigns)}
     """
   end
 
@@ -266,7 +266,7 @@ defmodule QuadblockquizWeb.TetrisLive do
             phx-click={if contest.pin, do: "request_pin", else: "start"}
             phx-value-contest={contest.id}
           >
-            <%= contest.name %>
+            {contest.name}
           </button>
         <% end %>
         <br />

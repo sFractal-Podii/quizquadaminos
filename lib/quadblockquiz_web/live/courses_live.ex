@@ -37,10 +37,10 @@ defmodule QuadblockquizWeb.CourseLive do
         <%= for content <- Courses.questions(@chapter,@course) do %>
           <tr>
             <td>
-              <%= raw(question(content)) %>
+              {raw(question(content))}
               <%= for answer <- answers(content) do %>
                 <%= label do %>
-                  <%= answer %>
+                  {answer}
                 <% end %>
               <% end %>
             </td>
@@ -62,7 +62,7 @@ defmodule QuadblockquizWeb.CourseLive do
               <.link navigate={
                 Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
               }>
-                <%= "start #{chapter}" %>
+                {"start #{chapter}"}
               </.link>
             </ul>
           <% end %>
@@ -71,13 +71,13 @@ defmodule QuadblockquizWeb.CourseLive do
         <div class="column">
           <%= for file <- @chapter_files do %>
             <ul>
-              <a href="#" phx-click="go-to-question" phx-value-question={file}><%= file %></a> <br />
+              <a href="#" phx-click="go-to-question" phx-value-question={file}>{file}</a> <br />
             </ul>
           <% end %>
         </div>
         <!-- column -->
         <div class="column column-75">
-          <%= raw(@question) %>
+          {raw(@question)}
         </div>
         <!-- column -->
       </div>
@@ -110,7 +110,7 @@ defmodule QuadblockquizWeb.CourseLive do
             <div class="p-2 md:p-4 md:space-y-4">
               <div>
                 <h1 class="text-blue-600 text-sm font-bold md:text-black md:text-2xl md:font-normal">
-                  <%= course %>
+                  {course}
                 </h1>
                 <p class="text-xs font-normal md:text-base md:font-light md:text-gray-600">
                   This is a future feature. Ignore
@@ -142,7 +142,7 @@ defmodule QuadblockquizWeb.CourseLive do
       <div class="container">
         <div class="row">
           <div class="column column-50 column-offset-25">
-            <%= ask_for_email(assigns) %>
+            {ask_for_email(assigns)}
           </div>
         </div>
       </div>

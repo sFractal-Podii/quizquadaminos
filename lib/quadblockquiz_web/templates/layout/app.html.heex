@@ -1,7 +1,7 @@
 <main role="main" class="container">
   <div :if={map_size(@flash) > 0}>
-    <p class="alert alert-info" role="alert"><%= Phoenix.Flash.get(@flash, :info) %></p>
-    <p class="alert alert-danger" role="alert"><%= Phoenix.Flash.get(@flash, :error) %></p>
+    <p class="alert alert-info" role="alert">{Phoenix.Flash.get(@flash, :info)}</p>
+    <p class="alert alert-danger" role="alert">{Phoenix.Flash.get(@flash, :error)}</p>
   </div>
-  <%= @inner_content %>
+  {@inner_content}
 </main>

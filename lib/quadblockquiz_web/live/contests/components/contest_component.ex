@@ -20,9 +20,9 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
   def render(assigns) do
     ~H"""
     <div class="md:table-row">
-      <div class="hidden md:table-cell md:p-4"><%= @contest.name %></div>
+      <div class="hidden md:table-cell md:p-4">{@contest.name}</div>
       <%= if @current_user.admin? do %>
-        <div class="hidden md:table-cell md:p-4"><%= start_or_pause_button(assigns, @contest) %></div>
+        <div class="hidden md:table-cell md:p-4">{start_or_pause_button(assigns, @contest)}</div>
         <div class="hidden md:table-cell md:p-4">
           <button
             class={
@@ -36,33 +36,33 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
           </button>
         </div>
       <% end %>
-      <div class="hidden md:table-cell md:p-4"><%= timer_or_final_result(assigns, @contest) %></div>
-      <div class="hidden md:table-cell md:p-4"><%= contest_date(assigns, @contest) %></div>
-      <div class="hidden md:table-cell md:p-4"><%= truncate_date(@contest.start_time) %></div>
-      <div class="hidden md:table-cell md:p-4"><%= truncate_date(@contest.end_time) %></div>
-      <div class="hidden md:table-cell md:p-4"><%= rsvp_or_results_button(assigns, @contest) %></div>
+      <div class="hidden md:table-cell md:p-4">{timer_or_final_result(assigns, @contest)}</div>
+      <div class="hidden md:table-cell md:p-4">{contest_date(assigns, @contest)}</div>
+      <div class="hidden md:table-cell md:p-4">{truncate_date(@contest.start_time)}</div>
+      <div class="hidden md:table-cell md:p-4">{truncate_date(@contest.end_time)}</div>
+      <div class="hidden md:table-cell md:p-4">{rsvp_or_results_button(assigns, @contest)}</div>
       <div class="flex rounded-lg flex-row shadow md:hidden justify-center p-4 gap-x-12 border border-t-0 mb-4">
         <div class="flex flex-col space-y-2">
           <div class="heading-3 text-blue-500 text-lg font-normal tracking-wide">
-            <%= @contest.name %>
+            {@contest.name}
           </div>
           <div class="inline-flex space-x-4">
             <p class="text-gray-400 font-normal text-xs">Date:</p>
-            <p class="text-sm font-light tracking-wide"><%= contest_date(assigns, @contest) %></p>
+            <p class="text-sm font-light tracking-wide">{contest_date(assigns, @contest)}</p>
           </div>
           <div class="inline-flex space-x-4">
             <p class="text-gray-400 font-normal text-xs">Start:</p>
-            <p class="text-sm font-light tracking-wide"><%= truncate_date(@contest.start_time) %></p>
+            <p class="text-sm font-light tracking-wide">{truncate_date(@contest.start_time)}</p>
           </div>
           <div class="inline-flex space-x-4">
             <p class="text-gray-400 font-normal text-xs">End:</p>
             <p class="pl-1 text-sm font-light tracking-wide">
-              <%= truncate_date(@contest.end_time) %>
+              {truncate_date(@contest.end_time)}
             </p>
           </div>
           <div>
             <p class="text-sm font-light tracking-wide">
-              <%= timer_or_final_result(assigns, @contest) %>
+              {timer_or_final_result(assigns, @contest)}
             </p>
           </div>
         </div>
@@ -137,9 +137,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
     ~H"""
     <% {hours, minutes, seconds} = @contest.time_elapsed |> to_human_time() %>
     <p>
-      <%= Util.count_display(hours) %>:<%= Util.count_display(minutes) %>:<%= Util.count_display(
-        seconds
-      ) %>
+      {Util.count_display(hours)}:{Util.count_display(minutes)}:{Util.count_display(seconds)}
     </p>
     """
   end
@@ -149,9 +147,9 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
     <%= if @time_remaining do %>
       <% {days, hours, minutes, seconds} = @time_remaining |> Util.to_human_time() %>
       <p>
-        <%= Util.count_display(days) %> days <%= Util.count_display(hours) %>h <%= Util.count_display(
-          minutes
-        ) %>m <%= Util.count_display(seconds) %>s
+        {Util.count_display(days)} days {Util.count_display(hours)}h {Util.count_display(minutes)}m {Util.count_display(
+          seconds
+        )}s
       </p>
     <% else %>
       <p>Date not yet set</p>
@@ -197,7 +195,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
     assigns = assign_new(assigns, :contest, fn -> contest end)
 
     ~H"""
-    <%= truncate_date(@contest.contest_date) %>
+    {truncate_date(@contest.contest_date)}
     <button
       class="button-clear"
       phx-click="edit_contest_date"
@@ -213,7 +211,7 @@ defmodule QuadblockquizWeb.ContestsLive.ContestComponent do
     assigns = assign_new(assigns, :contest, fn -> contest end)
 
     ~H"""
-    <%= truncate_date(@contest.contest_date) %>
+    {truncate_date(@contest.contest_date)}
     """
   end
 

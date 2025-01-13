@@ -13,7 +13,7 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
       |> assign_new(:dropdown_item_class, fn -> @dropdown_item_class end)
 
     ~H"""
-    <%= selected_login_level() |> sign_up_button(assigns) %>
+    {selected_login_level() |> sign_up_button(assigns)}
     """
   end
 
@@ -44,12 +44,12 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
     case assigns.style do
       :milligram ->
         ~H"""
-        <%= sign_up_button(assigns) %>
+        {sign_up_button(assigns)}
         """
 
       :tailwind ->
         ~H"""
-        <%= sign_up_button(assigns) %>
+        {sign_up_button(assigns)}
         """
     end
   end
@@ -146,7 +146,7 @@ defmodule QuadblockquizWeb.CustomHelperComponent do
 
   def display_name_and_avatar(assigns) do
     ~H"""
-    <h2>Welcome, <%= @current_user.name %>!</h2>
+    <h2>Welcome, {@current_user.name}!</h2>
     <div>
       <img src={@current_user.avatar} class="h-44 w-44" />
     </div>

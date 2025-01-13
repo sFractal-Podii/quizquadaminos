@@ -48,7 +48,7 @@ defmodule QuadblockquizWeb.LiveHelpers do
           <a id="close" href="#" class="phx-modal-close" phx-click={hide_modal()}>&times;</a>
         <% end %>
 
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </div>
     </div>
     """

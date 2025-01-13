@@ -21,7 +21,7 @@
               >
                 Contest
               </label>
-              <%= text_input(f, :name, placeholder: "contest-name") %>
+              {text_input(f, :name, placeholder: "contest-name")}
             </div>
             <div class="md:px-5 mt-2 md:mt-0">
               <label
@@ -30,7 +30,7 @@
               >
                 Pin
               </label>
-              <%= text_input(f, :pin, placeholder: "contest-pin") %>
+              {text_input(f, :pin, placeholder: "contest-pin")}
             </div>
             <div phx-update="ignore" id="contest_date" class="md:px-5 mt-2 md:mt-0">
               <label
@@ -39,10 +39,10 @@
               >
                 Date
               </label>
-              <%= datetime_local_input(f, :contest_date, class: "w-full") %>
+              {datetime_local_input(f, :contest_date, class: "w-full")}
             </div>
             <div class="mt-2 md:mt-6">
-              <%= submit("Create", class: "btn") %>
+              {submit("Create", class: "btn")}
             </div>
           </div>
           <!--closes row-->
@@ -82,7 +82,7 @@
       <%= for {status, contests} <- @contests |> group_contest_by_status do %>
         <div class="md:table-row pt-4">
           <div class="md:table-cell md:p-4 md:bg-sky-50 font-normal text-base md:font-bold">
-            <%= status(status) %> Contests
+            {status(status)} Contests
           </div>
           <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
           <div class="md:table-cell md:p-4 md:bg-sky-50"></div>

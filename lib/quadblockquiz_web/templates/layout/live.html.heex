@@ -7,7 +7,7 @@
     phx-click="lv:clear-flash"
     phx-value-key="info"
   >
-    <%= get(@flash, :info) %>
+    {get(@flash, :info)}
   </p>
 
   <p
@@ -17,8 +17,8 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"
   >
-    <%= get(@flash, :error) %>
+    {get(@flash, :error)}
   </p>
 
-  <%= @inner_content %>
+  {@inner_content}
 </main>
