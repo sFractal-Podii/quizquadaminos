@@ -111,6 +111,7 @@ defmodule QuadblockquizWeb.LeaderboardLive do
           <div class="md:border md:border-blue-600 md:p-2 md:rounded">
             <.link
               patch={Routes.live_path(@socket, __MODULE__, page: i, sort_by: @sort_by)}
+              id="goto-#{i}"
               class="button button-outline"
             >
               {i}
