@@ -2,6 +2,8 @@ name: add sbom to releases
 
 on:
   push:
+    branches:
+      - auto-sbom
     tags:
       - v*
 
@@ -17,8 +19,8 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.15.4"
-          otp-version: "26.0.2"
+          version-file: .tool-versions
+          version-type: strict
       - name: Restore dependencies cache
         uses: actions/cache@v4
         with:
