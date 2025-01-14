@@ -1,0 +1,33 @@
+name: add sbom to releases
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  add_sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.15.4"
+          otp-version: "26.0.2"
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Create sbom
+        run: mix sbom.install && mix sbom.cyclonedx && mix sbom.convert
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "*bom*"
