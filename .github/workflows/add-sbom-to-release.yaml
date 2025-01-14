@@ -27,8 +27,15 @@ jobs:
           path: deps
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
-      - name: Create sbom
-        run: mix deps.get && mix sbom.install && mix sbom.cyclonedx && mix sbom.convert
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Generate SBOM
+        run: |
+          mix sbom.install
+          mix sbom.cyclonedx
+          mix sbom.convert
 
       - uses: ncipollo/release-action@v1
         with:
