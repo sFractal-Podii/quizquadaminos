@@ -2,8 +2,6 @@ name: add sbom to releases
 
 on:
   push:
-    branches:
-      - auto-sbom
     tags:
       - v*
 
@@ -31,14 +29,8 @@ jobs:
           mix sbom.install
           mix sbom.cyclonedx
           mix sbom.convert
-          pwd
-          ls -al
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: priv/static/.well-known/sbom/*
-
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: ""
