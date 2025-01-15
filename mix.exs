@@ -42,7 +42,7 @@ defmodule Quadblockquiz.MixProject do
   defp elixirc_paths(_), do: ["lib", "qna"]
 
   defp extra_applications(:dev) do
-    extra_applications(:prod) ++ [:ssl, :inets]
+    extra_applications(:prod) ++ [ssl: :optional, inets: :optional]
   end
 
   defp extra_applications(_env) do
