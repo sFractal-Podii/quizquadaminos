@@ -34,6 +34,11 @@ jobs:
           pwd
           ls -al
 
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: priv/static/.well-known/sbom/*
+
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "priv/static/.well-known/sbom/*"
+          artifacts: ""
