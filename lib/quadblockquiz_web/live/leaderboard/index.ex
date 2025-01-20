@@ -58,19 +58,19 @@ defmodule QuadblockquizWeb.LeaderboardLive do
         <div class="md:table-row-group">
           <%= for record <- @records do %>
             <div class="table-row">
-              <div class={"table-cell #{cell_style()}"}><%= record.user.name %></div>
-              <div class={"table-cell #{cell_style()}"}><%= record.score %></div>
-              <div class={"table-cell #{cell_style()}"}><%= record.dropped_bricks %></div>
-              <div class={"table-cell #{cell_style()}"}><%= record.correctly_answered_qna %></div>
-              <div class={"table-cell #{cell_style()}"}><%= record.powerups %></div>
+              <div class={"table-cell #{cell_style()}"}>{record.user.name}</div>
+              <div class={"table-cell #{cell_style()}"}>{record.score}</div>
+              <div class={"table-cell #{cell_style()}"}>{record.dropped_bricks}</div>
+              <div class={"table-cell #{cell_style()}"}>{record.correctly_answered_qna}</div>
+              <div class={"table-cell #{cell_style()}"}>{record.powerups}</div>
               <div class={"table-cell #{cell_style()}"}>
-                <%= Util.datetime_to_time(record.start_time) %>
+                {Util.datetime_to_time(record.start_time)}
               </div>
               <div class={"table-cell #{cell_style()}"}>
-                <%= Util.datetime_to_time(record.end_time) %>
+                {Util.datetime_to_time(record.end_time)}
               </div>
               <div class={"table-cell #{cell_style()}"}>
-                <%= Util.datetime_to_date(record.start_time) %>
+                {Util.datetime_to_date(record.start_time)}
               </div>
               <div class={"table-cell #{cell_style()}"}>
                 <a href={Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive.Show, record)}>
@@ -89,15 +89,15 @@ defmodule QuadblockquizWeb.LeaderboardLive do
             <ul class="list-decimal py-4 pl-4">
               <a href={Routes.live_path(@socket, QuadblockquizWeb.LeaderboardLive.Show, record)}>
                 <li class="inline-flex">
-                  <%= user_avatar(record.user.avatar, assigns) %>
+                  {user_avatar(record.user.avatar, assigns)}
                   <div class="grid grid-cols-2 gap-x-44 pt-2 px-4">
                     <div class="grid w-48">
-                      <p class="text-base font-sans tracking-wide"><%= record.user.name %></p>
+                      <p class="text-base font-sans tracking-wide">{record.user.name}</p>
                       <p class="text-gray-400 text-sm">
-                        <%= time_taken(record.start_time, record.end_time) %>
+                        {time_taken(record.start_time, record.end_time)}
                       </p>
                     </div>
-                    <p class="tracking-wide text-base font-sans font-bold"><%= record.score %></p>
+                    <p class="tracking-wide text-base font-sans font-bold">{record.score}</p>
                   </div>
                 </li>
               </a>
@@ -111,10 +111,9 @@ defmodule QuadblockquizWeb.LeaderboardLive do
           <div class="md:border md:border-blue-600 md:p-2 md:rounded">
             <.link
               patch={Routes.live_path(@socket, __MODULE__, page: i, sort_by: @sort_by)}
-              id="goto-#{i}"
               class="button button-outline"
             >
-              <%= i %>
+              {i}
             </.link>
           </div>
         <% end %>

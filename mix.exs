@@ -33,15 +33,7 @@ defmodule Quadblockquiz.MixProject do
   def application do
     [
       mod: {Quadblockquiz.Application, []},
-      extra_applications: [
-        :logger,
-        :runtime_tools,
-        :ueberauth_github,
-        :ueberauth_google,
-        :ueberauth_linkedin,
-        :ueberauth,
-        :mix
-      ]
+      extra_applications: extra_applications(Mix.env())
     ]
   end
 
@@ -49,18 +41,34 @@ defmodule Quadblockquiz.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib", "qna"]
 
+  defp extra_applications(:dev) do
+    extra_applications(:prod) ++ [ssl: :optional, inets: :optional]
+  end
+
+  defp extra_applications(_env) do
+    [
+      :logger,
+      :runtime_tools,
+      :ueberauth_github,
+      :ueberauth_google,
+      :ueberauth_linkedin,
+      :ueberauth,
+      :mix
+    ]
+  end
+
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.11"},
-      {:phoenix_ecto, "~> 4.5.1"},
+      {:phoenix, "~> 1.7.17"},
+      {:phoenix_ecto, "~> 4.6.3"},
       {:ecto_sql, "~> 3.11.1"},
-      {:postgrex, ">= 0.17.2"},
-      {:phoenix_live_view, "~> 0.20.14"},
-      {:floki, ">= 0.36.0", only: :test},
-      {:phoenix_html, "~> 4.1.1"},
+      {:postgrex, ">= 0.19.3"},
+      {:phoenix_live_view, "~> 1.0.1"},
+      {:floki, ">= 0.37.0", only: :test},
+      {:phoenix_html, "~> 4.2.0"},
       {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix_live_reload, "~> 1.5.2", only: :dev},
@@ -80,8 +88,8 @@ defmodule Quadblockquiz.MixProject do
        only: :dev,
        branch: "auto-install-bom",
        runtime: false},
-      {:earmark, "~> 1.4"},
-      {:credo, "~> 1.7.5", only: [:dev, :test], runtime: false}
+      {:earmark, "~> 1.4.47"},
+      {:credo, "~> 1.7.10", only: [:dev, :test], runtime: false}
     ]
   end
 

@@ -7,9 +7,9 @@ defmodule QuadblockquizWeb.SbomLive do
     ~H"""
     <p>SBOMs for this site are available in several formats and serializations.</p>
     <%= for {k, v} <- @sbom_files do %>
-      <ol><%= k %></ol>
+      <ol>{k}</ol>
       <%= for file <- v do %>
-        <li><%= link(file, to: ["sbom/", file]) %></li>
+        <li>{link(file, to: ["sbom/", file])}</li>
       <% end %>
     <% end %>
     """

@@ -45,18 +45,21 @@ defmodule QuadblockquizWeb.LiveHelpers do
             <span aria-hidden="true">&times;</span>
           </.link>
         <% else %>
-          <a id="close" href="#" class="phx-modal-close" phx-click={hide_modal()}>&times;</a>
+          <a id="close" href="#" class="phx-modal-close" phx-click={hide_modal(:unpause)}>&times;</a>
         <% end %>
 
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </div>
     </div>
     """
   end
 
-  defp hide_modal(js \\ %JS{}) do
-    js
-    |> JS.push("unpause")
+  defp hide_modal(:unpause) do
+    hide_modal() |> JS.push("unpause")
+  end
+
+  defp hide_modal do
+    %JS{}
     |> JS.hide(to: "#modal", transition: "fade-out")
     |> JS.hide(to: "#modal-content", transition: "fade-out-scale")
   end

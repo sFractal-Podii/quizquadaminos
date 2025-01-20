@@ -19,7 +19,7 @@ defmodule QuadblockquizWeb.AdminLive do
     <div class="container">
       <h1>users level of login</h1>
       <section class="phx-hero">
-        <h3><%= notification(assigns) %></h3>
+        <h3>{notification(assigns)}</h3>
       </section>
       <form phx-change="login_levels">
         <label>
@@ -58,7 +58,7 @@ defmodule QuadblockquizWeb.AdminLive do
       <% end %>
 
       <h2>Reset game table</h2>
-      <%= raw(reset_game_table_button()) %>
+      {raw(reset_game_table_button())}
     </div>
     """
   end
@@ -93,9 +93,9 @@ defmodule QuadblockquizWeb.AdminLive do
 
   defp notification(assigns) do
     ~H"""
-    <%= if @by_config, do: "by_config is active" %>
-    <%= if @oauth_login, do: "oauth_login  is active" %>
-    <%= if @anonymous_login, do: "anonymous_login is active" %>
+    {if @by_config, do: "by_config is active"}
+    {if @oauth_login, do: "oauth_login  is active"}
+    {if @anonymous_login, do: "anonymous_login is active"}
     """
   end
 

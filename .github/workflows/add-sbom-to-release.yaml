@@ -1,0 +1,36 @@
+name: add sbom to releases
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  add_sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          version-file: .tool-versions
+          version-type: strict
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Generate SBOM
+        run: |
+          mix sbom.install
+          mix sbom.cyclonedx
+          mix sbom.convert
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: priv/static/.well-known/sbom/*

@@ -18,10 +18,10 @@ defmodule QuadblockquizWeb.SharedLive.AskEmailComponent do
         phx-submit="update_email"
         phx-target={@myself}
       >
-        <%= label(f, :email) %>
-        <%= text_input(f, :email, type: :email) %>
-        <%= error_tag(f, :email) %>
-        <%= text_input(f, :uid, type: :hidden) %>
+        {label(f, :email)}
+        {text_input(f, :email, type: :email)}
+        {error_tag(f, :email)}
+        {text_input(f, :uid, type: :hidden)}
         <button>Update Email</button>
       </.form>
     </div>

@@ -10,9 +10,9 @@ defmodule QuadblockquizWeb.SharedLive.ValidatePinComponent do
     <div>
       <h3>Enter PIN</h3>
       <.form :let={f} for={:contest} phx-submit={:validate} phx-target={@myself}>
-        <%= label(f, :pin) %>
-        <%= text_input(f, :pin, type: :text) %>
-        <%= error_tag(f, :pin) %>
+        {label(f, :pin)}
+        {text_input(f, :pin, type: :text)}
+        {error_tag(f, :pin)}
         <button>Start</button>
       </.form>
     </div>

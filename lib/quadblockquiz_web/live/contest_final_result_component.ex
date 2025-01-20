@@ -7,7 +7,7 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <h1>Contestboard for <%= @contest.name %></h1>
+      <h1>Contestboard for {@contest.name}</h1>
       <%= if @contest_records == []  do %>
         <h2>No records for this contest</h2>
         <.link patch={Routes.contests_path(@socket, :index)} class="button button-outline">
@@ -43,13 +43,13 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
                     <circle cx="5" cy="5" r="5" fill="green" /> Playing
                   </svg>
                 <% end %>
-                <%= user_name(record) %>
+                {user_name(record)}
               </td>
-              <td align="right"><%= record.score %></td>
-              <td align="center"><%= record.dropped_bricks %></td>
-              <td align="center"><%= record.correctly_answered_qna %></td>
-              <td><%= truncate_date(record.start_time) %></td>
-              <td><%= truncate_date(record.end_time) %></td>
+              <td align="right">{record.score}</td>
+              <td align="center">{record.dropped_bricks}</td>
+              <td align="center">{record.correctly_answered_qna}</td>
+              <td>{truncate_date(record.start_time)}</td>
+              <td>{truncate_date(record.end_time)}</td>
             </tr>
           <% end %>
         </table>
@@ -59,7 +59,7 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
               patch={Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)}
               class="button button-outline"
             >
-              <%= i %>
+              {i}
             </.link>
           <% end %>
         <% end %>

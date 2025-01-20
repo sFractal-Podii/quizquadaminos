@@ -100,9 +100,9 @@ defmodule QuadblockquizWeb.ContestPrizes do
       <%= for price <- @prices do %>
         <div class="bg-slate-100 p-4 pb-8 rounded-md text-center">
           <i class={"text-blue-300 fas fa-#{price.icon} fa-4x mt-6"}></i>
-          <h2 class="heading-2 my-6"><%= price.heading %></h2>
-          <p class="text-sm pb-2"><%= price.content %></p>
-          <span class="text-3xl font-bold"><%= price.price %></span>
+          <h2 class="heading-2 my-6">{price.heading}</h2>
+          <p class="text-sm pb-2">{price.content}</p>
+          <span class="text-3xl font-bold">{price.price}</span>
         </div>
       <% end %>
     </div>
