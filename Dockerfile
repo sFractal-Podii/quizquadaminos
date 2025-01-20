@@ -20,8 +20,8 @@ COPY mix.exs .
 COPY mix.lock .
 RUN mix deps.get && mix deps.compile
 # Let's make sure we have node
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
+   apt-get install -y nodejs
 
 COPY assets ./assets
 
