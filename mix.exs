@@ -64,7 +64,7 @@ defmodule Quadblockquiz.MixProject do
     [
       {:phoenix, "~> 1.7.17"},
       {:phoenix_ecto, "~> 4.6.3"},
-      {:ecto_sql, "~> 3.11.1"},
+      {:ecto_sql, "~> 3.12.1"},
       {:postgrex, ">= 0.19.3"},
       {:phoenix_live_view, "~> 1.0.1"},
       {:floki, ">= 0.37.0", only: :test},
