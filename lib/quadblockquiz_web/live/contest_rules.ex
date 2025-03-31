@@ -41,7 +41,7 @@ defmodule QuadblockquizWeb.ContestRules do
               Contestants must login to the game using the 'handle' option,
               and must choose a handle that is unique from other contestants.
               You should be asked for your email address on starting the first using that handle.
-              If you are not asked for your email, then there is already an email for that handle.
+              If you are not asked for your email, then there is already an email for that handle (and so you don't have to enter your email each time).
               If it wasn't yours, then you are playing for someone else!
               You may have more than one handle, but can only win one prize.
               To to be eligbile to win,
@@ -97,16 +97,16 @@ defmodule QuadblockquizWeb.ContestRules do
                 </li>
                 <li>
                   You must enter the contest to win!!!!
-                  Note there are two contests and you must pick one for each game played.
+                  Note there are two contests but only the IRL (ie the people in the room) can win prizes.
                 </li>
                 <li>
                   The "In Real Life" (IRL) Contest is for those physically present at the Village.
                   Although remote players can play the game, they are not eligible to win the IRL contest
-                  and should sign up for the Hybrid contest instead. The IRL pin is irl411
+                  and should sign up for the Hybrid contest instead. The IRL pin is 0402
                 </li>
                 <li>
                   The Hybrid Contest is for those remote from the conference, although nothing prevents
-                  those physically present from entering Hybrid if they want to. The Hybrid pin is hybrid411
+                  those physically present from entering Hybrid if they want to. The Hybrid pin is also 0402
                 </li>
                 <li>
                   When you start to play each game, it will ask whether you want to be part of this contest.
@@ -117,7 +117,7 @@ defmodule QuadblockquizWeb.ContestRules do
                   Note the Contest Scoreboards are different than the Leaderboard (which is for "all-time").
                 </li>
                 <li>
-                  A person can only win a single prize across the two Contests.
+                  A person can only win a single prize (eg you can't win total-points and most-blocks).
                 </li>
                 <li>
                   Note the winner maynot be the person at the top of the Contest Scoreboard
@@ -125,20 +125,14 @@ defmodule QuadblockquizWeb.ContestRules do
                 </li>
                 <li>
                   To be eligible for IRL Contest prizes, the person must be physcially present
-                  at lunch on Friday.
+                  when prizes are awarded at the end of the Village.
                   Unless previously agreed with sFractal, the person will be declared ineligible if not present,
-                  and the prize will go to next eligible person.
-                </li>
-                <li>
-                  To be eligible for Hybrid Contest prizes, the person must be on the bridge
-                  at lunch on Friday.
-                  Unless previously agreed with sFractal, the person will be declared ineligible if not on the bridge,
                   and the prize will go to next eligible person.
                 </li>
                 <li>
                   The "most points" prize will be awarded to the eligible
                   contest contestant with the highest points,
-                  who will then be **ineligible for the other Contest prizes**.
+                  who will then be ineligible for the other Contest prizes**.
                 </li>
                 <li>
                   The "most questions" prize will be awarded to the eligible
