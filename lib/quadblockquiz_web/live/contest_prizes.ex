@@ -39,7 +39,7 @@ defmodule QuadblockquizWeb.ContestPrizes do
         content: """
         A $50 Gift Card will be handed
         "in real life" (IRL)
-        at lunch on Friday
+        at 2:45 on Thursday
         to the
         ELIGIBLE person
         with the most bricks
