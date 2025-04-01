@@ -8,11 +8,13 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "trophy",
         heading: "IRL High Score",
         content: """
-        A $100 Amazon Gift Card will be handed
+        A autographed copy of
+        the book "Software Supply Chain Security" and
+        a $100 Gift Card will be awarded
         "in real life" (IRL)
-        at lunch on Friday
+        at 2:45 on Thursday
         to the
-        ELIGIBLE person with
+        ELIGIBLE person PRESENT with
         the highest score in the IRL contest (see rules).
         """,
         price: "$100"
@@ -23,7 +25,7 @@ defmodule QuadblockquizWeb.ContestPrizes do
         content: """
         A $50 Barnes & Noble Gift Card will be handed
         "in real life" (IRL)
-        at lunch on Friday
+        at 2:45 on Thursday
         to the
         ELIGIBLE person who
         answers the most quiz questions
@@ -49,36 +51,35 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "trophy",
         heading: "Hybrid High Score",
         content: """
-        A $50 Amazon Gift Card will be emailed
-        after the Village to the
-        ELIGIBLE person with
-        the highest score in the Hybrid contest (see rules).
+        No prize other than bragging rights but
+        the ELIGIBLE person with
+        the highest score in the Hybrid contest (see rules)
+        will be announced at 2:45 on Thursday
         """,
-        price: "$50"
+        price: "$0"
       },
       %{
         icon: "question",
         heading: "Hybrid Most Questions",
         content: """
-        A $25 Barnes & Noble Gift Card will be emailed
-        after the Village to the ELIGIBLE person who
-        answers the most quiz questions
-        in a game during the Hybrid contest (see rules).
+        No prize other than bragging rights but
+        the ELIGIBLE person who
+        answered the most quiz questions
+        in the Hybrid contest (see rules)
+        will be announced at 2:45 on Thursday
         """,
-        price: "$25"
+        price: "$0"
       },
       %{
         icon: "th",
         heading: "Hybrid Most Bricks",
         content: """
-        A $25 Home Depot Gift Card will be emailed
-        after the Village
-        to the
-        ELIGIBLE person
-        with the most bricks
-        in a game during the Hybrid contest (see rules).
+        No prize other than bragging rights but
+        the ELIGIBLE person with the most bricks
+        in the Hybrid contest (see rules)
+        will be announced at 2:45 on Thursday
         """,
-        price: "$25"
+        price: "$0"
       }
     ]
 
