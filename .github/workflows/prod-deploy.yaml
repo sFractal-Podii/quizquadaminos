@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Prod Deploy      
-
+name: Prod Deploy
 
 on:
   push:
     tags:
-    - 'v[0-9]+.[0-9]+.[0-9]+'
-    - '!v*-*'
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "!v*-*"
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
@@ -30,49 +29,47 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: prod
-      url: 'https://quadblockquiz.org/'
+      url: "https://quadblockquiz.org/"
     env:
       GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
       GCE_INSTANCE_ZONE: us-east4-c
 
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    # Setup gcloud CLI
-    - run: |
-        sudo apt-get install python2.7
-        export CLOUDSDK_PYTHON="/usr/bin/python2"
+      # Setup gcloud CLI
+      - id: "auth"
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: ${{ secrets.GCE_SA_KEY }}
 
-    - uses: google-github-actions/setup-gcloud@v0
-      with:
-        version: '290.0.1'
-        service_account_key: ${{ secrets.GCE_SA_KEY }}
-        project_id: ${{ secrets.GCE_PROJECT }}
+      - uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: "506.0.0"
 
-    # Configure Docker to use the gcloud command-line tool as a credential
-    # helper for authentication
-    - run: |-
-        gcloud --quiet auth configure-docker
+      # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication
+      - run: |-
+          gcloud --quiet auth configure-docker
 
-    # Build the Docker image
-    - name: Build
-      run: |
-        echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
-        echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
-        echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
-        docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}" .
+      # Build the Docker image
+      - name: Build
+        run: |
+          echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
+          echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
+          echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
+          docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}" .
 
-    # Push the Docker image to Google Container Registry
-    - name: Publish
-      run: |-
-        docker push "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}"
+      # Push the Docker image to Google Container Registry
+      - name: Publish
+        run: |-
+          docker push "gcr.io/duncan-openc2-plugfest/quadquiz:${GITHUB_REF_NAME}"
 
-    - name: Deploy to Cloud Run
-      id: deploy
-      uses: google-github-actions/deploy-cloudrun@v2
-      with:
-        service: quadquiz
-        region: us-east4
-        image: "gcr.io/duncan-openc2-plugfest/quadquiz:${{ github.ref_name }}"
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: quadquiz
+          region: us-east4
+          image: "gcr.io/duncan-openc2-plugfest/quadquiz:${{ github.ref_name }}"
