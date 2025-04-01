@@ -23,7 +23,7 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "question",
         heading: "IRL Most Questions",
         content: """
-        A $50 Barnes & Noble Gift Card will be handed
+        A $50 Gift Card will be handed
         "in real life" (IRL)
         at 2:45 on Thursday
         to the
@@ -37,7 +37,7 @@ defmodule QuadblockquizWeb.ContestPrizes do
         icon: "th",
         heading: "IRL Most Bricks",
         content: """
-        A $50 Home Depot Gift Card will be handed
+        A $50 Gift Card will be handed
         "in real life" (IRL)
         at lunch on Friday
         to the
