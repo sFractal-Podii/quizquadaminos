@@ -4,8 +4,8 @@ defmodule Quadblockquiz.MixProject do
   def project do
     [
       app: :quadblockquiz,
-      description: "Descri'be",
-      version: "1.1.14-alpha",
+      description: "Describe",
+      version: "1.1.14",
       elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
