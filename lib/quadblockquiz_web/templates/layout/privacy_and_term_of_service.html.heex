@@ -4,8 +4,10 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%= csrf_meta_tag() %>
-    <%= live_title_tag(assigns[:page_title] || "Quadblockquiz: ", suffix: " · SupplyChain Edition") %>
+    {csrf_meta_tag()}
+    <.live_title suffix=" · SupplyChain Edition">
+      {assigns[:page_title] || "Quadblockquiz: "}
+    </.live_title>
     <link
       phx-track-static
       rel="stylesheet"
@@ -46,10 +48,10 @@
           Quadblockquiz <span class="text-sm">Supply Chain Edition</span>
         </h1>
       </section>
-      <%= render(QuadblockquizWeb.LayoutView, "navbar_tailwind.html", assigns) %>
+      {render(QuadblockquizWeb.LayoutView, "navbar_tailwind.html", assigns)}
     </header>
     <div class="container mx-auto px-4 md:px-20 pb-20">
-      <div class="font-sans"><%= @inner_content %></div>
+      <div class="font-sans">{@inner_content}</div>
     </div>
   </body>
 </html>

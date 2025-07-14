@@ -19,7 +19,7 @@
         <h1 class="text-center font-bold text-xl">QuadBlockQuiz</h1>
         <h3 class="text-center font-normal text-sm">Supply Chain Edition</h3>
         <h4 class="text-center font-light text-sm">
-          Version <%= Quadblockquiz.Meta.version() %>
+          Version {Quadblockquiz.Meta.version()}
         </h4>
       </div>
     </div>
@@ -47,7 +47,7 @@
       </button>
     </div>
     <nav
-      :class="{'flex': open, 'hidden': !open}"
+      x-bind:class="{'flex': open, 'hidden': !open}"
       class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row"
     >
       <a class={element_class} href="/">Home</a>
@@ -104,7 +104,7 @@
               <svg
                 fill="currentColor"
                 viewBox="0 0 20 20"
-                :class="{'rotate-180': open, 'rotate-0': !open}"
+                x-bind:class="{'rotate-180': open, 'rotate-0': !open}"
                 class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1"
               >
                 <path
@@ -157,12 +157,12 @@
           </div>
         <% end %>
         <!-- check if admin -->
-        <%= link("Log Out",
+        {link("Log Out",
           to: Routes.auth_path(QuadblockquizWeb.Endpoint, :delete),
           method: "delete",
           class:
             "border border-blue-600 flex items-center justify-center ml-4 w-24 mt-2 h-10 text-base font-normal text-blue-600"
-        ) %>
+        )}
       <% else %>
         <!--if current user-->
         <div @click.away="open = false" class="relative" x-data="{ open: false }">
@@ -174,7 +174,7 @@
             <svg
               fill="currentColor"
               viewBox="0 0 20 20"
-              :class="{'rotate-180': open, 'rotate-0': !open}"
+              x-bind:class="{'rotate-180': open, 'rotate-0': !open}"
               class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1"
             >
               <path

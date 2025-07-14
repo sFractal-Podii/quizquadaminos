@@ -26,27 +26,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Google authentication configuration
-config :ueberauth, Ueberauth,
-  providers: [
-    google:
-      {Ueberauth.Strategy.Google, [default_scope: "email profile", allow_private_emails: true]}
-  ]
-
-config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: "",
-  client_secret: ""
-
-# Linkedin authentication configuration
-config :ueberauth, Ueberauth,
-  providers: [
-    linkedin: {Ueberauth.Strategy.LinkedIn, [default_scope: "r_liteprofile r_emailaddress"]}
-  ]
-
-config :ueberauth, Ueberauth.Strategy.LinkedIn.OAuth,
-  client_id: "",
-  client_secret: ""
-
 # Github authentication configuration
 config :ueberauth, Ueberauth,
   providers: [

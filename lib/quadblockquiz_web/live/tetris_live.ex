@@ -1,5 +1,8 @@
 defmodule QuadblockquizWeb.TetrisLive do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
+
+  require Logger
 
   alias Quadblockquiz.Accounts
   alias QuadblockquizWeb.SvgBoard
@@ -54,9 +57,9 @@ defmodule QuadblockquizWeb.TetrisLive do
         <div class="column column-50 column-offset-25">
           <h1>Welcome to QuadBlockQuiz!</h1>
           <%= if @has_email? do %>
-            <%= join_contest(assigns) %>
+            {join_contest(assigns)}
           <% else %>
-            <%= ask_for_email(assigns) %>
+            {ask_for_email(assigns)}
           <% end %>
         </div>
       </div>
@@ -69,38 +72,43 @@ defmodule QuadblockquizWeb.TetrisLive do
     <div class="container">
       <div class="row">
         <div class="column column-50 column-offset-25">
-          <h1>Game Over!</h1>
-          <h2>Your score: <%= @score %></h2>
-          <p>You are no longer in business.
-            Maybe you are bankrupt
-            due to a cyberattack,
-            or due to a lawsuit,
-            or maybe because you let your supply chain get to long.
-            Or maybe you were too busy answering cybersecurity questions
-            and not paying attention to business.
-            Or maybe you just hit quit :-).</p>
+          <h1>Game Over! {@why_end}</h1>
+          <%= case @why_end do %>
+            <% :you_quit -> %>
+              <h2>because you retired (hit "end game")</h2>
+            <% :timer_done -> %>
+              <h2>You are out of business because time expired</h2>
+            <% :supply_chain_too_long -> %>
+              <h2>
+                You are out of business because your supply chain got too long ie the blockyard filled
+              </h2>
+            <% _ -> %>
+              <h2>Oops. Not sure why it ended.</h2>
+          <% end %>
+          <h2>Your score: {@score}</h2>
+
           <hr />
-          <%= raw(SvgBoard.svg_head()) %>
+          {raw(SvgBoard.svg_head())}
           <%= for row <- [Map.values(@bottom)] do %>
             <%= for {x, y, color} <- row do %>
               <svg>
-                <%= raw(SvgBoard.box({x, y}, color)) %>
+                {raw(SvgBoard.box({x, y}, color))}
               </svg>
             <% end %>
           <% end %>
-          <%= raw(SvgBoard.svg_foot()) %>
+          {raw(SvgBoard.svg_foot())}
           <hr />
-          <%= live_redirect("Play again?", to: Routes.tetris_path(@socket, :tetris), class: "button") %>
+          <.link navigate={Routes.tetris_path(@socket, :tetris)} class="button">Play again?</.link>
         </div>
         <div class="column column-25 column-offset-25">
-          <p><%= @brick_count %> QuadBlocks dropped</p>
-          <p><%= @row_count %> rows cleard</p>
-          <p><%= @correct_answers %> questions answered correctly</p>
-          <p>TecDebt:<%= @tech_vuln_debt %>|<%= @tech_lic_debt %></p>
+          <p>{@brick_count} QuadBlocks dropped</p>
+          <p>{@row_count} rows cleared</p>
+          <p>{@correct_answers} questions answered correctly</p>
+          <p>TecDebt:{@tech_vuln_debt}|{@tech_lic_debt}</p>
         </div>
       </div>
     </div>
-    <%= debug(assigns) %>
+    {debug(assigns)}
     """
   end
 
@@ -129,29 +137,31 @@ defmodule QuadblockquizWeb.TetrisLive do
                 </div>
                 <div class="column column-50">
                 <%= if @modal do %>
-                <%= live_modal(
-      @socket,
-      QuadblockquizWeb.QuizModalComponent,
-      id: 1,
-      powers: @powers,
-      score: @score,
-      modal: @modal,
-      qna: @qna,
-      file_path: @file_path,
-      categories: @categories,
-      category: @category,
-      return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)
-    ) %>
+                  <.modal>
+                    <.live_component
+                      module={QuadblockquizWeb.QuizModalComponent}
+                      id={1}
+                      powers = {@powers}
+                      score= {@score}
+                      modal= {@modal}
+                      qna = {@qna}
+                      file_path = {@file_path}
+                      categories = {@categories}
+                      category = {@category}
+                      return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}
+                    />
+                  </.modal>
                 <% end %>
                 <%= if @super_modal do %>
-                <%= live_modal(
-      @socket,
-      QuadblockquizWeb.SuperpModalComponent,
-      id: 3,
-      powers: @powers,
-      super_modal: @super_modal,
-      return_to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)
-    ) %>
+                  <.modal return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}>
+                    <.live_component
+                      module={QuadblockquizWeb.SuperpModalComponent}
+                      id={3}
+                      powers = {@powers}
+                      super_modal= {@super_modal}
+                      return_to={Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris)}
+                    />
+                  </.modal>
                 <% end %>
                   <div phx-window-keydown="keydown" class="grid">
                     <%= raw(
@@ -256,7 +266,7 @@ defmodule QuadblockquizWeb.TetrisLive do
             phx-click={if contest.pin, do: "request_pin", else: "start"}
             phx-value-contest={contest.id}
           >
-            <%= contest.name %>
+            {contest.name}
           </button>
         <% end %>
         <br />
@@ -284,7 +294,10 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   defp new_game(socket) do
-    ## should qna be reset or carryover between games????
+    # log start of game including user
+    user = socket.assigns.current_user
+    Logger.notice("Starting Game: #{inspect(user)}")
+
     socket
     |> init_game
     |> new_block
@@ -339,6 +352,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     |> assign(vuln_threshold: 143)
     |> assign(available_powers_count: 0)
     |> assign(used_powers_count: 0)
+    |> assign(why_end: :unknown)
   end
 
   defp game_record(socket) do
@@ -428,19 +442,24 @@ defmodule QuadblockquizWeb.TetrisLive do
           Scoring.tick(socket.assigns.speed) +
           Scoring.rows(response.row_count, socket.assigns.correct_answers)
     )
-    |> assign(
-      state:
-        if(response.game_over || ended_contest?,
-          do: :game_over,
-          else: :playing
-        )
-    )
     |> cache_contest_game()
-    |> maybe_save_game_record()
+    # check if either last block filled or if contest ended
+    |> check_finished(response.game_over || ended_contest?)
     |> show
   end
 
   def drop(_not_playing, socket), do: socket
+
+  # check_finished updates and returns socket if game is over,
+  defp check_finished(socket, true = _game_over) do
+    socket
+    |> assign(state: :game_over)
+    |> assign(why_end: :supply_chain_too_long)
+    |> end_game()
+  end
+
+  # otherwise just leaves socket alone
+  defp check_finished(socket, false = _game_over), do: socket
 
   defp cache_contest_game(%{assigns: %{contest_id: nil}} = socket) do
     socket
@@ -547,7 +566,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   def handle_event("endgame", _, socket) do
-    {:noreply, end_game(socket)}
+    {:noreply, end_game(socket |> assign(why_end: :you_quit))}
   end
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
@@ -638,6 +657,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      |> assign(
        bottom: %{},
        powers: powers,
+       state: :playing,
        used_powers_count: socket.assigns.used_powers_count + 1
      )}
   end
@@ -651,6 +671,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
+     |> assign(state: :playing)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
   end
@@ -664,6 +685,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(speed: speed)
+     |> assign(state: :playing)
      |> assign(tick_count: tick_count)
      |> assign(powers: powers)}
   end
@@ -704,6 +726,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
+     |> assign(state: :playing)
      |> assign(bottom: bottom)}
   end
 
@@ -715,6 +738,7 @@ defmodule QuadblockquizWeb.TetrisLive do
      socket
      |> assign(used_powers_count: socket.assigns.used_powers_count + 1)
      |> assign(powers: powers)
+     |> assign(state: :playing)
      |> assign(bottom: bottom)}
   end
 
@@ -761,7 +785,7 @@ defmodule QuadblockquizWeb.TetrisLive do
     {x, y} = parse_to_integer(x, y)
     color = String.to_atom(color)
     bottom = Bottom.remove_vuln_and_license(socket.assigns.bottom, {x, y, color})
-    {:noreply, socket |> assign(bottom: bottom)}
+    {:noreply, socket |> assign(bottom: bottom, state: :playing)}
   end
 
   def handle_event("transform_block", _params, socket) do
@@ -886,12 +910,14 @@ defmodule QuadblockquizWeb.TetrisLive do
         block_coordinates: nil,
         adding_block: false,
         moving_block: false,
+        state: :playing,
         used_powers_count: socket.assigns.used_powers_count + 1
       )
     else
       assign(socket,
         moving_block: false,
-        adding_block: false
+        adding_block: false,
+        state: :playing
       )
     end
   end
@@ -909,6 +935,7 @@ defmodule QuadblockquizWeb.TetrisLive do
       bottom: bottom,
       deleting_block: false,
       powers: powers,
+      state: :playing,
       used_powers_count: socket.assigns.used_powers_count + 1
     )
   end
@@ -923,6 +950,7 @@ defmodule QuadblockquizWeb.TetrisLive do
       bottom: bottom,
       adding_block: false,
       powers: powers,
+      state: :playing,
       used_powers_count: socket.assigns.used_powers_count + 1
     )
   end
@@ -958,10 +986,14 @@ defmodule QuadblockquizWeb.TetrisLive do
     socket =
       case remaining_time do
         {0, 0, 0, 0} ->
-          end_game(socket)
+          socket
+          |> assign(why_end: :timer_done)
+          |> end_game()
 
         _ ->
-          socket |> assign(:time_elapsed, elapsed_time) |> assign(:remaining_time, remaining_time)
+          socket
+          |> assign(:time_elapsed, elapsed_time)
+          |> assign(:remaining_time, remaining_time)
       end
 
     {:noreply, socket}
@@ -1074,7 +1106,7 @@ defmodule QuadblockquizWeb.TetrisLive do
   defp right_points(socket) do
     # points for right answer
     %{"Right" => points} = socket.assigns.qna.score
-    {points, _} = Integer.parse(points)
+    {points, _} = points |> String.trim() |> Integer.parse()
     # multiplier for # blocks
     correct_answers = socket.assigns.correct_answers
     mult = Scoring.question_block_multiplier(correct_answers)
@@ -1158,6 +1190,11 @@ defmodule QuadblockquizWeb.TetrisLive do
   end
 
   defp end_game(socket) do
+    # log end of game for a user for a reason
+    user = socket.assigns.current_user
+    reason = socket.assigns.why_end
+    Logger.notice("Ending Game of #{inspect(user)} for #{inspect(reason)}")
+
     socket
     |> assign(end_time: DateTime.utc_now())
     |> cache_contest_game()

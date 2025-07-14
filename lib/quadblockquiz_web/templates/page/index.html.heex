@@ -87,11 +87,10 @@
           <h2 class="font-bold">Why Play?</h2>
           <p>
             Whatever reason you're attending
-            the workshop,
+            the village,
             you can't afford to pass on this
-            love child of tetrominoes and Trivia.
-            More than abstract configurations of digital blocks,
-            our tetrominoes spin-off envisions the classic arcade game
+            love child of tetrominoes and trivia.
+            Our tetrominoes spin-off envisions the classic arcade game
             as a potent metaphor for supply chain cyber security.
           </p>
         </div>
@@ -129,15 +128,15 @@
             but also the security of the extended ecosystem and all entities involved.
           </p>
           <div class="flex justify-between items-center mt-5">
-            <%= link("Read More",
+            {link("Read More",
               to: Routes.page_path(QuadblockquizWeb.Endpoint, :read_more),
               class: "font-normal text-gray-700 text-sm"
-            ) %>
-            <%= link("Sign Up",
+            )}
+            {link("Sign Up",
               to: Routes.page_path(QuadblockquizWeb.Endpoint, :sign_up),
               class:
                 "font-normal text-white bg-blue-500 flex items-center justify-center w-20 h-9 text-sm"
-            ) %>
+            )}
           </div>
         </div>
       </div>
@@ -149,7 +148,7 @@
         <h1 class="text-center font-normal text-5xl">QuadBlockQuiz</h1>
         <h3 class="text-center font-normal text-3xl">Supply Chain Edition</h3>
         <h4 class="text-center font-light text-xl">
-          Version <%= Quadblockquiz.Meta.version() %>
+          Version {Quadblockquiz.Meta.version()}
         </h4>
       </div>
       <div>
@@ -172,11 +171,10 @@
       <div class="text-center px-4 space-y-4">
         <h2 class="font-normal text-4xl">Why Play?</h2>
         <p class="font-light text-lg">
-          Whatever reason you're attending this workshop,
+          Whatever reason you're attending this village,
           you can't afford to pass on this
-          love child of tetrominoes and Trivia.
-          More than abstract configurations of digital blocks,
-          our tetrominoes spin-off envisions the classic arcade game
+          love child of tetrominoes and trivia.
+          Our tetrominoes spin-off envisions the classic arcade game
           as a potent metaphor for supply chain cyber security.
           You can choose to let the blocks fall as they may
           and scramble to cope with the accumulated consequences
@@ -205,14 +203,14 @@
         </p>
         <ul class="font-light text-lg">
           <li>
-            vulnerabilities (unfortunate gaps in an otherwise functioning security paradigm)
+            - vulnerabilities (unfortunate gaps in a security paradigm)
           </li>
-          <li>licensing issues (extraneous blocks that gunk up the works)</li>
+          <li>- licensing issues (extraneous blocks that gunk up the works)</li>
           <li>
-            cyber attacks(rapid changes in operating conditions that take over entire sections of the gameboard and speed the game up uncontrollably)
+            - cyber attacks(rapid changes in operating conditions that take over the gameboard and speed the game up uncontrollably)
           </li>
           <li>
-            licensing lawsuits (tiresome procedures that gum up entire sections of the game board and slow the game to a snail's pace)
+            - licensing lawsuits (tiresome procedures that gum up the gameboard and slow the game to a snail's pace)
           </li>
         </ul>
         <p class="font-light text-lg">
@@ -224,17 +222,17 @@
           <QuadblockquizWeb.CustomHelperComponent.display_name_and_avatar current_user={
             @current_user
           } />
-          <%= link("Play Game",
+          {link("Play Game",
             to: Routes.tetris_path(QuadblockquizWeb.Endpoint, :tetris),
             class:
               "font-normal text-white bg-blue-500 flex items-center justify-center w-24 h-9 text-base"
-          ) %>
+          )}
         <% end %>
       </div>
     </div>
   </div>
 <% else %>
   <div class="mx-auto max-w-5xl bg-gray-100 items-center justify-center flex h-24">
-    <h1 class="font-semibold text-lg">Game not available until workshop starts</h1>
+    <h1 class="font-semibold text-lg">Game not available until nearer village</h1>
   </div>
 <% end %>

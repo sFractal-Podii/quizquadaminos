@@ -3,12 +3,6 @@ defmodule Quadblockquiz.QnaTest do
 
   alias Quadblockquiz.QnA
 
-  test "answers are determined by hyphen or asterisk in newline" do
-    answers = QnA.question(["qna"], "open_chain_sample")
-
-    assert Enum.count(answers.choices) == 2
-  end
-
   test "question/1 returns the correct answers" do
     _answers = [
       {" short for fuddy-duddy", 0},

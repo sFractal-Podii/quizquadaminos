@@ -16,7 +16,6 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
   watchers: [
     node: [
       "build.js",
-      "--watch",
       cd: Path.expand("../assets", __DIR__)
     ],
     npx: [

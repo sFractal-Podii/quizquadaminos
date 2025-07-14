@@ -41,11 +41,11 @@
       <%= if Quadblockquiz.Accounts.user_has_role?(@current_user, ["admin"]) do %>
         <li><QuadblockquizWeb.CustomHelperComponent.admin_dropdown /></li>
       <% end %>
-      <%= link("Logout",
+      {link("Logout",
         to: Routes.auth_path(QuadblockquizWeb.Endpoint, :delete),
         method: "delete",
         class: "button logout"
-      ) %>
+      )}
     <% else %>
       <QuadblockquizWeb.CustomHelperComponent.hide_or_show_sign_up_button />
     <% end %>

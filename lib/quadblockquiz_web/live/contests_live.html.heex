@@ -12,7 +12,7 @@
     <div class="heading-1">Contests</div>
     <div class="container max-width: 768px">
       <%= if @current_user.admin? do %>
-        <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
+        <.form :let={f} for={@changeset} phx-change="validate" phx-submit="save">
           <div class="md:flex items-center">
             <div class="md:px-5 mt-2 md:mt-0">
               <label
@@ -21,7 +21,7 @@
               >
                 Contest
               </label>
-              <%= text_input(f, :name, placeholder: "contest-name") %>
+              {text_input(f, :name, placeholder: "contest-name")}
             </div>
             <div class="md:px-5 mt-2 md:mt-0">
               <label
@@ -30,7 +30,7 @@
               >
                 Pin
               </label>
-              <%= text_input(f, :pin, placeholder: "contest-pin") %>
+              {text_input(f, :pin, placeholder: "contest-pin")}
             </div>
             <div phx-update="ignore" id="contest_date" class="md:px-5 mt-2 md:mt-0">
               <label
@@ -39,10 +39,10 @@
               >
                 Date
               </label>
-              <%= datetime_local_input(f, :contest_date, class: "w-full") %>
+              {datetime_local_input(f, :contest_date, class: "w-full")}
             </div>
             <div class="mt-2 md:mt-6">
-              <%= submit("Create", class: "btn") %>
+              {submit("Create", class: "btn")}
             </div>
           </div>
           <!--closes row-->
@@ -50,12 +50,15 @@
       <% end %>
     </div>
     <%= if @modal do %>
-      <%= live_modal(@socket, QuadblockquizWeb.SharedLive.AskEmailComponent,
-        id: 1,
-        return_to: @current_uri,
-        redirect_to: @current_uri,
-        current_user: @current_user
-      ) %>
+      <.modal return_to={@current_uri}>
+        <.live_component
+          module={QuadblockquizWeb.SharedLive.AskEmailComponent}
+          id={1}
+          return_to={@current_uri}
+          redirect_to={@current_uri}
+          current_user={@current_user}
+        />
+      </.modal>
     <% end %>
     <div class="table">
       <div class="hidden md:table-header-group md:bg-white md:text-base md:font-bold font-normal">
@@ -79,7 +82,7 @@
       <%= for {status, contests} <- @contests |> group_contest_by_status do %>
         <div class="md:table-row pt-4">
           <div class="md:table-cell md:p-4 md:bg-sky-50 font-normal text-base md:font-bold">
-            <%= status(status) %> Contests
+            {status(status)} Contests
           </div>
           <div class="md:table-cell md:p-4 md:bg-sky-50"></div>
           <div class="md:table-cell md:p-4 md:bg-sky-50"></div>

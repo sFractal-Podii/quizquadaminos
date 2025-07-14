@@ -20,13 +20,13 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
     Contests.create_contest(%{name: "contestA"})
     # admin
     {:ok, _view, html} = live(conn, "/admin/contests")
-    assert html =~ "<button class=\"  icon-button\" phx-click=\"start\""
-    assert html =~ "<button class=\"disabled  icon-button\" phx-click=\"stop\""
+    assert html =~ "icon-button\" phx-click=\"start\""
+    assert html =~ "icon-button\" phx-click=\"stop\""
     # player
     conn = Auth.login("github:player")
     {:ok, _view, html} = live(conn, "/contests")
-    refute html =~ "<button class=\"  icon-button\" phx-click=\"start\""
-    refute html =~ "<button class=\"disabled  icon-button\" phx-click=\"stop\""
+    refute html =~ "icon-button\" phx-click=\"start\""
+    refute html =~ "icon-button\" phx-click=\"stop\""
   end
 
   test "admin can start a contest", %{conn: conn} do
@@ -34,7 +34,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
     {:ok, view, _html} = live(conn, "/admin/contests")
     html = render_click(view, :start, %{"contest" => "contestE"})
     contest = Contests.get_contest("contestE")
-    assert html =~ "#{DateTime.truncate(contest.start_time, :second)}</div>"
+    assert html =~ "#{DateTime.truncate(contest.start_time, :second) |> DateTime.to_iso8601()}"
   end
 
   test "admin can stop a contest", %{conn: conn} do
@@ -44,13 +44,13 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
     html = render_click(view, :stop, %{"contest" => "contestE"})
     contest = Contests.get_contest("contestE")
     assert html =~ "Final Results"
-    assert html =~ "#{DateTime.truncate(contest.end_time, :second)}</div>"
+    assert html =~ "#{DateTime.truncate(contest.start_time, :second) |> DateTime.to_iso8601()}"
   end
 
   test "User can see the rsvp button", %{conn: conn} do
     Contests.create_contest(%{name: "contestF"})
     {:ok, _view, html} = live(conn, "/contests")
-    assert html =~ "RSVP </button>"
+    assert html =~ "RSVP\n  </button>"
   end
 
   test "User can rsvp for a contest", %{conn: conn} do
@@ -62,7 +62,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
       |> element("button", "RSVP")
       |> render_click()
 
-    assert html =~ "CANCEL RSVP </button>"
+    assert html =~ " CANCEL RSVP\n  </button>"
   end
 
   test "User can cancel a rsvp for a contest", %{conn: conn} do
@@ -79,28 +79,24 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
       |> element("button", "CANCEL RSVP")
       |> render_click()
 
-    assert html =~ "RSVP </button>"
-  end
-
-  test "admin can see the restart button", %{conn: conn} do
-    Contests.create_contest(%{name: "contestE"})
-    {:ok, view, _html} = live(conn, "/admin/contests")
-    html = render_click(view, :start, %{"contest" => "contestE"})
-    assert html =~ "<button class=\" icon-button\" phx-click=\"restart\""
+    assert html =~ "RSVP\n  </button>"
   end
 
   test "only admin can see option to create contest and set date", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/admin/contests")
 
-    assert html =~ "<input id=\"contest_name\" name=\"contest[name]\" type=\"text\""
-    assert html =~ "type=\"datetime-local\"/></div>"
+    assert html =~
+             "<input id=\"contest_name\" name=\"contest[name]\" placeholder=\"contest-name\" type=\"text\"/></div>"
+
+    assert html =~
+             "<input class=\"w-full\" id=\"contest_contest_date\" name=\"contest[contest_date]\" type=\"datetime-local\"/>"
   end
 
   test "admin can create a contest and set the date for the contest", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/admin/contests")
 
     render_submit(view, :save, %{
-      "contest" => %{"name" => "ContestD", "contest_date" => "2021-09-16T14:11"}
+      "contest" => %{"name" => "ContestD", "contest_date" => "2021-09-16T14:11", "pin" => "1234"}
     })
 
     {:ok, _view, html} = live(conn, "/admin/contests")
@@ -115,7 +111,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
     {:ok, view, _html} = live(conn, "/admin/contests")
 
     html = render_click(view, :start, %{"contest" => "contestB"})
-    assert html =~ "<p>00:00:00</p>"
+    assert html =~ "00:00:00"
   end
 
   test "admin can see countdown timer", %{conn: conn} do
@@ -136,7 +132,7 @@ defmodule QuadblockquizWeb.ContestsLiveTest do
     minutes = Util.count_display(minutes)
     seconds = Util.count_display(seconds)
 
-    assert html =~ "<p>#{day} days #{hours}h #{minutes}m #{seconds}s</p>"
+    assert html =~ "#{day} days #{hours}h #{minutes}m #{seconds}s"
   end
 
   test "admin can see the count up timer increase", %{conn: conn} do

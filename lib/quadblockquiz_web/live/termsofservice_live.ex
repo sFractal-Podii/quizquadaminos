@@ -59,7 +59,8 @@ defmodule QuadblockquizWeb.TermsOfServiceLive do
         </li>
         <li>
           <p>
-            <strong>Website</strong> refers to Quadblockquiz, accessible from
+            <strong>Website</strong>
+            refers to Quadblockquiz, accessible from
             <a href="http://Quadblockquiz.org" rel="external nofollow noopener" target="_blank">
               http://Quadblockquiz.org
             </a>

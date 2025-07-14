@@ -1,18 +1,18 @@
 defmodule QuadblockquizWeb.ContestFinalResultComponent do
   use QuadblockquizWeb, :live_component
+  import Phoenix.Component
 
   alias Quadblockquiz.Contests
 
   def render(assigns) do
     ~H"""
     <div>
-      <h1>Contestboard for <%= @contest.name %></h1>
+      <h1>Contestboard for {@contest.name}</h1>
       <%= if @contest_records == []  do %>
         <h2>No records for this contest</h2>
-        <%= live_patch("Back to contest listing",
-          class: "button button-outline",
-          to: Routes.contests_path(@socket, :index)
-        ) %>
+        <.link patch={Routes.contests_path(@socket, :index)} class="button button-outline">
+          Back to contest listing
+        </.link>
       <% else %>
         <table>
           <tr>
@@ -43,22 +43,24 @@ defmodule QuadblockquizWeb.ContestFinalResultComponent do
                     <circle cx="5" cy="5" r="5" fill="green" /> Playing
                   </svg>
                 <% end %>
-                <%= user_name(record) %>
+                {user_name(record)}
               </td>
-              <td align="right"><%= record.score %></td>
-              <td align="center"><%= record.dropped_bricks %></td>
-              <td align="center"><%= record.correctly_answered_qna %></td>
-              <td><%= truncate_date(record.start_time) %></td>
-              <td><%= truncate_date(record.end_time) %></td>
+              <td align="right">{record.score}</td>
+              <td align="center">{record.dropped_bricks}</td>
+              <td align="center">{record.correctly_answered_qna}</td>
+              <td>{truncate_date(record.start_time)}</td>
+              <td>{truncate_date(record.end_time)}</td>
             </tr>
           <% end %>
         </table>
         <%= unless active_contest?(@contest.name) do %>
           <%= for i <- (@page - 5)..(@page + 5), i >0 do %>
-            <%= live_patch(i,
-              class: "button button-outline",
-              to: Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)
-            ) %>
+            <.link
+              patch={Routes.contests_path(@socket, :show, @contest, page: i, sort_by: @sort_by)}
+              class="button button-outline"
+            >
+              {i}
+            </.link>
           <% end %>
         <% end %>
       <% end %>

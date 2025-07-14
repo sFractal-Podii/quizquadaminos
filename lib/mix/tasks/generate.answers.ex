@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Gen.Answers do
   use Mix.Task
 
-  @directories ["qna", "courses"]
+  @directories ["qna", "courses", "test/quadblockquiz/qna"]
   require Logger
 
   @shortdoc "Generates json file answers to the specified directory"
@@ -55,6 +55,7 @@ defmodule Mix.Tasks.Gen.Answers do
       case question_type(name) do
         "free-form" -> "secret"
         "multi-choice" -> 0
+        _ -> 0
       end
 
     {file_name, answer}

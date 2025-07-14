@@ -1,8 +1,10 @@
 defmodule QuadblockquizWeb.CourseLive do
   use QuadblockquizWeb, :live_view
+  import Phoenix.Component
 
   alias Quadblockquiz.Accounts
   alias Quadblockquiz.Courses
+
   alias QuadblockquizWeb.Router.Helpers, as: Routes
 
   @impl true
@@ -35,10 +37,10 @@ defmodule QuadblockquizWeb.CourseLive do
         <%= for content <- Courses.questions(@chapter,@course) do %>
           <tr>
             <td>
-              <%= raw(question(content)) %>
+              {raw(question(content))}
               <%= for answer <- answers(content) do %>
                 <%= label do %>
-                  <%= answer %>
+                  {answer}
                 <% end %>
               <% end %>
             </td>
@@ -57,9 +59,11 @@ defmodule QuadblockquizWeb.CourseLive do
         <div class="column column-25">
           <%= for chapter <- Courses.chapter_list(assigns.course) do %>
             <ul>
-              <%= live_redirect("start #{chapter}",
-                to: Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
-              ) %>
+              <.link navigate={
+                Routes.tetris_path(@socket, :tetris, %{course: @course, chapter: chapter})
+              }>
+                {"start #{chapter}"}
+              </.link>
             </ul>
           <% end %>
         </div>
@@ -67,13 +71,13 @@ defmodule QuadblockquizWeb.CourseLive do
         <div class="column">
           <%= for file <- @chapter_files do %>
             <ul>
-              <a href="#" phx-click="go-to-question" phx-value-question={file}><%= file %></a> <br />
+              <a href="#" phx-click="go-to-question" phx-value-question={file}>{file}</a> <br />
             </ul>
           <% end %>
         </div>
         <!-- column -->
         <div class="column column-75">
-          <%= raw(@question) %>
+          {raw(@question)}
         </div>
         <!-- column -->
       </div>
@@ -106,13 +110,13 @@ defmodule QuadblockquizWeb.CourseLive do
             <div class="p-2 md:p-4 md:space-y-4">
               <div>
                 <h1 class="text-blue-600 text-sm font-bold md:text-black md:text-2xl md:font-normal">
-                  <%= course %>
+                  {course}
                 </h1>
                 <p class="text-xs font-normal md:text-base md:font-light md:text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida ullamcorper mattis quis nec sed accumsan. Velit urna enim.
+                  This is a future feature. Ignore
                 </p>
                 <p class="text-blue-600 underline float-right text-xs font-normal md:invisible">
-                  <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                  <.link patch={Routes.course_path(@socket, :show, course)}>start course</.link>
                 </p>
               </div>
               <div class="hidden md:flex md:justify-between">
@@ -126,7 +130,7 @@ defmodule QuadblockquizWeb.CourseLive do
                 </div>
                 <div class="pt-7">
                   <button class="rounded-sm bg-blue-600 text-white flex items-center justify-center text-base font-normal h-12 w-40">
-                    <%= live_patch("start course", to: Routes.course_path(@socket, :show, course)) %>
+                    <.link patch={Routes.course_path(@socket, :show, course)}>start course</.link>
                   </button>
                 </div>
               </div>
@@ -138,7 +142,7 @@ defmodule QuadblockquizWeb.CourseLive do
       <div class="container">
         <div class="row">
           <div class="column column-50 column-offset-25">
-            <%= ask_for_email(assigns) %>
+            {ask_for_email(assigns)}
           </div>
         </div>
       </div>

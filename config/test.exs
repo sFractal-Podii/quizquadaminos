@@ -19,7 +19,7 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
   server: false
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :warning
 
 config :quadblockquiz,
   base_questions_directory: Path.join(Path.dirname(__DIR__), "test/quadblockquiz")
