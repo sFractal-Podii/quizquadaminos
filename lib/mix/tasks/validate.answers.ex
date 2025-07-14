@@ -21,15 +21,12 @@ defmodule Mix.Tasks.Validate.Answers do
       |> Enum.map(fn file -> "qna" <> "/" <> Enum.join(file, "/") <> "\n" end)
 
     if Enum.count(without_answers) > 0 do
-      """
+      Mix.shell().error("""
       The following questions do not have answers: \n
       #{without_answers}
-      """
-      |> Mix.shell().error()
-
-      exit({:shutdown, 1})
+      """)
     else
-      Logger.info("all answers have present.")
+      Mix.shell().info("all answers are present.")
     end
   end
 end
