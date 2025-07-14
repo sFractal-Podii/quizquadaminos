@@ -48,10 +48,11 @@ defmodule Quadblockquiz.QnA do
     # should be refactored to test questions on the courses directory too
     base_file = ["qna"]
     base_file_path = base_file |> Enum.join("/")
-    folders = File.ls!(base_file_path)
+    file_path = @base_questions_directory <> "/" <> base_file_path
+    folders = File.ls!(file_path)
 
     for folder <- folders,
-        path = base_file_path <> "/" <> folder,
+        path = file_path <> "/" <> folder,
         File.dir?(path),
         File.ls!(path) != [],
         position <- 0..Enum.count(File.ls!(path)) do

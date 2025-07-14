@@ -4,19 +4,10 @@ Mix.shell(Mix.Shell.Process)
 
 defmodule Mix.Tasks.Validate.AnswersTest do
   use ExUnit.Case, async: true
-  @answers_path "qna/answers.json"
-  @tmp_answers_path "qna/answers.test"
 
-  setup_all do
-    File.cp(@answers_path, @tmp_answers_path)
-
-    on_exit(fn ->
-      File.rm(@answers_path)
-      File.rename(@tmp_answers_path, @answers_path)
-    end)
-
-    :ok
-  end
+  @base_questions_directory Application.compile_env!(:quadblockquiz, :base_questions_directory)
+                            |> to_string()
+  @answers_path @base_questions_directory <> "/qna/answers.json"
 
   test "fails if file is not present" do
     File.rm(@answers_path)

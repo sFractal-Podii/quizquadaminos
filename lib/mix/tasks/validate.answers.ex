@@ -3,14 +3,21 @@ defmodule Mix.Tasks.Validate.Answers do
 
   require Logger
 
+  @base_questions_directory Application.compile_env!(:quadblockquiz, :base_questions_directory)
+                            |> to_string()
+
   @shortdoc "Checks that we do have answers for all the questions, and vice versa"
   def run(_) do
-    all_answers = File.read!("qna/answers.json") |> Jason.decode!()
-    all_files = Path.wildcard("qna/**/*/*.md")
+    answers_path = @base_questions_directory <> "/qna/answers.json"
+    all_answers = File.read!(answers_path) |> Jason.decode!()
+    all_files = Path.wildcard(@base_questions_directory <> "/qna/**/*/*.md")
 
     without_answers =
       Enum.map(all_files, fn filename ->
-        ["qna" | rest] = String.split(filename, "/")
+        ["qna" | rest] =
+          filename
+          |> String.split("/")
+          |> Enum.drop_while(fn item -> item != "qna" end)
 
         case get_in(all_answers, rest) do
           nil -> rest
