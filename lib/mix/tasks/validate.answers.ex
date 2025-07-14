@@ -28,6 +28,8 @@ defmodule Mix.Tasks.Validate.Answers do
       |> Mix.shell().error()
 
       exit({:shutdown, 1})
+    else
+      Logger.info("all answers have present.")
     end
   end
 end
