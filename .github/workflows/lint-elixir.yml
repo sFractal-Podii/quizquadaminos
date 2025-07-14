@@ -14,6 +14,8 @@ jobs:
   lint:
     name: Run test and check code styles
     runs-on: ubuntu-latest
+    env:
+      MIX_ENV: test
 
     services:
       db:
@@ -48,5 +50,11 @@ jobs:
         run: make header && make lint
       - name: Run tests
         run: mix gen.answers && mix test
-      - name: Build Docker Image
+
+  make-docker:
+    name: make docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build docker image
         run: make docker-image
