@@ -48,8 +48,7 @@ COPY courses ./courses
 COPY lib ./lib
 COPY assets ./assets
 
-RUN MIX_ENV=dev mix validate.answers \
-   && mix assets.deploy \
+RUN mix assets.deploy \
    && mix release
 
 FROM debian:bullseye-slim AS app
