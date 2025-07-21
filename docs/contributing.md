@@ -3,21 +3,24 @@
 This project uses [semantic versioning](https://semver.org/) as much as we can
 
 ## Contributing for Non team.
+
 ### Open an issue
 
-Visit github issues (https://github.com/sFractal-Podii/quizquadaminos/issues)  and ensure that the issues you want to create does not exist before creating the issue.
+Visit github issues (https://github.com/sFractal-Podii/quizquadaminos/issues) and ensure that the issues you want to create does not exist before creating the issue.
 
 ### Open a pull request
+
 To create a pull request :
+
 1. Fork the project and clone it locally.https://github.com/sFractal-Podii/quizquadaminos.
 2. Create your branch for your changes. Naming of the branch should be according to the issue you are working on.
-3.  Make the changes and create the pull request. Compare your branch on the fork against the develop branch of the original repo.
+3. Make the changes and create the pull request. Compare your branch on the fork against the develop branch of the original repo.
 
 ### After creating a Pull request.
+
 - Constantly visit your pull request to see the comments left and work on the comments.
 - Issues are merged once they are approved
 - For clean history of commits, rebase if the PR has more than one commit
-
 
 ## Issue tracking
 
@@ -53,9 +56,8 @@ To squash the commits replace the word `pick` with the letter `s` on the followi
 see [deployment](./deployment.md) for deployment options and how to deploy
 
 ## working with questions
-Quadblockquiz includes both playing quadblocks
-and answering questions
-to gain points and powerups.
+
+Quadblockquiz includes both playing quadblocks and answering questions to gain points and powerups.
 
 ### Adding questions
 
@@ -203,7 +205,7 @@ mix validate.questions
 
 18:12:43.749 [info]  All Files are valid!
 
-````
+```
 
 #### Customising the answers
 
@@ -237,7 +239,6 @@ test                   Run the test suite
 update-instance        updates image of a running instance
 ```
 
-
 ## Redesign of the project layout
 
 Currently the project is being redesigned using [tailwindcss framework](https://tailwindcss.com) which enables us to build complex responsive layouts.
@@ -251,59 +252,67 @@ At the moment the project is using both `phoenixcss` and `tailwindcss` framework
 
 2. Under `router.ex` add the path of the page you are redesigning inside the scope that is piped through tailwind_layout i.e
 
-    ```
-    scope "/", quadblockquizWeb do
-    pipe_through [:browser, :tailwind_layout]
+   ```
+   scope "/", quadblockquizWeb do
+   pipe_through [:browser, :tailwind_layout]
 
-    get "/how-to-play", PageController, :how_to_play
-    live "/contest_rules", ContestRules
-    live "/leaderboard", LeaderboardLive
-    end
+   get "/how-to-play", PageController, :how_to_play
+   live "/contest_rules", ContestRules
+   live "/leaderboard", LeaderboardLive
+   end
 
    ```
+
 ## Design Notes
+
 This section is just some notes on how the software works.
 
 ### End of Game
 
 #### End of Game due to user ending
+
 One simple way the game ends is because the user clicks the 'End Game' button
 when the game is paused (after hitting space bar while playing).
 How this occurs is as follows:
+
 - the user is on the Quiz Modal and the 'End Game' button is displayed
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/quiz_modal_component.ex#L5
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/quiz_modal_component.ex#L5
 - the user clicks the 'End Game' button which invokes the 'endgame' event
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L549
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L549
 - which calls end_game
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L1160
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L1160
 - the socket state is set to :game_over (as opposed to :playing)
 - and the game over screen is rendered
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L67
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L67
 
 #### End of Game due to blockyard filling
+
 One way the game ends is when the stack of blocks reaches the top of blockyard.
 How this occurs is as follows:
+
 - the clock tick causes the falling block to move down one row. TetrisLive.ontick(:playing)
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L1045 which calls TetrisLive.drop
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#394 which calls Tetris.drop
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L10 which calls Tetris.maybe_do_drop based on Bottom.collides?
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/bottom.ex#L10
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L1045 which calls TetrisLive.drop
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#394 which calls Tetris.drop
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L10 which calls Tetris.maybe_do_drop based on Bottom.collides?
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/bottom.ex#L10
 - the falling block 'collides' with existing blocks in the brickyard. The falling block is incorporated into the brickyard and a new block is created.
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L23. If the new block also collides (ie no room left), the game is over.
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L42 so Tetris.maybe_do_drop responds with game_over:true which Tetris.drop responds to TetrisLive.drop which puts it in response.game_over which TetrisLive.drop uses to set socket state to :game_over
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L433
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L23. If the new block also collides (ie no room left), the game is over.
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz/Tetris.ex#L42 so Tetris.maybe_do_drop responds with game_over:true which Tetris.drop responds to TetrisLive.drop which puts it in response.game_over which TetrisLive.drop uses to set socket state to :game_over
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L433
 - the socket state is set to :game_over (as opposed to :playing)
 - on next tick the scores are broadcast
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L972
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L972
 - and on that same tick, the game is recorded in the db
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L344
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L344
 - and the game over screen is rendered
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L67
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L67
 
 #### End of Game due to running out of time
+
 Another way the game ends is when time runs out.
 How this occurs is as follows:
+
 - the max length of game time is set in TetrisLive at 15 min
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L26
-- Remaining time is calculated once per sec and if remaining time is zero,  endgame is called
-   + see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L961
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L26
+- Remaining time is calculated once per sec and if remaining time is zero, endgame is called
+  - see https://github.com/sFractal-Podii/quizquadaminos/blob/develop/lib/quadblockquiz_web/live/tetris_live.ex#L961
