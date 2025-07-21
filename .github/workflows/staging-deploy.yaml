@@ -1,17 +1,3 @@
-# Copyright 2020 Google, LLC.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 name: Staging Deploy
 
 on:
@@ -41,34 +27,47 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check if version ends in -dev and branch is valid
+        id: check_version
+        run: |
+          VERSION=$(grep 'version:' mix.exs | sed -E 's/.*version: *"([^"]+)".*/\1/')
+          BRANCH="${GITHUB_REF_NAME}"
+          echo "Found version: $VERSION on branch: $BRANCH"
+          if [[ "$VERSION" == *-dev && ("$BRANCH" == "develop" || "$BRANCH" == "test-staging-deploy") ]]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - id: "auth"
+        if: steps.check_version.outputs.deploy == 'true'
         uses: "google-github-actions/auth@v2"
         with:
           credentials_json: ${{ secrets.GCE_SA_KEY }}
 
       - uses: google-github-actions/setup-gcloud@v2
+        if: steps.check_version.outputs.deploy == 'true'
         with:
           version: "506.0.0"
 
-      # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
-      - run: |-
-          gcloud --quiet auth configure-docker
+      - name: Configure Docker auth
+        if: steps.check_version.outputs.deploy == 'true'
+        run: gcloud --quiet auth configure-docker
 
-      # Build the Docker image
       - name: Build
+        if: steps.check_version.outputs.deploy == 'true'
         run: |
           echo '${{ secrets.RELEASES_SECRETS }}' >> config/releases.exs
           echo '${{ secrets.QNA_ANSWERS }}' >> qna/answers.json
           echo '${{ secrets.COURSES_ANSWERS }}' >> courses/answers.json
           docker build --tag "gcr.io/duncan-openc2-plugfest/quadquiz:staging" .
 
-      # Push the Docker image to Google Container Registry
       - name: Publish
-        run: |-
-          docker push "gcr.io/duncan-openc2-plugfest/quadquiz:staging"
+        if: steps.check_version.outputs.deploy == 'true'
+        run: docker push "gcr.io/duncan-openc2-plugfest/quadquiz:staging"
 
       - name: Deploy to Cloud Run
+        if: steps.check_version.outputs.deploy == 'true'
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
