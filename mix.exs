@@ -89,7 +89,8 @@ defmodule Quadblockquiz.MixProject do
        branch: "auto-install-bom",
        runtime: false},
       {:earmark, "~> 1.4.47"},
-      {:credo, "~> 1.7.10", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7.10", only: [:dev, :test], runtime: false},
+      {:hackney, "~> 1.20"}
     ]
   end
 
