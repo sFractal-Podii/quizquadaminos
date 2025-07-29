@@ -26,6 +26,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :oauth2, adapter: Tesla.Adapter.Hackney
+config :tesla, adapter: Tesla.Adapter.Hackney
+
 # Github authentication configuration
 config :ueberauth, Ueberauth,
   providers: [
