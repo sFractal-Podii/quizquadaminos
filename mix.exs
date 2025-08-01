@@ -71,7 +71,7 @@ defmodule Quadblockquiz.MixProject do
       {:phoenix_html, "~> 4.2.0"},
       {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix_view, "~> 2.0"},
-      {:phoenix_live_reload, "~> 1.5.2", only: :dev},
+      {:phoenix_live_reload, "~> 1.6.0", only: :dev},
       {:phoenix_live_dashboard, "~> 0.8.0"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 0.4"},
