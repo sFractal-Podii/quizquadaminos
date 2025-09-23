@@ -43,7 +43,6 @@ defmodule QuadblockquizWeb.Router do
     get "/.well-known/sbom", PageController, :sbom
 
     live "/leaderboard/:board_id", LeaderboardLive.Show
-    live "/contestboard", ContestboardLive
 
     live "/contests/:id", ContestsLive, :show
     get "/anonymous", SessionController, :anonymous
