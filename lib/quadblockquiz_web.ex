@@ -19,7 +19,7 @@ defmodule QuadblockquizWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: QuadblockquizWeb
+      use Phoenix.Controller, formats: [html: "View", json: "View"]
 
       import Plug.Conn
       import QuadblockquizWeb.Gettext
