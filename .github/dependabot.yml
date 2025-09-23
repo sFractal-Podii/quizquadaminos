@@ -3,11 +3,25 @@ updates:
   - package-ecosystem: "npm"
     directory: "/assets"
     target-branch: "develop"
+    ignore:
+      - dependency-name: "phoenix"
+      - dependency-name: "phoenix_html"
+      - dependency-name: "phoenix_live_view"
     schedule:
-      interval: "monthly"
+      interval: "daily"
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 14
 
   - package-ecosystem: "mix"
     directory: "/"
     target-branch: "develop"
     schedule:
-      interval: "monthly"
+      interval: "daily"
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 14
