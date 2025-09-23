@@ -6,10 +6,10 @@ updates:
     schedule:
       interval: "monthly"
     cooldown:
-      default-days: 5
+      default-days: 14
       semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
+      semver-minor-days: 14
+      semver-patch-days: 14
 
   - package-ecosystem: "mix"
     directory: "/"
@@ -17,7 +17,7 @@ updates:
     schedule:
       interval: "monthly"
     cooldown:
-      default-days: 5
+      default-days: 14
       semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
+      semver-minor-days: 14
+      semver-patch-days: 14
