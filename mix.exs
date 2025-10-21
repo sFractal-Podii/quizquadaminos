@@ -68,7 +68,7 @@ defmodule Quadblockquiz.MixProject do
       {:postgrex, ">= 0.19.3"},
       {:phoenix_live_view, "~> 1.0.1"},
       {:floki, ">= 0.37.0", only: :test},
-      {:phoenix_html, "~> 4.2.0"},
+      {:phoenix_html, "~> 4.3.0"},
       {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix_live_reload, "~> 1.6.0", only: :dev},
