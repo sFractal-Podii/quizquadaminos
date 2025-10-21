@@ -90,7 +90,8 @@ defmodule Quadblockquiz.MixProject do
        runtime: false},
       {:earmark, "~> 1.4.47"},
       {:credo, "~> 1.7.10", only: [:dev, :test], runtime: false},
-      {:hackney, "~> 1.20"}
+      {:hackney, "~> 1.20"},
+      {:lazy_html, ">= 0.1.0", only: :test}
     ]
   end
 
