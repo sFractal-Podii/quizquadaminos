@@ -66,7 +66,7 @@ defmodule Quadblockquiz.MixProject do
       {:phoenix_ecto, "~> 4.6.3"},
       {:ecto_sql, "~> 3.13.2"},
       {:postgrex, ">= 0.19.3"},
-      {:phoenix_live_view, "~> 1.0.1"},
+      {:phoenix_live_view, "~> 1.1.13"},
       {:floki, ">= 0.37.0", only: :test},
       {:phoenix_html, "~> 4.3.0"},
       {:phoenix_html_helpers, "~> 1.0"},
@@ -90,7 +90,8 @@ defmodule Quadblockquiz.MixProject do
        runtime: false},
       {:earmark, "~> 1.4.47"},
       {:credo, "~> 1.7.10", only: [:dev, :test], runtime: false},
-      {:hackney, "~> 1.20"}
+      {:hackney, "~> 1.20"},
+      {:lazy_html, ">= 0.1.0", only: :test}
     ]
   end
 
