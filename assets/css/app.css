@@ -12,15 +12,15 @@
   transition: opacity 1s ease-out;
 }
 
-.phx-disconnected{
+.phx-disconnected {
   cursor: wait;
 }
-.phx-disconnected *{
+.phx-disconnected * {
   pointer-events: none;
 }
 
 .phx-modal {
-  opacity: 1!important;
+  opacity: 1 !important;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -28,8 +28,8 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .phx-modal-content {
@@ -54,12 +54,11 @@
   cursor: pointer;
 }
 
-
-.disabled:hover{
+.disabled:hover {
   cursor: not-allowed;
 }
 
-.not_allowed:hover{
+.not_allowed:hover {
   cursor: not-allowed;
 }
 
@@ -98,7 +97,7 @@
 }
 
 .position-block {
-  fill:#F8F8F8;
+  fill: #f8f8f8;
 }
 .hover-block:hover {
   fill: purple;
@@ -150,7 +149,7 @@
   flex-direction: column;
 }
 
-.dropdown:hover .dropdown-content a{
+.dropdown:hover .dropdown-content a {
   display: flex;
   align-items: center;
 }

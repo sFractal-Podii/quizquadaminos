@@ -29,6 +29,30 @@ config :phoenix, :json_library, Jason
 config :oauth2, adapter: Tesla.Adapter.Hackney
 config :tesla, adapter: Tesla.Adapter.Hackney
 
+config :esbuild,
+  version: "0.25.5",
+  default: [
+    args: ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ],
+  tailwind: [
+    args: ~w(js/app_tailwind.js --bundle --target=es2016 --outdir=../priv/static/assets),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
+config :tailwind,
+  version: "3.2.4",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app_tailwind.css
+      --output=../priv/static/assets/app_tailwind.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
 # Github authentication configuration
 config :ueberauth, Ueberauth,
   providers: [

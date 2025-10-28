@@ -1,18 +1,38 @@
+// See the Tailwind configuration guide for advanced usage
+// https://tailwindcss.com/docs/configuration
+
+let plugin = require("tailwindcss/plugin");
+
 module.exports = {
-  mode: 'jit', // https://tailwindcss.com/docs/just-in-time-mode
-  content: [
-    './js/**/*.js',
-    '../lib/*_web/**/*.*ex'
-  ],
+  content: ["./js/**/*.js", "../lib/*_web.ex", "../lib/*_web/**/*.*ex"],
   theme: {
-    boxShadow: {
-        DEFAULT: '0px 0.5px 0.5px rgba(0, 0, 0, 0.25)'
-      },
-     fontFamily: {
-      'sans': ['Helvetica']},
     extend: {},
   },
-  variants: {
-    extend: {},
-  },
-}
+  plugins: [
+    require("@tailwindcss/forms"),
+    plugin(({ addVariant }) =>
+      addVariant("phx-no-feedback", [
+        "&.phx-no-feedback",
+        ".phx-no-feedback &",
+      ]),
+    ),
+    plugin(({ addVariant }) =>
+      addVariant("phx-click-loading", [
+        "&.phx-click-loading",
+        ".phx-click-loading &",
+      ]),
+    ),
+    plugin(({ addVariant }) =>
+      addVariant("phx-submit-loading", [
+        "&.phx-submit-loading",
+        ".phx-submit-loading &",
+      ]),
+    ),
+    plugin(({ addVariant }) =>
+      addVariant("phx-change-loading", [
+        "&.phx-change-loading",
+        ".phx-change-loading &",
+      ]),
+    ),
+  ],
+};
