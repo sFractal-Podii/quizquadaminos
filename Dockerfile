@@ -19,20 +19,14 @@ RUN mix local.hex --force \
 
 
 RUN syft debian:bullseye-slim -o spdx > debian.bullseye_slim-spdx-bom.spdx \
-      && syft debian:bullseye-slim -o spdx-json > debian.bullseye_slim-spdx-bom.json \
-      && syft debian:bullseye-slim -o cyclonedx-json > debian.bullseye_slim-cyclonedx-bom.json \
-      && syft debian:bullseye-slim -o cyclonedx > debian.bullseye_slim-cyclonedx-bom.xml
+   && syft debian:bullseye-slim -o spdx-json > debian.bullseye_slim-spdx-bom.json \
+   && syft debian:bullseye-slim -o cyclonedx-json > debian.bullseye_slim-cyclonedx-bom.json \
+   && syft debian:bullseye-slim -o cyclonedx > debian.bullseye_slim-cyclonedx-bom.xml
 
 COPY mix.exs .
 COPY mix.lock .
 
 RUN mix deps.get && mix deps.compile
-
-RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
-   apt-get install -y nodejs
-
-COPY assets/package*.json ./assets/
-RUN npm ci --prefix ./assets
 
 RUN MIX_ENV=dev mix deps.compile \
    && MIX_ENV=dev mix sbom.install \

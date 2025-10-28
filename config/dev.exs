@@ -14,18 +14,9 @@ config :quadblockquiz, QuadblockquizWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    node: [
-      "build.js",
-      cd: Path.expand("../assets", __DIR__)
-    ],
-    npx: [
-      "tailwindcss",
-      "--input=css/app_tailwind.css",
-      "--output=../priv/static/assets/app_tailwind.css",
-      "--postcss",
-      "--watch",
-      cd: Path.expand("../assets", __DIR__)
-    ]
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    esbuild_tailwind: {Esbuild, :install_and_run, [:tailwind, ~w(--watch --sourcemap=inline)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 config :quadblockquiz,

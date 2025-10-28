@@ -79,7 +79,6 @@ format: mix format ## Run formatting tools on the code
 release: ## Build a release of the application with MIX_ENV=prod
 	MIX_ENV=prod mix deps.get --only prod
 	MIX_ENV=prod mix compile
-	npm install --prefix ./assets
 	MIX_ENV=prod mix assets.deploy
 	MIX_ENV=prod mix release
 

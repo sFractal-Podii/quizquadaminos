@@ -91,7 +91,9 @@ defmodule Quadblockquiz.MixProject do
       {:earmark, "~> 1.4.47"},
       {:credo, "~> 1.7.10", only: [:dev, :test], runtime: false},
       {:hackney, "~> 1.20"},
-      {:lazy_html, ">= 0.1.0", only: :test}
+      {:lazy_html, ">= 0.1.0", only: :test},
+      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.1.8", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -108,8 +110,9 @@ defmodule Quadblockquiz.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
-        "cmd --cd assets node build.js",
-        "cmd --cd assets npm run deploy",
+        "esbuild default --minify",
+        "esbuild tailwind --minify",
+        "tailwind default --minify",
         "phx.digest"
       ],
       sbom: ["sbom.install", "sbom.cyclonedx", "sbom.phx"]

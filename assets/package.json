@@ -2,25 +2,10 @@
   "repository": {},
   "description": " ",
   "license": "MIT",
-  "scripts": {
-    "deploy": "NODE_ENV=production postcss css/app_tailwind.css -o ../priv/static/assets/app_tailwind.css"
-  },
+  "scripts": {},
   "dependencies": {
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "esbuild": "^0.25.0",
-    "minimist": "^1.2.8",
-    "nanoid": ">=5.0.9",
-    "postcss": "^8.4.49",
-    "postcss-cli": "^11.0.0",
-    "postcss-import": "^16.1.0",
-    "tailwindcss": "^3.4.17"
-  },
-  "dependenciesComments": {
-    "nanoid": "added due to dependabot"
   }
 }

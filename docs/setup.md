@@ -1,9 +1,10 @@
 # Setup guide
+
 ## Quick start locally
 
 First ensure you have the following set up in your computer
+
 - elixir 1.11.2
-- nodejs > 12 LTS
 - Postgresql > 11
 
 You can use [the phoenix installation guide](https://hexdocs.pm/phoenix/installation.html#content) to ensure you
@@ -13,10 +14,9 @@ have everything set up as expected
 
 To start your Phoenix server:
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `npm install` inside the `assets` directory
-  * Start Phoenix endpoint with `mix phx.server`
+- Install dependencies with `mix deps.get`
+- Create and migrate your database with `mix ecto.setup`
+- Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
@@ -38,22 +38,25 @@ Provide the information for `Homepage URL` and `Authorization Callback URL` in t
 `External_IP` is provided once a VM instance is launched.
 
 ## Set up Google OAuth app
+
 Instructions to setup Google OAuth app can be found on [google setup docs](./docs/google_setup.md)
 
 ## Set up LinkedIn OAuth app
+
 Instructions to setup LinkedIn OAuth app can be found on [google setup docs](./docs/linkedin_setup.md)
 
 ## SBOM
+
 To access the SBOM of the project, visit `bom.json` or `bom.xml` to get them in json or xml format
 
 ## permission to run game
+
 In order to run the game, you must be a configurable player who has been provided with permission access to play the game. Players are required to login with their github account.
 
 Instruction of how to play the game has been provided on the dashboard. Once you start the game, you will be able to see list of instruction displayed.
 
-
-
 ## 6. misc Convenience make tasks
+
 This project includes a couple of convenience `make` tasks. To get the full list
 of the tasks run the command `make targets` to see a list of current tasks. For example
 
@@ -74,65 +77,72 @@ test                   Run the test suite
 update-instance        updates image of a running instance
 ```
 
-
 # Contributing
+
 This project uses [semantic versioning](https://semver.org/) as much as we can
 
-
 ## Issue tracking
+
 We use github issues to track issues , checkout [the project board](https://github.com/sFractal-Podii/quizquadaminos/projects/1) for issues
 
 All issues have priorities with `A` being the highest priority
 
 ## Deployment strategy
+
 All work merged into the develop branch are automatically pushed to the staging server
 
 ## working with questions
+
 ### Adding questions
- We currently have two folders for adding questions, it can be on the `qna` directory or the `courses` both on the project root directory.
- Contest questions are currently on the `qna` directory while `courses` contains questions for a classroom setup type of questions
 
- To add a question, you will need to add a markdown file which should meet the following conditions
+We currently have two folders for adding questions, it can be on the `qna` directory or the `courses` both on the project root directory.
+Contest questions are currently on the `qna` directory while `courses` contains questions for a classroom setup type of questions
 
- 1. It needs to define the question type
+To add a question, you will need to add a markdown file which should meet the following conditions
 
- This is defined in the 'header' of the file. The two questions types currently allowed are `free-form` and `multi-choice` (take note of the `-`).
- The header is then followed by three dashes
+1.  It needs to define the question type
 
-#### Example
- ```markdown
- %{
-  type: "free-form"
- }
-
- ---
- ```
- 2. Needs to clearly define the question
-
- The main question is marked by the first level markdown header (using one `#`) followed by the word question
-
+This is defined in the 'header' of the file. The two questions types currently allowed are `free-form` and `multi-choice` (take note of the `-`).
+The header is then followed by three dashes
 
 #### Example
-  ```markdown
-  ## Software Bill of Materials
-  A “Software Bill of Materials” (SBOM) is
-  effectively a nested inventory,
-  a list of ingredients that make up
 
-  # Question:
-  What does SBOM stand for?
+```markdown
+%{
+type: "free-form"
+}
 
-  ```
+---
+```
 
- Anything before the `answers` header is considered part of the question
+2.  Needs to clearly define the question
 
- 3. The answers need to be clearly defined
-
- Answers are marked by second level markdown header (that is two `#`) with the word `answers`
-
- For multichoice answers, we use the markdown list (`-`) to show the options. The position of the correct answer is counted from 0 being the first option (this information will be used later when generating/updating answers)
+The main question is marked by the first level markdown header (using one `#`) followed by the word question
 
 #### Example
+
+```markdown
+## Software Bill of Materials
+
+A “Software Bill of Materials” (SBOM) is
+effectively a nested inventory,
+a list of ingredients that make up
+
+# Question:
+
+What does SBOM stand for?
+```
+
+Anything before the `answers` header is considered part of the question
+
+3.  The answers need to be clearly defined
+
+Answers are marked by second level markdown header (that is two `#`) with the word `answers`
+
+For multichoice answers, we use the markdown list (`-`) to show the options. The position of the correct answer is counted from 0 being the first option (this information will be used later when generating/updating answers)
+
+#### Example
+
     ```markdown
     ## Answers
     - Security Bungles Obfuscate Mission
@@ -140,11 +150,13 @@ All work merged into the develop branch are automatically pushed to the staging 
     - Special Bureau of Meteorology
     - Security Bill of Materials
     ```
- 4. Scores should be provided
 
- We need to provide the score for both right score and wrong score
+4.  Scores should be provided
+
+We need to provide the score for both right score and wrong score
 
 #### Example
+
     ```markdown
     ## Score
     - Right:25
@@ -152,31 +164,20 @@ All work merged into the develop branch are automatically pushed to the staging 
 
     ```
 
- 5. Power up for the question
+5.  Power up for the question
 
- This determines what powerup the user gets whenever they get the correct answer. Valid power ups are
-    - deleteblock
-    - addblock
-    - moveblock
-    - clearblocks
-    - speedup
-    - slowdown
-    - fixvuln
-    - fixlicense
-    - rm_all_vulns
-    - rm_all_lic_issues
-    - superpower
-
+This determines what powerup the user gets whenever they get the correct answer. Valid power ups are - deleteblock - addblock - moveblock - clearblocks - speedup - slowdown - fixvuln - fixlicense - rm_all_vulns - rm_all_lic_issues - superpower
 
 #### Example
 
-  ```markdown
-  ## Powerup
-  DeleteBlock
-  ```
+```markdown
+## Powerup
 
+DeleteBlock
+```
 
 ### Generating answers
+
 There is a convenience tasks that generates default answers (0 for multichoice and "secret" for free-form questions)
 
 ```shell
@@ -210,7 +211,6 @@ $ mix gen.answers qna # genratates only for the qna folder
 
 ```
 
-
 ```shell
 $ mix gen.answers courses # genratates only for the courses folder
 
@@ -221,6 +221,7 @@ $ mix gen.answers courses # genratates only for the courses folder
 ```
 
 #### Customising the answers
+
 Once the default answers have been generated, we can open the `answers.json` file and provide the correct answers. Note that the answers you provide will not be overridden by the next `mix gen.answers`
 
 For development purposes, the first multichoice answer is always the correct answer, the word "secret" is always the answer to a `free-form` question
