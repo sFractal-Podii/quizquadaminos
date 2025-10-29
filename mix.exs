@@ -93,7 +93,7 @@ defmodule Quadblockquiz.MixProject do
       {:hackney, "~> 1.20"},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.1.8", runtime: Mix.env() == :dev}
+      {:tailwind, "~> 0.4.0", runtime: Mix.env() == :dev}
     ]
   end
 
