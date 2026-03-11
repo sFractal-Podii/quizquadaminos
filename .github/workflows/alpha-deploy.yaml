@@ -28,7 +28,11 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: alpha
-      url: 'https://alpha.quadblockquiz.org/'
+    permissions:
+      contents: write #lets the workflow read and write the repository's code. Needed here to push the new bump-version branch
+      id-token: write
+      pull-requests: write  # Required for PR actions
+
     env:
       GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
       GCE_INSTANCE_ZONE: us-east4-c
@@ -37,7 +41,52 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+          fetch-depth: 0  #tells it to fetch the complete git history. We need because version extraction relies on reading the git tag (GITHUB_REF), and tags are part of the full history.
 
+    - name: Extract tag version and update mix.exs
+      id: update_mix
+      run: |
+        TAG="${GITHUB_REF#refs/tags/}"
+        VERSION="${TAG#v}"
+        echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+        sed -i.bak -E "s/(version:\s*\")[^\"]+\"/\1${VERSION}\"/" mix.exs
+        rm mix.exs.bak
+        echo "Updated mix.exs to version $VERSION"
+
+    - name: Create Pull Request to update version
+      run: |
+        VERSION="${{ env.VERSION }}"
+        BRANCH="bump-version-to-${VERSION}"
+
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        git checkout -b "$BRANCH"
+        git add mix.exs
+        git commit -m "chore: bump version to $VERSION from tag"
+        git push origin "$BRANCH"
+
+        sleep 5
+        gh pr create \
+          --base develop \
+          --head "$BRANCH" \
+          --title "chore: bump version to $VERSION from tag" \
+          --body "This PR updates \`mix.exs\` to version \`$VERSION\` from tag \`$GITHUB_REF_NAME\`"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Enable auto-merge once checks pass
+      run: |
+        VERSION="${{ env.VERSION }}"
+        PR_URL=$(gh pr view bump-version-to-${VERSION} --json url -q .url)
+        echo "Enabling auto-merge on PR: $PR_URL"
+        gh pr merge "$PR_URL" --auto --squash
+
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
     - id: "auth"
       uses: "google-github-actions/auth@v2"
       with:
