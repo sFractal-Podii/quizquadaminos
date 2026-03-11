@@ -86,7 +86,7 @@ jobs:
 
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+
     - id: "auth"
       uses: "google-github-actions/auth@v2"
       with:
@@ -95,8 +95,6 @@ jobs:
     - uses: google-github-actions/setup-gcloud@v2
       with:
         version: "506.0.0"
-
-
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
