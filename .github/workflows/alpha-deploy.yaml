@@ -16,6 +16,8 @@ name: Snowflake Deploy
 
 on:
   push:
+    branches:
+    - update-permissions
     tags:
     - v*-alpha
 
@@ -75,7 +77,7 @@ jobs:
           --title "chore: bump version to $VERSION from tag" \
           --body "This PR updates \`mix.exs\` to version \`$VERSION\` from tag \`$GITHUB_REF_NAME\`"
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_PAT_PUBLIC }}
 
     - name: Enable auto-merge once checks pass
       run: |
@@ -85,7 +87,7 @@ jobs:
         gh pr merge "$PR_URL" --auto --squash
 
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_PAT_PUBLIC }}
 
     - id: "auth"
       uses: "google-github-actions/auth@v2"
