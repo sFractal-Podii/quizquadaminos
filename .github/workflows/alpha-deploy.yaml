@@ -16,8 +16,6 @@ name: Snowflake Deploy
 
 on:
   push:
-    branches:
-    - update-permissions
     tags:
     - v*-alpha
 
